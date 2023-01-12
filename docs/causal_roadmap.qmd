@@ -10,11 +10,14 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r setup, include=FALSE}
+```{r}
+#| label: setup
+#| include: false
 library(tidyverse)
 ```
 
-```{r, echo=FALSE}
+```{r}
+#| echo: false
 # Type of adjustment set from DAG
 type.mas <- "minimal"
 # Type of effect to be estimated from DAG
@@ -70,7 +73,12 @@ where $(f_{W{_t}}, f_{A_{t}}, f_{Y_{t}})$ were the nonparametric structural equa
 and $(U_{W_{t}}, U_{A_{t}}, U_{Y_{t}})$ were the unmeasured factors contributing the confounders, exposures, and outcome, respectively. 
 The corresponding causal graph (without indexes for ease of notation) is given in Figure \@ref(fig:causal-graph).
 
-```{r causal-graph, echo=FALSE, fig.cap="Causal graph corresponding to structural equations.", fig.height=3, fig.width=3}
+```{r}
+#| label: causal-graph
+#| echo: false
+#| fig.cap: Causal graph corresponding to structural equations.
+#| fig.height: 3.0
+#| fig.width: 3.0
 causal.graph <- ggdag::dagify(A ~ W + U_A, Y ~ W + A + U_Y, W ~ U_W, 
                               exposure = "A", outcome = "Y") %>%
   ggdag::tidy_dagitty()
@@ -87,7 +95,9 @@ In the following sections, we present the simplified DAG specific to each resear
 
 ## Research question 1:...
 
-```{r echo=FALSE, fig.cap="Simplified DAG for research question 1."}
+```{r}
+#| echo: false
+#| fig.cap: Simplified DAG for research question 1.
 sdag1 <- ggdag::dagify(X_ti ~ W_t, 
                        Y ~ W_t + X_ti, 
                        exposure = "X_ti", outcome = "Y") %>%
@@ -96,7 +106,8 @@ sdag1 <- ggdag::dagify(X_ti ~ W_t,
   ggplot2::ggtitle("RQ1")
 ```
 
-```{r, echo=FALSE}
+```{r}
+#| echo: false
 ggpubr::ggarrange(sdag1, ..., 
                   ncol = x, nrow = y)
 ```
@@ -176,7 +187,8 @@ Table providing values for all non-data arguments, and brief rationale when depa
 
 ## DAGs
 
-```{r, echo=FALSE}
+```{r}
+#| echo: false
 source("../DAGs/dag_v1.R")
 source("../code/dags.R")
 
@@ -185,7 +197,11 @@ dags <- dag.v1()
 
 ### Research question 1:...
 
-```{r, echo=FALSE, fig.cap="DAG for Research question 1.", fig.height=10, fig.width=18}
+```{r}
+#| echo: false
+#| fig.cap: DAG for Research question 1.
+#| fig.height: 10.0
+#| fig.width: 18.0
 dag.rq1 <- dags$rq1 %>%
   dagitty::dagitty()
 dag.rq1 %>% ggdag::tidy_dagitty() %>%
@@ -196,7 +212,8 @@ dag.rq1 %>% ggdag::tidy_dagitty() %>%
 
 The `r I(type.mas)` sufficient adjustment sets for estimating the `r I(type.effect)` effect of X on Y are:
 
-```{r, echo=FALSE}
+```{r}
+#| echo: false
 dagitty::adjustmentSets(x = dag.rq1, 
                         type = type.mas, effect = type.effect)
 ```

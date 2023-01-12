@@ -24,7 +24,7 @@ output:
       - --reference-doc=reference_document.docx
 bibliography:
   - bibliography.bib
-csl: journal.csl
+#csl: journal.csl
 link-citations: yes
 linkcolor: blue
 header-includes:
@@ -61,28 +61,32 @@ abstract: |-
 <!-- ####################################################################### -->
 <!-- INTRODUCTION -->
 # Introduction {#intro}
-```{r child="sections/introduction.Rmd"}
+```{r}
+#| child: sections/introduction.qmd
 ```
 <!-- ####################################################################### -->
 
 <!-- ####################################################################### -->
 <!-- METHODS -->
 # Methods {#methods}
-```{r child="sections/methods.Rmd"}
+```{r}
+#| child: sections/methods.qmd
 ```
 <!-- ####################################################################### -->
 
 <!-- ####################################################################### -->
 <!-- RESULTS -->
 # Results {#res}
-```{r child="sections/results.Rmd"}
+```{r}
+#| child: sections/results.qmd
 ```
 <!-- ####################################################################### -->
 
 <!-- ####################################################################### -->
 <!-- DISCUSSION -->
 # Discussion {#discussion}
-```{r child="sections/discussion.Rmd"}
+```{r}
+#| child: sections/discussion.qmd
 ```
 <!-- ####################################################################### -->
 
