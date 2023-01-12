@@ -1,0 +1,93 @@
+---
+title: "Paper X"
+author:
+  - Lorenzo Fabbri:
+      correspondence: "yes"
+      email: "lorenzo.fabbri@isglobal.org"
+      institute: [isg, upf]
+institute:
+  - isg: ISGlobal
+  - upf: UPF
+output:
+  bookdown::pdf_document2:
+    toc: no
+    pandoc_args:
+      - --filter=pandoc-crossref
+      - --lua-filter=scholarly-metadata.lua
+      - --lua-filter=author-info-blocks.lua
+  bookdown::word_document: default
+  bookdown::word_document2:
+    pandoc_args:
+      - --filter=pandoc-crossref
+      - --lua-filter=scholarly-metadata.lua
+      - --lua-filter=author-info-blocks.lua
+      - --reference-doc=reference_document.docx
+bibliography:
+  - bibliography.bib
+csl: journal.csl
+link-citations: yes
+linkcolor: blue
+header-includes:
+  - \usepackage{setspace}\doublespacing
+  - \usepackage[switch, pagewise, running]{lineno}
+  - \linenumbers
+  - \renewcommand\linenumberfont{\normalfont\small}
+  - \usepackage{rotating}
+  - \usepackage{float}
+abstract: |-
+ \singlespacing
+ **Background**
+ 
+ **Objectives**
+ 
+ **Methods**
+ 
+ **Results**
+ 
+ **Discussion**
+
+  **Keywords:** Causal Inference
+---
+
+```{=latex}
+\setcounter{tocdepth}{4}
+\tableofcontents
+```
+
+\twocolumn
+\doublespacing
+\pagewiselinenumbers
+
+<!-- ####################################################################### -->
+<!-- INTRODUCTION -->
+# Introduction {#intro}
+```{r child="sections/introduction.Rmd"}
+```
+<!-- ####################################################################### -->
+
+<!-- ####################################################################### -->
+<!-- METHODS -->
+# Methods {#methods}
+```{r child="sections/methods.Rmd"}
+```
+<!-- ####################################################################### -->
+
+<!-- ####################################################################### -->
+<!-- RESULTS -->
+# Results {#res}
+```{r child="sections/results.Rmd"}
+```
+<!-- ####################################################################### -->
+
+<!-- ####################################################################### -->
+<!-- DISCUSSION -->
+# Discussion {#discussion}
+```{r child="sections/discussion.Rmd"}
+```
+<!-- ####################################################################### -->
+
+\newpage
+\onecolumn
+\singlespacing
+
+# References
