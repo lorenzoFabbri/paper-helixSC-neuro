@@ -1,31 +1,35 @@
 ---
 title: "Paper X"
+keywords:
+  - Causal Inference
+  - Epidemiology
 author:
-  - Lorenzo Fabbri:
-      correspondence: "yes"
-      email: "lorenzo.fabbri@isglobal.org"
-      institute: [isg, upf]
-institute:
-  - isg: ISGlobal
-  - upf: UPF
-output:
-  bookdown::pdf_document2:
-    toc: no
-    pandoc_args:
-      - --filter=pandoc-crossref
-      - --lua-filter=scholarly-metadata.lua
-      - --lua-filter=author-info-blocks.lua
-  bookdown::word_document: default
-  bookdown::word_document2:
-    pandoc_args:
-      - --filter=pandoc-crossref
-      - --lua-filter=scholarly-metadata.lua
-      - --lua-filter=author-info-blocks.lua
-      - --reference-doc=reference_document.docx
-bibliography:
-  - bibliography.bib
+  - name: "Lorenzo Fabbri"
+    number: 1
+    email: lorenzo.fabbri@isglobal.org
+    orcid: 0000-0003-3031-322X
+    attributes:
+      corresponding: true
+    affiliations:
+      - ref: isg
+      - ref: upf
+affiliations:
+  - id: isg
+    name: ISGlobal
+    city: Barcelona
+    state: Spain
+  - id: upf
+    name: UPF
+    city: Barcelona
+    state: Spain
+format:
+  pdf:
+    pdf-engine: pdflatex
+    toc: false
+  # docx:
 #csl: journal.csl
-link-citations: yes
+bibliography: bibliography.bib
+link-citations: true
 linkcolor: blue
 header-includes:
   - \usepackage{setspace}\doublespacing
@@ -34,7 +38,7 @@ header-includes:
   - \renewcommand\linenumberfont{\normalfont\small}
   - \usepackage{rotating}
   - \usepackage{float}
-abstract: |-
+abstract: |
  \singlespacing
  **Background**
  
@@ -45,8 +49,6 @@ abstract: |-
  **Results**
  
  **Discussion**
-
-  **Keywords:** Causal Inference
 ---
 
 ```{=latex}
