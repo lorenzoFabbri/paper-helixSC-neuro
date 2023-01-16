@@ -1,23 +1,51 @@
 ---
 title: "Causal Roadmap"
-author: Lorenzo Fabbri
-output:
-  bookdown::pdf_document2:
-    number_sections: false
-  html_document: default
-bibliography: references.bib
-editor_options: 
-  chunk_output_type: console
+keywords:
+  - Causal Inference
+  - Epidemiology
+author:
+  - name: "Lorenzo Fabbri"
+    number: 1
+    email: lorenzo.fabbri@isglobal.org
+    orcid: 0000-0003-3031-322X
+    attributes:
+      corresponding: true
+    affiliations:
+      - ref: isg
+      - ref: upf
+affiliations:
+  - id: isg
+    name: ISGlobal
+    city: Barcelona
+    state: Spain
+  - id: upf
+    name: UPF
+    city: Barcelona
+    state: Spain
+format:
+  pdf:
+    pdf-engine: pdflatex
+    toc: false
+bibliography: ../output/paper/bibliography.bib
+link-citations: true
+linkcolor: blue
+header-includes:
+  - \usepackage{setspace}\doublespacing
+  - \usepackage[switch, pagewise, running]{lineno}
+  - \linenumbers
+  - \renewcommand\linenumberfont{\normalfont\small}
+  - \usepackage{rotating}
+  - \usepackage{float}
+execute:
+  echo: false
 ---
 
 ```{r}
 #| label: setup
-#| include: false
 library(tidyverse)
 ```
 
 ```{r}
-#| echo: false
 # Type of adjustment set from DAG
 type.mas <- "minimal"
 # Type of effect to be estimated from DAG
@@ -75,7 +103,6 @@ The corresponding causal graph (without indexes for ease of notation) is given i
 
 ```{r}
 #| label: causal-graph
-#| echo: false
 #| fig.cap: Causal graph corresponding to structural equations.
 #| fig.height: 3.0
 #| fig.width: 3.0
@@ -96,7 +123,6 @@ In the following sections, we present the simplified DAG specific to each resear
 ## Research question 1:...
 
 ```{r}
-#| echo: false
 #| fig.cap: Simplified DAG for research question 1.
 sdag1 <- ggdag::dagify(X_ti ~ W_t, 
                        Y ~ W_t + X_ti, 
@@ -107,9 +133,8 @@ sdag1 <- ggdag::dagify(X_ti ~ W_t,
 ```
 
 ```{r}
-#| echo: false
-ggpubr::ggarrange(sdag1, ..., 
-                  ncol = x, nrow = y)
+ggpubr::ggarrange(sdag1, 
+                  ncol = 1, nrow = 1)
 ```
 
 <!-- ####################################################################### -->
@@ -188,7 +213,6 @@ Table providing values for all non-data arguments, and brief rationale when depa
 ## DAGs
 
 ```{r}
-#| echo: false
 source("../DAGs/dag_v1.R")
 source("../code/dags.R")
 
@@ -198,7 +222,6 @@ dags <- dag.v1()
 ### Research question 1:...
 
 ```{r}
-#| echo: false
 #| fig.cap: DAG for Research question 1.
 #| fig.height: 10.0
 #| fig.width: 18.0
@@ -213,7 +236,6 @@ dag.rq1 %>% ggdag::tidy_dagitty() %>%
 The `r I(type.mas)` sufficient adjustment sets for estimating the `r I(type.effect)` effect of X on Y are:
 
 ```{r}
-#| echo: false
 dagitty::adjustmentSets(x = dag.rq1, 
                         type = type.mas, effect = type.effect)
 ```
