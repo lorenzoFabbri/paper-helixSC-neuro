@@ -65,8 +65,16 @@ The **aim** of the present study was to research the...
 The study **population** was based on..., consisting of $\text{N}=$... Inclusion criteria were:...
 
 Measured **exposures** consisted of...
+:::{.callout-note}
+1300 mother-child pairs with data on: POPs, PFAS, heavy metals, phthalates, phenols, OP pesticides, and cotinine.
+
+Longitudinal assessment but not repeated measures.
+:::
 
 The **primary outcome** was... **Secondary outcomes** included...
+:::{.callout-note}
+Tryptophan metabolism and depression.
+:::
 
 <!-- ####################################################################### -->
 ## Descriptive analyses
