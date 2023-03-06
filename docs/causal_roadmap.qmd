@@ -10,7 +10,6 @@ keywords:
   - Endocrine Disrupting Chemicals
   - Neurodevelopment
   - Neurobehavior
-
 author:
   - name: "Lorenzo Fabbri"
     number: 1
@@ -30,7 +29,6 @@ affiliations:
     name: Pompeu Fabra University
     city: Barcelona
     state: Spain
-
 format:
   pdf:
     documentclass: report
@@ -40,20 +38,60 @@ format:
     margin-right: 15mm
     margin-bottom: 15mm
     margin-top: 15mm
-
-bibliography: ../output/paper/bibliography.bib
+    include-in-header:
+      - \usepackage{rotating}
+      - \usepackage{float}
+    pandoc_args:
+      - !expr acronymsdown::add_filter()
+bibliography: ../../../PhD.bib
 link-citations: true
 linkcolor: blue
-
-header-includes:
-  - \usepackage{rotating}
-  - \usepackage{float}
-
 execute:
   echo: false
-
 editor_options: 
   chunk_output_type: console
+filters:
+  - /home/lorenzo/R/x86_64-pc-linux-gnu-library/4.1/acronymsdown/parse-acronyms.lua
+acronyms:
+  insert_links: false
+  sorting: alphabetical
+  keys:
+    - key: edc
+      shortname: EDC
+      longname: endocrine disruptor
+    - key: edcs
+      shortname: EDCs
+      longname: endocrine disruptors
+    - key: mtp
+      shortname: MTP
+      longname: modified treatment policy
+    - key: mtps
+      shortname: MTPs
+      longname: modified treatment policies
+    - key: tmle
+      shortname: TMLE
+      longname: Targeted Minimum Loss-Based Estimator
+    - key: sl
+      shortname: SL
+      longname: Super Learner
+    - key: cpm
+      shortname: CPM
+      longname: Raven’s Coloured Progressive Matrices
+    - key: ant
+      shortname: ANT
+      longname: Attention Network Test
+    - key: cbcl
+      shortname: CBCL
+      longname: Child Behavior Checklist
+    - key: npsem
+      shortname: NPSEM
+      longname: non-parametric Structural Equation Model
+    - key: prs
+      shortname: PRS
+      longname: polygenic risk score
+    - key: mr
+      shortname: MR
+      longname: Mendelian Randomization
 ---
 
 ```{r}
@@ -63,44 +101,59 @@ library(tidyverse)
 ```
 
 ```{r}
+#| echo: false
+#| include: false
+
+source("../../../all_phd/info_phd.R")
+source("../../../all_phd/triangulation_methods.R")
+infos <- info_phd()
+methods <- describe_triangulation_methods()
+```
+
+```{r}
 # Type of adjustment set from DAG
 type_mas <- "minimal"
 # Type of effect to be estimated from DAG
 type_effect <- "direct"
 ```
 
+\newpage
+
 \textcolor{red}{Most of the following was **copy-pasted** from published papers.}
 
 <!-- ####################################################################### -->
-# Step 0: Formulate the research question(s)
+# Formulate the research question(s)
 <!-- ####################################################################### -->
 
-The **aim** of the present study was to research the...
+The **aim** of the present study is to research the short-term effects of postnatal exposure to non-persistent \acr{edcs} on neurodevelopment and neurobehavior in childhood, and how the metabolome and the proteome might mediate these effects. We will strengthen the estimated effects by making use of the principles and criteria of triangulation [@LawlorTillingDaveySmith:2016]. To estimate these effects, we will primarily rely on the use of \acr{mtps} [@munozPopulationInterventionCausal2012; @haneuseEstimationEffectInterventions2013; @diazNonparametricCausalEffects2021] in combination with \acr{tmle} [@vanderlaanTargetedMinimumLossBased2018], to avoid relying on arbitrary parametric assumptions. We will consider both additive and multiplicative shifts of the exposures' distribution.
 
-The study **population** was based on..., consisting of $\text{N}=$... Inclusion criteria were:...
+The primary study **population** is based on the HELIX sub-cohort, consisting of $\text{N}=1200$ mother-child pairs from six existing European birth cohorts [@vrijheidHumanEarlylifeExposome2014]. We will replicate the obtained results in the HELIX Child Panel, consisting of $\text{N}=150$ children followed twice for one week. **Exposures** consisted of non-persistent \acr{edcs} (phenols, phthalates, and organophosphate compounds), measured in childhood in a pool of two urine samples. A single-spot blood sample, collected during the visit, was used for serum metabolomics and plasma proteomics. **Outcomes** related to childhood neurodevelopment and neurobehavior, included:
 
-Measured **exposures** consisted of...
-
-The **primary outcome** was... **Secondary outcomes** included...
+- \acr{cpm}, for assessing non-verbal intelligence.
+- Computerised n-back test, for assessing working memory.
+- \acr{ant}.
+- \acr{cbcl}, for assessing behavioural and emotional problems.
 
 <!-- ####################################################################### -->
 ## Descriptive analyses
 <!-- ####################################################################### -->
 
+\textcolor{red}{TODO}
+
 <!-- ####################################################################### -->
-# Step 1: Define a realistic statistical model
+# Define a realistic statistical model
 <!-- ####################################################################### -->
 
 For time index $t$, let $W_t$ denote the set of potential confounders, $A_t$ the observed exposures, 
 and $Y_t$ the clinical outcome of interest. For each subject $i$ and each time index $t$, 
-we assumed its observed data $O_{ti} = (W_{ti}, A_{ti}, Y_{ti})$ were generated by sampling from a distribution 
+we assume its observed data $O_{ti} = (W_{ti}, A_{ti}, Y_{ti})$ were generated by sampling from a distribution 
 $\mathbb{P}_{0,t}$ compatible with the causal model specified in @eq-npsem.
 
 <!-- ####################################################################### -->
-# Step 2: Specify a causal model and causal quantity of interest
+# Specify a causal model and causal quantity of interest
 <!-- ####################################################################### -->
 
-We specified the following nonparametric structural equation model (NPSEM) to present the data generating process, 
+We specify the following \acr{npsem} to present the data generating process, 
 including its measured confounders $W_t$, exposures $A_t$, and outcome $Y_t$, for each time index $t$:
 
 $$
@@ -111,8 +164,8 @@ $$
 \end{aligned}
 $$ {#eq-npsem}
 
-where $(f_{W{_t}}, f_{A_{t}}, f_{Y_{t}})$ were the nonparametric structural equations, 
-and $(U_{W_{t}}, U_{A_{t}}, U_{Y_{t}})$ were the unmeasured factors contributing the confounders, exposures, and outcome, respectively. 
+where $(f_{W{_t}}, f_{A_{t}}, f_{Y_{t}})$ are the non-parametric structural equations, 
+and $(U_{W_{t}}, U_{A_{t}}, U_{Y_{t}})$ are the unmeasured factors contributing the confounders, exposures, and outcome, respectively. 
 The corresponding causal graph (without indexes for ease of notation) is given in @fig-causal-graph.
 
 ```{r}
@@ -126,13 +179,25 @@ causal_graph <- ggdag::dagify(A ~ W + U_A, Y ~ W + A + U_Y, W ~ U_W,
 ggdag::ggdag(causal_graph) + ggdag::theme_dag()
 ```
 
-For each time index, we specified our causal parameter $\phi$ as...
+In order to test the \acr{npsem}’s implications (conditional independencies), we will perform simulations from the DAGs, checking assumptions and data consistency, using the `dagitty` R package.
 
-As **primary analysis**, we estimated....
+Following the \acr{mtp} framework, we will generate counterfactual outcomes $Y^d = f_Y (W, A^d, U_Y)$ by intervening on the causal model to shift the observed exposures by some user-specified function $A^d = d(\cdot)$. We will focus on simple interventions to shift the observed exposure $A$ by an additive constant $c$ or multiplicative constant $k$: $d(A,c) = c+A$ and $d(A,k) = k \times A$, respectively.
 
-In the following sections, we present the simplified DAG specific to each research question.
+We specify our causal parameter $\phi$ as the difference in the expected counterfactual outcome under the shifted exposures and the expected outcome under the observed exposures:
 
-## Research question 1:...
+$$
+\phi^{\Delta} = \mathbb{E}[Y^d] - \mathbb{E}[Y],
+$$
+
+where the expectation is over the individuals of our target population.
+
+As **primary analyses**, we will estimate the short-term effects of childhood exposure to individual non-persistent \acr{edcs} in relation to one or more neurodevelopmental outcomes of interest. We will further explore the potential mediating role of the serum metabolome and the plasma proteome.
+
+In the following sections, we present a brief summary of each research question.
+
+## Research question 1: What are the short-term effects of childhood exposure to \acr{edcs} on the outcomes?
+
+We will estimate the short-term effects of childhood exposure to non-persistent \acr{edcs} on the outcomes of interest measured in childhood. We will perform an ExWAS kind of analysis with the dependent variable $y$ being the outcome, and the independent variable $x_i$ being the levels of \acr{edc} $i$. We will assume that all associations are confounded by the same set of confounders, independently of the \acr{edc} considered.
 
 ```{r}
 #| fig.cap: Simplified DAG for research question 1.
@@ -144,66 +209,75 @@ sdag1 <- ggdag::dagify(X_ti ~ W_t,
   ggplot2::ggtitle("RQ1")
 ```
 
-## Research question 2:...
+## Research question 2: What are the short-term effects of childhood exposure to \acr{edcs} on metabolites and proteins?
 
-```{r}
-#| fig.cap: Simplified DAG for research question 2.
-sdag2 <- ggdag::dagify(X_ti ~ W_t, 
-                       Y ~ W_t + X_ti, 
-                       exposure = "X_ti", outcome = "Y") %>%
-  ggdag::tidy_dagitty() %>%
-  ggdag::ggdag(text_size = 2, node_size = 10) + ggdag::theme_dag() +
-  ggplot2::ggtitle("RQ2")
-```
+We will estimate the short-term effects of childhood exposure to non-persistent \acr{edcs} on metabolites and proteins measured in childhood. We will perform an MWAS analysis with the dependent variable $m_i$ being the metabolite or protein $i$, and the independent variable $x_j$ being the levels of \acr{edc} $j$. We will assume that all associations are confounded by the same set of confounders, independently of the \acr{edc} considered.
 
-## Research question 3:...
+## Research question 3: What are the short-term effects of childhood *exposure* to metabolites and proteins on the outcomes?
 
-```{r}
-#| fig.cap: Simplified DAG for research question 3.
-sdag3 <- ggdag::dagify(X_ti ~ W_t, 
-                       Y ~ W_t + X_ti, 
-                       exposure = "X_ti", outcome = "Y") %>%
-  ggdag::tidy_dagitty() %>%
-  ggdag::ggdag(text_size = 2, node_size = 10) + ggdag::theme_dag() +
-  ggplot2::ggtitle("RQ3")
-```
-
-```{r}
-ggpubr::ggarrange(sdag1, sdag2, sdag3, 
-                  ncol = 3, nrow = 1)
-```
+We will estimate the short-term effects of childhood *exposure* to metabolites and proteins on the outcomes of interest measured in childhood. We will perform an MWAS analysis with the dependent variable $y$ being the outcome, and the independent variable $m_i$ being the metabolite or protein $i$. We will assume that all associations are confounded by the same set of confounders, independently of the \acr{edc} considered.
 
 <!-- ####################################################################### -->
-# Step 3: Identification and the statistical estimand
+# Identification and the statistical estimand
 <!-- ####################################################################### -->
 
-For the causal parameter $\phi$, which involves a summary measure of the distribution of counterfactuals, 
-to be identified in terms of the observed data distribution, several assumptions would be required:
+For the causal parameter $\phi^{\Delta}$, which involves a summary measure of the distribution of counterfactuals, to be identified in terms of the observed data distribution, several assumptions would be required:
 
-* **No unmeasured confounding**: There are no unmeasured common causes of the exposure and the subsequent outcome. In our context, this assumption would be violated if, for example, an unmeasured variable influenced both the exposure levels and the outcome. We cannot guarantee that this assumption holds, and therefore limit our interpretations to statistical associations rather than causal effects.
-* **Positivity**:....
+* **No unmeasured confounding**: There are no unmeasured common causes of the exposure and the subsequent outcome, which we can formalize as $Y^d \perp \!\!\! \perp A|W$. In our context, this assumption would be violated if, for example, an unmeasured variable influences both the exposure levels and the clinical outcome. We cannot guarantee that this assumption holds, and therefore limit our interpretations to statistical associations rather than causal effects.
+* **Positivity**: If $(a, w)$ is within the support of $A, W$, then $(d(a,c), w)$ for additive shifts and $(d(a,k), w)$ for multiplicative shifts must also be within the support of $A,W$. In practice, this means that for any given time index and set of adjustment covariates, there is a positive probability of finding a subject with the same covariate values and a exposure level matching the shifted value. We will attempt to improve plausibility of this assumption by considering small shifts, while recognizing that this approach makes our causal effect data-adaptive.
 * **Independence** of subjects. This assumption also implies **no interference**: the exposure level $a$ for a given subject does not affect the outcomes of the other subjects.
-* **Consistency**: If $A = a$ for any subject, then $Y(a) = Y$. This means that the counterfactual outcome for a subject with its observed exposure level is the observed outcome.
+* **Consistency**: If $A = a$ for any subject, then $Y(a) = Y$, and hence the full observed set of outcomes when $A^d = A$ is simply $Y(A^d) = Y$. This means that the counterfactual outcome for a subject with its observed exposure level is the observed outcome.
 * **Time-ordering**: The confounders $W$ precede the exposure $A$, which also precedes the outcome $Y$.
 
-If these identifiability assumptions held, we could specify and focus our estimation efforts on a statistical estimand that equals the wished-for causal effect. In the (likely) case that they are not satisfied, we could still specify and focus our estimation efforts on a statistical estimand that is as close as possible to the causal parameter. Factoring the joint distribution of the observed data $\mathbb{P}_0$ into $\mathbb{P}_0 (O) = \mathbb{P}_0(Y|A,W) \mathbb{P}_0(A|W) \mathbb{P}_0(W)$, it can be shown that the statistical estimand corresponding to expected counterfactual outcome..., is given by
+If these identifiability assumptions held, we could specify and focus our estimation efforts on a statistical estimand that equals the wished-for causal effect. In the likely case that they are not satisfied, we could still specify and focus our estimation efforts on a statistical estimand that is as close as possible to the causal parameter. Factoring the joint distribution of the observed data $\mathbb{P}_0$ into $\mathbb{P}_0 (O) = \mathbb{P}_0(Y|A,W) \mathbb{P}_0(A|W) \mathbb{P}_0(W)$, it can be shown that the statistical estimand corresponding to expected counterfactual outcome under shift $d$, $\mathbb{E}[Y^d]$, is given by
 
 $$
-..., 
+\psi_0 (A^d) = \int \mathbb{E} (Y | A=a^d, W=w) dF_{A,W}(a, w), 
 $$
 
-Therefore, our statistical estimand of interest was
+with $dF_{A,W}(a, w)$ as the joint density of received exposures $A$ and covariate levels $W$ being integrated over. We refer to $\psi_0 (A^d)$ as the *shift parameter*. Under no shift, the expected outcome was identified as $\psi_0 (A^d) = \mathbb{E} (Y)$. Therefore, our statistical estimand of interest, corresponding to the expected difference in the outcome under shifted and observed exposure levels, is
 
 $$
-....
+\psi_0^{\Delta} = \psi_0 (A^d) - \psi_0 (A) = \int \mathbb{E} (Y | A=a^d, W=w)dF_{A,W} (a,w) - \mathbb{E} (Y).
 $$
 
 <!-- ####################################################################### -->
-# Step 4: Estimation from data and statistical inference
+# Estimation from data and statistical inference
 <!-- ####################################################################### -->
 
 <!-- ####################################################################### -->
-# Step 5: Interpretation and sensitivity analyses to inform a substantive conclusion
+# Triangulation: Improving causal inference in aetiological epidemiology
+<!-- ####################################################################### -->
+
+From [@LawlorTillingDaveySmith:2016]:
+
+> *Triangulation is the practice of obtaining more reliable answers to research questions through integrating results from several different approaches, where each approach has different key sources of potential bias that are unrelated to each other. With respect to causal questions in aetiological epidemiology, if the results of different approaches all point to the same conclusion, this strengthens confidence in the finding. This is particularly the case when the key sources of bias of some of the approaches would predict that findings would point in opposite directions if they were due to such biases.*
+
+@tbl-triangulation-paper3 summarizes the approaches that we will use to perform triangulation, based on [@LawlorTillingDaveySmith:2016].
+
+{{< include ../../../all_phd/tab_triangulation_p3.qmd >}}
+
+For each research question, and each approach, we will perform the following analyses:
+
+- `outcome ~ chemical`
+  - Regression analysis. We will use \acr{tmle} in combination with \acr{sl}, and a library of estimators including both simple parametric models (e.g., `glm`) and data-adaptive semi-parametric models. The models will be adjusted for relevant confounders, as identified with `dagitty`. We hypothesize the presence of residual confounding, especially due to genetic and parental socio-economic factors, which would result in **exaggeration** of any true causal effect.
+  - Outcome negative control study.
+  - Literature search.
+  - Qualitative \acr{prs}.
+- `omic ~ chemical`
+  - Regression analysis.
+  - Cross-cohort comparison. We will compare the regression models' results between subjects of different ethnic origins.
+  - Literature search.
+  - Qualitative \acr{prs}.
+- `outcome ~ omic`
+  - Regression analysis.
+  - Cross-cohort comparison.
+  - \acr{mr}.
+
+# Mendelian Randomization: Assumptions
+
+<!-- ####################################################################### -->
+# Interpretation and sensitivity analyses to inform a substantive conclusion
 <!-- ####################################################################### -->
 
 Highlight possible **limitations**:
