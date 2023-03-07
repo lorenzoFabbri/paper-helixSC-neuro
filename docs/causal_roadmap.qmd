@@ -31,12 +31,12 @@ affiliations:
     state: Spain
 format:
   pdf:
-    documentclass: report
     pdf-engine: pdflatex
+    number-sections: true
     toc: true
     margin-left: 15mm
     margin-right: 15mm
-    margin-bottom: 15mm
+    margin-bottom: 20mm
     margin-top: 15mm
     include-in-header:
       - \usepackage{rotating}
@@ -92,6 +92,21 @@ acronyms:
     - key: mr
       shortname: MR
       longname: Mendelian Randomization
+    - key: se
+      shortname: SE
+      longname: socio-economic
+    - key: iv
+      shortname: IV
+      longname: instrumental variable
+    - key: ivs
+      shortname: IVs
+      longname: instrumental variables
+    - key: ctd
+      shortname: CTD
+      longname: Comparative Toxicogenomics Database
+    - key: cv
+      shortname: CV
+      longname: cross-validation
 ---
 
 ```{r}
@@ -115,6 +130,9 @@ methods <- describe_triangulation_methods()
 type_mas <- "minimal"
 # Type of effect to be estimated from DAG
 type_effect <- "direct"
+
+# Number of folds for Cross-Validation (CV)
+cv.folds <- 10
 ```
 
 \newpage
@@ -245,6 +263,45 @@ $$
 # Estimation from data and statistical inference
 <!-- ####################################################################### -->
 
+To estimate the expected outcome under the observed exposure $\psi_0 (A) = \mathbb{E} (Y)$, we will use the empirical mean outcome. For estimating the shift parameter $\psi_0 (A^d)$, we will use \acr{tmle}, which typically uses the factorization of the observed data distribution into an outcome regression $\bar{Q}(A,W) = \mathbb{E} (Y|A,W)$ and an intervention mechanism $g(A|W) = P(A|W)$. Then, an initial estimate of the outcome regression is updated by a fluctuation that is a function of the intervention mechanism. In this study, we will use the implementation of [@diazNonparametricCausalEffects2021]. Here, we summarize the algorithm for the shift parameter $\psi_0 (A^d)$. We first define the density ratio
+
+$$
+r(a,w) = \frac{g^d(a|w)}{g(a|w)}.
+$$
+
+Estimation of the conditional density $g$ is done by recasting it as a classification problem. It can be shown that
+
+$$
+r(a,w) = \frac{P(\Lambda=1|a,w)}{1-P(\Lambda=1|a,w)},
+$$
+
+with $\Lambda$ indicating whether each subject received the natural or shifted value of treatment. We refer to $P(\Lambda=1|a,w)$ as $\bar{\lambda}$. To implement estimation of $\bar{\lambda}$ and $\bar{Q}$ flexibly, we will use the ensemble machine learning algorithm \acr{sl}. In the following, we present the steps necessary to estimate $\psi_0 (A^d)$ and the associational parameter $\psi_0^{\Delta}$. We note that our bounded continuous outcome will be **scaled** to $[0,1]$, and that to handle missing covariates $W_{i,j}$, we will redefine the data to include $\delta_{ij}$, where $\delta_{ij}=1$ if the covariate was observed and $0$ otherwise.
+
+1. Define and calculate the density ratio under the specified shift $\hat{r} (a_i, w_i)$ for each subject $i = 1, \dots, n$ from $\bar{\lambda}$ estimated via \acr{sl}.
+1. Generate initial conditional expectations for each subject, denoted $\bar{Q}(A,W)$.
+1. Fit the following logistic regression on the observed (scaled) $Y$ values, using the logit of the initial estimates as an offset
+$$
+\text{logit} (\bar{Q}^*(A,W)) = \text{logit} (\bar{Q}(A,W)) + \epsilon
+$$
+with weights $\hat{r} (a_i, w_i)$, calculating the estimated intercept $\hat{\epsilon}$, where $\bar{Q}^*(A,W)$ is now a targeted estimate of the conditional mean outcome.
+1. Use the resulting $\hat{\epsilon}$ value to generate targeted predictions under a shift, $\bar{Q}^*(A^d,W)$:
+$$
+\bar{Q}^*(A^d,W) = \text{logit}^{-1} \left[ \text{logit} (\bar{Q} (A^d, W)) + \hat{\epsilon} \right].
+$$
+1. With the updated estimates $\bar{Q}^*(A^d,W)$ in hand (after unscaling), define:
+$$
+\hat{\psi}_{\text{tmle}} = \frac{1}{n} \sum_{i=1}^n \bar{Q}^*(A^d,W).
+$$
+
+Using the empirical mean $\hat{Y} = \frac{1}{n} \sum_{i=1}^nY_i$, to estimate $\psi_0(A) = \mathbb{E}(Y)$, we obtain an estimate of the statistical association parameter $\psi_0^{\Delta} = \psi_0(A^d) = \psi_0(A)$ with
+$$
+\hat{\psi}^{\Delta} = \hat{\psi}_{\text{tmle}} - \bar{Y}.
+$$
+
+The $95\%$ Wald-style confidence interval $\hat{\psi}^{\Delta} \pm 1.96 \sqrt{Var(\hat{\psi}^{\Delta})}$ is obtained from the influence curve.
+
+Using `r I(cv.folds)`-fold \acr{cv}, \acr{sl} builds the best weighted combination of predictions from the algorithms listed in Table \@ref(tab:lmtp-specs). In case of repeated measures of the exposures, an `ID` variable will be used to make sure that the `r I(cv.folds)`-fold \acr{cv} splits will keep observations from the same individuals in the same split.
+
 <!-- ####################################################################### -->
 # Triangulation: Improving causal inference in aetiological epidemiology
 <!-- ####################################################################### -->
@@ -260,43 +317,41 @@ From [@LawlorTillingDaveySmith:2016]:
 For each research question, and each approach, we will perform the following analyses:
 
 - `outcome ~ chemical`
-  - Regression analysis. We will use \acr{tmle} in combination with \acr{sl}, and a library of estimators including both simple parametric models (e.g., `glm`) and data-adaptive semi-parametric models. The models will be adjusted for relevant confounders, as identified with `dagitty`. We hypothesize the presence of residual confounding, especially due to genetic and parental socio-economic factors, which would result in **exaggeration** of any true causal effect.
-  - Outcome negative control study.
-  - Literature search.
-  - Qualitative \acr{prs}.
+  - Regression analysis. We will use \acr{tmle} in combination with \acr{sl}, and a library of estimators including both simple parametric models (e.g., `glm`) and data-adaptive semi-parametric models. The models will be adjusted for relevant confounders, as identified with `dagitty`. We hypothesize the presence of residual confounding, especially due to genetic and parental \acr{se} factors, which would result in **exaggeration** of any true causal effect.
+  - Outcome negative control study. We will try to identify outcomes in the same cohorts that would be affected by confounders that are relevant in the association of \acr{edcs} exposure to the clinical outcome of interest, but for which a biological/causal effect of the exposures is unlikely.
+  - Literature search. For each of the `outcome ~ chemical` associations, we will perform a literature search to compare the obtained results. We will make use of PubMed, using as keywords the clinical outcome and the *common* name of each chemical, and the \acr{ctd} [@DavisWiegersJohnson:2023].
+  - Qualitative \acr{prs}. \textcolor{red}{TODO}
 - `omic ~ chemical`
-  - Regression analysis.
-  - Cross-cohort comparison. We will compare the regression models' results between subjects of different ethnic origins.
-  - Literature search.
-  - Qualitative \acr{prs}.
+  - Regression analysis. As above.
+  - Cross-cohort comparison. We will compare the regression models' results between subjects of different ethnic origins. We postulate that \acr{se} factors represent the main confounders for this association. Based on the associations been \acr{se} factors (e.g., maternal education) and the omic markers, we will compare the results of `omic ~ chemical` with the expected modified associations (e.g., weaker or stronger).
+  - Literature search. As above.
+  - Qualitative \acr{prs}. \textcolor{red}{TODO}
 - `outcome ~ omic`
-  - Regression analysis.
-  - Cross-cohort comparison.
-  - \acr{mr}.
+  - Regression analysis. As above.
+  - Cross-cohort comparison. As above.
+  - \acr{mr}. We will make use, ideally, of a weighted allele score of genetic variants known to be robustly associated with the omic markers as an \acr{IV}. We will use methods, including sensitivity analysis, to explore the possibility of bias due to: (i) weak instruments, and (ii) violation of the exclusion restriction criteria. Based on these, we will postulate whether the obtained results might be biased towards the null or not. By using \acr{mr}, we assume that this approach tests *exposure* to omic markers across the whole of childhood.
 
-# Mendelian Randomization: Assumptions
+## \acr{mr}: Assumptions
+
+\acr{mr} requires three \acr{iv} assumptions (taken from [Wikipedia](https://en.wikipedia.org/wiki/Mendelian_randomization)):
+
+- The genetic variant(s) used as instruments for the exposure is associated with the exposure (*relevance* assumption).
+- There are no confounders of the association between the genetic variant(s) and the outcome (*independence* or *exchangeability* assumption).
+- There is no pathway between the genetic variant(s) and the outcome, other than through the exposure (*exclusion restriction* or *no horizontal pleiotropy* assumption).
 
 <!-- ####################################################################### -->
 # Interpretation and sensitivity analyses to inform a substantive conclusion
 <!-- ####################################################################### -->
 
-Highlight possible **limitations**:
+{{< include ../../../all_phd/app-rel-ci.qmd >}}
 
-* When considering only one exposure, we do not consider the effect of the others on that exposure and the outcome;
-* When we consider only one outcome, we do not consider the effect of the other outcomes on that one;
-* Although the interpretation of $\psi^{\text{causal}}$ is clear, how closely $\psi^{\text{stat}}$ matches it merits discussion. One considers the plausibility of each of the identifying assumptions in turn.
+---
 
-We performed **sensitivity analysis** to measure robustness to unmeasured confounders, based on the following considerations:
+{{< include ../../../all_phd/app-rel-si.qmd >}}
 
-* Broadly, an open question is whether the estimated treatment effect is biased due to confounding by unmeasured covariates. We can examine how the substantive conclusion would be impacted under a range of presumed causal bias, $\delta = \psi^{\text{causal}} - \psi^{\text{stat}}$. That is, how *strong* would a particular confounder (or group of confounders) have to be in order to change the conclusions of this study? In a worst case scenario, how vulnerable are the study's results to many or all unobserved confounders acting **together**, possibly non-linearly? The exercise illustrates how the effect estimates, and confidence interval bounds change, depending on the magnitude and direction of the hypothesized gap;
-* We implemented the following methods to conduct sensitivity analysis:
-  * Selection bias and stratification...
-  * Placebo treatment (replacement of the actual treatment with a random variable);
-  * We performed leave-1-out analyses to assess the influence of single subjects on the effect of interest.
+---
 
-We took into consideration the following points to *validate* our results:
-
-* We evaluated whether the obtained results are of any relevance from a public health point of view.
+{{< include ../../../all_phd/app-replicability.qmd >}}
 
 <!-- ####################################################################### -->
 # Appendix
