@@ -41,6 +41,7 @@ format:
     include-in-header:
       - \usepackage{rotating}
       - \usepackage{float}
+      - \usepackage{typearea}
     pandoc_args:
       - !expr acronymsdown::add_filter()
 bibliography: ../../../PhD.bib
@@ -53,60 +54,9 @@ editor_options:
 filters:
   - /home/lorenzo/R/x86_64-pc-linux-gnu-library/4.1/acronymsdown/parse-acronyms.lua
 acronyms:
+  fromfile: ../../../all_phd/acronyms.yml
   insert_links: false
   sorting: alphabetical
-  keys:
-    - key: edc
-      shortname: EDC
-      longname: endocrine disruptor
-    - key: edcs
-      shortname: EDCs
-      longname: endocrine disruptors
-    - key: mtp
-      shortname: MTP
-      longname: modified treatment policy
-    - key: mtps
-      shortname: MTPs
-      longname: modified treatment policies
-    - key: tmle
-      shortname: TMLE
-      longname: Targeted Minimum Loss-Based Estimator
-    - key: sl
-      shortname: SL
-      longname: Super Learner
-    - key: cpm
-      shortname: CPM
-      longname: Raven’s Coloured Progressive Matrices
-    - key: ant
-      shortname: ANT
-      longname: Attention Network Test
-    - key: cbcl
-      shortname: CBCL
-      longname: Child Behavior Checklist
-    - key: npsem
-      shortname: NPSEM
-      longname: non-parametric Structural Equation Model
-    - key: prs
-      shortname: PRS
-      longname: polygenic risk score
-    - key: mr
-      shortname: MR
-      longname: Mendelian Randomization
-    - key: se
-      shortname: SE
-      longname: socio-economic
-    - key: iv
-      shortname: IV
-      longname: instrumental variable
-    - key: ivs
-      shortname: IVs
-      longname: instrumental variables
-    - key: ctd
-      shortname: CTD
-      longname: Comparative Toxicogenomics Database
-    - key: cv
-      shortname: CV
-      longname: cross-validation
 ---
 
 ```{r}
@@ -137,13 +87,13 @@ cv.folds <- 10
 
 \newpage
 
-\textcolor{red}{Most of the following was **copy-pasted** from published papers.}
+Most of the following was **copy-pasted** from published papers.
 
 <!-- ####################################################################### -->
 # Formulate the research question(s)
 <!-- ####################################################################### -->
 
-The **aim** of the present study is to research the short-term effects of postnatal exposure to non-persistent \acr{edcs} on neurodevelopment and neurobehavior in childhood, and how the metabolome and the proteome might mediate these effects. We will strengthen the estimated effects by making use of the principles and criteria of triangulation [@LawlorTillingDaveySmith:2016]. To estimate these effects, we will primarily rely on the use of \acr{mtps} [@munozPopulationInterventionCausal2012; @haneuseEstimationEffectInterventions2013; @diazNonparametricCausalEffects2021] in combination with \acr{tmle} [@vanderlaanTargetedMinimumLossBased2018], to avoid relying on arbitrary parametric assumptions. We will consider both additive and multiplicative shifts of the exposures' distribution.
+The **aim** of the present study is to research the short-term effects of postnatal exposures to non-persistent \acr{edcs} on neurodevelopment and neurobehavior in childhood, and how the metabolome and the proteome might mediate these effects. We will strengthen the estimated effects by making use of the principles and criteria of triangulation [@LawlorTillingDaveySmith:2016]. To estimate these effects, we will primarily rely on the use of \acr{mtps} [@munozPopulationInterventionCausal2012; @haneuseEstimationEffectInterventions2013; @diazNonparametricCausalEffects2021] in combination with \acr{tmle} [@vanderlaanTargetedMinimumLossBased2018], to avoid relying on arbitrary parametric assumptions. We will consider both additive and multiplicative shifts of the exposures' distribution.
 
 The primary study **population** is based on the HELIX sub-cohort, consisting of $\text{N}=1200$ mother-child pairs from six existing European birth cohorts [@vrijheidHumanEarlylifeExposome2014]. We will replicate the obtained results in the HELIX Child Panel, consisting of $\text{N}=150$ children followed twice for one week. **Exposures** consisted of non-persistent \acr{edcs} (phenols, phthalates, and organophosphate compounds), measured in childhood in a pool of two urine samples. A single-spot blood sample, collected during the visit, was used for serum metabolomics and plasma proteomics. **Outcomes** related to childhood neurodevelopment and neurobehavior, included:
 
@@ -156,7 +106,7 @@ The primary study **population** is based on the HELIX sub-cohort, consisting of
 ## Descriptive analyses
 <!-- ####################################################################### -->
 
-\textcolor{red}{TODO}
+{{< include ../../../all_phd/descriptive_stats.qmd >}}
 
 <!-- ####################################################################### -->
 # Define a realistic statistical model
@@ -171,6 +121,12 @@ $\mathbb{P}_{0,t}$ compatible with the causal model specified in @eq-npsem.
 # Specify a causal model and causal quantity of interest
 <!-- ####################################################################### -->
 
+```{r}
+rq1.title <- "What are the short-term effects of childhood exposure to EDCs on the outcomes?"
+rq2.title <- "What are the short-term effects of childhood exposure to EDCs on metabolites and proteins?"
+rq3.title <- "What are the short-term effects of childhood *exposure* to metabolites and proteins on the outcomes?"
+```
+
 We specify the following \acr{npsem} to present the data generating process, 
 including its measured confounders $W_t$, exposures $A_t$, and outcome $Y_t$, for each time index $t$:
 
@@ -184,11 +140,11 @@ $$ {#eq-npsem}
 
 where $(f_{W{_t}}, f_{A_{t}}, f_{Y_{t}})$ are the non-parametric structural equations, 
 and $(U_{W_{t}}, U_{A_{t}}, U_{Y_{t}})$ are the unmeasured factors contributing the confounders, exposures, and outcome, respectively. 
-The corresponding causal graph (without indexes for ease of notation) is given in @fig-causal-graph.
+The corresponding causal graph (without indexes for ease of notation) is shown in @fig-causal-graph.
 
 ```{r}
 #| label: fig-causal-graph
-#| fig.cap: Causal graph corresponding to structural equations.
+#| fig.cap: Causal graph corresponding to the structural equations.
 #| fig.height: 3.0
 #| fig.width: 3.0
 causal_graph <- ggdag::dagify(A ~ W + U_A, Y ~ W + A + U_Y, W ~ U_W, 
@@ -213,7 +169,7 @@ As **primary analyses**, we will estimate the short-term effects of childhood ex
 
 In the following sections, we present a brief summary of each research question.
 
-## Research question 1: What are the short-term effects of childhood exposure to \acr{edcs} on the outcomes?
+## Research question 1: `r rq1.title`
 
 We will estimate the short-term effects of childhood exposure to non-persistent \acr{edcs} on the outcomes of interest measured in childhood. We will perform an ExWAS kind of analysis with the dependent variable $y$ being the outcome, and the independent variable $x_i$ being the levels of \acr{edc} $i$. We will assume that all associations are confounded by the same set of confounders, independently of the \acr{edc} considered.
 
@@ -227,13 +183,13 @@ sdag1 <- ggdag::dagify(X_ti ~ W_t,
   ggplot2::ggtitle("RQ1")
 ```
 
-## Research question 2: What are the short-term effects of childhood exposure to \acr{edcs} on metabolites and proteins?
+## Research question 2: `r rq2.title`
 
-We will estimate the short-term effects of childhood exposure to non-persistent \acr{edcs} on metabolites and proteins measured in childhood. We will perform an MWAS analysis with the dependent variable $m_i$ being the metabolite or protein $i$, and the independent variable $x_j$ being the levels of \acr{edc} $j$. We will assume that all associations are confounded by the same set of confounders, independently of the \acr{edc} considered.
+We will estimate the short-term effects of childhood exposure to non-persistent \acr{edcs} on metabolites and proteins measured in childhood. We will perform an XWAS analysis with the dependent variable $m_i$ being the metabolite or protein $i$, and the independent variable $x_j$ being the levels of \acr{edc} $j$. We will assume that all associations are confounded by the same set of confounders, independently of the \acr{edc} considered.
 
-## Research question 3: What are the short-term effects of childhood *exposure* to metabolites and proteins on the outcomes?
+## Research question 3: `r rq3.title`
 
-We will estimate the short-term effects of childhood *exposure* to metabolites and proteins on the outcomes of interest measured in childhood. We will perform an MWAS analysis with the dependent variable $y$ being the outcome, and the independent variable $m_i$ being the metabolite or protein $i$. We will assume that all associations are confounded by the same set of confounders, independently of the \acr{edc} considered.
+We will estimate the short-term effects of childhood *exposure* to metabolites and proteins on the outcomes of interest measured in childhood. We will perform an XWAS analysis with the dependent variable $y$ being the outcome, and the independent variable $m_i$ being the metabolite or protein $i$. We will assume that all associations are confounded by the same set of confounders, independently of the biomarker considered.
 
 <!-- ####################################################################### -->
 # Identification and the statistical estimand
@@ -241,11 +197,11 @@ We will estimate the short-term effects of childhood *exposure* to metabolites a
 
 For the causal parameter $\phi^{\Delta}$, which involves a summary measure of the distribution of counterfactuals, to be identified in terms of the observed data distribution, several assumptions would be required:
 
-* **No unmeasured confounding**: There are no unmeasured common causes of the exposure and the subsequent outcome, which we can formalize as $Y^d \perp \!\!\! \perp A|W$. In our context, this assumption would be violated if, for example, an unmeasured variable influences both the exposure levels and the clinical outcome. We cannot guarantee that this assumption holds, and therefore limit our interpretations to statistical associations rather than causal effects.
-* **Positivity**: If $(a, w)$ is within the support of $A, W$, then $(d(a,c), w)$ for additive shifts and $(d(a,k), w)$ for multiplicative shifts must also be within the support of $A,W$. In practice, this means that for any given time index and set of adjustment covariates, there is a positive probability of finding a subject with the same covariate values and a exposure level matching the shifted value. We will attempt to improve plausibility of this assumption by considering small shifts, while recognizing that this approach makes our causal effect data-adaptive.
+* **No unmeasured confounding**. There are no unmeasured common causes of the exposure and the subsequent outcome, which we can formalize as $Y^d \perp \!\!\! \perp A|W$. In our context, this assumption would be violated if, for example, an unmeasured variable influences both the exposure levels and the clinical outcome. We cannot guarantee that this assumption holds, and therefore limit our interpretations to statistical associations rather than causal effects.
+* **Positivity**. If $(a, w)$ is within the support of $A, W$, then $(d(a,c), w)$ for additive shifts and $(d(a,k), w)$ for multiplicative shifts must also be within the support of $A,W$. In practice, this means that for any given time index and set of adjustment covariates, there is a positive probability of finding a subject with the same covariate values and a exposure level matching the shifted value. We will attempt to improve plausibility of this assumption by considering small shifts, while recognizing that this approach makes our causal effect data-adaptive.
 * **Independence** of subjects. This assumption also implies **no interference**: the exposure level $a$ for a given subject does not affect the outcomes of the other subjects.
-* **Consistency**: If $A = a$ for any subject, then $Y(a) = Y$, and hence the full observed set of outcomes when $A^d = A$ is simply $Y(A^d) = Y$. This means that the counterfactual outcome for a subject with its observed exposure level is the observed outcome.
-* **Time-ordering**: The confounders $W$ precede the exposure $A$, which also precedes the outcome $Y$.
+* **Consistency**. If $A = a$ for any subject, then $Y(a) = Y$, and hence the full observed set of outcomes when $A^d = A$ is simply $Y(A^d) = Y$. This means that the counterfactual outcome for a subject with its observed exposure level is the observed outcome.
+* **Time-ordering**. The confounders $W$ precede the exposure $A$, which also precedes the outcome $Y$.
 
 If these identifiability assumptions held, we could specify and focus our estimation efforts on a statistical estimand that equals the wished-for causal effect. In the likely case that they are not satisfied, we could still specify and focus our estimation efforts on a statistical estimand that is as close as possible to the causal parameter. Factoring the joint distribution of the observed data $\mathbb{P}_0$ into $\mathbb{P}_0 (O) = \mathbb{P}_0(Y|A,W) \mathbb{P}_0(A|W) \mathbb{P}_0(W)$, it can be shown that the statistical estimand corresponding to expected counterfactual outcome under shift $d$, $\mathbb{E}[Y^d]$, is given by
 
@@ -275,7 +231,7 @@ $$
 r(a,w) = \frac{P(\Lambda=1|a,w)}{1-P(\Lambda=1|a,w)},
 $$
 
-with $\Lambda$ indicating whether each subject received the natural or shifted value of treatment. We refer to $P(\Lambda=1|a,w)$ as $\bar{\lambda}$. To implement estimation of $\bar{\lambda}$ and $\bar{Q}$ flexibly, we will use the ensemble machine learning algorithm \acr{sl}. In the following, we present the steps necessary to estimate $\psi_0 (A^d)$ and the associational parameter $\psi_0^{\Delta}$. We note that our bounded continuous outcome will be **scaled** to $[0,1]$, and that to handle missing covariates $W_{i,j}$, we will redefine the data to include $\delta_{ij}$, where $\delta_{ij}=1$ if the covariate was observed and $0$ otherwise.
+with $\Lambda$ indicating whether each subject received the natural or shifted value of treatment. We refer to $P(\Lambda=1|a,w)$ as $\bar{\lambda}$. To implement estimation of $\bar{\lambda}$ and $\bar{Q}$ flexibly, we will use the ensemble machine learning algorithm \acr{sl} [@vanderlaanSuperLearner2007; @naimiStackedGeneralizationIntroduction2018]. In the following, we present the steps necessary to estimate $\psi_0 (A^d)$ and the associational parameter $\psi_0^{\Delta}$. We note that our bounded continuous outcome will be **scaled** to $[0,1]$, and that to handle missing covariates $W_{i,j}$, we will redefine the data to include $\delta_{ij}$, where $\delta_{ij}=1$ if the covariate was observed and $0$ otherwise.
 
 1. Define and calculate the density ratio under the specified shift $\hat{r} (a_i, w_i)$ for each subject $i = 1, \dots, n$ from $\bar{\lambda}$ estimated via \acr{sl}.
 1. Generate initial conditional expectations for each subject, denoted $\bar{Q}(A,W)$.
@@ -293,14 +249,14 @@ $$
 \hat{\psi}_{\text{tmle}} = \frac{1}{n} \sum_{i=1}^n \bar{Q}^*(A^d,W).
 $$
 
-Using the empirical mean $\hat{Y} = \frac{1}{n} \sum_{i=1}^nY_i$, to estimate $\psi_0(A) = \mathbb{E}(Y)$, we obtain an estimate of the statistical association parameter $\psi_0^{\Delta} = \psi_0(A^d) = \psi_0(A)$ with
+Using the empirical mean $\hat{Y} = \frac{1}{n} \sum_{i=1}^nY_i$, to estimate $\psi_0(A) = \mathbb{E}(Y)$, we obtain an estimate of the statistical association parameter $\psi_0^{\Delta} = \psi_0(A^d) - \psi_0(A)$ with
 $$
 \hat{\psi}^{\Delta} = \hat{\psi}_{\text{tmle}} - \bar{Y}.
 $$
 
 The $95\%$ Wald-style confidence interval $\hat{\psi}^{\Delta} \pm 1.96 \sqrt{Var(\hat{\psi}^{\Delta})}$ is obtained from the influence curve.
 
-Using `r I(cv.folds)`-fold \acr{cv}, \acr{sl} builds the best weighted combination of predictions from the algorithms listed in Table \@ref(tab:lmtp-specs). In case of repeated measures of the exposures, an `ID` variable will be used to make sure that the `r I(cv.folds)`-fold \acr{cv} splits will keep observations from the same individuals in the same split.
+Using `r I(cv.folds)`-fold \acr{cv}, \acr{sl} builds the best weighted combination of predictions from the algorithms listed in \@ref(tab:lmtp-specs). In case of repeated measures of the exposures, an `ID` variable will be used to make sure that the `r I(cv.folds)`-fold \acr{cv} splits will keep observations from the same individuals in the same split.
 
 <!-- ####################################################################### -->
 # Triangulation: Improving causal inference in aetiological epidemiology
@@ -317,21 +273,21 @@ From [@LawlorTillingDaveySmith:2016]:
 For each research question, and each approach, we will perform the following analyses:
 
 - `outcome ~ chemical`
-  - Regression analysis. We will use \acr{tmle} in combination with \acr{sl}, and a library of estimators including both simple parametric models (e.g., `glm`) and data-adaptive semi-parametric models. The models will be adjusted for relevant confounders, as identified with `dagitty`. We hypothesize the presence of residual confounding, especially due to genetic and parental \acr{se} factors, which would result in **exaggeration** of any true causal effect.
-  - Outcome negative control study. We will try to identify outcomes in the same cohorts that would be affected by confounders that are relevant in the association of \acr{edcs} exposure to the clinical outcome of interest, but for which a biological/causal effect of the exposures is unlikely.
-  - Literature search. For each of the `outcome ~ chemical` associations, we will perform a literature search to compare the obtained results. We will make use of PubMed, using as keywords the clinical outcome and the *common* name of each chemical, and the \acr{ctd} [@DavisWiegersJohnson:2023].
-  - Qualitative \acr{prs}. \textcolor{red}{TODO}
+  - **Regression analysis**. We will use \acr{tmle} in combination with \acr{sl}, and a library of estimators including both simple parametric models (e.g., `glm`) and data-adaptive semi-parametric models. The models will be adjusted for relevant confounders, as identified with `dagitty`. We hypothesize the presence of residual confounding, especially due to genetic and parental \acr{se} factors, which would result in **exaggeration** of any true causal effect.
+  - **Outcome negative control study**. We will try to identify outcomes in the same cohorts that would be affected by confounders that are relevant in the association of \acr{edcs} exposure to the clinical outcome of interest, but for which a biological/causal effect of the exposures is unlikely.
+  - **Literature search**. For each of the `outcome ~ chemical` associations, we will perform a literature search to compare the obtained results. We will make use of PubMed, using as keywords the clinical outcome and the *common* name of each chemical, and the \acr{ctd} [@DavisWiegersJohnson:2023].
+  - **Qualitative \acr{prs}**. \textcolor{red}{TODO}
 - `omic ~ chemical`
-  - Regression analysis. As above.
-  - Cross-cohort comparison. We will compare the regression models' results between subjects of different ethnic origins. We postulate that \acr{se} factors represent the main confounders for this association. Based on the associations been \acr{se} factors (e.g., maternal education) and the omic markers, we will compare the results of `omic ~ chemical` with the expected modified associations (e.g., weaker or stronger).
-  - Literature search. As above.
-  - Qualitative \acr{prs}. \textcolor{red}{TODO}
+  - **Regression analysis**. As above.
+  - **Cross-cohort comparison**. We will compare the regression models' results between subjects of different ethnic origins. We postulate that \acr{se} factors represent the main confounders for this association. Based on the associations between \acr{se} factors (e.g., maternal education) and the omic markers, we will compare the results of `omic ~ chemical` with the expected modified associations (e.g., weaker or stronger).
+  - **Literature search**. As above.
+  - **Qualitative \acr{prs}**. \textcolor{red}{TODO}
 - `outcome ~ omic`
-  - Regression analysis. As above.
-  - Cross-cohort comparison. As above.
-  - \acr{mr}. We will make use, ideally, of a weighted allele score of genetic variants known to be robustly associated with the omic markers as an \acr{IV}. We will use methods, including sensitivity analysis, to explore the possibility of bias due to: (i) weak instruments, and (ii) violation of the exclusion restriction criteria. Based on these, we will postulate whether the obtained results might be biased towards the null or not. By using \acr{mr}, we assume that this approach tests *exposure* to omic markers across the whole of childhood.
+  - **Regression analysis**. As above.
+  - **Cross-cohort comparison**. As above.
+  - **\acr{mr}**. We will make use, ideally, of a weighted allele score of genetic variants known to be robustly associated with the omic markers as an \acr{IV}. We will use methods, including sensitivity analysis, to explore the possibility of bias due to: (i) weak instruments, and (ii) violation of the exclusion restriction criteria. Based on these, we will postulate whether the obtained results might be biased towards the **null** or not. By using \acr{mr}, we assume that this approach tests *exposure* to omic markers across the whole of childhood.
 
-## \acr{mr}: Assumptions
+## Mendelian Randomization: Assumptions
 
 \acr{mr} requires three \acr{iv} assumptions (taken from [Wikipedia](https://en.wikipedia.org/wiki/Mendelian_randomization)):
 
@@ -343,13 +299,15 @@ For each research question, and each approach, we will perform the following ana
 # Interpretation and sensitivity analyses to inform a substantive conclusion
 <!-- ####################################################################### -->
 
+## Reliable Causal Inference
+
 {{< include ../../../all_phd/app-rel-ci.qmd >}}
 
----
+## Reliable Statistical Inference
 
 {{< include ../../../all_phd/app-rel-si.qmd >}}
 
----
+## Replicability
 
 {{< include ../../../all_phd/app-replicability.qmd >}}
 
@@ -357,7 +315,11 @@ For each research question, and each approach, we will perform the following ana
 # Appendix
 <!-- ####################################################################### -->
 
-## Checklist A: Reproducibility
+## Data Checking
+
+{{< include ../../../all_phd/app-data-checking.qmd >}}
+
+## Checklist A: Replicability
 
 Table with random seed, names, description, and version numbers of all software packages.
 
@@ -385,25 +347,85 @@ source("../code/dags.R")
 dags <- dag_v1()
 ```
 
-### Research question 1:...
+### Research question 1: `r rq1.title`
 
 ```{r}
-#| fig.cap: DAG for Research question 1.
-#| fig.height: 10.0
-#| fig.width: 18.0
-dag_rq1 <- dags$chem_to_out %>%
+#| fig-cap: DAG for research question 1.
+#| fig-align: center
+#| fig-width: 30
+#| fig-height: 40
+#| out-extra: "keepaspectratio=true"
+dag_rq <- dags$chem_to_out %>%
   dagitty::dagitty()
-dag_rq1 %>% ggdag::tidy_dagitty() %>%
-  ggdag::ggdag_status(text_size = 10, text_col = "black") +
-  ggdag::theme_dag() + ggdag::scale_adjusted() +
+dag_rq %>%
+  ggdag::tidy_dagitty() %>%
+  ggdag::ggdag_status(text_size = 12, text_col = "black") +
+  ggdag::scale_adjusted() +
+  ggdag::theme_dag() +
   ggplot2::theme(legend.text = ggplot2::element_text(size = 20))
+
+adj_sets <- dagitty::adjustmentSets(x = dag_rq, 
+                                    type = type_mas, effect = type_effect)
 ```
 
-The `r I(type_mas)` sufficient adjustment sets for estimating the `r I(type_effect)` effect of X on Y are:
+There are a total of `r length(adj_sets)` `r I(type_mas)` sufficient adjustment sets for estimating the `r I(type_effect)` effect. The first one is:
 
 ```{r}
-dagitty::adjustmentSets(x = dag_rq1, 
-                        type = type_mas, effect = type_effect)
+adj_sets[[1]]
+```
+
+### Research question 2: `r rq2.title`
+
+```{r}
+#| fig-cap: DAG for research question 2.
+#| fig-align: center
+#| fig-width: 30
+#| fig-height: 40
+#| out-extra: "keepaspectratio=true"
+dag_rq <- dags$chem_to_out %>%
+  dagitty::dagitty()
+dag_rq %>%
+  ggdag::tidy_dagitty() %>%
+  ggdag::ggdag_status(text_size = 12, text_col = "black") +
+  ggdag::scale_adjusted() +
+  ggdag::theme_dag() +
+  ggplot2::theme(legend.text = ggplot2::element_text(size = 20))
+
+adj_sets <- dagitty::adjustmentSets(x = dag_rq, 
+                                    type = type_mas, effect = type_effect)
+```
+
+There are a total of `r length(adj_sets)` `r I(type_mas)` sufficient adjustment sets for estimating the `r I(type_effect)` effect. The first one is:
+
+```{r}
+adj_sets[[1]]
+```
+
+### Research question 3: `r rq3.title`
+
+```{r}
+#| fig-cap: DAG for research question 3.
+#| fig-align: center
+#| fig-width: 30
+#| fig-height: 40
+#| out-extra: "keepaspectratio=true"
+dag_rq <- dags$chem_to_out %>%
+  dagitty::dagitty()
+dag_rq %>%
+  ggdag::tidy_dagitty() %>%
+  ggdag::ggdag_status(text_size = 12, text_col = "black") +
+  ggdag::scale_adjusted() +
+  ggdag::theme_dag() +
+  ggplot2::theme(legend.text = ggplot2::element_text(size = 20))
+
+adj_sets <- dagitty::adjustmentSets(x = dag_rq, 
+                                    type = type_mas, effect = type_effect)
+```
+
+There are a total of `r length(adj_sets)` `r I(type_mas)` sufficient adjustment sets for estimating the `r I(type_effect)` effect. The first one is:
+
+```{r}
+adj_sets[[1]]
 ```
 
 \newpage
