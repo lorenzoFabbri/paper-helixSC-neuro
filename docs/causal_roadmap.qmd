@@ -10,30 +10,13 @@ keywords:
   - Endocrine Disrupting Chemicals
   - Neurodevelopment
   - Neurobehavior
-author:
-  - name: "Lorenzo Fabbri"
-    number: 1
-    email: lorenzo.fabbri@isglobal.org
-    orcid: 0000-0003-3031-322X
-    attributes:
-      corresponding: true
-    affiliations:
-      - ref: isg
-      - ref: upf
-affiliations:
-  - id: isg
-    name: Barcelona Institute for Global Health (ISGlobal)
-    city: Barcelona
-    state: Spain
-  - id: upf
-    name: Pompeu Fabra University
-    city: Barcelona
-    state: Spain
+metadata-files:
+  - ../../../all_phd/authors.yml
 format:
   pdf:
     pdf-engine: pdflatex
     number-sections: true
-    toc: true
+    toc: false
     margin-left: 15mm
     margin-right: 15mm
     margin-bottom: 20mm
@@ -53,11 +36,21 @@ editor_options:
   chunk_output_type: console
 filters:
   - /home/lorenzo/R/x86_64-pc-linux-gnu-library/4.1/acronymsdown/parse-acronyms.lua
+  - ../../../all_phd/scholarly-metadata.lua
+  - ../../../all_phd/author-info-blocks.lua
 acronyms:
   fromfile: ../../../all_phd/acronyms.yml
   insert_links: false
+  insert_loa: false
   sorting: alphabetical
 ---
+
+```{=latex}
+\setcounter{tocdepth}{4}
+\tableofcontents
+```
+
+\printacronyms
 
 ```{r}
 #| label: setup
