@@ -32,6 +32,9 @@ link-citations: true
 linkcolor: blue
 execute:
   echo: false
+  warning: false
+  error: false
+  message: false
 editor_options: 
   chunk_output_type: console
 filters:
@@ -50,22 +53,16 @@ acronyms:
 \tableofcontents
 ```
 
-\printacronyms
-
 ```{r}
-#| label: setup
-#| message: false
-library(tidyverse)
-```
-
-```{r}
-#| echo: false
 #| include: false
 
+here::i_am("causal_roadmap.qmd")
 source("../../../all_phd/info_phd.R")
 source("../../../all_phd/triangulation_methods.R")
 infos <- info_phd()
 methods <- describe_triangulation_methods()
+
+library(tidyverse)
 ```
 
 ```{r}
@@ -333,7 +330,6 @@ Table providing values for all non-data arguments, and brief rationale when depa
 ## DAGs
 
 ```{r}
-#| message: false
 source("../DAGs/dag_v1.R")
 source("../code/dags.R")
 
@@ -421,9 +417,9 @@ There are a total of `r length(adj_sets)` `r I(type_mas)` sufficient adjustment 
 adj_sets[[1]]
 ```
 
-\newpage
-
 <!-- ####################################################################### -->
-# Bibliography
+# References {.unnumbered}
 <!-- ####################################################################### -->
 
+::: {#refs}
+:::
