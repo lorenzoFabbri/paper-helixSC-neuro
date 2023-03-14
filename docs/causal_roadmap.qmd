@@ -263,19 +263,51 @@ From [@LawlorTillingDaveySmith:2016]:
 For each research question, and each approach, we will perform the following analyses:
 
 - `outcome ~ chemical`
-  - **Regression analysis**. We will use \acr{tmle} in combination with \acr{sl}, and a library of estimators including both simple parametric models (e.g., `glm`) and data-adaptive semi-parametric models. The models will be adjusted for relevant confounders, as identified with `dagitty`. We hypothesize the presence of residual confounding, especially due to genetic and parental \acr{se} factors, which would result in **exaggeration** of any true causal effect.
-  - **Outcome negative control study**. We will try to identify outcomes in the same cohorts that would be affected by confounders that are relevant in the association of \acr{edcs} exposure to the clinical outcome of interest, but for which a biological/causal effect of the exposures is unlikely.
-  - **Literature search**. For each of the `outcome ~ chemical` associations, we will perform a literature search to compare the obtained results. We will make use of PubMed, using as keywords the clinical outcome and the *common* name of each chemical, and the \acr{ctd} [@DavisWiegersJohnson:2023].
-  - **Qualitative \acr{prs}**. \textcolor{red}{TODO}
+  - **Regression analysis**. We will use \acr{tmle} in combination with \acr{sl}, and a library of estimators including both simple parametric models (i.e., `glm`), and data-adaptive semi-parametric models. Specifically, we will make use of the `lmtp` R package, in combination with \acr{tmle} and \acr{sl}. We will also compare the results obtained with \acr{tmle} with those obtained with a \acr{sdre}. @tbl-lmtp-specs provides detailed information about the specifications used for `lmtp`. \textcolor{red}{TODO: specify the treatment and reference policies.} The models will be adjusted for relevant confounders, as identified with `dagitty`. We hypothesize the presence of residual confounding, especially due to genetic and parental \acr{se} factors, which would result in **exaggeration** of any true causal effect.
+  - **Outcome negative control study**. We will try to identify outcomes in the same cohorts that would be affected by confounders that are relevant in the association of \acr{edcs} exposure to the clinical outcome of interest, but for which a biological/causal effect of the exposures is unlikely. We postulate that \acr{se} factors represent the main confounders for this association. We identified outcomes that are associated to \acr{se} factors, but that are not causally associated to the chemicals: having a car, and whether the child has their own room. \textcolor{red}{A possible issue is represented by the fact that these outcomes are measured on different scales.} We hypothesized that a higher \acr{se} position is positively associated to, e.g., having a car, and negatively associated to the chemicals' concentrations. This would result in a (confounded) **inverse** relationship. We will thus test the assumptions regarding the relation between the \acr{se} factors with each outcome, and check whether these associations are in the anticipated direction.
+  - **Literature search**. For each `outcome ~ chemical` association, we will perform a literature search to compare the obtained results. More precisely, we will adopt the following strategies:
+    - PubChem [@KimChenCheng:2023]. We will search each chemical, and report the results from the sections *Associated Disorders and Diseases* and *Chemical-Disease Co-Occurrences in Literature*. We will report the total number of hits for each section, the number of hits relevant for our outcome(s), and the number of articles for each hit.
+    - The \acr{ctd} [@DavisWiegersJohnson:2023]. We will search each chemical, and report the results from the section *Diseases*. We will specifically look for *curated* associations. We will report the total number of hits, the number of hits relevant for our outcome(s), and the detailed information for each of these.
 - `omic ~ chemical`
   - **Regression analysis**. As above.
   - **Cross-cohort comparison**. We will compare the regression models' results between subjects of different ethnic origins. We postulate that \acr{se} factors represent the main confounders for this association. Based on the associations between \acr{se} factors (e.g., maternal education) and the omic markers, we will compare the results of `omic ~ chemical` with the expected modified associations (e.g., weaker or stronger).
   - **Literature search**. As above.
-  - **Qualitative \acr{prs}**. \textcolor{red}{TODO}
 - `outcome ~ omic`
   - **Regression analysis**. As above.
-  - **Cross-cohort comparison**. As above.
-  - **\acr{mr}**. We will make use, ideally, of a weighted allele score of genetic variants known to be robustly associated with the omic markers as an \acr{IV}. We will use methods, including sensitivity analysis, to explore the possibility of bias due to: (i) weak instruments, and (ii) violation of the exclusion restriction criteria. Based on these, we will postulate whether the obtained results might be biased towards the **null** or not. By using \acr{mr}, we assume that this approach tests *exposure* to omic markers across the whole of childhood.
+  - **Cross-cohort comparison**. We postulate that \acr{se} factors represent the main confounders for this association. We will thus test the association between \acr{se} factors and the omics, separately for the two sub-populations (e.g., white British and Pakistani in BiB [@WrightSmallRaynor:2013]). If this association is smaller among Pakistani, if the association among white British were due to residual \acr{se} factor confounding, we would expect a **weaker** association among Pakistani.
+  - **\acr{mr}**. A simplified \acr{dag} is shown in @fig-dag-mr. We will make use, ideally, of a weighted allele score of genetic variants known to be robustly associated with the omic markers as an \acr{iv}. We will use methods, including sensitivity analysis, to explore the possibility of bias due to: (i) weak instruments, and (ii) violation of the exclusion restriction criteria. Based on these, we will postulate whether the obtained results might be biased towards the **null** or not. By using \acr{mr}, we assume that this approach tests *exposure* to omic markers across the whole of childhood. Specifically, we will perform the following analyses:
+    - We will use the *standard* \acr{ivw} [@BurgessButterworthThompson:2013; @BowdenDelGrecoMMinelli:2019] method for primary \acr{mr} analyses.
+    - We will use MR-Egger [@BowdenDaveySmithBurgess:2015], weighted median [@BowdenSmithHaycock:2016], and MR-PRESSO [@VerbanckChenNeale:2018] for sensitivity analyses.
+  
+    We will make use of \acr{2smr} [@DaveySmithEbrahim:2003; @PierceBurgess:2013; @DaveySmithHemani:2014]. We will thus employ results from two different types of \acr{gwass}: a exposure \acr{gwas}, using The Metabolomics GWAS Server [@SuhreShinPetersen:2011; @ShinFaumanPetersen:2014], and a outcome \acr{gwas}, using the OpenGWAS project [@10.7554/eLife.34408; @ElsworthLyonAlexander:2020]. The effects of the selected genetic variants will then be harmonized.
+
+```{r}
+#| fig-cap: Simplified DAG for MR analyses of `outcome ~ omic` associations.
+#| label: fig-dag-mr
+#| fig-width: 5
+#| fig-height: 4
+coords <- tibble::tribble(
+  ~name, ~x, ~y, 
+  "neuro", 1, 0, 
+  "metab", 0.5, 0, 
+  "SNP", 0, 0, 
+  "C", 0.75, 0.1
+)
+ggdag::dagify(
+  neuro ~ metab + C, 
+  metab ~ SNP + C, 
+  exposure = "metab", 
+  outcome = "neuro", 
+  coords = coords
+) %>%
+  ggdag::ggdag(., layout = "circle") +
+  ggdag::geom_dag_point(col = "gray") +
+  ggdag::geom_dag_edges() +
+  ggdag::geom_dag_text(col = "black") +
+  ggplot2::theme(axis.title = ggplot2::element_blank(), 
+                 axis.ticks = ggplot2::element_blank(), 
+                 axis.text = ggplot2::element_blank())
+```
 
 ## Mendelian Randomization: Assumptions
 
@@ -319,13 +351,27 @@ Table with random seed, names, description, and version numbers of all software 
 | `R` | `r I(paste0(R.version$major, ".", R.version$minor))` | Statistical programming environment |
 | ... | ... | ... |
 
-## Checklist B1: `xxx` package specifications
+## Checklist B1: `lmtp` package specifications
 
 Table providing values for all non-data arguments, and brief rationale when departing from the default specification.
 
 | **Argument** | **Setting** | **Default** (Y/N) | **Comment** |
 |:-------------|:------------|:------------------|:------------|
-| ... | ... | ... | ... |
+| `learners_outcome` | `SL.mean` | N | |
+| `learners_outcome` | `SL.glm` | Y | |
+| `learners_outcome` | `SL.gam` | N | |
+| `learners_outcome` | `SL.hal9001` | N | |
+| `learners_outcome` | `SL.bart` | N | |
+| `learners_trt` | `SL.mean` | N | |
+| `learners_trt` | `SL.glm` | Y | |
+| `learners_trt` | `SL.gam` | N | |
+| `learners_trt` | `SL.hal9001` | N | |
+| `learners_trt` | `SL.bart` | N | |
+| `folds` | 10 | Y | The number of folds to be used for cross-fitting |
+| `.learners_outcome_folds` | 10 | Y | The number of \acr{cv} folds for `learners_outcome` |
+| `.learners_trt_folds` | 10 | Y | The number of \acr{cv} folds for `learners_trt` |
+
+: Specifications for the `lmtp` R package. {#tbl-lmtp-specs}
 
 ## DAGs
 
