@@ -1,25 +1,74 @@
 ---
-title: "Tables"
-output:
-  bookdown::pdf_document2
+title: "Paper 3 - Tables"
+format:
+  docx:
+    reference-doc: reference_document.docx
+  pdf:
+    pdf-engine: pdflatex
+    number-sections: true
+    toc: false
+    margin-left: 15mm
+    margin-right: 15mm
+    margin-bottom: 20mm
+    margin-top: 15mm
+    include-in-header:
+      - \usepackage{rotating}
+      - \usepackage{float}
+      - \usepackage{typearea}
+link-citations: true
+linkcolor: blue
+execute:
+  echo: false
+  warning: false
+  error: false
+  message: false
+editor_options: 
+  chunk_output_type: console
+project:
+  execute_dir: project
 ---
 
 ```{r}
-knitr::opts_chunk$set(echo = FALSE, 
-                      warning = FALSE, message = FALSE, 
-                      cache = TRUE)
+#| include: false
+here::i_am("tables.qmd")
+source("../../../../all_phd/edcs.R")
+library(tidyverse)
 ```
 
 <!-- ####################################################################### -->
-<!-- Study populations -->
+# Study populations
+<!-- ####################################################################### -->
 ```{r}
 
 ```
-<!-- ####################################################################### -->
 
 <!-- ####################################################################### -->
-<!-- Exposures description -->
+# Exposures
+<!-- ####################################################################### -->
 ```{r}
-
+#| label: tbl-chem-info
+#| tbl-cap: Information about the non-persistent EDCs.
+edcs_info <- edcs_information() %>%
+  dplyr::select(-c(chem_id, smiles))
+gt::gt(edcs_info, groupname_col = "class") %>%
+  gt::cols_label(
+    full_name = "Compound", 
+    short_name = "Symbol", 
+    #smiles = "SMILES", 
+    pubchem_cid = "PubChem CID", 
+    ctd_id = "CTD ID", 
+    exposome_explorer_id = "Exposome Explore ID", 
+    parental_compound = "Parental compound"
+  ) %>%
+  gt::tab_style(
+    locations = gt::cells_column_labels(columns = everything()), 
+    style = list(
+      gt::cell_borders(sides = "bottom", weight = gt::px(3)), 
+      gt::cell_text(weight = "bold")
+    )
+  ) %>%
+  gt::tab_style(
+    locations = gt::cells_row_groups(group = everything()), 
+    style = list(gt::cell_text(weight = "bold"))
+  )
 ```
-<!-- ####################################################################### -->
