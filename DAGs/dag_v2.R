@@ -38,19 +38,19 @@ dag_v2 <- function() {
     water_preg ~ cohort + ethnicity_mother + maternalSEP_preg + paternalSEP_preg, 
     exposure = "chemical", 
     outcome = "intelligence"
-    # coords = list(
-    #   x = c(chemical = 0, intelligence = 1), 
-    #   y = c(chemical = 0, intelligence = 1)
-    # )
   )
   ##############################################################################
   
   ##############################################################################
-  chem_to_marker <- ''
+  chem_to_marker <- ggdag::dagify(
+    
+  )
   ##############################################################################
   
   ##############################################################################
-  marker_to_out <- ''
+  marker_to_out <- ggdag::dagify(
+    
+  )
   ##############################################################################
   
   return(list(
