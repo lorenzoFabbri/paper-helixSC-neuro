@@ -1,45 +1,37 @@
 ---
-title: "Paper X"
-keywords:
-  - Causal Inference
-  - Epidemiology
-author:
-  - name: "Lorenzo Fabbri"
-    number: 1
-    email: lorenzo.fabbri@isglobal.org
-    orcid: 0000-0003-3031-322X
-    attributes:
-      corresponding: true
-    affiliations:
-      - ref: isg
-      - ref: upf
-affiliations:
-  - id: isg
-    name: ISGlobal
-    city: Barcelona
-    state: Spain
-  - id: upf
-    name: UPF
-    city: Barcelona
-    state: Spain
+metadata-files:
+  - ../../../../all_phd/authors.yml
 format:
   pdf:
     pdf-engine: pdflatex
+    number-sections: true
     toc: false
-  # docx:
-#csl: journal.csl
-bibliography: bibliography.bib
+    include-in-header:
+      - \usepackage{rotating}
+      - \usepackage{float}
+      - \usepackage{typearea}
+    pandoc_args:
+      - !expr acronymsdown::add_filter()
+bibliography: ../../../../PhD.bib
 link-citations: true
 linkcolor: blue
-header-includes:
-  - \usepackage{setspace}\doublespacing
-  - \usepackage[switch, pagewise, running]{lineno}
-  - \linenumbers
-  - \renewcommand\linenumberfont{\normalfont\small}
-  - \usepackage{rotating}
-  - \usepackage{float}
+execute:
+  echo: false
+  warning: false
+  error: false
+  message: false
+editor_options: 
+  chunk_output_type: console
+filters:
+  - /home/lorenzo/R/x86_64-pc-linux-gnu-library/4.1/acronymsdown/parse-acronyms.lua
+  - ../../../../all_phd/scholarly-metadata.lua
+  - ../../../../all_phd/author-info-blocks.lua
+acronyms:
+  fromfile: ../../../../all_phd/acronyms.yml
+  insert_links: false
+  insert_loa: false
+  sorting: alphabetical
 abstract: |
- \singlespacing
  **Background**
  
  **Objectives**
@@ -56,9 +48,17 @@ abstract: |
 \tableofcontents
 ```
 
-\twocolumn
-\doublespacing
-\pagewiselinenumbers
+```{r}
+#| include: false
+
+here::i_am("manuscript.qmd")
+source("../../../../all_phd/info_phd.R")
+infos <- info_phd()
+```
+
+---
+title: "`r infos$paper3$title`"
+---
 
 <!-- ####################################################################### -->
 <!-- INTRODUCTION -->
@@ -93,7 +93,5 @@ abstract: |
 <!-- ####################################################################### -->
 
 \newpage
-\onecolumn
-\singlespacing
 
 # References

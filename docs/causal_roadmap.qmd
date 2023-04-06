@@ -85,6 +85,39 @@ Most of the following was **copy-pasted** from published papers.
 
 The **aim** of the present study is to research the short-term effects of postnatal exposures to non-persistent \acr{edcs} on neurodevelopment and neurobehavior in childhood, and how the metabolome and the proteome might mediate these effects. We will strengthen the estimated effects by making use of the principles and criteria of triangulation [@LawlorTillingDaveySmith:2016]. To estimate these effects, we will primarily rely on the use of \acr{mtps} [@munozPopulationInterventionCausal2012; @haneuseEstimationEffectInterventions2013; @diazNonparametricCausalEffects2021] in combination with \acr{tmle} [@vanderlaanTargetedMinimumLossBased2018], to avoid relying on arbitrary parametric assumptions. We will consider both additive and multiplicative shifts of the exposures' distribution.
 
+@fig-diagram summarizes the research questions and adopted methods to answer them. In case of regression analysis using \acr{mtps}, the causal quantity of interest, $\phi^{\Delta, i} = \mathbb{E}[Y^{d_i}] - \mathbb{E}[Y]$, will be *adapted* to the research question (i.e., different policies based on the type of exposure).
+
+```{mermaid}
+%%| fig-cap: Diagram summarizing research questions and methods.
+%%| label: fig-diagram
+flowchart LR
+  paper[Paper 3] --> rq1("RQ1
+                          neuro~chemical")
+  paper          --> rq2("RQ2
+                          met~chemical")
+  paper          --> rq3("RQ3
+                          neuro~met")
+  rq1            --> rqReg("Observational study.
+                            Method: Regression with MTPs.
+                            Causal estimand: phi.
+                            Uncertainty quantification: bootstrapping.")
+  rq1            --> rq1outNeg("Outcome negative control.
+                                Method: Regression with GLMs/GAMs.
+                                Uncertainty quantification: bootstrapping.")
+  rq1            --> rqLit("Literature search")
+  
+  rq2            --> rqReg
+  rq2            --> rqCrossCohort("Cross-cohort comparison.
+                                    Method: Regression with GLMs/GAMs.
+                                    Uncertainty quantification: bootstrapping.")
+  rq2            --> rqLit
+  
+  rq3            --> rqReg
+  rq3            --> rqCrossCohort
+  rq3            --> rq3mr("Mendelian Randomization.
+                            Causal estimand: .")
+```
+
 The primary study **population** is based on the HELIX sub-cohort, consisting of $\text{N}=1200$ mother-child pairs from six existing European birth cohorts [@vrijheidHumanEarlylifeExposome2014]. We will replicate the obtained results in the HELIX Child Panel, consisting of $\text{N}=150$ children followed twice for one week. **Exposures** consisted of non-persistent \acr{edcs} (phenols, phthalates, and organophosphate compounds), measured in childhood in a pool of two urine samples. A single-spot blood sample, collected during the visit, was used for serum metabolomics and plasma proteomics. **Outcomes** related to childhood neurodevelopment and neurobehavior, included:
 
 - \acr{cpm}, for assessing non-verbal intelligence.
@@ -246,7 +279,7 @@ $$
 
 The $95\%$ Wald-style confidence interval $\hat{\psi}^{\Delta} \pm 1.96 \sqrt{Var(\hat{\psi}^{\Delta})}$ is obtained from the influence curve.
 
-Using `r I(cv.folds)`-fold \acr{cv}, \acr{sl} builds the best weighted combination of predictions from the algorithms listed in \@ref(tab:lmtp-specs). In case of repeated measures of the exposures, an `ID` variable will be used to make sure that the `r I(cv.folds)`-fold \acr{cv} splits will keep observations from the same individuals in the same split.
+Using `r I(cv.folds)`-fold \acr{cv}, \acr{sl} builds the best weighted combination of predictions from the algorithms listed in @tbl-lmtp-specs. In case of repeated measures of the exposures, an `ID` variable will be used to make sure that the `r I(cv.folds)`-fold \acr{cv} splits will keep observations from the same individuals in the same split.
 
 <!-- ####################################################################### -->
 # Triangulation: Improving causal inference in aetiological epidemiology
@@ -403,7 +436,7 @@ Genetic polymorphisms relevant for the **chemicals**:
   * The \acr{snp} of the *UGT2B15* gene: `rs1902023`. Reference: https://doi.org/10.1016/j.envint.2020.106172.
 * Phthalates:
   *  The \acr{snps} of the cytochrome P450 (*CYPs*) and UDP-glucuronosyltransferase (*UGTs*) genes: `rs1057910`, `rs1799853`, `rs4244285`, `rs12248560`, `rs3892097`, `rs1902023`, and `rs11692021`. Reference: https://doi.org/10.1016/j.envint.2021.107046.
-  * The \acr{snps} of the *PPAR*$\alpha$ gene: `rs75525202`, `rs4823902`, `rs4253690`, `rs12330015`, `rs5766698`, `rs115250492`, and `rs1800246.` Reference: https://doi.org/10.3389/fgene.2022.855544. Not sure whether these \acr{snps} should be considered in the list below.
+  * The \acr{snps} of the *PPAR*$\alpha$ gene: `rs75525202`, `rs4823902`, `rs4253690`, `rs12330015`, `rs5766698`, `rs115250492`, and `rs1800246`. Reference: https://doi.org/10.3389/fgene.2022.855544. Not sure whether these \acr{snps} should be considered in the list below.
 
 Genetic polymorphisms relevant for the **outcomes**:
 
@@ -466,11 +499,16 @@ There are a total of `r length(adj_sets)` `r I(type_mas)` sufficient adjustment 
 #| fig-width: 30
 #| fig-height: 40
 #| out-extra: "keepaspectratio=true"
+dag_rq <- dags$marker_to_out
+myphd::visualize_dag(dag_rq)
+adj_sets <- dagitty::adjustmentSets(x = dag_rq, 
+                                    type = type_mas, effect = type_effect)
 ```
 
 There are a total of `r length(adj_sets)` `r I(type_mas)` sufficient adjustment sets for estimating the `r I(type_effect)` effect. The first one is:
 
 ```{r}
+adj_sets[[1]]
 ```
 
 <!-- ####################################################################### -->

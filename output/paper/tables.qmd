@@ -3,18 +3,6 @@ title: "Paper 3 - Tables"
 format:
   docx:
     reference-doc: reference_document.docx
-  pdf:
-    pdf-engine: pdflatex
-    number-sections: true
-    toc: false
-    margin-left: 15mm
-    margin-right: 15mm
-    margin-bottom: 20mm
-    margin-top: 15mm
-    include-in-header:
-      - \usepackage{rotating}
-      - \usepackage{float}
-      - \usepackage{typearea}
 link-citations: true
 linkcolor: blue
 execute:

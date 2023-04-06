@@ -1,17 +1,43 @@
 ---
-title: "Figures"
-output:
-  bookdown::pdf_document2
+title: "Paper 3 - Figures"
+format:
+  pdf:
+    pdf-engine: pdflatex
+    toc: false
+    include-in-header:
+      - \usepackage{rotating}
+      - \usepackage{float}
+      - \usepackage{typearea}
+link-citations: true
+linkcolor: blue
+execute:
+  echo: false
+  warning: false
+  error: false
+  message: false
+editor_options: 
+  chunk_output_type: console
+project:
+  execute_dir: project
 ---
 
 ```{r}
-knitr::opts_chunk$set(echo = FALSE, 
-                      warning = FALSE, message = FALSE, 
-                      cache = TRUE)
+#| include: false
+here::i_am("figures.qmd")
+source("../../code/ctd.R")
+library(tidyverse)
 ```
 
 <!-- ####################################################################### -->
-<!-- Workflow -->
-```{r}
-```
+# CTD Results
 <!-- ####################################################################### -->
+```{r}
+#| label: fig-ctd-res
+#| fig.cap: Barplot CTD.
+#| fig.height: 10
+#| fig.width: 10
+path <- "../../results/files/CTD_chem_diseases_1680702221550_05042023.csv"
+ctd <- loadCTD(path = path, 
+               filter_evidence = TRUE)
+plotCTD(ctd)
+```
