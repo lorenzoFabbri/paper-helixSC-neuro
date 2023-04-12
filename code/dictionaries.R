@@ -26,7 +26,6 @@ process_one_sheet <- function(sheet_id) {
     ))
   
   # Some variables from the codebooks have the wrong type
-  google_sheet[google_sheet$var_name == "e3_alcpreg_g", "type"] <- "integer"
   google_sheet[google_sheet$var_name == "hs_tob", "type"] <- "categorical"
   google_sheet[google_sheet$var_name == "e3_edum", "type"] <- "categorical"
   google_sheet[google_sheet$var_name == "e3_eduf", "type"] <- "categorical"
@@ -41,6 +40,7 @@ process_one_sheet <- function(sheet_id) {
   google_sheet[google_sheet$var_name == "e3_bw", "type"] <- "numerical"
   google_sheet[google_sheet$var_name == "e3_bhc", "type"] <- "numerical"
   google_sheet[google_sheet$var_name == "e3_bl", "type"] <- "numerical"
+  google_sheet[google_sheet$var_name == "e3_alcpreg_g", "type"] <- "integer"
   google_sheet[google_sheet$var_name == "hs_total_fish", "type"] <- "integer"
   google_sheet[google_sheet$var_name == "hs_total_veg", "type"] <- "integer"
   google_sheet[google_sheet$var_name == "hs_total_fruits", "type"] <- "integer"
@@ -228,17 +228,23 @@ dict_mapping_vars <- function() {
                            "hs_nox_wk_hs_t", 
                            "hs_pm10_wk_hs_t", 
                            "hs_pm25_wk_hs_t"), 
-    ############################################################################
-    airPollution_preg = c("NULL"), 
-    ############################################################################
+    airPollution_preg = c("h_no2_ratio_t1", 
+                          "h_no2_ratio_t2", 
+                          "h_no2_ratio_t3", 
+                          "h_nox_ratio_t1", 
+                          "h_nox_ratio_t2", 
+                          "h_nox_ratio_t3", 
+                          "h_pm10_ratio_t1", 
+                          "h_pm10_ratio_t2", 
+                          "h_pm10_ratio_t3", 
+                          "h_pm25_ratio_t1", 
+                          "h_pm25_ratio_t2", 
+                          "h_pm25_ratio_t3"), 
     breastfeeding = c("hs_bf", 
                       "hs_bfdur"), 
     bw = c("e3_bw", 
            "e3_bhc", 
            "e3_bl"), 
-    ############################################################################
-    child_alcohol = c("NULL"), 
-    ############################################################################
     child_diet = c("hs_total_fish", 
                    "hs_total_veg", 
                    "hs_total_fruits", 
@@ -247,9 +253,6 @@ dict_mapping_vars <- function() {
                    "hs_canfish"), 
     child_smoking = c("hs_tob", 
                       "hs_smk_parents"), 
-    ############################################################################
-    edu_child = c("NULL"), 
-    ############################################################################
     familySEP = c("hs_wrk_m", 
                   "hs_finance", 
                   "FAS_score"), 
@@ -260,11 +263,10 @@ dict_mapping_vars <- function() {
     ############################################################################
     maternalAlcohol_preg = c("e3_alcpreg_yn", 
                              "e3_alcpreg_g"), 
-    ############################################################################
-    maternalDiet_preg = c("NULL"), 
-    maternalIodine_preg = c("NULL"), 
-    maternalIron_preg = c("NULL"), 
-    ############################################################################
+    maternalDiet_preg = c("h_fish_preg", 
+                          "h_veg_preg", 
+                          "h_fruit_preg", 
+                          "h_fastfood_preg"), 
     maternalSEP_preg = c("e3_edum", 
                          "e3_ses"), 
     maternalSmoking_preg = c("e3_psmokt1", 
@@ -282,9 +284,7 @@ dict_mapping_vars <- function() {
                              "e3_asmokcigd_t3", 
                              "e3_asmokcigd_t2_t3", 
                              "e3_asmokcigd_p"), 
-    ############################################################################
-    maternal_folicAcid_preg = c("NULL"), 
-    ############################################################################
+    maternal_folicAcid_preg = c("h_folic_t1"), 
     neuropsychologicalDiagnosis_child = c("hs_neuro_diag"), 
     otherChemicals_child = c("hs_as_c", 
                              "hs_cd_c", 
@@ -320,27 +320,37 @@ dict_mapping_vars <- function() {
                             "hs_detp_madj", 
                             "hs_dedtp_madj"), 
     paternalSEP_preg = c("e3_eduf"), 
-    ############################################################################
-    paternalSmoking_preg = c("NULL"), 
-    ############################################################################
     qualityTesting_child = c("hs_qual_test", 
                              "hs_rest_nth", 
                              "hs_mood"), 
     water_child = c("hs_wtr_hm"), 
     sex_child = c("hs_Gender"), 
     ethnicity_child = c("hs_Ethnic"), 
-    ############################################################################
-    water_preg = c("NULL"), 
-    ethnicity_mother = c("NULL"), 
-    child_depression = c("NULL"), 
-    ############################################################################
+    ethnicity_mother = c("h_ethnicity_m"), 
     envFactors_visit = c("hs_temp", 
                          "hs_noise"), 
     season_visit = c("hs_date_neu"), 
     cohort = c("cohort"), 
-    ############################################################################
-    chemicals_SNPs = c("NULL")
-    ############################################################################
+    chemicals_SNPs = c("rs1057910", 
+                       "rs115250492", 
+                       "rs11692021", 
+                       "rs12248560", 
+                       "rs12330015", 
+                       "rs1799807", 
+                       "rs1799853", 
+                       "rs1800246", 
+                       "rs1803274", 
+                       "rs1902023", 
+                       "rs2177180", 
+                       "rs3892097", 
+                       "rs4244285", 
+                       "rs4253690", 
+                       "rs4823902", 
+                       "rs5766698", 
+                       "rs662", 
+                       "rs705379", 
+                       "rs75525202", 
+                       "rs854560")
   ) # END dictionary RQ1
   
   ##############################################################################
