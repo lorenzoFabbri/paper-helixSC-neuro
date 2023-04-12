@@ -391,12 +391,20 @@ ggdag::dagify(
 ## Checklist A: Replicability
 <!-- ####################################################################### -->
 
-Table with random seed, names, description, and version numbers of all software packages.
+Table with random seed, names, version numbers, and description of the main software packages.
 
 | **Name** | **Version** | **Description** |
 |:---------|:------------|:----------------|
 | Random seed | NA | Will be set to $X$ |
 | `R` | `r I(paste0(R.version$major, ".", R.version$minor))` | Statistical programming environment |
+| `tlverse` | `r packageVersion("tlverse")` | Targeted Learning software ecosystem in R |
+| `lmtp` | `r packageVersion("lmtp")` | Non-parametric Causal Effects of Feasible Interventions Based on Modified Treatment Policies |
+| `sl3` | `r packageVersion("sl3")` | Super Learner ensemble machine learning |
+| `labelled` | `r packageVersion("labelled")` | Manipulate metadata |
+| `dlookr` | `r packageVersion("dlookr")` | Diagnose, explore, and transform data |
+| `Hmisc` | `r packageVersion("Hmisc")` | Harrell Miscellaneous |
+| `dagitty` | `r packageVersion("dagitty")` | Graphical Analysis of Structural Causal Models |
+| `qreport` | `r packageVersion("qreport")` | Facilitating the composition of Quarto reports |
 | ... | ... | ... |
 
 ## Checklist B1: `lmtp` package specifications
