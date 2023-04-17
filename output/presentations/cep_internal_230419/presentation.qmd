@@ -1,0 +1,29 @@
+---
+title: "CEP Group Meeting"
+date: 2023-04-19
+author: Lorenzo Fabbri
+format:
+  revealjs:
+    footer: "Lorenzo Fabbri"
+    toc: true
+    toc_float: true
+    toc-depth: 2
+    toc-location: body
+link-citations: true
+linkcolor: blue
+execute:
+  echo: false
+  warning: false
+  error: false
+  message: false
+editor_options: 
+  chunk_output_type: console
+---
+
+# Overview
+
+## The Research Questions
+
+# Triangulation
+
+# Reliability and Replicability
