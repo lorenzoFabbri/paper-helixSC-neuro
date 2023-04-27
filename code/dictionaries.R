@@ -1,6 +1,35 @@
 # Script containing dictionaries (e.g., exposures)
 
 ################################################################################
+# Parameters for entire paper
+################################################################################
+params <- function() {
+  paths <- list(
+    # Raw
+    path_covariates_post = "", 
+    path_covariates_preg = "", 
+    path_snps = "", 
+    path_exposures_backtrans = "~/mounts/PROJECTES/HELIX_OMICS/data_raw/exposome.backtransf/child/preg_8y/20180901/20180919_v2_3_backtransformed.Rdata", 
+    path_exposures_post_raw = "~/mounts/PROJECTES/HELIX_OMICS/data_final/exposome/child/preg_8y/v2_3_20180601/exppostnatal_raw_v2_3.RData", 
+    path_exposures_preg_raw = "~/mounts/PROJECTES/HELIX_OMICS/data_final/exposome/child/preg_8y/v2_3_20180601/exppregnancy_raw_v2_3.RData", 
+    path_exposures_post_final = "~/mounts/PROJECTES/HELIX_OMICS/data_final/exposome/child/preg_8y/v2_3_20180601/exppostnatal_v2_3.RData", 
+    path_exposures_preg_final = "~/mounts/PROJECTES/HELIX_OMICS/data_final/exposome/child/preg_8y/v2_3_20180601/exppregnancy_v2_3.RData", 
+    path_metabolome_serum = "~/mounts/PROJECTES/HELIX_OMICS/data_final/metab/child/8y/serum.urine_Biocrates.NMR_QChelix_20170101/metab_serum_subcohort_v3.RData", 
+    path_metabolome_urine = "~/mounts/PROJECTES/HELIX_OMICS/data_final/metab/child/8y/serum.urine_Biocrates.NMR_QChelix_20170101/metab_urine_subcohort_v3.RData", 
+    
+    # Processed during analyses
+    path_exposures_post_procme = "~/mounts/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF_phd/data/data_paper3/processed/exposures/", 
+    path_exposures_preg_procme = "~/mounts/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF_phd/data/data_paper3/processed/exposures/", 
+    path_metabolome_serum = "~/mounts/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF_phd/data/data_paper3/processed/omics/", 
+    path_metabolome_urine = "~/mounts/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF_phd/data/data_paper3/processed/omics/"
+  )
+  
+  return(list(
+    paths = paths
+  ))
+}
+
+################################################################################
 # Parameters for running analyses
 ################################################################################
 params_analyses <- function() {
