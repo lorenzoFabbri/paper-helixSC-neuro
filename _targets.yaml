@@ -1,3 +1,6 @@
+rq0:
+  script: _targets_rq0.R
+  store: ../../../../data/data_paper3/_targets/rq0
 rq1:
   script: _targets_rq1.R
   store: ../../../../data/data_paper3/_targets/rq1
