@@ -1,6 +1,6 @@
 # DAGs based on research questions defined in the Causal Roadmap
 
-dag_v1 <- function() {
+dag_raw <- function() {
   ##############################################################################
   nodes <- 'dag{
   bb="0,0,1,1"

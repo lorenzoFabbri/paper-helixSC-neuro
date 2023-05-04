@@ -1,6 +1,6 @@
 # DAGs based on research questions defined in the Causal Roadmap
 
-dag_v2 <- function() {
+dags <- function() {
   ##############################################################################
   chem_to_out <- ggdag::dagify(
     airPollution_child ~ cohort + familySEP + season_visit, 

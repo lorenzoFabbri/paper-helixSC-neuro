@@ -1,6 +1,3 @@
-rq0:
-  script: _targets_rq0.R
-  store: ../../../../data/data_paper3/_targets/rq0
 rq1:
   script: _targets_rq1.R
-  store: ../../../../data/data_paper3/_targets/rq1
+  store: "../../../../../../mounts/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF_phd/data/data_paper3/_targets/_targetsRQ1"

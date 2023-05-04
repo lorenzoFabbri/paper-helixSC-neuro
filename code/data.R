@@ -3,7 +3,7 @@
 ################################################################################
 # Function to load exposome object and extract relevant datasets.
 ################################################################################
-process_exposome <- function(path_in) {
+load_exposome <- function(path_in) {
   # Path to the object of class ExposomeSet
   obj <- get(load(path_in))
   # Covariates

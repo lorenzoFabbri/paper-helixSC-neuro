@@ -1,25 +1,31 @@
-# Load packages required to define the pipeline
-library(targets)
-library(tarchetypes)
-source("code/")
+source("code/dictionaries.R")
+source("code/data.R")
+source("DAGs/dag_v2.R")
+source("code/research_questions/rq1.R")
 
-# Set target options
 targets::tar_option_set(
-  packages = c(""), 
   format = "qs"
 )
 options(clustermq.scheduler = "multicore")
 
-# Run the R scripts in the code/ folder with custom functions
-targets::tar_source()
+params_dag <- list(
+  type = "minimal", 
+  effect = "total"
+)
 
 list(
   targets::tar_target(
-    name = data, 
-    command = ""
-  ), 
+    name = dag, 
+    command = rq1_dag(dags = dags(), 
+                      exposure = "chemical", 
+                      outcome = "intelligence", 
+                      params_dag = params_dag)
+  ), # End dag target
   targets::tar_target(
-    name = model, 
-    command = ""
-  )
+    name = load_dat, 
+    command = rq1_load_data(params = params(), 
+                            which_expo = "path_exposures_post_final", 
+                            which_covars = c(), 
+                            which_outcome = "")
+  ) # End load_dat target
 )
