@@ -1,8 +1,38 @@
-# Script containing functions to handle datasets.
+#' Load the dataset corresponding to the HELIX data request
+#'
+#' @return A named list of data and metadata. A list.
+#' @export
+load_dat_request <- function() {
+  paths <- params()$paths
+  dat <- read.csv(paths$path_dat_request, 
+                  header = TRUE, stringsAsFactors = TRUE, 
+                  na.strings = c("NA", "null")) |>
+    tibble::as_tibble()
+  dat$e3_cbirth <- lubridate::as_date(dat$e3_cbirth)
+  
+  meta <- readODS::read_ods("docs/data_request_relevant.ods", 
+                            col_names = TRUE, strings_as_factors = TRUE) |>
+    tibble::as_tibble()
+  cols_to_change_type <- c("dag", "variable", 
+                           "description", "code", "label", 
+                           "comments")
+  meta[cols_to_change_type] <- sapply(
+    meta[cols_to_change_type], as.character
+  )
+  
+  return(list(
+    dat = dat, 
+    meta = meta
+  ))
+} # End function load data request
+################################################################################
 
-################################################################################
-# Function to load exposome object and extract relevant datasets.
-################################################################################
+#' Load exposome object
+#'
+#' @param path_in Path to exposome object. A string.
+#'
+#' @return A named list of phenotype data, meta-data, and exposures. A list.
+#' @export
 load_exposome <- function(path_in) {
   # Path to the object of class ExposomeSet
   obj <- get(load(path_in))
@@ -22,4 +52,4 @@ load_exposome <- function(path_in) {
     meta_data = meta, 
     exposure_data = expo
   ))
-}
+} # End function load exposome object
