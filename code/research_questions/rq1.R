@@ -44,7 +44,6 @@ rq1_load_data <- function(ids_other_covars, res_dag) {
   
   # Create one dataset for covariates, one for exposures, and one for outcomes
   dat <- list()
-  
   dat$exposures <- dat_request$dat |>
     dplyr::select(params_dat$variables$identifier, 
                   dplyr::contains(params_dat$variables$rq1$exposures, 
@@ -52,7 +51,6 @@ rq1_load_data <- function(ids_other_covars, res_dag) {
   dat$outcome <- dat_request$dat |>
     dplyr::select(params_dat$variables$identifier, 
                   params_dat$variables$rq1$outcome)
-  
   adj_set <- res_dag$adjustment_sets[[1]]
   mapping_covars <- dat_request$meta[dat_request$meta$dag %in% adj_set, 
                                      ]$variable
@@ -68,12 +66,27 @@ rq1_load_data <- function(ids_other_covars, res_dag) {
 
 #' Pre-process data for RQ1
 #'
-#' @param dat 
-#' @param metadat 
+#' @param dat
 #'
 #' @return
 #' @export
-rq1_prepare_data <- function(dat, metadat) {
+rq1_prepare_data <- function(dat) {
+  params_dat <- params()
+  steps_exposures <- params_dat$variables$preproc_exposures
+  steps_covars <- params_dat$variables$preproc_covars
+  
+  # Process exposures
+  dat$exposures <- myphd::preproc_data(dat = dat$exposures, 
+                                       dic_steps = steps_exposures)
+  
+  # Process covariates
+  dat$covariates$h_folic_t1 <- as.integer(dat$covariates$h_folic_t1)
+  dat$covariates$e3_ses <- as.integer(dat$covariates$e3_ses)
+  dat$covariates$e3_asmokyn_p <- as.integer(dat$covariates$e3_asmokyn_p)
+  dat$covariates <- myphd::preproc_data(dat = dat$covariates, 
+                                        dic_steps = steps_covars)
+  
+  return(dat)
 } # End function prepare data
 ################################################################################
 
@@ -90,11 +103,19 @@ rq1_describe_data <- function(dat, metadat) {
 
 #' Title
 #'
-#' @param params_analyses 
+#' @param
 #'
 #' @return
 #' @export
-rq1_run_mtp <- function(params_analyses) {
+rq1_run_mtp <- function() {
+  params_dat <- params()
+  outcome <- params_dat$variables$rq1$outcome
+  steps_outcome <- params_dat$variables$preproc_outcome
+  
+  # Process outcome
+  dat$exposures <- myphd::preproc_data(dat = dat$outcome, 
+                                       outcome = outcome, 
+                                       dic_steps = steps_outcome)
 } # End function run analysis mtp
 ################################################################################
 
@@ -105,6 +126,14 @@ rq1_run_mtp <- function(params_analyses) {
 #' @return
 #' @export
 rq1_run_out_neg_control <- function(params_analyses) {
+  params_dat <- params()
+  outcome <- params_dat$variables$rq1$outcome_negative
+  steps_outcome <- params_dat$variables$preproc_outcome
+  
+  # Process outcome
+  dat$exposures <- myphd::preproc_data(dat = dat$outcome, 
+                                       outcome = outcome, 
+                                       dic_steps = steps_outcome)
 } # End function run analysis negative control
 ################################################################################
 

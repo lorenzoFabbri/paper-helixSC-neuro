@@ -1,3 +1,20 @@
+#' Title
+#'
+#' @param dat 
+#'
+#' @return
+#' @export
+extract_cohort_id <- function(dat) {
+  params_dat <- params()
+  dat <- dat |>
+    dplyr::mutate(cohort = substr(
+      params_dat$variables$identifier, 1, 3
+    )) |>
+    dplyr::relocate(cohort)
+  
+  return(dat)
+}
+
 #' Load the dataset corresponding to the HELIX data request
 #'
 #' @return A named list of data and metadata. A list.

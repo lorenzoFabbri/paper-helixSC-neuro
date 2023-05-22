@@ -32,10 +32,33 @@ params <- function() {
   
   variables <- list(
     identifier = "HelixID", 
+    perc_missing_vars = 40, 
+    perc_missing_cases = 40, 
     rq1 = list(
       outcome = "hs_ADHD_raw", 
+      outcome_negative = "", 
       exposures = "cadj"
-    )
+    ), 
+    preproc_exposures = list(
+      missings = list(
+        do = TRUE
+      ), 
+      standardization = list(
+        do = TRUE, 
+        center = TRUE, 
+        scale = TRUE
+      )
+    ), # End preproc_exposures
+    preproc_outcome = list(
+      bound = list(
+        do = TRUE
+      )
+    ), # End preproc_outcome
+    preproc_covars = list(
+      missings = list(
+        do = TRUE
+      )
+    ) # End preproc_covars
   )
   ##############################################################################
   

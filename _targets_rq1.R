@@ -23,9 +23,11 @@ list(
   ), # End dag target
   targets::tar_target(
     name = load_dat, 
-    command = rq1_load_data(params = params(), 
-                            which_expo = "path_exposures_post_final", 
-                            which_covars = c(), 
-                            which_outcome = "")
-  ) # End load_dat target
+    command = rq1_load_data(ids_other_covars = c(), 
+                            res_dag = dag)
+  ), # End load_dat target
+  targets::tar_target(
+    name = preproc_dat, 
+    command = rq1_prepare_data(dat = load_dat)
+  ) # End preproc_dat target
 )
