@@ -10,6 +10,11 @@ editor_options:
 
 # 28/05/2023
 
+Remaining doubts:
+
+* Should I include the covariates when imputing the exposures?
+* Should I impute the covariates by cohort?
+
 ## Missing values by variables
 
 * There is a clear pattern for some covariates and some cohorts.

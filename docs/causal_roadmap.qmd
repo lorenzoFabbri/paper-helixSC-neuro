@@ -455,7 +455,7 @@ Genetic polymorphisms relevant for the **outcomes**:
 ```{r}
 source("../DAGs/dag_v2.R")
 
-dags <- dag_v2()
+dags <- dags()
 ```
 
 <!-- ####################################################################### -->
