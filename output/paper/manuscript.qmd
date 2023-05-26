@@ -7,11 +7,10 @@ format:
     number-sections: true
     toc: false
     include-in-header:
-      - \usepackage{rotating}
-      - \usepackage{float}
-      - \usepackage{typearea}
-    pandoc_args:
-      - !expr acronymsdown::add_filter()
+      text: |
+        \usepackage{rotating}
+        \usepackage{float}
+        \usepackage{typearea}
 bibliography: ../../../../PhD.bib
 link-citations: true
 linkcolor: blue
@@ -23,9 +22,8 @@ execute:
 editor_options: 
   chunk_output_type: console
 filters:
-  - /home/lorenzo/R/x86_64-pc-linux-gnu-library/4.1/acronymsdown/parse-acronyms.lua
-  - ../../../../all_phd/scholarly-metadata.lua
-  - ../../../../all_phd/author-info-blocks.lua
+  - ../../../../all_phd/_extensions/acronyms/parse-acronyms.lua
+  - ../../../../all_phd/_extensions/authors-block/authors-block.lua
 acronyms:
   fromfile: ../../../../all_phd/acronyms.yml
   insert_links: false

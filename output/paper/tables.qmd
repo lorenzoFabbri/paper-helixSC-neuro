@@ -19,7 +19,7 @@ project:
 ```{r}
 #| include: false
 here::i_am("tables.qmd")
-source("../../../../all_phd/edcs.R")
+
 library(tidyverse)
 ```
 
@@ -36,7 +36,7 @@ library(tidyverse)
 ```{r}
 #| label: tbl-chem-info
 #| tbl-cap: Information about the non-persistent EDCs.
-edcs_info <- edcs_information() %>%
+edcs_info <- myphd::edcs_information() %>%
   dplyr::select(-c(chem_id, smiles))
 gt::gt(edcs_info, groupname_col = "class") %>%
   gt::cols_label(

@@ -5,9 +5,10 @@ format:
     pdf-engine: pdflatex
     toc: false
     include-in-header:
-      - \usepackage{rotating}
-      - \usepackage{float}
-      - \usepackage{typearea}
+      text: |
+        \usepackage{rotating}
+        \usepackage{float}
+        \usepackage{typearea}
 link-citations: true
 linkcolor: blue
 execute:
@@ -24,7 +25,7 @@ project:
 ```{r}
 #| include: false
 here::i_am("figures.qmd")
-source("../../code/ctd.R")
+
 library(tidyverse)
 ```
 
@@ -37,7 +38,7 @@ library(tidyverse)
 #| fig.height: 10
 #| fig.width: 10
 path <- "../../results/files/CTD_chem_diseases_1680702221550_05042023.csv"
-ctd <- loadCTD(path = path, 
-               filter_evidence = TRUE)
-plotCTD(ctd)
+ctd <- myphd::load_ctd(path = path, 
+                       filter_evidence = TRUE)
+myphd::plot_ctd(ctd)
 ```

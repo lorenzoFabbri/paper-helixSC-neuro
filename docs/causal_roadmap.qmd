@@ -37,8 +37,8 @@ execute:
 editor_options: 
   chunk_output_type: console
 filters:
-  - acronyms
-  - authors-block
+  - ../../../all_phd/_extensions/acronyms/parse-acronyms.lua
+  - ../../../all_phd/_extensions/authors-block/authors-block.lua
 acronyms:
   fromfile: ../../../all_phd/acronyms.yml
   insert_links: false
