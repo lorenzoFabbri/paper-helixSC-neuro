@@ -1,0 +1,4 @@
+title: acronyms
+contributes:
+  filters:
+    - parse-acronyms.lua

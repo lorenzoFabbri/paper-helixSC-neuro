@@ -2322,6 +2322,28 @@
       ],
       "Hash": "6069eb2a6597963eae0605c1875ff14c"
     },
+    "readODS": {
+      "Package": "readODS",
+      "Version": "1.8.2",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "readODS",
+      "RemoteUsername": "ropensci",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "15da5ae56ee9b53781565f613dc3aca5b8116fd1",
+      "Requirements": [
+        "R",
+        "cellranger",
+        "purrr",
+        "readr",
+        "stringi",
+        "utils",
+        "xml2",
+        "zip"
+      ],
+      "Hash": "205824fcc01fc71ac5247a6d9493181e"
+    },
     "readr": {
       "Package": "readr",
       "Version": "2.1.4",
@@ -3090,6 +3112,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "0d0056cc5383fbc240ccd0cb584bf436"
+    },
+    "zip": {
+      "Package": "zip",
+      "Version": "2.3.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "d98c94dacb7e0efcf83b0a133a705504"
     },
     "zoo": {
       "Package": "zoo",
