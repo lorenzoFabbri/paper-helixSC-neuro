@@ -1,9 +1,9 @@
-source("code/dictionaries.R")
 source("DAGs/dag_v2.R")
+source("code/dictionaries.R")
 source("code/data.R")
+source("code/mtps.R")
 source("code/research_questions/utils.R")
 source("code/research_questions/rq1.R")
-source("code/mtps.R")
 
 targets::tar_option_set(
   format = "qs"
