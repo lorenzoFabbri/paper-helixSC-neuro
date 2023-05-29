@@ -5,7 +5,7 @@
 ################################################################################
 params <- function(is_hpc) {
   if (is_hpc == TRUE) {
-    
+    common_path <- "../../../../"
   } else {
     common_path <- "~/mounts/PROJECTES/HELIX_OMICS/"
   }
@@ -96,11 +96,10 @@ params <- function(is_hpc) {
 ################################################################################
 params_analyses <- function() {
   # Common parameters
-  learners_outcome <- c("SL.mean", "SL.glm", 
-                        "SL.gam")
+  learners_outcome <- c("SL.glm")
   learners_exposure <- learners_outcome
   estimator <- "tmle"
-  folds <- 3
+  folds <- 5
   folds_outcome <- 3
   folds_exposure <- 3
   density_ratio_trim <- 0.995
