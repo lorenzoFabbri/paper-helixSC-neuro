@@ -267,6 +267,21 @@
       ],
       "Hash": "45f0398006e83a5b10b72a90663d8d8c"
     },
+    "ROCR": {
+      "Package": "ROCR",
+      "Version": "1.0-11",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "gplots",
+        "grDevices",
+        "graphics",
+        "methods",
+        "stats"
+      ],
+      "Hash": "cc151930e20e16427bc3d0daec62b4a9"
+    },
     "Rcpp": {
       "Package": "Rcpp",
       "Version": "1.0.10",
@@ -280,7 +295,7 @@
     },
     "RcppArmadillo": {
       "Package": "RcppArmadillo",
-      "Version": "0.12.2.0.0",
+      "Version": "0.12.4.0.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -290,7 +305,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "39aed0e5fbb0b775a1752ad7813fc56c"
+      "Hash": "5402c9d935b45fe528538703b5edf680"
     },
     "RcppEigen": {
       "Package": "RcppEigen",
@@ -338,6 +353,19 @@
       ],
       "Hash": "2042cd9759cc89a453c4aefef0ce9aae"
     },
+    "SuperLearner": {
+      "Package": "SuperLearner",
+      "Version": "2.0-28",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "cvAUC",
+        "gam",
+        "nnls"
+      ],
+      "Hash": "8a1b2fdfb6c4a448a4cfa24980124ad9"
+    },
     "V8": {
       "Package": "V8",
       "Version": "4.3.0",
@@ -362,21 +390,6 @@
         "utils"
       ],
       "Hash": "4f57884290cc75ab22f4af9e9d4ca862"
-    },
-    "acronymsdown": {
-      "Package": "acronymsdown",
-      "Version": "0.11.1",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "acronymsdown",
-      "RemoteUsername": "rchaput",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "085142fcfc23e6712d6ec1e0ed811dd7a2a09651",
-      "Requirements": [
-        "rmarkdown"
-      ],
-      "Hash": "0a28d949b329480283cbe5453db6e282"
     },
     "askpass": {
       "Package": "askpass",
@@ -781,6 +794,17 @@
       ],
       "Hash": "e4f97056611e8e6b8b852d13b7400cf1"
     },
+    "cvAUC": {
+      "Package": "cvAUC",
+      "Version": "1.1.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "ROCR",
+        "data.table"
+      ],
+      "Hash": "07bca048cef2774d3bc39b8b7f507cff"
+    },
     "dagitty": {
       "Package": "dagitty",
       "Version": "0.3-1",
@@ -1083,6 +1107,49 @@
       ],
       "Hash": "94af08e0aa9675a16fadbb3aaaa90d2a"
     },
+    "future": {
+      "Package": "future",
+      "Version": "1.32.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "digest",
+        "globals",
+        "listenv",
+        "parallel",
+        "parallelly",
+        "utils"
+      ],
+      "Hash": "c68517cf2f78be4ea86e140b8598a4ca"
+    },
+    "future.apply": {
+      "Package": "future.apply",
+      "Version": "1.10.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "future",
+        "globals",
+        "parallel",
+        "utils"
+      ],
+      "Hash": "a930c9ddc317f898e6f5bed7be8dd322"
+    },
+    "gam": {
+      "Package": "gam",
+      "Version": "1.22-2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "foreach",
+        "methods",
+        "splines",
+        "stats"
+      ],
+      "Hash": "fed7831c88d8eb0fad64437c6d8febaf"
+    },
     "gargle": {
       "Package": "gargle",
       "Version": "1.4.0",
@@ -1275,6 +1342,17 @@
         "utils"
       ],
       "Hash": "06f12f72ce94e533751a041cef8b71bc"
+    },
+    "globals": {
+      "Package": "globals",
+      "Version": "0.16.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "codetools"
+      ],
+      "Hash": "baa9585ab4ce47a9f4618e671778cc6f"
     },
     "glue": {
       "Package": "glue",
@@ -1767,6 +1845,16 @@
       ],
       "Hash": "001cecbeac1cff9301bdc3775ee46a86"
     },
+    "listenv": {
+      "Package": "listenv",
+      "Version": "0.9.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "4fbd3679ec8ee169ba28d4b1ea7d0e8f"
+    },
     "lme4": {
       "Package": "lme4",
       "Version": "1.1-33",
@@ -1792,6 +1880,27 @@
         "utils"
       ],
       "Hash": "2fa7b59feca0d767533fd0c8a7a2bf4b"
+    },
+    "lmtp": {
+      "Package": "lmtp",
+      "Version": "1.3.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "R6",
+        "SuperLearner",
+        "checkmate",
+        "cli",
+        "data.table",
+        "future",
+        "generics",
+        "nnls",
+        "origami",
+        "progressr",
+        "stats"
+      ],
+      "Hash": "203b7a78b83f9d9da78c795379151791"
     },
     "lobstr": {
       "Package": "lobstr",
@@ -2029,6 +2138,13 @@
       ],
       "Hash": "2c797b46eea7fb58ede195bc0b1f1138"
     },
+    "nnls": {
+      "Package": "nnls",
+      "Version": "1.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "e451f3c2946bae5c3e5b8d63f09d186e"
+    },
     "norm": {
       "Package": "norm",
       "Version": "1.0-11.0",
@@ -2058,6 +2174,40 @@
         "askpass"
       ],
       "Hash": "0f7cd2962e3044bb940cca4f4b5cecbe"
+    },
+    "origami": {
+      "Package": "origami",
+      "Version": "1.0.7",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "origami",
+      "RemoteUsername": "tlverse",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "2c4476fefd80cf125e942a6f8ab98600b52955e8",
+      "Requirements": [
+        "R",
+        "abind",
+        "assertthat",
+        "data.table",
+        "future",
+        "future.apply",
+        "listenv",
+        "methods"
+      ],
+      "Hash": "864ca0a28708f1fdbc81a6d18deb6b5e"
+    },
+    "parallelly": {
+      "Package": "parallelly",
+      "Version": "1.35.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "parallel",
+        "tools",
+        "utils"
+      ],
+      "Hash": "1cf5a54cfc5dcb0b84037acfd93cbca7"
     },
     "pbkrtest": {
       "Package": "pbkrtest",
@@ -2201,6 +2351,18 @@
         "prettyunits"
       ],
       "Hash": "14dc9f7a3c91ebb14ec5bb9208a07061"
+    },
+    "progressr": {
+      "Package": "progressr",
+      "Version": "0.13.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "digest",
+        "utils"
+      ],
+      "Hash": "376a8ebcc878f9c1395e212548fc297a"
     },
     "promises": {
       "Package": "promises",
