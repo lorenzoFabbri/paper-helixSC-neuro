@@ -19,8 +19,7 @@ extract_cohort_id <- function(dat) {
 #'
 #' @return A named list of data and metadata. A list.
 #' @export
-load_dat_request <- function() {
-  paths <- params()$paths
+load_dat_request <- function(paths) {
   dat <- read.csv(paths$path_dat_request, 
                   header = TRUE, stringsAsFactors = TRUE, 
                   na.strings = c("NA", "null")) |>

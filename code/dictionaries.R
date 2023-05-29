@@ -3,8 +3,13 @@
 ################################################################################
 # Parameters for entire paper
 ################################################################################
-params <- function() {
-  common_path <- "~/mounts/PROJECTES/HELIX_OMICS/"
+params <- function(is_hpc) {
+  if (is_hpc == TRUE) {
+    
+  } else {
+    common_path <- "~/mounts/PROJECTES/HELIX_OMICS/"
+  }
+  
   paths <- list(
     # Raw
     path_covariates_post = "", 
@@ -17,7 +22,7 @@ params <- function() {
     path_exposures_preg_final = "data_final/exposome/child/preg_8y/v2_3_20180601/exppregnancy_v2_3.RData", 
     path_metabolome_serum = "data_final/metab/child/8y/serum.urine_Biocrates.NMR_QChelix_20170101/metab_serum_subcohort_v3.RData", 
     path_metabolome_urine = "data_final/metab/child/8y/serum.urine_Biocrates.NMR_QChelix_20170101/metab_urine_subcohort_v3.RData", 
-    path_dat_request = "DATA_PREVIOUS_MIGRATION/lorenzoF_phd/data/data_paper3/requests/AP136/HELIX_AP_136_request_updated15may.2023.csv",  
+    path_dat_request = "DATA_PREVIOUS_MIGRATION/lorenzoF_phd/data/data_paper3/requests/AP136/HELIX_AP_136_request_updated23may.2023.csv",  
     
     # Processed during analyses
     path_exposures_post_procme = "DATA_PREVIOUS_MIGRATION/lorenzoF_phd/data/data_paper3/processed/exposures/", 
@@ -92,14 +97,18 @@ params <- function() {
 params_analyses <- function() {
   # Common parameters
   learners_outcome <- c("SL.mean", "SL.glm", 
-                        "SL.gam", "SL.hal9001", "SL.bart")
+                        "SL.gam")
   learners_exposure <- learners_outcome
   estimator <- "tmle"
-  folds <- 10
-  folds_outcome <- 10
-  folds_exposure <- 10
+  folds <- 3
+  folds_outcome <- 3
+  folds_exposure <- 3
   density_ratio_trim <- 0.995
   markov_assumption <- Inf
+  shift_type <- "mul"
+  shift_amount <- 0.5
+  shift_lower_bound <- 0
+  shift_upper_bound <- 1
   
   rq1 <- list(
     learners_outcome = learners_outcome, 
@@ -109,7 +118,11 @@ params_analyses <- function() {
     .learners_outcome_folds = folds_outcome, 
     .learners_trt_folds = folds_exposure, 
     .trim = density_ratio_trim, 
-    k = markov_assumption
+    k = markov_assumption, 
+    shift_type = shift_type, 
+    shift_amount = shift_amount, 
+    shift_lower_bound = shift_lower_bound, 
+    shift_upper_bound = shift_upper_bound
   ) # End dictionary parameters RQ1
   rq2 <- rq1
   rq3 <- rq1
