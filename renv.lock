@@ -75,19 +75,6 @@
       ],
       "Hash": "a7fca16a50b6ef7771b49d636dd54b57"
     },
-    "BiocVersion": {
-      "Package": "BiocVersion",
-      "Version": "3.14.0",
-      "Source": "Bioconductor",
-      "git_url": "https://git.bioconductor.org/packages/BiocVersion",
-      "git_branch": "master",
-      "git_last_commit": "aa56d93",
-      "git_last_commit_date": "2021-05-19",
-      "Requirements": [
-        "R"
-      ],
-      "Hash": "e57437f82a5c13263a9cf442b9796ba3"
-    },
     "DBI": {
       "Package": "DBI",
       "Version": "1.1.3",
@@ -101,7 +88,7 @@
     },
     "DT": {
       "Package": "DT",
-      "Version": "0.27",
+      "Version": "0.28",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -113,7 +100,7 @@
         "magrittr",
         "promises"
       ],
-      "Hash": "3444e6ed78763f9f13aaa39f2481eb34"
+      "Hash": "ab745834dfae7eaf71dd0b90f3b66759"
     },
     "FactoMineR": {
       "Package": "FactoMineR",
@@ -194,14 +181,14 @@
     },
     "KernSmooth": {
       "Package": "KernSmooth",
-      "Version": "2.23-20",
+      "Version": "2.23-21",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R",
         "stats"
       ],
-      "Hash": "8dcfa99b14c296bc9f1fd64d52fd3ce7"
+      "Hash": "6314fc110e09548ba889491db6ae67fb"
     },
     "MASS": {
       "Package": "MASS",
@@ -220,7 +207,7 @@
     },
     "Matrix": {
       "Package": "Matrix",
-      "Version": "1.5-4",
+      "Version": "1.5-4.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -232,7 +219,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "e779c7d9f35cc364438578f334cffee2"
+      "Hash": "38082d362d317745fb932e13956dccbb"
     },
     "MatrixModels": {
       "Package": "MatrixModels",
@@ -496,7 +483,7 @@
     },
     "boot": {
       "Package": "boot",
-      "Version": "1.3-28",
+      "Version": "1.3-28.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -504,7 +491,7 @@
         "graphics",
         "stats"
       ],
-      "Hash": "0baa960e3b49c6176a4f42addcbacc59"
+      "Hash": "9a052fbcbe97a98ceb18dbfd30ebd96e"
     },
     "brio": {
       "Package": "brio",
@@ -689,7 +676,7 @@
     },
     "cluster": {
       "Package": "cluster",
-      "Version": "2.1.2",
+      "Version": "2.1.4",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -699,7 +686,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "ce49bfe5bc0b3ecd43a01fe1b01c2243"
+      "Hash": "5edbbabab6ce0bf7900a74fd4358628e"
     },
     "codetools": {
       "Package": "codetools",
@@ -1085,7 +1072,7 @@
     },
     "foreign": {
       "Package": "foreign",
-      "Version": "0.8-82",
+      "Version": "0.8-84",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1094,7 +1081,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "32b25c97ce306a760c4d9f787991b5d9"
+      "Hash": "467ec0ca895d4e61a22cfbac9bccddf8"
     },
     "fs": {
       "Package": "fs",
@@ -1124,7 +1111,7 @@
     },
     "future.apply": {
       "Package": "future.apply",
-      "Version": "1.10.0",
+      "Version": "1.11.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1134,7 +1121,7 @@
         "parallel",
         "utils"
       ],
-      "Hash": "a930c9ddc317f898e6f5bed7be8dd322"
+      "Hash": "ba4be138fe47eac3e16a6deaa4da106e"
     },
     "gam": {
       "Package": "gam",
@@ -1185,7 +1172,7 @@
     },
     "ggdag": {
       "Package": "ggdag",
-      "Version": "0.2.8",
+      "Version": "0.2.10",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1205,7 +1192,7 @@
         "tibble",
         "tidygraph"
       ],
-      "Hash": "b88b652fbfd6661bd689729475de9534"
+      "Hash": "07e9bed17027af3a3dfe3a1faecce837"
     },
     "ggforce": {
       "Package": "ggforce",
@@ -1665,7 +1652,7 @@
     },
     "igraph": {
       "Package": "igraph",
-      "Version": "1.4.2",
+      "Version": "1.4.3",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1681,7 +1668,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "3e476b375c746d899fd53a7281d78191"
+      "Hash": "f7f74f5fbff27d52b1283ac512bc5430"
     },
     "impute": {
       "Package": "impute",
@@ -1764,7 +1751,7 @@
     },
     "knitr": {
       "Package": "knitr",
-      "Version": "1.42",
+      "Version": "1.43",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1776,7 +1763,7 @@
         "xfun",
         "yaml"
       ],
-      "Hash": "8329a9bcc82943c8069104d4be3ee22d"
+      "Hash": "9775eb076713f627c07ce41d8199d8f6"
     },
     "labeling": {
       "Package": "labeling",
@@ -1802,7 +1789,7 @@
     },
     "lattice": {
       "Package": "lattice",
-      "Version": "0.20-45",
+      "Version": "0.21-8",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1813,7 +1800,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "b64cdbb2b340437c4ee047a1f4c4377b"
+      "Hash": "0b8a6d63c8770f02a8b5635f3c431e6b"
     },
     "lazyeval": {
       "Package": "lazyeval",
@@ -1955,7 +1942,7 @@
     },
     "markdown": {
       "Package": "markdown",
-      "Version": "1.6",
+      "Version": "1.7",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1964,7 +1951,7 @@
         "utils",
         "xfun"
       ],
-      "Hash": "c0e8495f796d73f2d2e1a8c6964d67e8"
+      "Hash": "0ffaea87c070a56d140ce00b0727b278"
     },
     "memoise": {
       "Package": "memoise",
@@ -2091,7 +2078,13 @@
     "myphd": {
       "Package": "myphd",
       "Version": "0.1.0",
-      "Source": "unknown",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "myphd",
+      "RemoteUsername": "isglobal-cep",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "90f95fb7eb7028fd4ce8ffda761f4b31e84dcc86",
       "Requirements": [
         "dagitty",
         "dplyr",
@@ -2100,7 +2093,7 @@
         "lifecycle",
         "magrittr"
       ],
-      "Hash": "dc689626648b618b68367e8c5824f0d7"
+      "Hash": "95e697e01559c525852f61d95658595f"
     },
     "nlme": {
       "Package": "nlme",
@@ -2199,7 +2192,7 @@
     },
     "parallelly": {
       "Package": "parallelly",
-      "Version": "1.35.0",
+      "Version": "1.36.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -2207,7 +2200,7 @@
         "tools",
         "utils"
       ],
-      "Hash": "1cf5a54cfc5dcb0b84037acfd93cbca7"
+      "Hash": "bca377e1c87ec89ebed77bba00635b2e"
     },
     "pbkrtest": {
       "Package": "pbkrtest",
@@ -2683,7 +2676,7 @@
     },
     "rpart": {
       "Package": "rpart",
-      "Version": "4.1.16",
+      "Version": "4.1.19",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -2692,7 +2685,7 @@
         "graphics",
         "stats"
       ],
-      "Hash": "ea3ca1d9473daabb3cd0f1b4f974c1ed"
+      "Hash": "b3c892a81783376cc2204af0f5805a80"
     },
     "rprojroot": {
       "Package": "rprojroot",
@@ -2863,10 +2856,10 @@
     },
     "sys": {
       "Package": "sys",
-      "Version": "3.4.1",
+      "Version": "3.4.2",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "34c16f1ef796057bfa06d3f4ff818a5d"
+      "Hash": "3a1be13d68d47a8cd0bfd74739ca1555"
     },
     "systemfonts": {
       "Package": "systemfonts",
@@ -2881,7 +2874,7 @@
     },
     "targets": {
       "Package": "targets",
-      "Version": "1.0.0",
+      "Version": "1.1.3",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -2902,10 +2895,9 @@
         "tools",
         "utils",
         "vctrs",
-        "withr",
         "yaml"
       ],
-      "Hash": "3f299989005cd3ccd101eb97623fd533"
+      "Hash": "547b1105f6a5d9ee56761562ceb63c7d"
     },
     "testthat": {
       "Package": "testthat",
