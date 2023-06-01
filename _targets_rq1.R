@@ -5,6 +5,8 @@ source("code/mtps.R")
 source("code/research_questions/utils.R")
 source("code/research_questions/rq1.R")
 
+library(earth)
+
 targets::tar_option_set(
   format = "qs"
 )
@@ -37,7 +39,14 @@ list(
   ##############################################################################
   targets::tar_target(
     name = lmtp, 
-    command = run_mtp(dat = preproc_dat)
-  ) # End run_mtp target
+    command = run_mtp(dat = preproc_dat, 
+                      shift_exposure = TRUE)
+  ), # End lmtp target
+  ##############################################################################
+  targets::tar_target(
+    name = lmtp_null, 
+    command = run_mtp(dat = preproc_dat, 
+                      shift_exposure = FALSE)
+  ) # End lmtp_null target
   ##############################################################################
 )

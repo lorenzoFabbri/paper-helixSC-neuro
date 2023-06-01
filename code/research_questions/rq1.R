@@ -14,9 +14,11 @@ rq1_prepare_data <- function(dat) {
                                        dic_steps = steps_exposures)
   
   # Process covariates
-  dat$covariates$h_folic_t1 <- as.integer(dat$covariates$h_folic_t1)
-  dat$covariates$e3_ses <- as.integer(dat$covariates$e3_ses)
-  dat$covariates$e3_asmokyn_p <- as.integer(dat$covariates$e3_asmokyn_p)
+  warning("Some covariates are modified by name. ", 
+          "This is not reproducible.")
+  # dat$covariates$h_folic_t1 <- as.integer(dat$covariates$h_folic_t1)
+  # dat$covariates$e3_ses <- as.integer(dat$covariates$e3_ses)
+  # dat$covariates$e3_asmokyn_p <- as.integer(dat$covariates$e3_asmokyn_p)
   dat$covariates <- myphd::preproc_data(dat = dat$covariates, 
                                         dic_steps = steps_covars)
   

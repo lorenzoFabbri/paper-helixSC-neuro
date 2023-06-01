@@ -113,7 +113,7 @@ rq_load_data <- function(ids_other_covars, res_dag) {
 #'
 #' @return
 #' @export
-run_mtp <- function(dat) {
+run_mtp <- function(dat, shift_exposure) {
   rq <- Sys.getenv("TAR_PROJECT")
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   outcome <- params_dat$variables[[rq]]$outcome
@@ -126,9 +126,13 @@ run_mtp <- function(dat) {
                                      dic_steps = steps_outcome)
   
   # Run lmtp
-  shift_func <- switch(params_ana$shift_type, 
-                       "mul" = mtp_mul, 
-                       "add" = mtp_add)
+  if (shift_exposure == TRUE) {
+    shift_func <- switch(params_ana$shift_type, 
+                         "mul" = mtp_mul, 
+                         "add" = mtp_add)
+  } else {
+    shift_func = NULL
+  }
   list_exposures <- names(dat$exposures)
   list_exposures <- setdiff(list_exposures, 
                             params_dat$variables$identifier)
