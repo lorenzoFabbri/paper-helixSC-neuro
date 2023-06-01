@@ -11,6 +11,7 @@ load_dag <- function(dags, exposure, outcome, params_dag) {
   ret <- list()
   rq <- Sys.getenv("TAR_PROJECT")
   which_dag <- switch(rq, 
+                      "rq01" = "chem_to_out", 
                       "rq1" = "chem_to_out")
   
   dag <- dags[[which_dag]]
@@ -28,6 +29,39 @@ load_dag <- function(dags, exposure, outcome, params_dag) {
 } # End function dag
 ################################################################################
 
+#' Title
+#'
+#' @param dat 
+#' @param res_dag 
+#' @param strategy 
+#'
+#' @return
+#' @export
+select_adjustment_set <- function(dat, meta, res_dag, strategy) {
+  warning("When all the covariates are available, ", 
+          "replace `any_of` with `all_of`.")
+  
+  all_as <- res_dag$adjustment_sets
+  lengths_as <- lapply(all_as, length) |>
+    unname() |>
+    unlist()
+  
+  ret <- switch(strategy,
+    "first" = all_as[[1]], 
+    "smallest" = all_as[[which.min(lengths_as)]], 
+    "largest" = all_as[[which.max(lengths_as)]], 
+    "random" = sample(all_as, size = 1), 
+    "minimize_missings" = all_as[[myphd::minimize_missings(
+      dat = dat, 
+      meta = meta, 
+      adjustment_sets = all_as
+    )]]
+  )
+  
+  return(ret)
+} # End function selection adjustment set
+################################################################################
+
 #' Load data
 #'
 #' @param ids_other_covars IDs for additional covariate data. A vector.
@@ -35,11 +69,11 @@ load_dag <- function(dags, exposure, outcome, params_dag) {
 #'
 #' @return A named list of exposures, covariates, and outcomes. A list.
 #' @export
-rq_load_data <- function(ids_other_covars, res_dag, is_hpc) {
+rq_load_data <- function(ids_other_covars, res_dag) {
   rq <- Sys.getenv("TAR_PROJECT")
   
   # Load data request
-  params_dat <- params(is_hpc = is_hpc)
+  params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   dat_request <- load_dat_request(paths = params_dat$paths)
   
   # Load eventual other covariates
@@ -56,7 +90,10 @@ rq_load_data <- function(ids_other_covars, res_dag, is_hpc) {
   dat$outcome <- dat_request$dat |>
     dplyr::select(params_dat$variables$identifier, 
                   params_dat$variables[[rq]]$outcome)
-  adj_set <- res_dag$adjustment_sets[[1]]
+  adj_set <- select_adjustment_set(dat = dat_request$dat, 
+                                   meta = dat_request$meta, 
+                                   res_dag = res_dag, 
+                                   strategy = params_dat$variables$strategy_select_adj_set)
   mapping_covars <- dat_request$meta[dat_request$meta$dag %in% adj_set, ]$variable
   warning("When all the covariates are available, ", 
           "replace `any_of` with `all_of`.")
@@ -74,9 +111,9 @@ rq_load_data <- function(ids_other_covars, res_dag, is_hpc) {
 #'
 #' @return
 #' @export
-run_mtp <- function(dat, is_hpc) {
+run_mtp <- function(dat) {
   rq <- Sys.getenv("TAR_PROJECT")
-  params_dat <- params(is_hpc = is_hpc)
+  params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   outcome <- params_dat$variables[[rq]]$outcome
   steps_outcome <- params_dat$variables$preproc_outcome
   params_ana <- params_analyses()[[rq]]

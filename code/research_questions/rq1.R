@@ -4,8 +4,8 @@
 #'
 #' @return
 #' @export
-rq1_prepare_data <- function(dat, is_hpc) {
-  params_dat <- params(is_hpc = is_hpc)
+rq1_prepare_data <- function(dat) {
+  params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   steps_exposures <- params_dat$variables$preproc_exposures
   steps_covars <- params_dat$variables$preproc_covars
   

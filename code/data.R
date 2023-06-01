@@ -1,20 +1,3 @@
-#' Title
-#'
-#' @param dat 
-#'
-#' @return
-#' @export
-extract_cohort_id <- function(dat) {
-  params_dat <- params()
-  dat <- dat |>
-    dplyr::mutate(cohort = substr(
-      params_dat$variables$identifier, 1, 3
-    )) |>
-    dplyr::relocate(cohort)
-  
-  return(dat)
-}
-
 #' Load the dataset corresponding to the HELIX data request
 #'
 #' @return A named list of data and metadata. A list.
@@ -26,7 +9,11 @@ load_dat_request <- function(paths) {
     tibble::as_tibble()
   dat$e3_cbirth <- lubridate::as_date(dat$e3_cbirth)
   
-  meta <- readODS::read_ods("docs/data_request_relevant.ods", 
+  which_meta <- switch(Sys.getenv("TAR_PROJECT"), 
+                       "rq01" = "_rq1", 
+                       "rq1" = "_rq1")
+  meta <- readODS::read_ods(paste0("docs/data_request_relevant", 
+                                   which_meta, ".ods"), 
                             col_names = TRUE, strings_as_factors = TRUE) |>
     tibble::as_tibble()
   cols_to_change_type <- c("dag", "variable", 

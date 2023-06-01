@@ -1,9 +1,7 @@
 source("DAGs/dag_v2.R")
 source("code/dictionaries.R")
 source("code/data.R")
-source("code/mtps.R")
 source("code/research_questions/utils.R")
-source("code/research_questions/rq1.R")
 
 targets::tar_option_set(
   format = "qs"
@@ -14,6 +12,8 @@ params_dag <- list(
   type = "minimal", 
   effect = "total"
 )
+id_var <- "HelixID"
+grouping_var <- "cohort"
 
 list(
   targets::tar_target(
@@ -23,21 +23,16 @@ list(
                        outcome = "intelligence", 
                        params_dag = params_dag)
   ), # End dag target
-  ##############################################################################
   targets::tar_target(
     name = load_dat, 
     command = rq_load_data(ids_other_covars = c(), 
                            res_dag = dag)
   ), # End load_dat target
-  ##############################################################################
   targets::tar_target(
-    name = preproc_dat, 
-    command = rq1_prepare_data(dat = load_dat)
-  ), # End preproc_dat target
-  ##############################################################################
-  targets::tar_target(
-    name = lmtp, 
-    command = run_mtp(dat = preproc_dat)
-  ) # End run_mtp target
-  ##############################################################################
+    name = viz_miss, 
+    command = myphd::explore_missings(load_dat$covariates, 
+                                      id_var = id_var, 
+                                      grouping_var = grouping_var, 
+                                      path_save = "results/figures/")
+  ) # End viz_miss target
 )

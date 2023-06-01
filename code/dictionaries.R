@@ -39,6 +39,12 @@ params <- function(is_hpc) {
     identifier = "HelixID", 
     perc_missing_vars = 40, 
     perc_missing_cases = 40, 
+    strategy_select_adj_set = "minimize_missings", 
+    rq01 = list(
+      outcome = "hs_ADHD_raw", 
+      outcome_negative = "", 
+      exposures = "cadj"
+    ), 
     rq1 = list(
       outcome = "hs_ADHD_raw", 
       outcome_negative = "", 
