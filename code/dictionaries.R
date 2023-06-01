@@ -102,7 +102,7 @@ params <- function(is_hpc) {
 ################################################################################
 params_analyses <- function() {
   # Common parameters
-  learners_outcome <- c("SL.glm")
+  learners_outcome <- c("SL.mean", "SL.glm")
   learners_exposure <- learners_outcome
   estimator <- "tmle"
   folds <- 5
@@ -111,7 +111,7 @@ params_analyses <- function() {
   density_ratio_trim <- 0.995
   markov_assumption <- Inf
   shift_type <- "mul"
-  shift_amount <- 0.5
+  shift_amount <- 0
   shift_lower_bound <- 0
   shift_upper_bound <- 1
   

@@ -95,6 +95,8 @@ rq_load_data <- function(ids_other_covars, res_dag) {
                                    res_dag = res_dag, 
                                    strategy = params_dat$variables$strategy_select_adj_set)
   mapping_covars <- dat_request$meta[dat_request$meta$dag %in% adj_set, ]$variable
+  dat$adjustment_set <- adj_set
+  dat$mapping_covariates <- mapping_covars
   warning("When all the covariates are available, ", 
           "replace `any_of` with `all_of`.")
   dat$covariates <- dat_request$dat |>
