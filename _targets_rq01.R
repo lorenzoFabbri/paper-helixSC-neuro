@@ -29,10 +29,36 @@ list(
                            res_dag = dag)
   ), # End load_dat target
   targets::tar_target(
-    name = viz_miss, 
+    name = viz_miss_covars, 
     command = myphd::explore_missings(load_dat$covariates, 
                                       id_var = id_var, 
                                       grouping_var = grouping_var, 
-                                      path_save = "results/figures/")
-  ) # End viz_miss target
+                                      path_save = paste0(
+                                        "results/figures/", 
+                                        Sys.getenv("TAR_PROJECT"), 
+                                        "/covars_"
+                                      ))
+  ), # End viz_miss_covars target
+  targets::tar_target(
+    name = viz_miss_exp, 
+    command = myphd::explore_missings(load_dat$exposures, 
+                                      id_var = id_var, 
+                                      grouping_var = grouping_var, 
+                                      path_save = paste0(
+                                        "results/figures/", 
+                                        Sys.getenv("TAR_PROJECT"), 
+                                        "/exp_"
+                                      ))
+  ), # End viz_miss_exp target
+  targets::tar_target(
+    name = viz_miss_out, 
+    command = myphd::explore_missings(load_dat$outcome, 
+                                      id_var = id_var, 
+                                      grouping_var = grouping_var, 
+                                      path_save = paste0(
+                                        "results/figures/", 
+                                        Sys.getenv("TAR_PROJECT"), 
+                                        "/out_"
+                                      ))
+  ) # End viz_miss_out target
 )

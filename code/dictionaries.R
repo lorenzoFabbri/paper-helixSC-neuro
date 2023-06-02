@@ -37,8 +37,6 @@ params <- function(is_hpc) {
   
   variables <- list(
     identifier = "HelixID", 
-    perc_missing_vars = 40, 
-    perc_missing_cases = 40, 
     strategy_select_adj_set = "minimize_missings", 
     rq01 = list(
       outcome = "hs_ADHD_raw", 
@@ -52,7 +50,9 @@ params <- function(is_hpc) {
     ), 
     preproc_exposures = list(
       missings = list(
-        do = TRUE
+        do = TRUE, 
+        threshold_within = 40, 
+        threshold_overall = 40
       ), 
       standardization = list(
         do = TRUE, 
@@ -67,7 +67,9 @@ params <- function(is_hpc) {
     ), # End preproc_outcome
     preproc_covars = list(
       missings = list(
-        do = TRUE
+        do = TRUE, 
+        threshold_within = 40, 
+        threshold_overall = 40
       )
     ) # End preproc_covars
   )
@@ -102,8 +104,7 @@ params <- function(is_hpc) {
 ################################################################################
 params_analyses <- function() {
   # Common parameters
-  learners_outcome <- c("SL.mean", "SL.glm", 
-                        "SL.earth")
+  learners_outcome <- c("SL.mean", "SL.glm")
   learners_exposure <- learners_outcome
   estimator <- "tmle"
   folds <- 5

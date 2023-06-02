@@ -121,9 +121,15 @@ run_mtp <- function(dat, shift_exposure) {
   params_ana <- params_analyses()[[rq]]
   
   # Process outcome
+  dat$outcome <- myphd::extract_cohort(dat = dat$outcome, 
+                                       id_var = params_dat$variables$identifier)
   dat$outcome <- myphd::preproc_data(dat = dat$outcome, 
                                      outcome = outcome, 
-                                     dic_steps = steps_outcome)
+                                     dic_steps = steps_outcome, 
+                                     id_var = params_dat$variables$identifier, 
+                                     by_var = "cohort")
+  dat$outcome <- dat$outcome |>
+    dplyr::select(-cohort)
   
   # Run lmtp
   if (shift_exposure == TRUE) {
