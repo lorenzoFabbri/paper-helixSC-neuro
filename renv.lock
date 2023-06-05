@@ -353,6 +353,16 @@
       ],
       "Hash": "8a1b2fdfb6c4a448a4cfa24980124ad9"
     },
+    "TeachingDemos": {
+      "Package": "TeachingDemos",
+      "Version": "2.12",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "41e566d7eab7307a31b3dee3b203c7e0"
+    },
     "V8": {
       "Package": "V8",
       "Version": "4.3.0",
@@ -931,6 +941,19 @@
         "vctrs"
       ],
       "Hash": "54ed3ea01b11e81a86544faaecfef8e2"
+    },
+    "earth": {
+      "Package": "earth",
+      "Version": "5.3.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "Formula",
+        "R",
+        "TeachingDemos",
+        "plotmo"
+      ],
+      "Hash": "1a97c41edcc9b87ec45ffdc128075909"
     },
     "ellipse": {
       "Package": "ellipse",
@@ -2084,7 +2107,7 @@
       "RemoteRepo": "myphd",
       "RemoteUsername": "isglobal-cep",
       "RemoteRef": "HEAD",
-      "RemoteSha": "90f95fb7eb7028fd4ce8ffda761f4b31e84dcc86",
+      "RemoteSha": "0fb47fbf51aa50eefdca758589f2c0f2ee8bb47e",
       "Requirements": [
         "dagitty",
         "dplyr",
@@ -2093,7 +2116,7 @@
         "lifecycle",
         "magrittr"
       ],
-      "Hash": "95e697e01559c525852f61d95658595f"
+      "Hash": "5e558f590cb4fe2475670a63d0ab0f84"
     },
     "nlme": {
       "Package": "nlme",
@@ -2283,6 +2306,33 @@
         "withr"
       ],
       "Hash": "6b0c222c5071efe0f3baf3dae9aa40e2"
+    },
+    "plotmo": {
+      "Package": "plotmo",
+      "Version": "3.6.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "Formula",
+        "R",
+        "TeachingDemos",
+        "plotrix"
+      ],
+      "Hash": "ec6e3b80a43a169b3a81e426e697b84a"
+    },
+    "plotrix": {
+      "Package": "plotrix",
+      "Version": "3.8-2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "grDevices",
+        "graphics",
+        "stats",
+        "utils"
+      ],
+      "Hash": "2ebe8c2ec200da649738b0fc35a9b1a1"
     },
     "plyr": {
       "Package": "plyr",
@@ -2652,7 +2702,7 @@
     },
     "rmarkdown": {
       "Package": "rmarkdown",
-      "Version": "2.21",
+      "Version": "2.22",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -2672,7 +2722,7 @@
         "xfun",
         "yaml"
       ],
-      "Hash": "493df4ae51e2e984952ea4d5c75786a3"
+      "Hash": "75a01be060d800ceb14e32c666cacac9"
     },
     "rpart": {
       "Package": "rpart",

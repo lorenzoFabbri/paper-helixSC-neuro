@@ -60,5 +60,23 @@ list(
                                         Sys.getenv("TAR_PROJECT"), 
                                         "/out_"
                                       ))
-  ) # End viz_miss_out target
+  ), # End viz_miss_out target
+  targets::tar_target(
+    name = desc_data_covars, 
+    command = myphd::describe_data(dat = load_dat$covariates, 
+                                   id_var = id_var, 
+                                   grouping_var = grouping_var)
+  ), # End desc_data_covars target
+  targets::tar_target(
+    name = desc_data_exp, 
+    command = myphd::describe_data(dat = load_dat$exposures, 
+                                   id_var = id_var, 
+                                   grouping_var = grouping_var)
+  ), # End desc_data_exp target
+  targets::tar_target(
+    name = desc_data_out, 
+    command = myphd::describe_data(dat = load_dat$outcome, 
+                                   id_var = id_var, 
+                                   grouping_var = grouping_var)
+  ) # End desc_data_out target
 )

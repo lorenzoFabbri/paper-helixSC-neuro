@@ -35,16 +35,17 @@ params <- function(is_hpc) {
   })
   ##############################################################################
   
+  outcome_rq1 <- "hs_correct_raven"
   variables <- list(
     identifier = "HelixID", 
     strategy_select_adj_set = "minimize_missings", 
     rq01 = list(
-      outcome = "hs_ADHD_raw", 
+      outcome = outcome_rq1, 
       outcome_negative = "", 
       exposures = "cadj"
     ), 
     rq1 = list(
-      outcome = "hs_ADHD_raw", 
+      outcome = outcome_rq1, 
       outcome_negative = "", 
       exposures = "cadj"
     ), 
@@ -55,7 +56,7 @@ params <- function(is_hpc) {
         threshold_overall = 40
       ), 
       standardization = list(
-        do = TRUE, 
+        do = FALSE, 
         center = TRUE, 
         scale = TRUE
       )

@@ -16,6 +16,8 @@ rq1_prepare_data <- function(dat) {
                                        dic_steps = steps_exposures, 
                                        id_var = params_dat$variables$identifier, 
                                        by_var = "cohort")
+  dat$exposures <- dplyr::select(dat$exposures, 
+                                 -dplyr::any_of("cohort"))
   
   # Process covariates
   warning("Some covariates are modified by name. ", 
