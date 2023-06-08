@@ -105,8 +105,11 @@ params <- function(is_hpc) {
 ################################################################################
 params_analyses <- function() {
   # Common parameters
-  learners_outcome <- c("SL.mean", "SL.glm")
-  learners_exposure <- learners_outcome
+  learners_outcome <- c("SL.mean", "SL.glm", 
+                        "SL.glmnet")
+  learners_exposure <- c("SL.glm", 
+                         "SL.glmnet")
+  
   estimator <- "tmle"
   folds <- 5
   folds_outcome <- 3
