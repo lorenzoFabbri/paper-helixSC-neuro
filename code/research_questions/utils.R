@@ -178,6 +178,29 @@ run_mtp <- function(dat, shift_exposure) {
                       #.learners_trt_folds = params_ana$.learners_trt_folds, 
                       .return_full_fits = TRUE)
     } else if (params_ana$estimator == "sdr") {
+      warning("In lmtp_sdr, some arguments have to be defined.")
+      lmtp::lmtp_sdr(data = dat_analysis, 
+                     trt = c(exposure), 
+                     outcome = outcome, 
+                     baseline = baseline, 
+                     #time_vary = , 
+                     cens = c("cens"), 
+                     shift = shift_func, 
+                     #shifted = , 
+                     k = params_ana$k, 
+                     mtp = TRUE, 
+                     outcome_type = "continuous", 
+                     #id = , 
+                     #bounds = , 
+                     learners_outcome = params_ana$learners_outcome, 
+                     learners_trt = params_ana$learners_trt, 
+                     folds = params_ana$folds, 
+                     #weights = , 
+                     #.bound = , 
+                     .trim = params_ana$.trim, 
+                     #.learners_outcome_folds = , 
+                     #.learners_trt_folds = , 
+                     .return_full_fits = TRUE)
     }
   })
   names(res) <- list_exposures

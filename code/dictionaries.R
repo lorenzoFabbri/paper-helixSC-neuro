@@ -22,7 +22,8 @@ params <- function(is_hpc) {
     path_exposures_preg_final = "data_final/exposome/child/preg_8y/v2_3_20180601/exppregnancy_v2_3.RData", 
     path_metabolome_serum = "data_final/metab/child/8y/serum.urine_Biocrates.NMR_QChelix_20170101/metab_serum_subcohort_v3.RData", 
     path_metabolome_urine = "data_final/metab/child/8y/serum.urine_Biocrates.NMR_QChelix_20170101/metab_urine_subcohort_v3.RData", 
-    path_dat_request = "DATA_PREVIOUS_MIGRATION/lorenzoF_phd/data/data_paper3/requests/AP136/HELIX_AP_136_request_updated23may.2023.csv",  
+    path_dat_request = "DATA_PREVIOUS_MIGRATION/lorenzoF_phd/data/data_paper3/requests/AP136/HELIX_AP_136_request_updated23may.2023.csv", 
+    path_all_steroids = "DATA_PREVIOUS_MIGRATION/lorenzoF_phd/data/data_paper3/requests/AP136/steroids/", 
     
     # Processed during analyses
     path_exposures_post_procme = "DATA_PREVIOUS_MIGRATION/lorenzoF_phd/data/data_paper3/processed/exposures/", 
@@ -39,6 +40,8 @@ params <- function(is_hpc) {
   variables <- list(
     identifier = "HelixID", 
     strategy_select_adj_set = "minimize_missings", 
+    strategy_loq_urine = "div2", 
+    creatinine_threshold = 10, 
     rq01 = list(
       outcome = outcome_rq1, 
       outcome_negative = "", 
@@ -47,7 +50,12 @@ params <- function(is_hpc) {
     rq1 = list(
       outcome = outcome_rq1, 
       outcome_negative = "", 
-      exposures = "cadj"
+      exposures = "_cadj"
+    ), 
+    rq3 = list(
+      outcome = outcome_rq1, 
+      outcome_negative = "", 
+      exposures = "_metab"
     ), 
     preproc_exposures = list(
       missings = list(
@@ -56,9 +64,9 @@ params <- function(is_hpc) {
         threshold_overall = 40
       ), 
       standardization = list(
-        do = FALSE, 
-        center = TRUE, 
-        scale = TRUE
+        do = TRUE, 
+        center_fun = mean, 
+        scale_fun = sd
       )
     ), # End preproc_exposures
     preproc_outcome = list(
@@ -105,19 +113,17 @@ params <- function(is_hpc) {
 ################################################################################
 params_analyses <- function() {
   # Common parameters
-  learners_outcome <- c("SL.mean", "SL.glm", 
-                        "SL.glmnet")
-  learners_exposure <- c("SL.glm", 
-                         "SL.glmnet")
+  learners_outcome <- c("SL.mean", "SL.glm")
+  learners_exposure <- c("SL.glm")
   
-  estimator <- "tmle"
-  folds <- 5
-  folds_outcome <- 3
-  folds_exposure <- 3
+  estimator <- "sdr"
+  folds <- 3
+  folds_outcome <- 1
+  folds_exposure <- 1
   density_ratio_trim <- 0.995
   markov_assumption <- Inf
   shift_type <- "mul"
-  shift_amount <- 0.01
+  shift_amount <- 0.1
   shift_lower_bound <- 0
   shift_upper_bound <- 1
   
