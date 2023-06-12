@@ -94,7 +94,8 @@ rq_load_data <- function(ids_other_covars, res_dag) {
                                    meta = dat_request$meta, 
                                    res_dag = res_dag, 
                                    strategy = params_dat$variables$strategy_select_adj_set)
-  mapping_covars <- dat_request$meta[dat_request$meta$dag %in% adj_set, ]$variable |>
+  mapping_covars <- dat_request$meta[dat_request$meta$dag %in% adj_set, 
+                                     ]$variable |>
     as.character()
   dat$adjustment_set <- adj_set
   dat$mapping_covariates <- mapping_covars
