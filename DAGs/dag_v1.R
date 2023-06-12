@@ -11,7 +11,6 @@ dag_raw <- function() {
   breastfeeding [pos="0.676,0.897"]
   bw [pos="0.665,0.685"]
   chemical [pos="0.114,0.497"]
-  chemicals_SNPs [pos="0.066,0.685"]
   child_diet [pos="0.420,0.066"]
   child_smoking [pos="0.771,0.067"]
   cohort [pos="0.223,0.067"]
@@ -22,7 +21,6 @@ dag_raw <- function() {
   familySEP [pos="0.504,0.249"]
   gestational_age [pos="0.675,0.766"]
   intelligence [pos="0.861,0.502"]
-  intelligence_SNPs [pos="0.862,0.678"]
   lipids [pos="0.287,0.774"]
   maternalAlcohol_preg [pos="0.638,0.243"]
   maternalDiet_preg [pos="0.321,0.066"]
@@ -51,7 +49,6 @@ dag_raw <- function() {
   breastfeeding [pos="0.676,0.897"]
   bw [pos="0.670,0.688"]
   chemical [exposure,pos="0.114,0.497"]
-  chemicals_SNPs [pos="0.066,0.685"]
   child_diet [pos="0.420,0.066"]
   child_smoking [pos="0.771,0.067"]
   cohort [pos="0.223,0.067"]
@@ -60,10 +57,8 @@ dag_raw <- function() {
   ethnicity_child [pos="0.223,0.137"]
   ethnicity_mother [pos="0.222,0.210"]
   familySEP [pos="0.504,0.249"]
-  fatMass_child [pos="0.558,0.821"]
   gestational_age [pos="0.667,0.770"]
   intelligence [outcome,pos="0.861,0.502"]
-  intelligence_SNPs [pos="0.862,0.678"]
   lipids [pos="0.403,0.816"]
   maternalAlcohol_preg [pos="0.644,0.246"]
   maternalDiet_preg [pos="0.321,0.066"]
@@ -82,14 +77,11 @@ dag_raw <- function() {
   age_child -> child_diet
   age_child -> child_smoking
   age_child -> creatinine
-  age_child -> fatMass_child
   age_child -> intelligence
   age_child -> neuropsychologicalDiagnosis_child
-  airPollution_child -> fatMass_child
   airPollution_child -> intelligence
   airPollution_child -> neuropsychologicalDiagnosis_child
   airPollution_preg -> bw
-  airPollution_preg -> fatMass_child
   airPollution_preg -> gestational_age
   airPollution_preg -> intelligence
   airPollution_preg -> neuropsychologicalDiagnosis_child
@@ -98,17 +90,13 @@ dag_raw <- function() {
   breastfeeding -> neuropsychologicalDiagnosis_child
   bw -> intelligence
   bw -> neuropsychologicalDiagnosis_child
-  chemical -> fatMass_child
   chemical -> intelligence
-  chemicals_SNPs -> chemical
   child_diet -> chemical
   child_diet -> creatinine
-  child_diet -> fatMass_child
   child_diet -> intelligence
   child_diet -> lipids
   child_diet -> neuropsychologicalDiagnosis_child
   child_diet -> otherChemicals_child
-  child_smoking -> fatMass_child
   child_smoking -> intelligence
   child_smoking -> neuropsychologicalDiagnosis_child
   child_smoking -> otherChemicals_child
@@ -122,21 +110,15 @@ dag_raw <- function() {
   cohort -> otherChemicals_preg
   envFactors_visit -> qualityTesting_child
   ethnicity_child -> bw
-  ethnicity_child -> chemicals_SNPs
   ethnicity_child -> child_smoking
-  ethnicity_child -> fatMass_child
   ethnicity_child -> gestational_age
-  ethnicity_child -> intelligence_SNPs
   ethnicity_child -> lipids
   ethnicity_child -> neuropsychologicalDiagnosis_child
   ethnicity_mother -> breastfeeding
   ethnicity_mother -> bw
-  ethnicity_mother -> chemicals_SNPs
   ethnicity_mother -> child_diet
   ethnicity_mother -> familySEP
-  ethnicity_mother -> fatMass_child
   ethnicity_mother -> gestational_age
-  ethnicity_mother -> intelligence_SNPs
   ethnicity_mother -> maternalAlcohol_preg
   ethnicity_mother -> maternalDiet_preg
   ethnicity_mother -> maternalSEP_preg
@@ -147,23 +129,17 @@ dag_raw <- function() {
   familySEP -> chemical
   familySEP -> child_diet
   familySEP -> child_smoking
-  familySEP -> fatMass_child
   familySEP -> intelligence
   familySEP -> neuropsychologicalDiagnosis_child
   familySEP -> otherChemicals_child
   familySEP -> water_child
-  fatMass_child -> creatinine
-  fatMass_child -> lipids
   gestational_age -> intelligence
   gestational_age -> neuropsychologicalDiagnosis_child
-  intelligence_SNPs -> intelligence
   maternalAlcohol_preg -> bw
-  maternalAlcohol_preg -> fatMass_child
   maternalAlcohol_preg -> gestational_age
   maternalAlcohol_preg -> intelligence
   maternalAlcohol_preg -> neuropsychologicalDiagnosis_child
   maternalDiet_preg -> bw
-  maternalDiet_preg -> fatMass_child
   maternalDiet_preg -> gestational_age
   maternalDiet_preg -> intelligence
   maternalDiet_preg -> neuropsychologicalDiagnosis_child
@@ -179,7 +155,6 @@ dag_raw <- function() {
   maternalSEP_preg -> neuropsychologicalDiagnosis_child
   maternalSEP_preg -> otherChemicals_preg
   maternalSmoking_preg -> bw
-  maternalSmoking_preg -> fatMass_child
   maternalSmoking_preg -> gestational_age
   maternalSmoking_preg -> intelligence
   maternalSmoking_preg -> neuropsychologicalDiagnosis_child
@@ -188,11 +163,9 @@ dag_raw <- function() {
   maternal_folicAcid_preg -> intelligence
   maternal_folicAcid_preg -> neuropsychologicalDiagnosis_child
   neuropsychologicalDiagnosis_child -> intelligence
-  otherChemicals_child -> fatMass_child
   otherChemicals_child -> intelligence
   otherChemicals_child -> neuropsychologicalDiagnosis_child
   otherChemicals_preg -> bw
-  otherChemicals_preg -> fatMass_child
   otherChemicals_preg -> gestational_age
   otherChemicals_preg -> intelligence
   otherChemicals_preg -> neuropsychologicalDiagnosis_child
@@ -214,7 +187,6 @@ dag_raw <- function() {
   sex_child -> child_diet
   sex_child -> child_smoking
   sex_child -> creatinine
-  sex_child -> fatMass_child
   sex_child -> lipids
   sex_child -> neuropsychologicalDiagnosis_child
   time_lastMeal -> chemical
@@ -240,7 +212,6 @@ dag_raw <- function() {
   breastfeeding [pos="0.676,0.897"]
   bw [pos="0.666,0.683"]
   chemical [pos="0.154,0.493"]
-  chemicals_SNPs [pos="0.047,0.608"]
   child_diet [pos="0.427,0.066"]
   child_smoking [pos="0.779,0.077"]
   cohort [pos="0.217,0.062"]
@@ -249,10 +220,8 @@ dag_raw <- function() {
   ethnicity_child [pos="0.218,0.142"]
   ethnicity_mother [pos="0.222,0.210"]
   familySEP [pos="0.511,0.265"]
-  fatMass_child [pos="0.566,0.818"]
   gestational_age [pos="0.667,0.770"]
   intelligence [outcome,pos="0.861,0.502"]
-  intelligence_SNPs [pos="0.862,0.678"]
   lipids [pos="0.323,0.923"]
   maternalAlcohol_preg [pos="0.644,0.246"]
   maternalDiet_preg [pos="0.317,0.081"]
@@ -272,15 +241,12 @@ dag_raw <- function() {
   age_child -> child_diet
   age_child -> child_smoking
   age_child -> creatinine
-  age_child -> fatMass_child
   age_child -> intelligence
   age_child -> neuropsychologicalDiagnosis_child
   airPollution_child -> biomarker
-  airPollution_child -> fatMass_child
   airPollution_child -> intelligence
   airPollution_child -> neuropsychologicalDiagnosis_child
   airPollution_preg -> bw
-  airPollution_preg -> fatMass_child
   airPollution_preg -> gestational_age
   airPollution_preg -> intelligence
   airPollution_preg -> neuropsychologicalDiagnosis_child
@@ -291,19 +257,15 @@ dag_raw <- function() {
   bw -> intelligence
   bw -> neuropsychologicalDiagnosis_child
   chemical -> biomarker
-  chemical -> fatMass_child
   chemical -> intelligence
-  chemicals_SNPs -> chemical
   child_diet -> biomarker
   child_diet -> chemical
   child_diet -> creatinine
-  child_diet -> fatMass_child
   child_diet -> intelligence
   child_diet -> lipids
   child_diet -> neuropsychologicalDiagnosis_child
   child_diet -> otherChemicals_child
   child_smoking -> biomarker
-  child_smoking -> fatMass_child
   child_smoking -> intelligence
   child_smoking -> neuropsychologicalDiagnosis_child
   child_smoking -> otherChemicals_child
@@ -320,22 +282,16 @@ dag_raw <- function() {
   envFactors_visit -> qualityTesting_child
   ethnicity_child -> biomarker
   ethnicity_child -> bw
-  ethnicity_child -> chemicals_SNPs
   ethnicity_child -> child_smoking
-  ethnicity_child -> fatMass_child
   ethnicity_child -> gestational_age
-  ethnicity_child -> intelligence_SNPs
   ethnicity_child -> lipids
   ethnicity_child -> neuropsychologicalDiagnosis_child
   ethnicity_mother -> biomarker
   ethnicity_mother -> breastfeeding
   ethnicity_mother -> bw
-  ethnicity_mother -> chemicals_SNPs
   ethnicity_mother -> child_diet
   ethnicity_mother -> familySEP
-  ethnicity_mother -> fatMass_child
   ethnicity_mother -> gestational_age
-  ethnicity_mother -> intelligence_SNPs
   ethnicity_mother -> maternalAlcohol_preg
   ethnicity_mother -> maternalDiet_preg
   ethnicity_mother -> maternalSEP_preg
@@ -347,24 +303,17 @@ dag_raw <- function() {
   familySEP -> chemical
   familySEP -> child_diet
   familySEP -> child_smoking
-  familySEP -> fatMass_child
   familySEP -> intelligence
   familySEP -> neuropsychologicalDiagnosis_child
   familySEP -> otherChemicals_child
   familySEP -> water_child
-  fatMass_child -> biomarker
-  fatMass_child -> creatinine
-  fatMass_child -> lipids
   gestational_age -> intelligence
   gestational_age -> neuropsychologicalDiagnosis_child
-  intelligence_SNPs -> intelligence
   maternalAlcohol_preg -> bw
-  maternalAlcohol_preg -> fatMass_child
   maternalAlcohol_preg -> gestational_age
   maternalAlcohol_preg -> intelligence
   maternalAlcohol_preg -> neuropsychologicalDiagnosis_child
   maternalDiet_preg -> bw
-  maternalDiet_preg -> fatMass_child
   maternalDiet_preg -> gestational_age
   maternalDiet_preg -> intelligence
   maternalDiet_preg -> neuropsychologicalDiagnosis_child
@@ -380,7 +329,6 @@ dag_raw <- function() {
   maternalSEP_preg -> neuropsychologicalDiagnosis_child
   maternalSEP_preg -> otherChemicals_preg
   maternalSmoking_preg -> bw
-  maternalSmoking_preg -> fatMass_child
   maternalSmoking_preg -> gestational_age
   maternalSmoking_preg -> intelligence
   maternalSmoking_preg -> neuropsychologicalDiagnosis_child
@@ -390,11 +338,9 @@ dag_raw <- function() {
   maternal_folicAcid_preg -> neuropsychologicalDiagnosis_child
   neuropsychologicalDiagnosis_child -> intelligence
   otherChemicals_child -> biomarker
-  otherChemicals_child -> fatMass_child
   otherChemicals_child -> intelligence
   otherChemicals_child -> neuropsychologicalDiagnosis_child
   otherChemicals_preg -> bw
-  otherChemicals_preg -> fatMass_child
   otherChemicals_preg -> gestational_age
   otherChemicals_preg -> intelligence
   otherChemicals_preg -> neuropsychologicalDiagnosis_child
@@ -418,7 +364,6 @@ dag_raw <- function() {
   sex_child -> child_diet
   sex_child -> child_smoking
   sex_child -> creatinine
-  sex_child -> fatMass_child
   sex_child -> lipids
   sex_child -> neuropsychologicalDiagnosis_child
   time_lastMeal -> biomarker
