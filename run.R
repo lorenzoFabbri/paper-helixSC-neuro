@@ -19,4 +19,4 @@ store <- paste0(path_store, "1")
 targets::tar_make(script = "_targets_rq1.R", 
                   store = store)
 targets::tar_load_everything(store = store)
-#targets::tar_destroy(destroy = "all")
+#targets::tar_destroy(destroy = "all", store = store)

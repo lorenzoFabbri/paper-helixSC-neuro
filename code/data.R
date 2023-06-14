@@ -77,7 +77,17 @@ load_dat_request <- function(paths) {
                   header = TRUE, stringsAsFactors = TRUE, 
                   na.strings = c("NA", "null")) |>
     tibble::as_tibble()
-  dat$e3_cbirth <- lubridate::as_date(dat$e3_cbirth)
+  dat <- dat |>
+    dplyr::mutate(
+      e3_cbirth = lubridate::as_date(dat$e3_cbirth), 
+      hs_date_neu = lubridate::as_date(dat$hs_date_neu)
+    ) |>
+    dplyr::rename(
+      hs_dmdtp_cadj = hs_dmdtp_crawadj, 
+      hs_dedtp_cadj = hs_dedtp_crawadj, 
+      hs_dedtp_madj = hs_dedtp_mrawadj, 
+      hs_cotinine_cadj = hs_cotinine_crawadj
+    )
   
   if (Sys.getenv("TAR_PROJECT") %in% c("rq2" ,"rq3")) {
     metab <- read.csv(paths$path_steroids, 

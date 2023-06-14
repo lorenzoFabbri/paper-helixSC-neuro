@@ -22,7 +22,7 @@ params <- function(is_hpc) {
     path_exposures_preg_final = "data_final/exposome/child/preg_8y/v2_3_20180601/exppregnancy_v2_3.RData", 
     path_metabolome_serum = "data_final/metab/child/8y/serum.urine_Biocrates.NMR_QChelix_20170101/metab_serum_subcohort_v3.RData", 
     path_metabolome_urine = "data_final/metab/child/8y/serum.urine_Biocrates.NMR_QChelix_20170101/metab_urine_subcohort_v3.RData", 
-    path_dat_request = "DATA_PREVIOUS_MIGRATION/lorenzoF_phd/data/data_paper3/requests/AP136/HELIX_AP_136_request_updated23may.2023.csv", 
+    path_dat_request = "DATA_PREVIOUS_MIGRATION/lorenzoF_phd/data/data_paper3/requests/AP136/HELIX_AP_136_request_updated12jun.2023.csv", 
     path_all_steroids = "DATA_PREVIOUS_MIGRATION/lorenzoF_phd/data/data_paper3/requests/AP136/steroids/", 
     
     # Processed during analyses
@@ -123,9 +123,9 @@ params_analyses <- function() {
   density_ratio_trim <- 0.995
   markov_assumption <- Inf
   shift_type <- "mul"
-  shift_amount <- 0.1
-  shift_lower_bound <- 0
-  shift_upper_bound <- 1
+  shift_amount <- 0.01
+  #shift_lower_bound <- 0
+  #shift_upper_bound <- 1
   
   rq1 <- list(
     learners_outcome = learners_outcome, 
@@ -137,9 +137,9 @@ params_analyses <- function() {
     .trim = density_ratio_trim, 
     k = markov_assumption, 
     shift_type = shift_type, 
-    shift_amount = shift_amount, 
-    shift_lower_bound = shift_lower_bound, 
-    shift_upper_bound = shift_upper_bound
+    shift_amount = shift_amount
+    #shift_lower_bound = shift_lower_bound, 
+    #shift_upper_bound = shift_upper_bound
   ) # End dictionary parameters RQ1
   rq2 <- rq1
   rq3 <- rq1

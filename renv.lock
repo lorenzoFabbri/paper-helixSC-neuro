@@ -783,13 +783,13 @@
     },
     "curl": {
       "Package": "curl",
-      "Version": "5.0.0",
+      "Version": "5.0.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
-      "Hash": "e4f97056611e8e6b8b852d13b7400cf1"
+      "Hash": "2118af9cb164c8d2dddc7b89eaf732d9"
     },
     "cvAUC": {
       "Package": "cvAUC",
@@ -1255,13 +1255,13 @@
       "RemoteRepo": "ggokabeito",
       "RemoteUsername": "malcolmbarrett",
       "RemoteRef": "HEAD",
-      "RemoteSha": "3221890f5316f565bdc118b5ab1bbb8044fcdb8c",
+      "RemoteSha": "e28e8b7a0a3301ac40722fb07ed082bde424bb8f",
       "Requirements": [
         "R",
         "ggplot2",
         "grDevices"
       ],
-      "Hash": "d48d6233bb43ef18d7a390a017fa8cc5"
+      "Hash": "a1cfedd755ad8e225c68dc3d6140e972"
     },
     "ggplot2": {
       "Package": "ggplot2",
@@ -1742,6 +1742,33 @@
       ],
       "Hash": "8954069286b4b2b0d023d1b288dce978"
     },
+    "janitor": {
+      "Package": "janitor",
+      "Version": "2.2.0.9000",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "janitor",
+      "RemoteUsername": "sfirke",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "5393d45940d3c5416ff0e7fb7802f13c631de614",
+      "Requirements": [
+        "R",
+        "dplyr",
+        "hms",
+        "lifecycle",
+        "lubridate",
+        "magrittr",
+        "purrr",
+        "rlang",
+        "snakecase",
+        "stringi",
+        "stringr",
+        "tidyr",
+        "tidyselect"
+      ],
+      "Hash": "d9aec90d614cc0962a489e885fc5253b"
+    },
     "jquerylib": {
       "Package": "jquerylib",
       "Version": "0.1.4",
@@ -1754,13 +1781,13 @@
     },
     "jsonlite": {
       "Package": "jsonlite",
-      "Version": "1.8.4",
+      "Version": "1.8.5",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "methods"
       ],
-      "Hash": "a4269a09a9b865579b2635c77e572374"
+      "Hash": "3ee4d9899e4db3e976fc82b98d24a31a"
     },
     "juicyjuice": {
       "Package": "juicyjuice",
@@ -2107,7 +2134,7 @@
       "RemoteRepo": "myphd",
       "RemoteUsername": "isglobal-cep",
       "RemoteRef": "HEAD",
-      "RemoteSha": "0fb47fbf51aa50eefdca758589f2c0f2ee8bb47e",
+      "RemoteSha": "421694ca79dff4e5dcfeb2377e1797f3e2aec7d6",
       "Requirements": [
         "dagitty",
         "dplyr",
@@ -2116,7 +2143,7 @@
         "lifecycle",
         "magrittr"
       ],
-      "Hash": "5e558f590cb4fe2475670a63d0ab0f84"
+      "Hash": "3039789781b4ce6567906e49cd7bfed3"
     },
     "nlme": {
       "Package": "nlme",
@@ -2857,6 +2884,18 @@
         "stats"
       ],
       "Hash": "9067f962730f58b14d8ae54ca885509f"
+    },
+    "snakecase": {
+      "Package": "snakecase",
+      "Version": "0.11.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "stringi",
+        "stringr"
+      ],
+      "Hash": "4079070fc210c7901c0832a3aeab894f"
     },
     "stringi": {
       "Package": "stringi",

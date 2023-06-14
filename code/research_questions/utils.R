@@ -38,9 +38,6 @@ load_dag <- function(dags, exposure, outcome, params_dag) {
 #' @return
 #' @export
 select_adjustment_set <- function(dat, meta, res_dag, strategy) {
-  warning("When all the covariates are available, ", 
-          "replace `any_of` with `all_of`.")
-  
   all_as <- res_dag$adjustment_sets
   lengths_as <- lapply(all_as, length) |>
     unname() |>
@@ -99,11 +96,9 @@ rq_load_data <- function(ids_other_covars, res_dag) {
     as.character()
   dat$adjustment_set <- adj_set
   dat$mapping_covariates <- mapping_covars
-  warning("When all the covariates are available, ", 
-          "replace `any_of` with `all_of`.")
   dat$covariates <- dat_request$dat |>
     dplyr::select(params_dat$variables$identifier, 
-                  dplyr::any_of(mapping_covars))
+                  dplyr::all_of(mapping_covars))
   
   return(dat)
 } # End function load data
