@@ -80,7 +80,90 @@ load_dat_request <- function(paths) {
   dat <- dat |>
     dplyr::mutate(
       e3_cbirth = lubridate::as_date(dat$e3_cbirth), 
-      hs_date_neu = lubridate::as_date(dat$hs_date_neu)
+      hs_date_neu = lubridate::as_date(dat$hs_date_neu), 
+      dplyr::across(
+        c("hs_bf", 
+          "e3_alcpreg_yn", "e3_alcpreg_1g", "e3_alcpreg_1gd", 
+          "hs_sample_c", 
+          "hs_tob", "hs_smk_parents", "hs_globalexp", 
+          "hs_fam_car", "hs_c_room", 
+          "hs_wrk_m", "hs_finance", "FAS_cat", 
+          "hs_neuro_diag", 
+          "hs_temp", "hs_noise", "hs_qual_test", "hs_rest_nth", 
+          "hs_mood", "hs_healthc_tday"), 
+        factor
+      ), 
+      h_bf = factor(h_bf, 
+                    levels = c("Never", "Ever"), 
+                    labels = c(0, 1)), 
+      cohort = factor(cohort, 
+                      levels = c("BIB", "EDEN", 
+                                 "KANC", "MOBA", 
+                                 "RHEA", "SAB")), 
+      dplyr::across(
+        dplyr::contains(c(
+          "_matrix", 
+          "_cdich", "_cdesc", "_mdesc", 
+          "_timing", "_laboratory"
+        )), 
+        factor
+      ), 
+      h_folic_t1 = factor(h_folic_t1, 
+                          levels = c("Yes", "No"), 
+                          labels = c(1, 2)), 
+      dplyr::across(
+        dplyr::contains("_pass_smok"), 
+        factor
+      ), 
+      dplyr::across(
+        dplyr::contains(c(
+          "_psmok", "_asmokyn"
+        )), 
+        factor, 
+        levels = c("yes", "no"), 
+        labels = c(1, 2)
+      ), 
+      hs_wtr_hm = factor(hs_wtr_hm, 
+                          levels = c("Bottled", 
+                                     "Municipal (tap) filtered", 
+                                     "Municipal (tap ) non-filtered", 
+                                     "Other, specify in the next question", 
+                                     "Don't know"), 
+                          labels = c(1, 2, 3, 4, 5)), 
+      dplyr::across(
+        dplyr::contains("_ethnicity"), 
+        factor
+      ), 
+      e3_edum = factor(e3_edum, 
+                       levels = c("primary school", 
+                                  "secondary school", 
+                                  "university degree or higher"), 
+                       labels = c(0, 1, 2)), 
+      e3_eduf = factor(e3_eduf, 
+                       levels = c("primary school", 
+                                  "secondary school", 
+                                  "university degree or higher"), 
+                       labels = c(0, 1, 2)), 
+      e3_edumc = factor(e3_edumc, 
+                        levels = c("low", "middle", "high"), 
+                        labels = c(0, 1, 2)), 
+      e3_edufc = factor(e3_edufc, 
+                        levels = c("low", "middle", "high"), 
+                        labels = c(0, 1, 2)), 
+      e3_edupc = factor(e3_edupc, 
+                        levels = c("low", "middle", "high"), 
+                        labels = c(0, 1, 2)), 
+      e3_ses = factor(e3_ses, 
+                      levels = c("low income", "medium income", "high income"), 
+                      labels = c(1, 2, 3)), 
+      e3_marital = factor(e3_marital, 
+                          levels = c("living alone", 
+                                     "living with the father", 
+                                     "other situation"), 
+                          labels = c(1, 0, 2)), 
+      e3_sex = factor(e3_sex, 
+                      levels = c("female", "male"), 
+                      labels = c(1, 0))
     ) |>
     dplyr::rename(
       hs_dmdtp_cadj = hs_dmdtp_crawadj, 
