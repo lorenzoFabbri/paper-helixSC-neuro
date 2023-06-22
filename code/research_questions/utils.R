@@ -106,6 +106,124 @@ rq_load_data <- function(ids_other_covars, res_dag) {
 
 #' Title
 #'
+#' @param dat 
+#'
+#' @return
+#' @export
+run_marginal_effects <- function(dat) {
+  rq <- Sys.getenv("TAR_PROJECT")
+  params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
+  id_var <- params_dat$variables$identifier
+  outcome <- params_dat$variables[[rq]]$outcome
+  steps_outcome <- params_dat$variables$preproc_outcome
+  params_ana <- params_analyses()[[rq]]
+  
+  # Step 1a: estimate weights for covariate balance
+  list_exposures <- dat$exposures |>
+    dplyr::select(-dplyr::any_of("HelixID")) |>
+    colnames()
+  list_covariates <- setdiff(colnames(dat$covariates), id_var)
+  estimated_weights <- lapply(list_exposures, function(x) {
+    tmp <- suppressWarnings(myphd::estimate_weights(
+      dat = dplyr::inner_join(dat$exposures, 
+                              dat$covariates, 
+                              by = id_var), 
+      exposure = x, 
+      covariates = list_covariates, 
+      method = params_ana$method_weightit, 
+      method_args = list(
+        use_kernel = params_ana$use_kernel, 
+        sl_discrete = params_ana$sl_discrete, 
+        sl_lib = params_ana$sl_lib
+      ))
+    )
+    WeightIt::trim(tmp$weights, params_ana$weights_trim)
+  }) # End loop over exposures to estimate weights
+  names(estimated_weights) <- list_exposures
+  ##############################################################################
+  
+  # Step 1b: explore balance
+  balance <- lapply(names(estimated_weights), function(x) {
+    myphd::explore_balance(exposure = strsplit(x, split = "_")[[1]][2], 
+                           covariates = list_covariates, 
+                           weights = estimated_weights[[x]])
+  })
+  names(balance) <- names(estimated_weights)
+  ## Save results
+  lapply(names(balance), function(x) {
+    ### bal.plot
+    .path <- paste0(
+      "results/figures/", 
+      Sys.getenv("TAR_PROJECT"), 
+      "/balplot_", 
+      params_ana$method_weightit, "_", 
+      strsplit(x, split = "_")[[1]][2], 
+      ".pdf"
+    )
+    ggplot2::ggsave(.path, 
+                    gridExtra::marrangeGrob(grobs = balance[[x]]$graph, 
+                                            nrow = 1, 
+                                            ncol = 1), 
+                    dpi = 480)
+    
+    ### bal.tab
+    .path <- paste0(
+      "results/tables/", 
+      Sys.getenv("TAR_PROJECT"), 
+      "/baltab_", 
+      params_ana$method_weightit, "_", 
+      strsplit(x, split = "_")[[1]][2], 
+      ".docx"
+    )
+    tab <- balance[[x]]$tab$Balance |>
+      as.data.frame() |>
+      tibble::rownames_to_column(var = "variable")
+    colnames(tab) <- c("variable", "type", 
+                       "unadj. correlation", "adj. correlation", 
+                       "threshold", "adj. KS")
+    tab <- tab |>
+      dplyr::arrange(dplyr::desc(`adj. correlation`), 
+                     variable) |>
+      dplyr::mutate(type = dplyr::recode(
+        type, "Contin." = "continuous", 
+              "Binary" = "binary"
+      )) |>
+      gt::gt(groupname_col = "type") |>
+      gt::tab_options(row_group.as_column = TRUE) |>
+      gt::fmt_number(decimals = 3) |>
+      gt::tab_header(paste0("Balance statistics: ", 
+                            strsplit(x, split = "_")[[1]][2]))
+    gt::gtsave(tab, filename = .path)
+  })
+  
+  ### love.plot
+  .path <- paste0(
+    "results/figures/", 
+    Sys.getenv("TAR_PROJECT"), 
+    "/loveplot_", 
+    params_ana$method_weightit, 
+    ".pdf"
+  )
+  ggplot2::ggsave(.path, 
+                  gridExtra::marrangeGrob(grobs = sapply(balance, `[[`, "love"), 
+                                          nrow = 1, 
+                                          ncol = 1), 
+                  dpi = 480, height = 6)
+  ##############################################################################
+  
+  # Step 2: fit model(s) using estimated weights
+  
+  # Step 3: estimate marginal effects
+  
+  return(list(
+    estimated_weights = estimated_weights, 
+    balance = balance
+  ))
+} # End function run_marginal_effects
+################################################################################
+
+#' Title
+#'
 #' @param
 #'
 #' @return

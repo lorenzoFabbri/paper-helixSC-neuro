@@ -113,9 +113,9 @@ params <- function(is_hpc) {
 ################################################################################
 params_analyses <- function() {
   # Common parameters
+  ## lmtp
   learners_outcome <- c("SL.mean", "SL.glm")
   learners_exposure <- c("SL.glm")
-  
   estimator <- "sdr"
   folds <- 3
   folds_outcome <- 1
@@ -124,10 +124,16 @@ params_analyses <- function() {
   markov_assumption <- Inf
   shift_type <- "mul"
   shift_amount <- 0.01
-  #shift_lower_bound <- 0
-  #shift_upper_bound <- 1
+  
+  ## WeightIt, Cobalt, marginaleffects
+  method_weightit <- "glm"
+  weights_trim <- 0.95
+  use_kernel <- FALSE
+  sl_discrete <- FALSE
+  sl_lib <- FALSE
   
   rq1 <- list(
+    # lmtp
     learners_outcome = learners_outcome, 
     learners_trt = learners_exposure, 
     estimator = estimator, 
@@ -137,9 +143,13 @@ params_analyses <- function() {
     .trim = density_ratio_trim, 
     k = markov_assumption, 
     shift_type = shift_type, 
-    shift_amount = shift_amount
-    #shift_lower_bound = shift_lower_bound, 
-    #shift_upper_bound = shift_upper_bound
+    shift_amount = shift_amount, 
+    # WeightIt, Cobalt, marginaleffects
+    method_weightit = method_weightit, 
+    weights_trim = weights_trim, 
+    use_kernel = use_kernel, 
+    sl_discrete = sl_discrete, 
+    sl_lib = sl_lib
   ) # End dictionary parameters RQ1
   rq2 <- rq1
   rq3 <- rq1
