@@ -6,6 +6,7 @@
 #' @param params_dag A list of parameters for `dagitty`. A list.
 #'
 #' @return A named list with DAG and adjustment sets. A list.
+#'
 #' @export
 load_dag <- function(dags, exposure, outcome, params_dag) {
   ret <- list()
@@ -29,13 +30,16 @@ load_dag <- function(dags, exposure, outcome, params_dag) {
 } # End function dag
 ################################################################################
 
-#' Title
+#' Various ways to select an adjustment set out of many
 #'
-#' @param dat 
-#' @param res_dag 
-#' @param strategy 
+#' @param dat A named list of tibbles containing the variables of interest. A list.
+#' @param res_dag Result of the call to [load_dag()]. A named list.
+#' @param strategy Strategy to adopt to select the adjustment set.
+#' The currently available strategies are: `first`, `smallest`, `largest`, `random`,
+#' and `minimize_missings`. A string.
 #'
-#' @return
+#' @return An adjustment set. A vector.
+#'
 #' @export
 select_adjustment_set <- function(dat, meta, res_dag, strategy) {
   all_as <- res_dag$adjustment_sets
@@ -59,12 +63,13 @@ select_adjustment_set <- function(dat, meta, res_dag, strategy) {
 } # End function selection adjustment set
 ################################################################################
 
-#' Load data
+#' Load data necessary for down-streams analyses
 #'
 #' @param ids_other_covars IDs for additional covariate data. A vector.
-#' @param res_dag Result of call to `load_dag`. A list.
+#' @param res_dag Result of the call to [load_dag()]. A list.
 #'
 #' @return A named list of exposures, covariates, and outcomes. A list.
+#'
 #' @export
 rq_load_data <- function(ids_other_covars, res_dag) {
   rq <- Sys.getenv("TAR_PROJECT")
@@ -106,9 +111,10 @@ rq_load_data <- function(ids_other_covars, res_dag) {
 
 #' Title
 #'
-#' @param dat 
+#' @param dat
 #'
 #' @return
+#'
 #' @export
 run_marginal_effects <- function(dat) {
   rq <- Sys.getenv("TAR_PROJECT")
@@ -222,11 +228,13 @@ run_marginal_effects <- function(dat) {
 } # End function run_marginal_effects
 ################################################################################
 
-#' Title
+#' Fit models using `lmtp`
 #'
-#' @param
+#' @param dat A named list of tibbles containing the variables of interest. A list.
+#' @param shift_exposure Whether to shift the exposure variables or not. A logical. 
 #'
-#' @return
+#' @return A named list containing the results of the call to `lmtp`, for each exposure.
+#'
 #' @export
 run_mtp <- function(dat, shift_exposure) {
   rq <- Sys.getenv("TAR_PROJECT")

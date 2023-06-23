@@ -1,8 +1,10 @@
 #' Pre-process data for RQ1
 #'
-#' @param dat
+#' @param dat A named list of tibbles containing the variables of interest. A list.
 #'
-#' @return
+#' @return A named list of pre-processed tibbles containing the variables of interest.
+#' A list.
+#'
 #' @export
 rq1_prepare_data <- function(dat) {
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
@@ -40,6 +42,7 @@ rq1_prepare_data <- function(dat) {
 #' @param metadat 
 #'
 #' @return
+#'
 #' @export
 rq1_describe_data <- function(dat, metadat) {
 } # End function describe data
@@ -50,6 +53,7 @@ rq1_describe_data <- function(dat, metadat) {
 #' @param params_analyses 
 #'
 #' @return
+#'
 #' @export
 rq1_run_out_neg_control <- function(params_analyses) {
 } # End function run analysis negative control
@@ -60,6 +64,7 @@ rq1_run_out_neg_control <- function(params_analyses) {
 #' @param params_analyses 
 #'
 #' @return
+#'
 #' @export
 rq1_run_analyses <- function(params_analyses) {
 } # End function run analyses

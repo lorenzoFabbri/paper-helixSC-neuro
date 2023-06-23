@@ -1,14 +1,17 @@
-#' Title
-#'
-#' @param paths 
+#' Process the steroid metabolomics data
 #'
 #' @return
+#'
 #' @export
-process_steroids <- function(paths) {
+process_steroids <- function() {
+  rq <- Sys.getenv("TAR_PROJECT")
+  
+  # Load data
+  params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
+  paths <- params_dat$paths
   steroids <- paths$path_all_steroids
   datasets <- c("urine_bib", "urine_inma_rhea_eden_kanc", "urine_moba")
   datasets <- paste0(datasets, ".xlsx")
-  params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   
   tbls <- lapply(datasets, function(x) {
     dd <- readxl::read_xlsx(paste0(steroids, x), 
@@ -60,6 +63,14 @@ process_steroids <- function(paths) {
   return(tbls)
 }
 
+#' Title
+#'
+#' @param loq 
+#' @param strategy 
+#'
+#' @return
+#'
+#' @export
 handle_loq_urine <- function(loq, strategy) {
   if (strategy == "div2") {
     new_val <- as.numeric(loq) / 2
@@ -68,11 +79,15 @@ handle_loq_urine <- function(loq, strategy) {
   return(new_val)
 }
 
-#' Load the dataset corresponding to the HELIX data request
+#' Load and clean the dataset corresponding to the HELIX data request
 #'
 #' @return A named list of data and metadata. A list.
+#'
 #' @export
-load_dat_request <- function(paths) {
+load_dat_request <- function() {
+  params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
+  paths <- params_dat$paths
+  
   dat <- read.csv(paths$path_dat_request, 
                   header = TRUE, stringsAsFactors = TRUE, 
                   na.strings = c("NA", "null")) |>
@@ -205,6 +220,7 @@ load_dat_request <- function(paths) {
 #' @param path_in Path to exposome object. A string.
 #'
 #' @return A named list of phenotype data, meta-data, and exposures. A list.
+#'
 #' @export
 load_exposome <- function(path_in) {
   # Path to the object of class ExposomeSet
