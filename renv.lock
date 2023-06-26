@@ -389,6 +389,29 @@
       ],
       "Hash": "d1fa8fae6a47e88bb46d5152312bd8bd"
     },
+    "WeightIt": {
+      "Package": "WeightIt",
+      "Version": "0.14.2",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "WeightIt",
+      "RemoteUsername": "ngreifer",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "8484a507f4e531c8d0610a1e9441cd230a6428be",
+      "Requirements": [
+        "R",
+        "backports",
+        "chk",
+        "cobalt",
+        "crayon",
+        "ggplot2",
+        "rlang",
+        "stats",
+        "utils"
+      ],
+      "Hash": "46fa85e2cb23e06087399bfd3829a20a"
+    },
     "abind": {
       "Package": "abind",
       "Version": "1.4-5",
@@ -657,6 +680,20 @@
       ],
       "Hash": "ca9c113196136f4a9ca9ce6079c2c99e"
     },
+    "chk": {
+      "Package": "chk",
+      "Version": "0.9.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "lifecycle",
+        "methods",
+        "rlang",
+        "tools"
+      ],
+      "Hash": "bccdb88efae005f6b9785a5fdfaaeb16"
+    },
     "circlize": {
       "Package": "circlize",
       "Version": "0.4.15",
@@ -710,6 +747,27 @@
         "utils"
       ],
       "Hash": "5edbbabab6ce0bf7900a74fd4358628e"
+    },
+    "cobalt": {
+      "Package": "cobalt",
+      "Version": "4.5.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "backports",
+        "chk",
+        "crayon",
+        "ggplot2",
+        "grDevices",
+        "grid",
+        "gridExtra",
+        "gtable",
+        "rlang",
+        "stats",
+        "utils"
+      ],
+      "Hash": "c1340edda8df5ecf5e9c5f0ca487f7eb"
     },
     "codetools": {
       "Package": "codetools",
@@ -2176,14 +2234,14 @@
     },
     "myphd": {
       "Package": "myphd",
-      "Version": "0.1.0",
+      "Version": "0.0.1",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "myphd",
       "RemoteUsername": "isglobal-cep",
       "RemoteRef": "HEAD",
-      "RemoteSha": "2f916e67c24615ce983654366787bdd973a5aa30",
+      "RemoteSha": "35a9a94023568ffe8ff910ed9d80951d2040965c",
       "Requirements": [
         "dagitty",
         "dplyr",
@@ -2192,7 +2250,7 @@
         "lifecycle",
         "magrittr"
       ],
-      "Hash": "8fb6fb47219c39e74f1765e0354c27cc"
+      "Hash": "3820761b4e25a895025f4b10fa82d1be"
     },
     "nlme": {
       "Package": "nlme",

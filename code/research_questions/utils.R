@@ -109,14 +109,15 @@ rq_load_data <- function(ids_other_covars, res_dag) {
 } # End function load data
 ################################################################################
 
-#' Title
+#' Estimate weights and explore covariance balance
 #'
-#' @param dat
+#' @param dat A named list of tibbles containing the variables of interest. A list.
 #'
-#' @return
+#' @return A named list containing estimated weights and results of
+#' balance exploration. A list.
 #'
 #' @export
-run_marginal_effects <- function(dat) {
+rq_estimate_weights <- function(dat) {
   rq <- Sys.getenv("TAR_PROJECT")
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   id_var <- params_dat$variables$identifier
@@ -124,11 +125,12 @@ run_marginal_effects <- function(dat) {
   steps_outcome <- params_dat$variables$preproc_outcome
   params_ana <- params_analyses()[[rq]]
   
-  # Step 1a: estimate weights for covariate balance
+  # Step 1: estimate weights for covariate balance
   list_exposures <- dat$exposures |>
     dplyr::select(-dplyr::any_of("HelixID")) |>
     colnames()
   list_covariates <- setdiff(colnames(dat$covariates), id_var)
+  ## Loop over exposures
   estimated_weights <- lapply(list_exposures, function(x) {
     tmp <- suppressWarnings(myphd::estimate_weights(
       dat = dplyr::inner_join(dat$exposures, 
@@ -148,7 +150,7 @@ run_marginal_effects <- function(dat) {
   names(estimated_weights) <- list_exposures
   ##############################################################################
   
-  # Step 1b: explore balance
+  # Step 2: explore balance
   balance <- lapply(names(estimated_weights), function(x) {
     myphd::explore_balance(exposure = strsplit(x, split = "_")[[1]][2], 
                            covariates = list_covariates, 
@@ -192,7 +194,7 @@ run_marginal_effects <- function(dat) {
                      variable) |>
       dplyr::mutate(type = dplyr::recode(
         type, "Contin." = "continuous", 
-              "Binary" = "binary"
+        "Binary" = "binary"
       )) |>
       gt::gt(groupname_col = "type") |>
       gt::tab_options(row_group.as_column = TRUE) |>
@@ -215,16 +217,45 @@ run_marginal_effects <- function(dat) {
                                           nrow = 1, 
                                           ncol = 1), 
                   dpi = 480, height = 6)
-  ##############################################################################
-  
-  # Step 2: fit model(s) using estimated weights
-  
-  # Step 3: estimate marginal effects
   
   return(list(
     estimated_weights = estimated_weights, 
     balance = balance
   ))
+} # End function `rq_estimate_weights`
+################################################################################
+
+#' Title
+#'
+#' @param dat
+#' @param weights
+#'
+#' @return
+#'
+#' @export
+run_marginal_effects <- function(dat, weights) {
+  rq <- Sys.getenv("TAR_PROJECT")
+  params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
+  outcome <- params_dat$variables[[rq]]$outcome
+  steps_outcome <- params_dat$variables$preproc_outcome
+  params_ana <- params_analyses()[[rq]]
+  
+  # Process outcome
+  dat$outcome <- myphd::extract_cohort(dat = dat$outcome, 
+                                       id_var = params_dat$variables$identifier)
+  dat$outcome <- myphd::preproc_data(dat = dat$outcome, 
+                                     outcome = outcome, 
+                                     dic_steps = steps_outcome, 
+                                     id_var = params_dat$variables$identifier, 
+                                     by_var = "cohort")
+  dat$outcome <- dat$outcome |>
+    dplyr::select(-cohort)
+  
+  # Step 1: fit model(s) using estimated weights
+  
+  # Step 2: estimate marginal effects
+  
+  return()
 } # End function run_marginal_effects
 ################################################################################
 
