@@ -97,16 +97,16 @@ load_dat_request <- function() {
       e3_cbirth = lubridate::as_date(dat$e3_cbirth), 
       hs_date_neu = lubridate::as_date(dat$hs_date_neu), 
       dplyr::across(
-        c("hs_bf", 
-          "e3_alcpreg_yn", "e3_alcpreg_1g", "e3_alcpreg_1gd", 
-          "hs_sample_c", 
-          "hs_tob", "hs_smk_parents", "hs_globalexp", 
-          "hs_fam_car", "hs_c_room", 
-          "hs_wrk_m", "hs_finance", "FAS_cat", 
-          "hs_neuro_diag", 
-          "hs_temp", "hs_noise", "hs_qual_test", "hs_rest_nth", 
-          "hs_mood", "hs_healthc_tday"), 
-        factor
+        dplyr::all_of(c("hs_bf", 
+                        "e3_alcpreg_yn", "e3_alcpreg_1g", "e3_alcpreg_1gd", 
+                        "hs_sample_c", 
+                        "hs_tob", "hs_smk_parents", "hs_globalexp", 
+                        "hs_fam_car", "hs_c_room", 
+                        "hs_wrk_m", "hs_finance", "FAS_cat", 
+                        "hs_neuro_diag", 
+                        "hs_temp", "hs_noise", "hs_qual_test", "hs_rest_nth", 
+                        "hs_mood", "hs_healthc_tday")), 
+        \(x) factor(x)
       ), 
       h_bf = factor(h_bf, 
                     levels = c("Never", "Ever"), 
@@ -121,22 +121,22 @@ load_dat_request <- function() {
           "_cdich", "_cdesc", "_mdesc", 
           "_timing", "_laboratory"
         )), 
-        factor
+        \(x) factor(x)
       ), 
       h_folic_t1 = factor(h_folic_t1, 
                           levels = c("Yes", "No"), 
                           labels = c(1, 2)), 
       dplyr::across(
         dplyr::contains("_pass_smok"), 
-        factor
+        \(x) factor(x)
       ), 
       dplyr::across(
         dplyr::contains(c(
           "_psmok", "_asmokyn"
         )), 
-        factor, 
-        levels = c("yes", "no"), 
-        labels = c(1, 2)
+        function(x) {factor(x, 
+                            levels = c("yes", "no"), 
+                            labels = c(1, 2))}
       ), 
       hs_wtr_hm = factor(hs_wtr_hm, 
                           levels = c("Bottled", 
@@ -147,7 +147,7 @@ load_dat_request <- function() {
                           labels = c(1, 2, 3, 4, 5)), 
       dplyr::across(
         dplyr::contains("_ethnicity"), 
-        factor
+        \(x) factor(x)
       ), 
       e3_edum = factor(e3_edum, 
                        levels = c("primary school", 

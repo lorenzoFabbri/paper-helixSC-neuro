@@ -26,6 +26,15 @@ load_dag <- function(dags, exposure, outcome, params_dag) {
                                             effect = params_dag$effect)
   ret$adjustment_sets <- adjustment_set
   
+  # Identify precision covariates to add to adjustment set
+  prec_covars <- dagitty::parents(x = dag, 
+                                  v = outcome)
+  parents_exposure <- dagitty::parents(x = dag, 
+                                       v = exposure)
+  ret$prec_covars <- setdiff(setdiff(prec_covars, 
+                                     exposure), 
+                             parents_exposure)
+  
   return(ret)
 } # End function dag
 ################################################################################
@@ -76,7 +85,7 @@ rq_load_data <- function(ids_other_covars, res_dag) {
   
   # Load data request
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
-  dat_request <- load_dat_request(paths = params_dat$paths)
+  dat_request <- load_dat_request()
   
   # Load eventual other covariates
   if (!is.null(ids_other_covars)) {
@@ -96,6 +105,9 @@ rq_load_data <- function(ids_other_covars, res_dag) {
                                    meta = dat_request$meta, 
                                    res_dag = res_dag, 
                                    strategy = params_dat$variables$strategy_select_adj_set)
+  # Add precision covariates
+  adj_set <- unique(c(adj_set, 
+                      res_dag$prec_covars))
   mapping_covars <- dat_request$meta[dat_request$meta$dag %in% adj_set, 
                                      ]$variable |>
     as.character()
@@ -104,6 +116,11 @@ rq_load_data <- function(ids_other_covars, res_dag) {
   dat$covariates <- dat_request$dat |>
     dplyr::select(params_dat$variables$identifier, 
                   dplyr::all_of(mapping_covars))
+  cols_to_season <- c("hs_date_neu", "e3_cbirth")
+  dat$covariates <- myphd::convert_time_season(dat = dat$covariates, 
+                                               cols = cols_to_season) |>
+    dplyr::mutate(dplyr::across(dplyr::any_of(cols_to_season), 
+                                \(x) factor(x)))
   
   return(dat)
 } # End function load data
@@ -119,6 +136,9 @@ rq_load_data <- function(ids_other_covars, res_dag) {
 #' @export
 rq_estimate_weights <- function(dat) {
   rq <- Sys.getenv("TAR_PROJECT")
+  rq <- switch(rq, 
+               "rq01" = "rq1", 
+               "rq1" = "rq1")
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   id_var <- params_dat$variables$identifier
   outcome <- params_dat$variables[[rq]]$outcome

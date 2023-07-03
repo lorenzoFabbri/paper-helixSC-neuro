@@ -5,6 +5,7 @@ path_store <- ifelse(
   "~/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF_phd/data/data_paper3/_targets/_targetsRQ", 
   "~/mounts/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF_phd/data/data_paper3/_targets/_targetsRQ"
 )
+Sys.setenv(path_store = path_store)
 
 ################################################################################
 Sys.setenv(TAR_PROJECT = "rq01")

@@ -26,7 +26,6 @@ list(
                        outcome = "intelligence", 
                        params_dag = params_dag)
   ), # End dag target
-  ##############################################################################
   targets::tar_target(
     name = load_dat, 
     command = rq_load_data(ids_other_covars = c(), 
@@ -39,11 +38,20 @@ list(
   ), # End preproc_dat target
   ##############################################################################
   targets::tar_target(
+    name = marginal, 
+    command = run_marginal_effects(dat = load_dat, 
+                                   weights = targets::tar_read(
+                                     name = "weights", 
+                                     store = paste0(Sys.getenv("path_store"), 
+                                                    "01")
+                                   ))
+  ), # End marginal target
+  ##############################################################################
+  targets::tar_target(
     name = lmtp, 
     command = run_mtp(dat = preproc_dat, 
                       shift_exposure = TRUE)
   ), # End lmtp target
-  ##############################################################################
   targets::tar_target(
     name = lmtp_null, 
     command = run_mtp(dat = preproc_dat, 
