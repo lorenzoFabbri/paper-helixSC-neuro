@@ -187,6 +187,27 @@ load_dat_request <- function() {
       hs_cotinine_cadj = hs_cotinine_crawadj
     )
   
+  # Manually modify some factors that have levels w/ few subjects
+  dat <- dat |>
+    dplyr::mutate(
+      hs_wrk_m = forcats::fct_collapse(
+        hs_wrk_m, 
+        "Employed" = c(1), 
+        "Unemployed" = c(2), 
+        "Other" = c(3, 5, 6, 7), 
+        "Stay-at-home parent" = c(4), 
+        "Does not wish to answer" = c(8)
+      ) |>
+        factor(
+          levels = c("Employed", "Unemployed", "Other", 
+                     "Stay-at-home parent", 
+                     "Does not wish to answer"), 
+          labels = c(1, 2, 3, 4, 5)
+        )
+    ) |>
+    # Exclude subjects with not usable test
+    dplyr::filter(hs_qual_test != 3)
+  
   if (Sys.getenv("TAR_PROJECT") %in% c("rq2" ,"rq3")) {
     metab <- read.csv(paths$path_steroids, 
                       header = TRUE, stringsAsFactors = TRUE, 
