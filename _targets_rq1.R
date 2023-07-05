@@ -40,11 +40,7 @@ list(
   targets::tar_target(
     name = marginal, 
     command = run_marginal_effects(dat = load_dat, 
-                                   weights = targets::tar_read(
-                                     name = "weights", 
-                                     store = paste0(Sys.getenv("path_store"), 
-                                                    "01")
-                                   ))
+                                   weights = NULL)
   ), # End marginal target
   ##############################################################################
   targets::tar_target(

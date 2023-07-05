@@ -127,6 +127,7 @@ params_analyses <- function() {
   
   ## WeightIt, Cobalt, marginaleffects
   method_weightit <- "glm"
+  method_marginal <- "gam"
   weights_trim <- 0.95
   use_kernel <- FALSE
   sl_discrete <- FALSE
@@ -146,6 +147,7 @@ params_analyses <- function() {
     shift_amount = shift_amount, 
     # WeightIt, Cobalt, marginaleffects
     method_weightit = method_weightit, 
+    method_marginal = method_marginal, 
     weights_trim = weights_trim, 
     use_kernel = use_kernel, 
     sl_discrete = sl_discrete, 

@@ -146,10 +146,11 @@ rq_estimate_weights <- function(dat) {
   params_ana <- params_analyses()[[rq]]
   
   # Step 1: estimate weights for covariate balance
-  list_exposures <- dat$exposures |>
-    dplyr::select(-dplyr::any_of("HelixID")) |>
-    colnames()
-  list_covariates <- setdiff(colnames(dat$covariates), id_var)
+  list_exposures <- names(dat$exposures)
+  list_exposures <- setdiff(list_exposures, 
+                            id_var)
+  list_covariates <- setdiff(colnames(dat$covariates), 
+                             id_var)
   ## Loop over exposures
   estimated_weights <- lapply(list_exposures, function(x) {
     tmp <- suppressWarnings(myphd::estimate_weights(
@@ -168,6 +169,19 @@ rq_estimate_weights <- function(dat) {
     WeightIt::trim(tmp$weights, params_ana$weights_trim)
   }) # End loop over exposures to estimate weights
   names(estimated_weights) <- list_exposures
+  path_save_weights <- paste0(
+    Sys.getenv("path_store_res"), 
+    "weights_exposure_model/"
+  )
+  if (!dir.exists(path_save_weights)) {
+    dir.create(path_save_weights)
+  }
+  saveRDS(estimated_weights, 
+          file = paste0(
+            path_save_weights, 
+            params_ana$method_weightit, 
+            ".rds"
+          ))
   ##############################################################################
   
   # Step 2: explore balance
@@ -271,11 +285,51 @@ run_marginal_effects <- function(dat, weights) {
   dat$outcome <- dat$outcome |>
     dplyr::select(-cohort)
   
+  ##############################################################################
   # Step 1: fit model(s) using estimated weights
+  list_exposures <- names(dat$exposures)
+  list_exposures <- setdiff(list_exposures, 
+                            params_dat$variables$identifier)
+  list_covariates <- setdiff(colnames(dat$covariates), 
+                             params_dat$variables$identifier)
+  dat_merged <- dplyr::full_join(dat$covariates, dat$outcome, 
+                                 by = params_dat$variables$identifier)
+  if (is.null(weights)) {
+    weights <- readRDS(file = paste0(
+      Sys.getenv("path_store_res"), 
+      "weights_exposure_model/", 
+      params_ana$method_weightit, 
+      ".rds"
+    ))
+  } # End check if weights are not provided
   
+  # Loop over each exposure
+  fits <- lapply(list_exposures, function(exposure) {
+    dat_analysis <- dplyr::bind_cols(dplyr::select(dat$exposures, 
+                                                   dplyr::all_of(exposure)), 
+                                     dat_merged) |>
+      dplyr::select(-params_dat$variables$identifier)
+    
+    fit <- myphd::fit_model_weighted(
+      dat = dat_analysis, 
+      outcome = outcome, 
+      exposure = exposure, 
+      covariates = list_covariates, 
+      weights = weights[[exposure]]$weights, 
+      method = params_ana$method_marginal, 
+      method_args = c()
+    )
+  }) # End loop over exposures
+  names(fits) <- list_exposures
+  ##############################################################################
+  
+  ##############################################################################
   # Step 2: estimate marginal effects
+  ##############################################################################
   
-  return()
+  return(list(
+    fits = fits
+  ))
 } # End function run_marginal_effects
 ################################################################################
 
