@@ -39,7 +39,7 @@ list(
   ##############################################################################
   targets::tar_target(
     name = marginal, 
-    command = run_marginal_effects(dat = load_dat, 
+    command = run_marginal_effects(dat = preproc_dat, 
                                    weights = NULL)
   ), # End marginal target
   ##############################################################################
