@@ -303,23 +303,30 @@ run_marginal_effects <- function(dat, weights) {
     ))
   } # End check if weights are not provided
   
-  # Loop over each exposure
-  fits <- lapply(list_exposures, function(exposure) {
-    dat_analysis <- dplyr::bind_cols(dplyr::select(dat$exposures, 
-                                                   dplyr::all_of(exposure)), 
-                                     dat_merged) |>
-      dplyr::select(-params_dat$variables$identifier)
+  # "Loop" over each exposure
+  future::plan(future::multisession, 
+               workers = parallelly::availableCores() - 2)
+  progressr::with_progress({
+    p <- progressr::progressor(steps = length(list_exposures))
     
-    fit <- myphd::fit_model_weighted(
-      dat = dat_analysis, 
-      outcome = outcome, 
-      exposure = exposure, 
-      covariates = list_covariates, 
-      weights = weights[[exposure]]$weights, 
-      method = params_ana$method_marginal, 
-      method_args = c()
-    )
-  }) # End loop over exposures
+    fits <- furrr::future_map(list_exposures, function(exposure) {
+      p()
+      dat_analysis <- dplyr::bind_cols(dplyr::select(dat$exposures, 
+                                                     dplyr::all_of(exposure)), 
+                                       dat_merged) |>
+        dplyr::select(-params_dat$variables$identifier)
+      
+      fit <- myphd::fit_model_weighted(
+        dat = dat_analysis, 
+        outcome = outcome, 
+        exposure = exposure, 
+        covariates = list_covariates, 
+        weights = weights[[exposure]]$weights, 
+        method = params_ana$method_marginal, 
+        method_args = c()
+      )
+    }) # End loop over exposures
+  }) # End progress bar
   names(fits) <- list_exposures
   ##############################################################################
   
