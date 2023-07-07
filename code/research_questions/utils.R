@@ -267,7 +267,7 @@ rq_estimate_weights <- function(dat) {
 #' @return
 #'
 #' @export
-run_marginal_effects <- function(dat, weights) {
+rq_fit_model_weighted <- function(dat, weights) {
   rq <- Sys.getenv("TAR_PROJECT")
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   outcome <- params_dat$variables[[rq]]$outcome
@@ -285,8 +285,7 @@ run_marginal_effects <- function(dat, weights) {
   dat$outcome <- dat$outcome |>
     dplyr::select(-cohort)
   
-  ##############################################################################
-  # Step 1: fit model(s) using estimated weights
+  # Fit model(s) using estimated weights
   list_exposures <- names(dat$exposures)
   list_exposures <- setdiff(list_exposures, 
                             params_dat$variables$identifier)
@@ -303,7 +302,7 @@ run_marginal_effects <- function(dat, weights) {
     ))
   } # End check if weights are not provided
   
-  # "Loop" over each exposure
+  ## "Loop" over each exposure
   future::plan(future::multisession, 
                workers = parallelly::availableCores() - 2)
   progressr::with_progress({
@@ -328,16 +327,25 @@ run_marginal_effects <- function(dat, weights) {
     }) # End loop over exposures
   }) # End progress bar
   names(fits) <- list_exposures
-  ##############################################################################
-  
-  ##############################################################################
-  # Step 2: estimate marginal effects
-  ##############################################################################
   
   return(list(
     fits = fits
   ))
-} # End function run_marginal_effects
+} # End function rq_fit_model_weighted
+################################################################################
+
+#' Title
+#'
+#' @param dat 
+#' @param fits 
+#' @param type_effect 
+#'
+#' @return
+#'
+#' @export
+rq_estimate_marginal_effects <- function(dat, fits, type_effect) {
+  
+} # End function rq_estimate_marginal_effects
 ################################################################################
 
 #' Fit models using `lmtp`
