@@ -127,7 +127,7 @@ params_analyses <- function() {
   
   ## WeightIt, Cobalt, marginaleffects
   method_weightit <- "glm"
-  method_marginal <- "glm_fast"
+  method_marginal <- "glm"
   weights_trim <- 0.95
   use_kernel <- FALSE
   sl_discrete <- FALSE

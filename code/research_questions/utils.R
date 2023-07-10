@@ -284,6 +284,7 @@ rq_fit_model_weighted <- function(dat, weights) {
                                      by_var = "cohort")
   dat$outcome <- dat$outcome |>
     dplyr::select(-cohort)
+  idxs_missing_outcome <- which(is.na(dat$outcome[[outcome]]))
   
   # Fit model(s) using estimated weights
   list_exposures <- names(dat$exposures)
@@ -303,24 +304,27 @@ rq_fit_model_weighted <- function(dat, weights) {
   } # End check if weights are not provided
   
   ## "Loop" over each exposure
-  future::plan(future::multisession, 
-               workers = parallelly::availableCores() - 2)
+  future::plan(future::sequential)
   progressr::with_progress({
     p <- progressr::progressor(steps = length(list_exposures))
     
     fits <- furrr::future_map(list_exposures, function(exposure) {
       p()
-      dat_analysis <- dplyr::bind_cols(dplyr::select(dat$exposures, 
-                                                     dplyr::all_of(exposure)), 
-                                       dat_merged) |>
-        dplyr::select(-params_dat$variables$identifier)
+      dat_analysis <- dplyr::full_join(dplyr::select(dat$exposures, 
+                                                     dplyr::all_of(c(exposure, 
+                                                                   params_dat$variables$identifier))), 
+                                       dat_merged, 
+                                       by = params_dat$variables$identifier) |>
+        dplyr::select(-params_dat$variables$identifier) |>
+        dplyr::filter(!is.na(.data[[outcome]]))
       
+      weights_exposure <- weights[[exposure]]$weights[-idxs_missing_outcome]
       fit <- myphd::fit_model_weighted(
         dat = dat_analysis, 
         outcome = outcome, 
         exposure = exposure, 
         covariates = list_covariates, 
-        weights = weights[[exposure]]$weights, 
+        weights = weights_exposure, 
         method = params_ana$method_marginal, 
         method_args = c()
       )
@@ -328,8 +332,31 @@ rq_fit_model_weighted <- function(dat, weights) {
   }) # End progress bar
   names(fits) <- list_exposures
   
+  # Visualize effect estimates
+  effect_estimates <- lapply(seq_along(fits), function(idx) {
+    exposure <- names(fits)[[idx]]
+    summ <- fits[[exposure]]$fit |>
+      summary()
+    coefs <- summ$coefficients |>
+      as.data.frame() |>
+      tibble::rownames_to_column() |>
+      dplyr::rename(
+        variable = rowname, 
+        estimate = Estimate, 
+        se = `Std. Error`, 
+        tvalue = `t value`, 
+        pvalue = `Pr(>|t|)`
+      ) |>
+      tibble::as_tibble() |>
+      dplyr::filter(variable == exposure)
+  }) |>
+    dplyr::bind_rows() # End loop extract effect estimates
+  
+  plt <- myphd::plot_effect_estimates(dat = effect_estimates)
+  
   return(list(
-    fits = fits
+    fits = fits, 
+    plots = plt
   ))
 } # End function rq_fit_model_weighted
 ################################################################################
@@ -394,9 +421,10 @@ run_mtp <- function(dat, shift_exposure) {
   
   # Loop over each exposure
   res <- lapply(list_exposures, function(exposure) {
-    dat_analysis <- dplyr::bind_cols(dplyr::select(dat$exposures, 
+    dat_analysis <- dplyr::full_join(dplyr::select(dat$exposures, 
                                                    dplyr::all_of(exposure)), 
-                                     dat_merged) |>
+                                     dat_merged, 
+                                     by = params_dat$variables$identifier) |>
       dplyr::select(-params_dat$variables$identifier)
     
     if (params_ana$estimator == "tmle") {
