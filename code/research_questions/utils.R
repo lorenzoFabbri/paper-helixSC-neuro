@@ -363,14 +363,13 @@ rq_fit_model_weighted <- function(dat, weights) {
 
 #' Title
 #'
-#' @param dat 
 #' @param fits 
 #' @param shifts_exposure 
 #'
 #' @return
 #'
 #' @export
-rq_estimate_marginal_effects <- function(dat, fits, shifts_exposure) {
+rq_estimate_marginal_effects <- function(fits, shifts_exposure) {
   if (is.null(shifts_exposure)) {
     shifts_exposure <- c(0.0001, 0.001, 0.01, 0.1, 
                          1, 
