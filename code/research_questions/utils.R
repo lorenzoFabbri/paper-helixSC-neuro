@@ -365,13 +365,78 @@ rq_fit_model_weighted <- function(dat, weights) {
 #'
 #' @param dat 
 #' @param fits 
-#' @param type_effect 
+#' @param shifts_exposure 
 #'
 #' @return
 #'
 #' @export
-rq_estimate_marginal_effects <- function(dat, fits, type_effect) {
+rq_estimate_marginal_effects <- function(dat, fits, shifts_exposure) {
+  if (is.null(shifts_exposure)) {
+    shifts_exposure <- c(0.0001, 0.001, 0.01, 0.1, 
+                         1, 
+                         2)
+  }
   
+  # Loop over the fitted models to estimate marginal effects
+  ret <- lapply(seq_along(fits), function(idx) {
+    exposure <- names(fits)[[idx]]
+    mod <- fits[[exposure]]$fit
+    
+    ## Average comparisons for different shifts
+    res <- lapply(shifts_exposure, function(x) {
+      tmp <- eval(parse(
+        text = glue::glue(
+          "marginaleffects::avg_comparisons(
+            model = mod, 
+            variables = list(
+              {exposure} = mod$data[[exposure]] * x
+            )
+          )", 
+        exposure = exposure)
+      )) |>
+        marginaleffects::tidy()
+      colnames(tmp) <- c("variable", "contrast", "estimate", 
+                         "se", "statistics", 
+                         "pvalue", "svalue", "low", "high")
+      tmp <- tmp |>
+        dplyr::mutate(contrast = x)
+    }) |>
+      dplyr::bind_rows() # End loop over shifts exposure
+  }) |>
+    dplyr::bind_rows() # End loop extract effect estimates
+  ##############################################################################
+  
+  # Plot estimates for each exposure and contrast
+  plts <- lapply(unique(ret$variable), function(x) {
+    ret |>
+      dplyr::filter(variable == x) |>
+      ggplot2::ggplot(ggplot2::aes(x = as.factor(contrast), 
+                                   y = estimate)) +
+      ggplot2::geom_point(ggplot2::aes(), 
+                          size = 2) +
+      ggplot2::geom_errorbar(ggplot2::aes(
+        ymin = low, ymax = high
+      ), 
+      width = 0, 
+      linewidth = 0.3) +
+      ggplot2::geom_hline(yintercept = 0, 
+                          col = "black") +
+      ggplot2::scale_x_discrete(
+        breaks = shifts_exposure, 
+        labels = as.character(shifts_exposure)
+      ) +
+      ggplot2::labs(
+        title = x, 
+        x = "contrast"
+      ) +
+      ggplot2::theme_minimal()
+  }) # End loop plotting
+  ##############################################################################
+  
+  return(list(
+    comparisons = ret, 
+    plots = plts
+  ))
 } # End function rq_estimate_marginal_effects
 ################################################################################
 
