@@ -19,48 +19,148 @@ process_steroids <- function() {
                             col_names = TRUE, trim_ws = TRUE) |>
       tibble::as_tibble()
     dd <- janitor::clean_names(dd, case = "none")
+    colnames(dd)[[1]] <- params_dat$variables$identifier
+    # Tidy names
+    dd <- dd |>
+      dplyr::mutate(dplyr::across(
+        dplyr::all_of(params_dat$variables$identifier), 
+        ~ stringr::str_trim(., side = "both")
+      )) |>
+      dplyr::rowwise() |>
+      dplyr::mutate(HelixID = dplyr::case_when(
+        grepl("KAN|EDP", HelixID) ~ stringr::str_split(HelixID, "_")[[1]][1], 
+        grepl("SAB", HelixID) ~ paste0(stringr::str_split(HelixID, " ")[[1]][1], 
+                                       stringr::str_split(HelixID, " ")[[1]][2]), 
+        .default = HelixID
+      ))
     
     if (x == "urine_bib.xlsx") {
-      dd <- dd |>
-        dplyr::rename(HelixID = HELIX2021)
-      loq <- readxl::read_xlsx(paste0(steroids, x), 
-                               sheet = 2, skip = 2, 
-                               col_names = TRUE, trim_ws = TRUE) |>
-        tibble::as_tibble()
-      colnames(loq) <- c("metabolite", "loq")
-      loq$metabolite <- janitor::make_clean_names(loq$metabolite, 
-                                                  case = "none")
       creat <- readxl::read_xlsx(paste0(steroids, x), 
                                  sheet = 3, skip = 1, 
                                  col_names = TRUE, trim_ws = TRUE) |>
         tibble::as_tibble()
-      colnames(creat) <- c(params_dat$variables$identifier, "creatinine")
-    } else if (x == "urine_inma_rhea_eden_kanc.xlsx") {
-      
-    } else if (x == "urine_moba.xlsx") {
-      
+    } else {
+      creat <- readxl::read_xlsx(paste0(steroids, 
+                                        "creatinine.xlsx"), 
+                                 sheet = 2, 
+                                 col_names = TRUE, trim_ws = TRUE) |>
+        tibble::as_tibble()
     }
+    colnames(creat) <- c(params_dat$variables$identifier, "creatinine")
+    # Tidy names
+    creat <- creat |>
+      dplyr::mutate(dplyr::across(
+        dplyr::all_of(params_dat$variables$identifier), 
+        ~ stringr::str_trim(., side = "both")
+      )) |>
+      dplyr::rowwise() |>
+      dplyr::mutate(HelixID = dplyr::case_when(
+        grepl("KAN|EDP|MOB", HelixID) ~ stringr::str_split(HelixID, "_")[[1]][1], 
+        grepl("SAB", HelixID) ~ paste0(stringr::str_split(HelixID, "_")[[1]][1], 
+                                       stringr::str_split(HelixID, "_")[[1]][4]), 
+        .default = HelixID
+      )) |>
+      dplyr::mutate(HelixID = dplyr::case_when(
+        grepl("MOB", HelixID) ~ ifelse(
+          nchar(HelixID) == 6, 
+          HelixID, 
+          ifelse(
+            nchar(HelixID) == 5, 
+            paste0(substring(HelixID, 1, 3), 
+                   "0", 
+                   substring(HelixID, 4, 5)), 
+            paste0(substring(HelixID, 1, 3), 
+                   "00", 
+                   substring(HelixID, 4))
+          )
+        ), 
+        grepl("SAB", HelixID) ~ paste0(substring(HelixID, 1, 3), 
+                                       substring(HelixID, 5, 7)), 
+        .default = HelixID
+      ))
     
-    # Take care of values <LOQ
+    loq <- readxl::read_xlsx(paste0(steroids, x), 
+                             sheet = 2, 
+                             col_names = TRUE, trim_ws = TRUE) |>
+      tibble::as_tibble()
+    colnames(loq) <- c("metabolite", "loq")
+    loq$metabolite <- janitor::make_clean_names(loq$metabolite, 
+                                                case = "none")
+    ############################################################################
+    
+    # Descriptive bad values
+    descs <- lapply(dd, function(x) {
+      list(
+        loq = sum(x == "<LOQ" | x == "<LLOQ"), 
+        nd = sum(x == "n.d."), 
+        out = sum(stringr::str_detect(x, "\\*"))
+      )
+    }) |>
+      purrr::transpose() |>
+      purrr::map_df(~ .x, .id = "statistic") |>
+      dplyr::select(-params_dat$variables$identifier, 
+                    -statistic)
+    ############################################################################
+    
+    # Cleaning
     cols <- colnames(dd) |>
       setdiff(params_dat$variables$identifier)
     dd <- dd |>
-      dplyr::mutate(dplyr::across(dplyr::all_of(cols), 
-                                  ~ ifelse(. == "<LOQ", NA, .)), 
-                    dplyr::across(dplyr::all_of(cols), 
-                                  as.numeric))
+      dplyr::mutate(
+        # Values below the limit of quantification
+        dplyr::across(dplyr::all_of(cols), 
+                      ~ ifelse(. %in% c("<LOQ", "<LLOQ"), NA, .)), 
+        # Values not detected
+        dplyr::across(dplyr::all_of(cols), 
+                      ~ ifelse(. == "n.d.", NA, .)), 
+        # Potential contamination
+        dplyr::across(dplyr::all_of(cols), 
+                      ~ ifelse(stringr::str_detect(., "\\*"), NA, .)), 
+        # Convert to numeric since now no text
+        dplyr::across(dplyr::all_of(cols), 
+                      as.numeric)
+      )
     dd <- dplyr::inner_join(dd, creat, 
                             by = params_dat$variables$identifier)
+    
+    ## Take care of <LOQ
     dd <- dd |>
       dplyr::mutate(dplyr::across(dplyr::all_of(cols), 
-                                  ~ ifelse(creatinine > params_dat$variables$creatinine_threshold & is.na(.), 
+                                  ~ ifelse(is.na(.) & creatinine > params_dat$variables$creatinine_threshold, 
                                            handle_loq_urine(loq[loq$metabolite == dplyr::cur_column(), 
                                                                 "loq"], 
                                                             params_dat$variables$strategy_loq_urine), 
                                            .)))
-  }) # End read data
+    
+    return(list(
+      met = dd, 
+      descs = descs
+    ))
+  }) # End loop read data
   
-  return(tbls)
+  # Merged data
+  metabs <- purrr::reduce(lapply(tbls, "[[", "met"), 
+                          .f = dplyr::full_join)
+  descs <- as.data.frame(
+    purrr::reduce(
+      lapply(tbls, function(x) {
+        as.matrix(x$descs)
+      }), 
+      .f = `+`
+    )
+  ) |>
+    tibble::as_tibble() |>
+    dplyr::mutate(statistic = c("loq", "nd", "out")) |>
+    dplyr::relocate("statistic")
+  
+  # Some sanity checks
+  assertthat::are_equal(nrow(metabs), 
+                        length(unique(metabs$HelixID)))
+  
+  return(list(
+    metabolome = metabs, 
+    descriptives = descs
+  ))
 }
 
 #' Title
@@ -209,10 +309,6 @@ load_dat_request <- function() {
     dplyr::filter(hs_qual_test != 3)
   
   if (Sys.getenv("TAR_PROJECT") %in% c("rq2" ,"rq3")) {
-    metab <- read.csv(paths$path_steroids, 
-                      header = TRUE, stringsAsFactors = TRUE, 
-                      na.strings = c("NA", "null")) |>
-      tibble::as_tibble()
   }
   
   which_meta <- switch(Sys.getenv("TAR_PROJECT"), 
