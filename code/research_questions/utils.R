@@ -389,11 +389,14 @@ rq_estimate_marginal_effects <- function(fits, shifts_exposure) {
             model = mod, 
             variables = list(
               {exposure} = mod$data[[exposure]] * x
-            )
+            ), 
+            by = {glue::double_quote(by)}
           )", 
-        exposure = exposure)
+        exposure = exposure, 
+        by = "cohort")
       )) |>
         marginaleffects::tidy()
+      print(tmp)
       colnames(tmp) <- c("variable", "contrast", "estimate", 
                          "se", "statistics", 
                          "pvalue", "svalue", "low", "high")
