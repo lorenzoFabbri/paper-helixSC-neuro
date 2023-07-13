@@ -31,6 +31,7 @@ process_steroids <- function() {
         grepl("KAN|EDP", HelixID) ~ stringr::str_split(HelixID, "_")[[1]][1], 
         grepl("SAB", HelixID) ~ paste0(stringr::str_split(HelixID, " ")[[1]][1], 
                                        stringr::str_split(HelixID, " ")[[1]][2]), 
+        grepl("^[[:digit:]]+", HelixID) ~ paste0("RHE", HelixID), 
         .default = HelixID
       ))
     
@@ -58,6 +59,7 @@ process_steroids <- function() {
         grepl("KAN|EDP|MOB", HelixID) ~ stringr::str_split(HelixID, "_")[[1]][1], 
         grepl("SAB", HelixID) ~ paste0(stringr::str_split(HelixID, "_")[[1]][1], 
                                        stringr::str_split(HelixID, "_")[[1]][4]), 
+        grepl("^[[:digit:]]+", HelixID) ~ paste0("RHE", HelixID), 
         .default = HelixID
       )) |>
       dplyr::mutate(HelixID = dplyr::case_when(
@@ -112,18 +114,21 @@ process_steroids <- function() {
                       ~ ifelse(. %in% c("<LOQ", "<LLOQ"), NA, .)), 
         # Values not detected
         dplyr::across(dplyr::all_of(cols), 
-                      ~ ifelse(. == "n.d.", NA, .)), 
+                      ~ ifelse(. == "n.d.", "-777", .)), 
         # Potential contamination
         dplyr::across(dplyr::all_of(cols), 
-                      ~ ifelse(stringr::str_detect(., "\\*"), NA, .)), 
+                      ~ ifelse(stringr::str_detect(., "\\*"), "-999", .)), 
         # Convert to numeric since now no text
         dplyr::across(dplyr::all_of(cols), 
                       as.numeric)
-      )
+      ) |>
+      dplyr::select(-AED)
     dd <- dplyr::inner_join(dd, creat, 
                             by = params_dat$variables$identifier)
     
     ## Take care of <LOQ
+    cols <- colnames(dd) |>
+      setdiff(params_dat$variables$identifier)
     dd <- dd |>
       dplyr::mutate(dplyr::across(dplyr::all_of(cols), 
                                   ~ ifelse(is.na(.) & creatinine > params_dat$variables$creatinine_threshold, 
@@ -131,6 +136,19 @@ process_steroids <- function() {
                                                                 "loq"], 
                                                             params_dat$variables$strategy_loq_urine), 
                                            .)))
+    
+    ### Take care of contamination and non-detected
+    dd <- dd |>
+      dplyr::mutate(
+        dplyr::across(
+          dplyr::all_of(cols), 
+          \(x) dplyr::case_when(
+            x == -999 ~ NA, 
+            x == -777 ~ NA, 
+            .default = x
+          )
+        )
+      )
     
     return(list(
       met = dd, 
