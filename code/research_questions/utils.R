@@ -326,38 +326,21 @@ rq_fit_model_weighted <- function(dat, weights) {
         covariates = list_covariates, 
         weights = weights_exposure, 
         method = params_ana$method_marginal, 
-        method_args = c(
+        method_args = list(
           family = params_ana$family_marginal, 
           add_inter_exposure = params_ana$add_inter_exposure, 
           add_splines_exposure = params_ana$add_splines_exposure, 
           df_splines = params_ana$df_splines
         )
       )
+      
+      return(list(
+        fit = fit$fit, 
+        weights = weights_exposure
+      ))
     }) # End loop over exposures
   }) # End progress bar
   names(fits) <- list_exposures
-  
-  # Visualize effect estimates
-  effect_estimates <- lapply(seq_along(fits), function(idx) {
-    exposure <- names(fits)[[idx]]
-    summ <- fits[[exposure]]$fit |>
-      summary()
-    coefs <- summ$coefficients |>
-      as.data.frame() |>
-      tibble::rownames_to_column() |>
-      dplyr::rename(
-        variable = rowname, 
-        estimate = Estimate, 
-        se = `Std. Error`, 
-        tvalue = `t value`, 
-        pvalue = `Pr(>|t|)`
-      ) |>
-      tibble::as_tibble() |>
-      dplyr::filter(variable == exposure)
-  }) |>
-    dplyr::bind_rows() # End loop extract effect estimates
-  
-  plt <- myphd::plot_effect_estimates(dat = effect_estimates)
   
   return(list(
     fits = fits, 
@@ -374,7 +357,7 @@ rq_fit_model_weighted <- function(dat, weights) {
 #' @return
 #'
 #' @export
-rq_estimate_marginal_effects <- function(fits, shifts_exposure) {
+rq_estimate_marginal_effects <- function(fits, shifts_exposure, by) {
   if (is.null(shifts_exposure)) {
     shifts_exposure <- c(0.0001, 0.001, 0.01, 0.1, 
                          1, 1.3, 1.6, 
@@ -385,6 +368,7 @@ rq_estimate_marginal_effects <- function(fits, shifts_exposure) {
   ret <- lapply(seq_along(fits), function(idx) {
     exposure <- names(fits)[[idx]]
     mod <- fits[[exposure]]$fit
+    weights <- fits[[exposure]]$weights
     
     ## Average comparisons for different shifts
     res <- lapply(shifts_exposure, function(x) {
@@ -395,17 +379,15 @@ rq_estimate_marginal_effects <- function(fits, shifts_exposure) {
             variables = list(
               {exposure} = mod$data[[exposure]] * x
             ), 
-            by = {glue::double_quote(by)}
+            by = {glue::double_quote(by)}, 
+            wts = weights
           )", 
         exposure = exposure, 
-        by = "cohort")
+        by = by)
       )) |>
         marginaleffects::tidy()
-      print(tmp)
-      colnames(tmp) <- c("variable", "contrast", "estimate", 
-                         "se", "statistics", 
-                         "pvalue", "svalue", "low", "high")
       tmp <- tmp |>
+        dplyr::rename(variable = term) |>
         dplyr::mutate(contrast = x)
     }) |>
       dplyr::bind_rows() # End loop over shifts exposure
@@ -417,15 +399,19 @@ rq_estimate_marginal_effects <- function(fits, shifts_exposure) {
   plts <- lapply(unique(ret$variable), function(x) {
     ret |>
       dplyr::filter(variable == x) |>
+      dplyr::arrange(cohort) |>
       ggplot2::ggplot(ggplot2::aes(x = as.factor(contrast), 
-                                   y = estimate)) +
+                                   y = estimate, 
+                                   color = .data[[by]])) +
       ggplot2::geom_point(ggplot2::aes(), 
-                          size = 2) +
+                          size = 2, 
+                          position = ggplot2::position_dodge(width = 0.5)) +
       ggplot2::geom_errorbar(ggplot2::aes(
-        ymin = low, ymax = high
+        ymin = conf.low, ymax = conf.high
       ), 
-      width = 0, 
-      linewidth = 0.3) +
+      width = 0.1, 
+      linewidth = 0.3, 
+      position = ggplot2::position_dodge(width = 0.5)) +
       ggplot2::geom_hline(yintercept = 0, 
                           col = "black") +
       ggplot2::scale_x_discrete(

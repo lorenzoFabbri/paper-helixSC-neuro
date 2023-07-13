@@ -135,7 +135,7 @@ params_analyses <- function() {
     family_marginal = "binomial", 
     add_inter_exposure = TRUE, 
     add_splines_exposure = TRUE, 
-    df_spline 3
+    df_splines = 3
   ) # End dictionary parameters RQ1
   rq2 <- rq1
   rq3 <- rq1
