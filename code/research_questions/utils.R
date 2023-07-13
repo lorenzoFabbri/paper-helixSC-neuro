@@ -326,7 +326,12 @@ rq_fit_model_weighted <- function(dat, weights) {
         covariates = list_covariates, 
         weights = weights_exposure, 
         method = params_ana$method_marginal, 
-        method_args = c()
+        method_args = c(
+          family = params_ana$family_marginal, 
+          add_inter_exposure = params_ana$add_inter_exposure, 
+          add_splines_exposure = params_ana$add_splines_exposure, 
+          df_splines = params_ana$df_splines
+        )
       )
     }) # End loop over exposures
   }) # End progress bar

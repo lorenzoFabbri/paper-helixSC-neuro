@@ -1,0 +1,93 @@
+---
+title: "CEP Group Meeting"
+date: 2023-07-26
+author: Lorenzo Fabbri
+institute: ISGlobal
+
+format:
+  beamer:
+    pdf-engine: xelatex
+    fontsize: "9pt"
+    toc: false
+    toc-depth: 2
+
+slide-number: true
+
+bibliography: ../../../../../PhD.bib
+link-citations: true
+linkcolor: blue
+
+execute:
+  echo: false
+  warning: false
+  error: false
+  message: false
+
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| include: false
+here::i_am("presentation.qmd")
+```
+
+## Overview
+
+- **Aim**: to research the *short-term* effects of postnatal exposures to non-persistent EDCs on neurodevelopment and neurobehavior in childhood, and how the metabolome and the proteome might *mediate* these effects.
+- **How**: by making use of the principles and criteria of triangulation. We will primarily rely on the use of MTPs in combination with TMLE.
+- **Population**: the HELIX sub-cohort, consisting of $\text{N}=1200$ mother-child pairs.
+- **Exposures**: non-persistent EDCs (phenols, phthalates, and organophosphate compounds), measured in childhood in a pool of two urine samples.
+- **Outcomes**
+  - Raven’s Coloured Progressive Matrices, for assessing non-verbal intelligence.
+  - Computerised n-back test, for assessing working memory.
+  - Attention Network Test, to provide a measure of the efficiency of three different functions of attention.
+  - Child Behavior Checklist, for assessing behavioural and emotional problems.
+- ***Mediators***: serum and urine metabolome, plasma proteome.
+
+## The Research Questions
+
+```{mermaid}
+%%| fig-cap: Simplified DAG.
+%%| label: fig-diag-dag
+%%| fig-align: center
+flowchart LR
+  exposure(chemical) --> mediator(metabolite)
+  mediator --> outcome(neurodevelopment)
+  exposure --> outcome
+```
+
+## Triangulation
+
+```{mermaid}
+%%| fig-cap: Diagram summarizing research questions and methods.
+%%| label: fig-diagram
+%%| fig-align: center
+%%| fig-height: 3
+flowchart LR
+  paper[Paper 3] --> rq1("RQ1
+                          neuro~chemical")
+  paper          --> rq2("RQ2
+                          met~chemical")
+  paper          --> rq3("RQ3
+                          neuro~met")
+  rq1            --> rqReg("Observational study.
+                            Method: Regression with MTPs.
+                            Causal estimand: phi.
+                            Uncertainty quantification: bootstrapping.")
+  rq1            --> rq1outNeg("Outcome negative control.
+                                Method: Regression with GLMs/GAMs.
+                                Uncertainty quantification: bootstrapping.")
+  rq1            --> rqLit("Literature search")
+  
+  rq2            --> rqReg
+  rq2            --> rqCrossCohort("Cross-cohort comparison.
+                                    Method: Regression with GLMs/GAMs.
+                                    Uncertainty quantification: bootstrapping.")
+  rq2            --> rqLit
+  
+  rq3            --> rqReg
+  rq3            --> rqCrossCohort
+  rq3            --> rq3mr("Mendelian Randomization.
+                            Causal estimand: .")
+```

@@ -112,46 +112,30 @@ params <- function(is_hpc) {
 # Parameters for running analyses
 ################################################################################
 params_analyses <- function() {
-  # Common parameters
-  ## lmtp
-  learners_outcome <- c("SL.mean", "SL.glm")
-  learners_exposure <- c("SL.glm")
-  estimator <- "sdr"
-  folds <- 3
-  folds_outcome <- 1
-  folds_exposure <- 1
-  density_ratio_trim <- 0.995
-  markov_assumption <- Inf
-  shift_type <- "mul"
-  shift_amount <- 0.01
-  
-  ## WeightIt, Cobalt, marginaleffects
-  method_weightit <- "glm"
-  method_marginal <- "glm"
-  weights_trim <- 0.95
-  use_kernel <- FALSE
-  sl_discrete <- FALSE
-  sl_lib <- FALSE
-  
   rq1 <- list(
     # lmtp
-    learners_outcome = learners_outcome, 
-    learners_trt = learners_exposure, 
-    estimator = estimator, 
-    folds = folds, 
-    .learners_outcome_folds = folds_outcome, 
-    .learners_trt_folds = folds_exposure, 
-    .trim = density_ratio_trim, 
-    k = markov_assumption, 
-    shift_type = shift_type, 
-    shift_amount = shift_amount, 
+    learners_outcome = c("SL.mean", "SL.glm"), 
+    learners_trt = c("SL.glm"), 
+    estimator = "sdr", 
+    folds = 3, 
+    .learners_outcome_folds = 1, 
+    .learners_trt_folds = 1, 
+    .trim = 0.995, 
+    k = Inf, 
+    shift_type = "mul", 
+    shift_amount = 0.01, 
+    ############################################################################
     # WeightIt, Cobalt, marginaleffects
-    method_weightit = method_weightit, 
-    method_marginal = method_marginal, 
-    weights_trim = weights_trim, 
-    use_kernel = use_kernel, 
-    sl_discrete = sl_discrete, 
-    sl_lib = sl_lib
+    method_weightit = "glm", 
+    weights_trim = 0.95, 
+    use_kernel = FALSE, 
+    sl_discrete = FALSE, 
+    sl_lib = FALSE, 
+    method_marginal = "glm", 
+    family_marginal = "binomial", 
+    add_inter_exposure = TRUE, 
+    add_splines_exposure = TRUE, 
+    df_spline 3
   ) # End dictionary parameters RQ1
   rq2 <- rq1
   rq3 <- rq1
