@@ -153,10 +153,14 @@ rq_estimate_weights <- function(dat) {
                              id_var)
   ## Loop over exposures
   estimated_weights <- lapply(list_exposures, function(x) {
+    cat(paste0("Estimating weights for: ", x, "... "))
     tmp <- suppressWarnings(myphd::estimate_weights(
-      dat = dplyr::inner_join(dat$exposures, 
-                              dat$covariates, 
-                              by = id_var), 
+      dat = dplyr::full_join(dplyr::select(dat$exposures, 
+                                           dplyr::all_of(c(x, 
+                                                           params_dat$variables$identifier))), 
+                             dat$covariates, 
+                             by = id_var) |>
+        dplyr::select(-params_dat$variables$identifier), 
       exposure = x, 
       covariates = list_covariates, 
       method = params_ana$method_weightit, 
@@ -187,7 +191,8 @@ rq_estimate_weights <- function(dat) {
   # Step 2: explore balance
   balance <- lapply(names(estimated_weights), function(x) {
     myphd::explore_balance(exposure = strsplit(x, split = "_")[[1]][2], 
-                           covariates = list_covariates, 
+                           covariates = estimated_weights[[x]]$covs |>
+                             colnames(), 
                            weights = estimated_weights[[x]])
   })
   names(balance) <- names(estimated_weights)
@@ -343,8 +348,7 @@ rq_fit_model_weighted <- function(dat, weights) {
   names(fits) <- list_exposures
   
   return(list(
-    fits = fits, 
-    plots = plt
+    fits = fits
   ))
 } # End function rq_fit_model_weighted
 ################################################################################
@@ -357,7 +361,7 @@ rq_fit_model_weighted <- function(dat, weights) {
 #' @return
 #'
 #' @export
-rq_estimate_marginal_effects <- function(fits, shifts_exposure, by) {
+rq_estimate_marginal_effects <- function(fits, shifts_exposure) {
   if (is.null(shifts_exposure)) {
     shifts_exposure <- c(0.0001, 0.001, 0.01, 0.1, 
                          1, 1.3, 1.6, 
@@ -379,11 +383,9 @@ rq_estimate_marginal_effects <- function(fits, shifts_exposure, by) {
             variables = list(
               {exposure} = mod$data[[exposure]] * x
             ), 
-            by = {glue::double_quote(by)}, 
             wts = weights
           )", 
-        exposure = exposure, 
-        by = by)
+        exposure = exposure)
       )) |>
         marginaleffects::tidy()
       tmp <- tmp |>
@@ -399,10 +401,8 @@ rq_estimate_marginal_effects <- function(fits, shifts_exposure, by) {
   plts <- lapply(unique(ret$variable), function(x) {
     ret |>
       dplyr::filter(variable == x) |>
-      dplyr::arrange(cohort) |>
       ggplot2::ggplot(ggplot2::aes(x = as.factor(contrast), 
-                                   y = estimate, 
-                                   color = .data[[by]])) +
+                                   y = estimate)) +
       ggplot2::geom_point(ggplot2::aes(), 
                           size = 2, 
                           position = ggplot2::position_dodge(width = 0.5)) +
@@ -480,7 +480,10 @@ run_mtp <- function(dat, shift_exposure) {
   # Loop over each exposure
   res <- lapply(list_exposures, function(exposure) {
     dat_analysis <- dplyr::full_join(dplyr::select(dat$exposures, 
-                                                   dplyr::all_of(exposure)), 
+                                                   dplyr::all_of(
+                                                     c(params_dat$variables$identifier, 
+                                                     exposure)
+                                                   )), 
                                      dat_merged, 
                                      by = params_dat$variables$identifier) |>
       dplyr::select(-params_dat$variables$identifier)

@@ -38,9 +38,18 @@ list(
   ), # End preproc_dat target
   ##############################################################################
   targets::tar_target(
-    name = marginal, 
+    name = weights, 
+    command = rq_estimate_weights(dat = preproc_dat)
+  ), # End weights target
+  targets::tar_target(
+    name = weighted_fits, 
     command = rq_fit_model_weighted(dat = preproc_dat, 
-                                    weights = NULL)
+                                    weights = weights$estimated_weights)
+  ), # End weighted_fits target
+  targets::tar_target(
+    name = marginal, 
+    command = rq_estimate_marginal_effects(fits = weighted_fits, 
+                                           shifts_exposure = NULL)
   ), # End marginal target
   ##############################################################################
   targets::tar_target(
