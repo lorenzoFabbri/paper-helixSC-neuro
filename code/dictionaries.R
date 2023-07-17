@@ -22,14 +22,14 @@ params <- function(is_hpc) {
     path_exposures_preg_final = "data_final/exposome/child/preg_8y/v2_3_20180601/exppregnancy_v2_3.RData", 
     path_metabolome_serum = "data_final/metab/child/8y/serum.urine_Biocrates.NMR_QChelix_20170101/metab_serum_subcohort_v3.RData", 
     path_metabolome_urine = "data_final/metab/child/8y/serum.urine_Biocrates.NMR_QChelix_20170101/metab_urine_subcohort_v3.RData", 
-    path_dat_request = "DATA_PREVIOUS_MIGRATION/lorenzoF_phd/data/data_paper3/requests/AP136/HELIX_AP_136_request_updated12jun.2023.csv", 
-    path_all_steroids = "DATA_PREVIOUS_MIGRATION/lorenzoF_phd/data/data_paper3/requests/AP136/steroids/", 
+    path_dat_request = "DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/requests/AP136/HELIX_AP_136_request_updated12jun.2023.csv", 
+    path_all_steroids = "DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/requests/AP136/steroids/", 
     
     # Processed during analyses
-    path_exposures_post_procme = "DATA_PREVIOUS_MIGRATION/lorenzoF_phd/data/data_paper3/processed/exposures/", 
-    path_exposures_preg_procme = "DATA_PREVIOUS_MIGRATION/lorenzoF_phd/data/data_paper3/processed/exposures/", 
-    path_metabolome_serum = "DATA_PREVIOUS_MIGRATION/lorenzoF_phd/data/data_paper3/processed/omics/", 
-    path_metabolome_urine = "DATA_PREVIOUS_MIGRATION/lorenzoF_phd/data/data_paper3/processed/omics/"
+    path_exposures_post_procme = "DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/processed/exposures/", 
+    path_exposures_preg_procme = "DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/processed/exposures/", 
+    path_metabolome_serum = "DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/processed/omics/", 
+    path_metabolome_urine = "DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/processed/omics/"
   )
   paths <- lapply(paths, function(x) {
     paste0(common_path, x)
@@ -126,11 +126,12 @@ params_analyses <- function() {
     shift_amount = 0.01, 
     ############################################################################
     # WeightIt, Cobalt, marginaleffects
-    method_weightit = "glm", 
+    method_weightit = "super", 
     weights_trim = 0.95, 
-    use_kernel = FALSE, 
+    use_kernel = TRUE, 
     sl_discrete = FALSE, 
-    sl_lib = FALSE, 
+    sl_lib = c("SL.glm", 
+               "SL.gam", "SL.glmnet"), 
     method_marginal = "glm", 
     family_marginal = "binomial", 
     add_inter_exposure = TRUE, 
