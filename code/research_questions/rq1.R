@@ -30,36 +30,3 @@ rq1_prepare_data <- function(dat) {
   return(dat)
 } # End function prepare data
 ################################################################################
-
-#' Describe population for RQ1
-#'
-#' @param dat 
-#' @param metadat 
-#'
-#' @return
-#'
-#' @export
-rq1_describe_data <- function(dat, metadat) {
-} # End function describe data
-################################################################################
-
-#' Title
-#'
-#' @param params_analyses 
-#'
-#' @return
-#'
-#' @export
-rq1_run_out_neg_control <- function(params_analyses) {
-} # End function run analysis negative control
-################################################################################
-
-#' Title
-#'
-#' @param params_analyses 
-#'
-#' @return
-#'
-#' @export
-rq1_run_analyses <- function(params_analyses) {
-} # End function run analyses

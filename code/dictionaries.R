@@ -36,27 +36,45 @@ params <- function(is_hpc) {
   })
   ##############################################################################
   
-  outcome_rq1 <- "hs_correct_raven"
   variables <- list(
     identifier = "HelixID", 
     strategy_select_adj_set = "minimize_missings", 
     strategy_loq_urine = "div2", 
     creatinine_threshold = 10, 
+    ############################################################################
     rq01 = list(
-      outcome = outcome_rq1, 
+      outcome = "hs_correct_raven", 
       outcome_negative = "", 
       exposures = "cadj"
     ), 
     rq1 = list(
-      outcome = outcome_rq1, 
+      outcome = "hs_correct_raven", 
       outcome_negative = "", 
       exposures = "_cadj"
+    ), # End options RQ1
+    ############################################################################
+    rq02 = list(
+      outcome = "metab", 
+      outcome_negative = "", 
+      exposures = "cadj"
+    ), 
+    rq2 = list(
+      outcome = "metab", 
+      outcome_negative = "", 
+      exposures = "_cadj"
+    ), # End options RQ2
+    ############################################################################
+    rq03 = list(
+      outcome = "hs_correct_raven", 
+      outcome_negative = "", 
+      exposures = "metab"
     ), 
     rq3 = list(
-      outcome = outcome_rq1, 
+      outcome = "hs_correct_raven", 
       outcome_negative = "", 
       exposures = "_metab"
-    ), 
+    ), # End options RQ3
+    ############################################################################
     preproc_exposures = list(
       missings = list(
         do = TRUE, 
@@ -69,11 +87,13 @@ params <- function(is_hpc) {
         scale_fun = sd
       )
     ), # End preproc_exposures
+    ############################################################################
     preproc_outcome = list(
       bound = list(
         do = TRUE
       )
     ), # End preproc_outcome
+    ############################################################################
     preproc_covars = list(
       missings = list(
         do = TRUE, 

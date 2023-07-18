@@ -48,7 +48,7 @@ list(
   ), # End weighted_fits target
   targets::tar_target(
     name = marginal, 
-    command = rq_estimate_marginal_effects(fits = weighted_fits, 
+    command = rq_estimate_marginal_effects(fits = weighted_fits$fits, 
                                            shifts_exposure = NULL)
   ), # End marginal target
   ##############################################################################

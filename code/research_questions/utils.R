@@ -180,82 +180,84 @@ rq_estimate_weights <- function(dat) {
   if (!dir.exists(path_save_weights)) {
     dir.create(path_save_weights)
   }
-  saveRDS(estimated_weights, 
-          file = paste0(
-            path_save_weights, 
-            params_ana$method_weightit, 
-            ".rds"
-          ))
+  qs::qsave(x = estimated_weights, 
+            file = paste0(
+              path_save_weights, 
+              params_ana$method_weightit, 
+              ".qs"
+            ), 
+            nthreads = 4)
   ##############################################################################
   
   # Step 2: explore balance
-  balance <- lapply(names(estimated_weights), function(x) {
-    myphd::explore_balance(exposure = strsplit(x, split = "_")[[1]][2], 
-                           covariates = estimated_weights[[x]]$covs |>
-                             colnames(), 
-                           weights = estimated_weights[[x]])
-  })
-  names(balance) <- names(estimated_weights)
-  ## Save results
-  lapply(names(balance), function(x) {
-    ### bal.plot
-    .path <- paste0(
-      "results/figures/", 
-      Sys.getenv("TAR_PROJECT"), 
-      "/balplot_", 
-      params_ana$method_weightit, "_", 
-      strsplit(x, split = "_")[[1]][2], 
-      ".pdf"
-    )
-    ggplot2::ggsave(.path, 
-                    gridExtra::marrangeGrob(grobs = balance[[x]]$graph, 
-                                            nrow = 1, 
-                                            ncol = 1), 
-                    dpi = 480)
-    
-    ### bal.tab
-    .path <- paste0(
-      "results/tables/", 
-      Sys.getenv("TAR_PROJECT"), 
-      "/baltab_", 
-      params_ana$method_weightit, "_", 
-      strsplit(x, split = "_")[[1]][2], 
-      ".docx"
-    )
-    tab <- balance[[x]]$tab$Balance |>
-      as.data.frame() |>
-      tibble::rownames_to_column(var = "variable")
-    colnames(tab) <- c("variable", "type", 
-                       "unadj. correlation", "adj. correlation", 
-                       "threshold", "adj. KS")
-    tab <- tab |>
-      dplyr::arrange(dplyr::desc(`adj. correlation`), 
-                     variable) |>
-      dplyr::mutate(type = dplyr::recode(
-        type, "Contin." = "continuous", 
-        "Binary" = "binary"
-      )) |>
-      gt::gt(groupname_col = "type") |>
-      gt::tab_options(row_group.as_column = TRUE) |>
-      gt::fmt_number(decimals = 3) |>
-      gt::tab_header(paste0("Balance statistics: ", 
-                            strsplit(x, split = "_")[[1]][2]))
-    gt::gtsave(tab, filename = .path)
-  })
-  
-  ### love.plot
-  .path <- paste0(
-    "results/figures/", 
-    Sys.getenv("TAR_PROJECT"), 
-    "/loveplot_", 
-    params_ana$method_weightit, 
-    ".pdf"
-  )
-  ggplot2::ggsave(.path, 
-                  gridExtra::marrangeGrob(grobs = sapply(balance, `[[`, "love"), 
-                                          nrow = 1, 
-                                          ncol = 1), 
-                  dpi = 480, height = 6)
+  balance = c()
+  # balance <- lapply(names(estimated_weights), function(x) {
+  #   myphd::explore_balance(exposure = strsplit(x, split = "_")[[1]][2], 
+  #                          covariates = estimated_weights[[x]]$covs |>
+  #                            colnames(), 
+  #                          weights = estimated_weights[[x]])
+  # })
+  # names(balance) <- names(estimated_weights)
+  # ## Save results
+  # lapply(names(balance), function(x) {
+  #   ### bal.plot
+  #   .path <- paste0(
+  #     "results/figures/", 
+  #     Sys.getenv("TAR_PROJECT"), 
+  #     "/balplot_", 
+  #     params_ana$method_weightit, "_", 
+  #     strsplit(x, split = "_")[[1]][2], 
+  #     ".pdf"
+  #   )
+  #   ggplot2::ggsave(.path,
+  #                   gridExtra::marrangeGrob(grobs = balance[[x]]$graph,
+  #                                           nrow = 1,
+  #                                           ncol = 1),
+  #                   dpi = 480)
+  #   
+  #   ### bal.tab
+  #   .path <- paste0(
+  #     "results/tables/", 
+  #     Sys.getenv("TAR_PROJECT"), 
+  #     "/baltab_", 
+  #     params_ana$method_weightit, "_", 
+  #     strsplit(x, split = "_")[[1]][2], 
+  #     ".docx"
+  #   )
+  #   tab <- balance[[x]]$tab$Balance |>
+  #     as.data.frame() |>
+  #     tibble::rownames_to_column(var = "variable")
+  #   colnames(tab) <- c("variable", "type", 
+  #                      "unadj. correlation", "adj. correlation", 
+  #                      "threshold", "adj. KS")
+  #   tab <- tab |>
+  #     dplyr::arrange(dplyr::desc(`adj. correlation`), 
+  #                    variable) |>
+  #     dplyr::mutate(type = dplyr::recode(
+  #       type, "Contin." = "continuous", 
+  #       "Binary" = "binary"
+  #     )) |>
+  #     gt::gt(groupname_col = "type") |>
+  #     gt::tab_options(row_group.as_column = TRUE) |>
+  #     gt::fmt_number(decimals = 3) |>
+  #     gt::tab_header(paste0("Balance statistics: ", 
+  #                           strsplit(x, split = "_")[[1]][2]))
+  #   gt::gtsave(tab, filename = .path)
+  # })
+  # 
+  # ### love.plot
+  # .path <- paste0(
+  #   "results/figures/", 
+  #   Sys.getenv("TAR_PROJECT"), 
+  #   "/loveplot_", 
+  #   params_ana$method_weightit, 
+  #   ".pdf"
+  # )
+  # ggplot2::ggsave(.path,
+  #                 gridExtra::marrangeGrob(grobs = sapply(balance, `[[`, "love"),
+  #                                         nrow = 1,
+  #                                         ncol = 1),
+  #                 dpi = 480, height = 6)
   
   return(list(
     estimated_weights = estimated_weights, 
@@ -300,15 +302,18 @@ rq_fit_model_weighted <- function(dat, weights) {
   dat_merged <- dplyr::full_join(dat$covariates, dat$outcome, 
                                  by = params_dat$variables$identifier)
   if (is.null(weights)) {
-    weights <- readRDS(file = paste0(
-      Sys.getenv("path_store_res"), 
-      "weights_exposure_model/", 
-      params_ana$method_weightit, 
-      ".rds"
-    ))
+    weights <- qs::qread(
+      file = paste0(
+        Sys.getenv("path_store_res"), 
+        "weights_exposure_model/", 
+        params_ana$method_weightit, 
+        ".rds"
+      ), 
+      nthreads = 4
+    )
   } # End check if weights are not provided
   
-  ## "Loop" over each exposure
+  ## Loop over each exposure
   future::plan(future::sequential)
   progressr::with_progress({
     p <- progressr::progressor(steps = length(list_exposures))
