@@ -109,6 +109,7 @@ list(
   ##############################################################################
   targets::tar_target(
     name = weights, 
-    command = rq_estimate_weights(dat = preproc_dat)
+    command = rq_estimate_weights(dat = preproc_dat, 
+                                  save_results = TRUE)
   ) # End weights target
 )

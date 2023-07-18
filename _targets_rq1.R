@@ -11,7 +11,6 @@ library(gam)
 targets::tar_option_set(
   format = "qs"
 )
-options(clustermq.scheduler = "multicore")
 
 params_dag <- list(
   type = "minimal", 
@@ -39,7 +38,8 @@ list(
   ##############################################################################
   targets::tar_target(
     name = weights, 
-    command = rq_estimate_weights(dat = preproc_dat)
+    command = rq_estimate_weights(dat = preproc_dat, 
+                                  save_results = FALSE)
   ), # End weights target
   targets::tar_target(
     name = weighted_fits, 
@@ -50,17 +50,6 @@ list(
     name = marginal, 
     command = rq_estimate_marginal_effects(fits = weighted_fits$fits, 
                                            shifts_exposure = NULL)
-  ), # End marginal target
-  ##############################################################################
-  targets::tar_target(
-    name = lmtp, 
-    command = run_mtp(dat = preproc_dat, 
-                      shift_exposure = TRUE)
-  ), # End lmtp target
-  targets::tar_target(
-    name = lmtp_null, 
-    command = run_mtp(dat = preproc_dat, 
-                      shift_exposure = FALSE)
-  ) # End lmtp_null target
+  ) # End marginal target
   ##############################################################################
 )

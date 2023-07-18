@@ -90,7 +90,7 @@ params <- function(is_hpc) {
     ############################################################################
     preproc_outcome = list(
       bound = list(
-        do = TRUE
+        do = FALSE
       )
     ), # End preproc_outcome
     ############################################################################
@@ -147,13 +147,13 @@ params_analyses <- function() {
     ############################################################################
     # WeightIt, Cobalt, marginaleffects
     method_weightit = "super", 
-    weights_trim = 0.95, 
+    weights_trim = 0.90, 
     use_kernel = TRUE, 
     sl_discrete = FALSE, 
     sl_lib = c("SL.glm", 
                "SL.gam", "SL.glmnet"), 
-    method_marginal = "glm", 
-    family_marginal = "binomial", 
+    method_marginal = "gam", 
+    family_marginal = "ocat", 
     add_inter_exposure = TRUE, 
     add_splines_exposure = TRUE, 
     df_splines = 3

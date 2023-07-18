@@ -134,7 +134,7 @@ rq_load_data <- function(ids_other_covars, res_dag) {
 #' balance exploration. A list.
 #'
 #' @export
-rq_estimate_weights <- function(dat) {
+rq_estimate_weights <- function(dat, save_results) {
   rq <- Sys.getenv("TAR_PROJECT")
   rq <- switch(rq, 
                "rq01" = "rq1", 
@@ -152,8 +152,9 @@ rq_estimate_weights <- function(dat) {
   list_covariates <- setdiff(colnames(dat$covariates), 
                              id_var)
   ## Loop over exposures
-  estimated_weights <- lapply(list_exposures, function(x) {
-    cat(paste0("Estimating weights for: ", x, "... "))
+  future::plan(future::multisession, 
+               workers = 4)
+  estimated_weights <- furrr::future_map(list_exposures, function(x) {
     tmp <- suppressWarnings(myphd::estimate_weights(
       dat = dplyr::full_join(dplyr::select(dat$exposures, 
                                            dplyr::all_of(c(x, 
@@ -172,6 +173,7 @@ rq_estimate_weights <- function(dat) {
     )
     WeightIt::trim(tmp$weights, params_ana$weights_trim)
   }) # End loop over exposures to estimate weights
+  future::plan(future::sequential)
   names(estimated_weights) <- list_exposures
   path_save_weights <- paste0(
     Sys.getenv("path_store_res"), 
@@ -190,74 +192,82 @@ rq_estimate_weights <- function(dat) {
   ##############################################################################
   
   # Step 2: explore balance
-  balance = c()
-  # balance <- lapply(names(estimated_weights), function(x) {
-  #   myphd::explore_balance(exposure = strsplit(x, split = "_")[[1]][2], 
-  #                          covariates = estimated_weights[[x]]$covs |>
-  #                            colnames(), 
-  #                          weights = estimated_weights[[x]])
-  # })
-  # names(balance) <- names(estimated_weights)
-  # ## Save results
-  # lapply(names(balance), function(x) {
-  #   ### bal.plot
-  #   .path <- paste0(
-  #     "results/figures/", 
-  #     Sys.getenv("TAR_PROJECT"), 
-  #     "/balplot_", 
-  #     params_ana$method_weightit, "_", 
-  #     strsplit(x, split = "_")[[1]][2], 
-  #     ".pdf"
-  #   )
-  #   ggplot2::ggsave(.path,
-  #                   gridExtra::marrangeGrob(grobs = balance[[x]]$graph,
-  #                                           nrow = 1,
-  #                                           ncol = 1),
-  #                   dpi = 480)
-  #   
-  #   ### bal.tab
-  #   .path <- paste0(
-  #     "results/tables/", 
-  #     Sys.getenv("TAR_PROJECT"), 
-  #     "/baltab_", 
-  #     params_ana$method_weightit, "_", 
-  #     strsplit(x, split = "_")[[1]][2], 
-  #     ".docx"
-  #   )
-  #   tab <- balance[[x]]$tab$Balance |>
-  #     as.data.frame() |>
-  #     tibble::rownames_to_column(var = "variable")
-  #   colnames(tab) <- c("variable", "type", 
-  #                      "unadj. correlation", "adj. correlation", 
-  #                      "threshold", "adj. KS")
-  #   tab <- tab |>
-  #     dplyr::arrange(dplyr::desc(`adj. correlation`), 
-  #                    variable) |>
-  #     dplyr::mutate(type = dplyr::recode(
-  #       type, "Contin." = "continuous", 
-  #       "Binary" = "binary"
-  #     )) |>
-  #     gt::gt(groupname_col = "type") |>
-  #     gt::tab_options(row_group.as_column = TRUE) |>
-  #     gt::fmt_number(decimals = 3) |>
-  #     gt::tab_header(paste0("Balance statistics: ", 
-  #                           strsplit(x, split = "_")[[1]][2]))
-  #   gt::gtsave(tab, filename = .path)
-  # })
-  # 
-  # ### love.plot
-  # .path <- paste0(
-  #   "results/figures/", 
-  #   Sys.getenv("TAR_PROJECT"), 
-  #   "/loveplot_", 
-  #   params_ana$method_weightit, 
-  #   ".pdf"
-  # )
-  # ggplot2::ggsave(.path,
-  #                 gridExtra::marrangeGrob(grobs = sapply(balance, `[[`, "love"),
-  #                                         nrow = 1,
-  #                                         ncol = 1),
-  #                 dpi = 480, height = 6)
+  future::plan(future::multisession, 
+               workers = 4)
+  balance <- furrr::future_map(names(estimated_weights), function(x) {
+    myphd::explore_balance(exposure = strsplit(x, split = "_")[[1]][2],
+                           covariates = estimated_weights[[x]]$covs |>
+                             colnames(),
+                           weights = estimated_weights[[x]])
+  })
+  future::plan(future::sequential)
+  names(balance) <- names(estimated_weights)
+  
+  ## Save results
+  if (save_results) {
+    future::plan(future::multisession, 
+                 workers = 4)
+    furrr::future_map(names(balance), function(x) {
+      ### bal.plot
+      .path <- paste0(
+        "results/figures/",
+        Sys.getenv("TAR_PROJECT"),
+        "/balplot_",
+        params_ana$method_weightit, "_",
+        strsplit(x, split = "_")[[1]][2],
+        ".pdf"
+      )
+      ggplot2::ggsave(.path,
+                      gridExtra::marrangeGrob(grobs = balance[[x]]$graph,
+                                              nrow = 1,
+                                              ncol = 1),
+                      dpi = 480, type = "cairo")
+      
+      ### bal.tab
+      .path <- paste0(
+        "results/tables/",
+        Sys.getenv("TAR_PROJECT"),
+        "/baltab_",
+        params_ana$method_weightit, "_",
+        strsplit(x, split = "_")[[1]][2],
+        ".docx"
+      )
+      tab <- balance[[x]]$tab$Balance |>
+        as.data.frame() |>
+        tibble::rownames_to_column(var = "variable")
+      colnames(tab) <- c("variable", "type",
+                         "unadj. correlation", "adj. correlation",
+                         "threshold", "adj. KS")
+      tab <- tab |>
+        dplyr::arrange(dplyr::desc(`adj. correlation`),
+                       variable) |>
+        dplyr::mutate(type = dplyr::recode(
+          type, "Contin." = "continuous",
+          "Binary" = "binary"
+        )) |>
+        gt::gt(groupname_col = "type") |>
+        gt::tab_options(row_group.as_column = TRUE) |>
+        gt::fmt_number(decimals = 3) |>
+        gt::tab_header(paste0("Balance statistics: ",
+                              strsplit(x, split = "_")[[1]][2]))
+      gt::gtsave(tab, filename = .path)
+    })
+    future::plan(future::sequential)
+    
+    ### love.plot
+    .path <- paste0(
+      "results/figures/",
+      Sys.getenv("TAR_PROJECT"),
+      "/loveplot_",
+      params_ana$method_weightit,
+      ".pdf"
+    )
+    ggplot2::ggsave(.path,
+                    gridExtra::marrangeGrob(grobs = sapply(balance, `[[`, "love"),
+                                            nrow = 1,
+                                            ncol = 1),
+                    dpi = 480, height = 6, type = "cairo")
+  } # End save_results
   
   return(list(
     estimated_weights = estimated_weights, 
@@ -307,49 +317,46 @@ rq_fit_model_weighted <- function(dat, weights) {
         Sys.getenv("path_store_res"), 
         "weights_exposure_model/", 
         params_ana$method_weightit, 
-        ".rds"
+        ".qs"
       ), 
       nthreads = 4
     )
   } # End check if weights are not provided
   
   ## Loop over each exposure
-  future::plan(future::sequential)
-  progressr::with_progress({
-    p <- progressr::progressor(steps = length(list_exposures))
-    
-    fits <- furrr::future_map(list_exposures, function(exposure) {
-      p()
-      dat_analysis <- dplyr::full_join(dplyr::select(dat$exposures, 
-                                                     dplyr::all_of(c(exposure, 
+  future::plan(future::multisession, 
+               workers = 4)
+  fits <- furrr::future_map(list_exposures, function(exposure) {
+    dat_analysis <- dplyr::full_join(dplyr::select(dat$exposures, 
+                                                   dplyr::all_of(c(exposure, 
                                                                    params_dat$variables$identifier))), 
-                                       dat_merged, 
-                                       by = params_dat$variables$identifier) |>
-        dplyr::select(-params_dat$variables$identifier) |>
-        dplyr::filter(!is.na(.data[[outcome]]))
-      
-      weights_exposure <- weights[[exposure]]$weights[-idxs_missing_outcome]
-      fit <- myphd::fit_model_weighted(
-        dat = dat_analysis, 
-        outcome = outcome, 
-        exposure = exposure, 
-        covariates = list_covariates, 
-        weights = weights_exposure, 
-        method = params_ana$method_marginal, 
-        method_args = list(
-          family = params_ana$family_marginal, 
-          add_inter_exposure = params_ana$add_inter_exposure, 
-          add_splines_exposure = params_ana$add_splines_exposure, 
-          df_splines = params_ana$df_splines
-        )
+                                     dat_merged, 
+                                     by = params_dat$variables$identifier) |>
+      dplyr::select(-params_dat$variables$identifier) |>
+      dplyr::filter(!is.na(.data[[outcome]]))
+    
+    weights_exposure <- weights[[exposure]]$weights[-idxs_missing_outcome]
+    fit <- myphd::fit_model_weighted(
+      dat = dat_analysis, 
+      outcome = outcome, 
+      exposure = exposure, 
+      covariates = list_covariates, 
+      weights = weights_exposure, 
+      method = params_ana$method_marginal, 
+      method_args = list(
+        family = params_ana$family_marginal, 
+        add_inter_exposure = params_ana$add_inter_exposure, 
+        add_splines_exposure = params_ana$add_splines_exposure, 
+        df_splines = params_ana$df_splines
       )
-      
-      return(list(
-        fit = fit$fit, 
-        weights = weights_exposure
-      ))
-    }) # End loop over exposures
-  }) # End progress bar
+    )
+    
+    return(list(
+      fit = fit$fit, 
+      weights = weights_exposure
+    ))
+  }) # End loop over exposures
+  future::plan(future::sequential)
   names(fits) <- list_exposures
   
   return(list(
