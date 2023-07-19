@@ -4,23 +4,23 @@
     "Repositories": [
       {
         "Name": "BioCsoft",
-        "URL": "https://bioconductor.org/packages/3.16/bioc"
+        "URL": "https://bioconductor.org/packages/3.17/bioc"
       },
       {
         "Name": "BioCann",
-        "URL": "https://bioconductor.org/packages/3.16/data/annotation"
+        "URL": "https://bioconductor.org/packages/3.17/data/annotation"
       },
       {
         "Name": "BioCexp",
-        "URL": "https://bioconductor.org/packages/3.16/data/experiment"
+        "URL": "https://bioconductor.org/packages/3.17/data/experiment"
       },
       {
         "Name": "BioCworkflows",
-        "URL": "https://bioconductor.org/packages/3.16/workflows"
+        "URL": "https://bioconductor.org/packages/3.17/workflows"
       },
       {
         "Name": "BioCbooks",
-        "URL": "https://bioconductor.org/packages/3.16/books"
+        "URL": "https://bioconductor.org/packages/3.17/books"
       },
       {
         "Name": "CRAN",
@@ -367,16 +367,6 @@
         "nnls"
       ],
       "Hash": "1779fb40d0e1189fb1a1cb3bd3ce906e"
-    },
-    "TeachingDemos": {
-      "Package": "TeachingDemos",
-      "Version": "2.12",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R"
-      ],
-      "Hash": "41e566d7eab7307a31b3dee3b203c7e0"
     },
     "V8": {
       "Package": "V8",
@@ -1009,19 +999,6 @@
         "vctrs"
       ],
       "Hash": "54ed3ea01b11e81a86544faaecfef8e2"
-    },
-    "earth": {
-      "Package": "earth",
-      "Version": "5.3.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "Formula",
-        "R",
-        "TeachingDemos",
-        "plotmo"
-      ],
-      "Hash": "1a97c41edcc9b87ec45ffdc128075909"
     },
     "ellipse": {
       "Package": "ellipse",
@@ -2271,7 +2248,7 @@
       "RemoteRepo": "myphd",
       "RemoteUsername": "isglobal-cep",
       "RemoteRef": "HEAD",
-      "RemoteSha": "6844113b69ad8450ef073a03d5123f7b1234ab63",
+      "RemoteSha": "1f2b87deb776dd3dbda7de5550867b95c8c7757d",
       "Requirements": [
         "dagitty",
         "dplyr",
@@ -2280,7 +2257,7 @@
         "lifecycle",
         "magrittr"
       ],
-      "Hash": "bb663ad1d537886c5c83e284690c8fd5"
+      "Hash": "22939fd570e1c2d0369fa9a6ae75fc23"
     },
     "nlme": {
       "Package": "nlme",
@@ -2485,33 +2462,6 @@
         "withr"
       ],
       "Hash": "a7f498a1b2a4a6816148e498509f6e1d"
-    },
-    "plotmo": {
-      "Package": "plotmo",
-      "Version": "3.6.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "Formula",
-        "R",
-        "TeachingDemos",
-        "plotrix"
-      ],
-      "Hash": "ec6e3b80a43a169b3a81e426e697b84a"
-    },
-    "plotrix": {
-      "Package": "plotrix",
-      "Version": "3.8-2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "grDevices",
-        "graphics",
-        "stats",
-        "utils"
-      ],
-      "Hash": "2ebe8c2ec200da649738b0fc35a9b1a1"
     },
     "plyr": {
       "Package": "plyr",

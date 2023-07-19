@@ -5,9 +5,6 @@ source("code/mtps.R")
 source("code/research_questions/utils.R")
 source("code/research_questions/rq1.R")
 
-library(earth)
-library(gam)
-
 targets::tar_option_set(
   format = "qs"
 )

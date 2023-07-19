@@ -38,7 +38,7 @@ params <- function(is_hpc) {
   
   variables <- list(
     identifier = "HelixID", 
-    strategy_select_adj_set = "minimize_missings", 
+    strategy_select_adj_set = "smallest", 
     strategy_loq_urine = "div2", 
     creatinine_threshold = 10, 
     ############################################################################

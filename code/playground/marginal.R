@@ -5,7 +5,7 @@ source("code/mtps.R")
 source("code/research_questions/utils.R")
 source("code/research_questions/rq1.R")
 
-Sys.setenv(is_hpc = FALSE)
+Sys.setenv(is_hpc = TRUE)
 path_store <- ifelse(
   Sys.getenv("is_hpc"), 
   "~/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/_targets/_targetsRQ", 
