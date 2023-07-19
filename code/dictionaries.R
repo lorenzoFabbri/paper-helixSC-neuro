@@ -153,10 +153,12 @@ params_analyses <- function() {
     sl_lib = c("SL.glm", 
                "SL.gam", "SL.glmnet"), 
     method_marginal = "gam", 
-    family_marginal = "ocat", 
+    family_marginal = mgcv::ocat(R = 36), 
     add_inter_exposure = TRUE, 
     add_splines_exposure = TRUE, 
-    df_splines = 3
+    df_splines = 3, 
+    threshold_smooth = 10, 
+    threshold_k = 3
   ) # End dictionary parameters RQ1
   rq2 <- rq1
   rq3 <- rq1

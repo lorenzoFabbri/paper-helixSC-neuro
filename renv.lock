@@ -380,7 +380,7 @@
     },
     "V8": {
       "Package": "V8",
-      "Version": "4.3.2",
+      "Version": "4.3.3",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -389,7 +389,7 @@
         "jsonlite",
         "utils"
       ],
-      "Hash": "85986a8a9f63af35ad24a022dfa48fdb"
+      "Hash": "20d81ec18bde233d8cc3265761fe8c93"
     },
     "WeightIt": {
       "Package": "WeightIt",
@@ -2280,7 +2280,13 @@
     "myphd": {
       "Package": "myphd",
       "Version": "0.0.1",
-      "Source": "unknown",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "myphd",
+      "RemoteUsername": "isglobal-cep",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "6844113b69ad8450ef073a03d5123f7b1234ab63",
       "Requirements": [
         "dagitty",
         "dplyr",
@@ -2289,7 +2295,7 @@
         "lifecycle",
         "magrittr"
       ],
-      "Hash": "086200aad083bef90c9859031e3db01e"
+      "Hash": "bb663ad1d537886c5c83e284690c8fd5"
     },
     "nlme": {
       "Package": "nlme",

@@ -153,7 +153,7 @@ rq_estimate_weights <- function(dat, save_results) {
                              id_var)
   ## Loop over exposures
   future::plan(future::multisession, 
-               workers = 4)
+               workers = 2)
   estimated_weights <- furrr::future_map(list_exposures, function(x) {
     tmp <- suppressWarnings(myphd::estimate_weights(
       dat = dplyr::full_join(dplyr::select(dat$exposures, 
@@ -171,8 +171,11 @@ rq_estimate_weights <- function(dat, save_results) {
         sl_lib = params_ana$sl_lib
       ))
     )
-    WeightIt::trim(tmp$weights, params_ana$weights_trim)
-  }) # End loop over exposures to estimate weights
+    suppressMessages(WeightIt::trim(tmp$weights, params_ana$weights_trim))
+  }, 
+  .options = furrr::furrr_options(
+    seed = TRUE
+  )) # End loop over exposures to estimate weights
   future::plan(future::sequential)
   names(estimated_weights) <- list_exposures
   path_save_weights <- paste0(
@@ -193,20 +196,23 @@ rq_estimate_weights <- function(dat, save_results) {
   
   # Step 2: explore balance
   future::plan(future::multisession, 
-               workers = 4)
+               workers = 2)
   balance <- furrr::future_map(names(estimated_weights), function(x) {
     myphd::explore_balance(exposure = strsplit(x, split = "_")[[1]][2],
                            covariates = estimated_weights[[x]]$covs |>
                              colnames(),
                            weights = estimated_weights[[x]])
-  })
+  }, 
+  .options = furrr::furrr_options(
+    seed = TRUE
+  ))
   future::plan(future::sequential)
   names(balance) <- names(estimated_weights)
   
   ## Save results
   if (save_results) {
     future::plan(future::multisession, 
-                 workers = 4)
+                 workers = 2)
     furrr::future_map(names(balance), function(x) {
       ### bal.plot
       .path <- paste0(
@@ -251,7 +257,10 @@ rq_estimate_weights <- function(dat, save_results) {
         gt::tab_header(paste0("Balance statistics: ",
                               strsplit(x, split = "_")[[1]][2]))
       gt::gtsave(tab, filename = .path)
-    })
+    }, 
+    .options = furrr::furrr_options(
+      seed = TRUE
+    ))
     future::plan(future::sequential)
     
     ### love.plot
@@ -292,6 +301,11 @@ rq_fit_model_weighted <- function(dat, weights) {
   params_ana <- params_analyses()[[rq]]
   
   # Process outcome
+  if (params_ana$method_marginal == "super") {
+    steps_outcome$bound$do <- TRUE
+  } else {
+    steps_outcome$bound$do <- FALSE
+  }
   dat$outcome <- myphd::extract_cohort(dat = dat$outcome, 
                                        id_var = params_dat$variables$identifier)
   dat$outcome <- myphd::preproc_data(dat = dat$outcome, 
@@ -325,7 +339,7 @@ rq_fit_model_weighted <- function(dat, weights) {
   
   ## Loop over each exposure
   future::plan(future::multisession, 
-               workers = 4)
+               workers = 2)
   fits <- furrr::future_map(list_exposures, function(exposure) {
     dat_analysis <- dplyr::full_join(dplyr::select(dat$exposures, 
                                                    dplyr::all_of(c(exposure, 
@@ -347,7 +361,9 @@ rq_fit_model_weighted <- function(dat, weights) {
         family = params_ana$family_marginal, 
         add_inter_exposure = params_ana$add_inter_exposure, 
         add_splines_exposure = params_ana$add_splines_exposure, 
-        df_splines = params_ana$df_splines
+        df_splines = params_ana$df_splines, 
+        threshold_smooth = params_ana$threshold_smooth, 
+        threshold_k = params_ana$threshold_k
       )
     )
     
@@ -355,7 +371,10 @@ rq_fit_model_weighted <- function(dat, weights) {
       fit = fit$fit, 
       weights = weights_exposure
     ))
-  }) # End loop over exposures
+  }, 
+  .options = furrr::furrr_options(
+    seed = TRUE
+  )) # End loop over exposures
   future::plan(future::sequential)
   names(fits) <- list_exposures
   
