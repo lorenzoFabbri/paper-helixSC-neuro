@@ -36,6 +36,7 @@ params <- function(is_hpc) {
   })
   ##############################################################################
   
+  clinical_outcome <- "hs_hitrtse"
   variables <- list(
     identifier = "HelixID", 
     strategy_select_adj_set = "smallest", 
@@ -43,12 +44,12 @@ params <- function(is_hpc) {
     creatinine_threshold = 10, 
     ############################################################################
     rq01 = list(
-      outcome = "hs_correct_raven", 
+      outcome = clinical_outcome, 
       outcome_negative = "", 
       exposures = "cadj"
     ), 
     rq1 = list(
-      outcome = "hs_correct_raven", 
+      outcome = clinical_outcome, 
       outcome_negative = "", 
       exposures = "_cadj"
     ), # End options RQ1
@@ -65,12 +66,12 @@ params <- function(is_hpc) {
     ), # End options RQ2
     ############################################################################
     rq03 = list(
-      outcome = "hs_correct_raven", 
+      outcome = clinical_outcome, 
       outcome_negative = "", 
       exposures = "metab"
     ), 
     rq3 = list(
-      outcome = "hs_correct_raven", 
+      outcome = clinical_outcome, 
       outcome_negative = "", 
       exposures = "_metab"
     ), # End options RQ3
@@ -114,7 +115,7 @@ params <- function(is_hpc) {
     anthropometric = c("e3_bw", "e3_gac", "hs_age_years", "e3_sex", 
                        "hs_c_height", "hs_c_weight"), 
     outcomes = c("hs_fam_car", "hs_c_room", "hs_neuro_diag", 
-                 variables$rq1$outcome), 
+                 clinical_outcome), 
     sep = c("hs_wrk_m", "FAS_score", "e3_edumc", 
             "e3_marital", "e3_ses", "e3_edupc", "e3_edufc"), 
     biomarkers = c("hs_dift_mealblood")
@@ -153,7 +154,8 @@ params_analyses <- function() {
     sl_lib = c("SL.glm", 
                "SL.gam", "SL.glmnet"), 
     method_marginal = "gam", 
-    family_marginal = mgcv::ocat(R = 36), 
+    #family_marginal = mgcv::ocat(R = 36), 
+    family_marginal = gaussian(link = "identity"), 
     add_inter_exposure = TRUE, 
     add_splines_exposure = TRUE, 
     df_splines = 3, 
