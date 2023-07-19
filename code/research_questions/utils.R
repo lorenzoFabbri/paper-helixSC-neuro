@@ -153,7 +153,7 @@ rq_estimate_weights <- function(dat, save_results) {
                              id_var)
   ## Loop over exposures
   future::plan(future::multisession, 
-               workers = 2)
+               workers = floor(future::availableCores() / 3))
   estimated_weights <- furrr::future_map(list_exposures, function(x) {
     tmp <- suppressWarnings(myphd::estimate_weights(
       dat = dplyr::full_join(dplyr::select(dat$exposures, 
@@ -196,7 +196,7 @@ rq_estimate_weights <- function(dat, save_results) {
   
   # Step 2: explore balance
   future::plan(future::multisession, 
-               workers = 2)
+               workers = floor(future::availableCores() / 5))
   balance <- furrr::future_map(names(estimated_weights), function(x) {
     myphd::explore_balance(exposure = strsplit(x, split = "_")[[1]][2],
                            covariates = estimated_weights[[x]]$covs |>
@@ -212,7 +212,7 @@ rq_estimate_weights <- function(dat, save_results) {
   ## Save results
   if (save_results) {
     future::plan(future::multisession, 
-                 workers = 2)
+                 workers = floor(future::availableCores() / 5))
     furrr::future_map(names(balance), function(x) {
       ### bal.plot
       .path <- paste0(
@@ -339,7 +339,7 @@ rq_fit_model_weighted <- function(dat, weights) {
   
   ## Loop over each exposure
   future::plan(future::multisession, 
-               workers = 2)
+               workers = floor(future::availableCores() / 2))
   fits <- furrr::future_map(list_exposures, function(exposure) {
     dat_analysis <- dplyr::full_join(dplyr::select(dat$exposures, 
                                                    dplyr::all_of(c(exposure, 
