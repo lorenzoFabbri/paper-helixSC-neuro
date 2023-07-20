@@ -94,12 +94,11 @@ rq_load_data <- function(ids_other_covars, res_dag) {
   
   # Create one dataset for covariates, one for exposures, and one for outcomes
   dat <- list()
-  cat("\nThe following exposures were not found:\n")
+  warning("The following exposures were not found:")
   cat(setdiff(
     params_dat$variables[[rq]]$exposures, 
     colnames(dat_request$dat)
   ), sep = "\n")
-  cat("\n")
   dat$exposures <- dat_request$dat |>
     dplyr::select(dplyr::any_of(c(
       params_dat$variables$identifier, 
