@@ -179,7 +179,8 @@ process_steroids <- function() {
     metabolome = metabs, 
     descriptives = descs
   ))
-}
+} # End function process_steroids
+################################################################################
 
 #' Title
 #'
@@ -195,7 +196,8 @@ handle_loq_urine <- function(loq, strategy) {
   }
   
   return(new_val)
-}
+} # End function handle_loq_urine
+################################################################################
 
 #' Load and clean the dataset corresponding to the HELIX data request
 #'
@@ -330,8 +332,12 @@ load_dat_request <- function() {
   }
   
   which_meta <- switch(Sys.getenv("TAR_PROJECT"), 
-                       "rq01" = "_rq1", 
-                       "rq1" = "_rq1")
+                       "rq01" = "rq1", 
+                       "rq1" = "rq1", 
+                       "rq02" = "rq2", 
+                       "rq2" = "rq2", 
+                       "rq03" = "rq3", 
+                       "rq3" = "rq3")
   meta <- readODS::read_ods(paste0("docs/data_request_relevant", 
                                    which_meta, ".ods"), 
                             col_names = TRUE, strings_as_factors = TRUE) |>
@@ -347,7 +353,7 @@ load_dat_request <- function() {
     dat = dat, 
     meta = meta
   ))
-} # End function load data request
+} # End function load_dat_request
 ################################################################################
 
 #' Load exposome object
@@ -376,4 +382,5 @@ load_exposome <- function(path_in) {
     meta_data = meta, 
     exposure_data = expo
   ))
-} # End function load exposome object
+} # End function load_exposome
+################################################################################

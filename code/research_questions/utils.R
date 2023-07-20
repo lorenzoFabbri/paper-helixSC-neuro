@@ -36,7 +36,7 @@ load_dag <- function(dags, exposure, outcome, params_dag) {
                              parents_exposure)
   
   return(ret)
-} # End function dag
+} # End function load_dag
 ################################################################################
 
 #' Various ways to select an adjustment set out of many
@@ -69,7 +69,7 @@ select_adjustment_set <- function(dat, meta, res_dag, strategy) {
   )
   
   return(ret)
-} # End function selection adjustment set
+} # End function select_adjustment_set
 ################################################################################
 
 #' Load data necessary for down-streams analyses
@@ -94,10 +94,17 @@ rq_load_data <- function(ids_other_covars, res_dag) {
   
   # Create one dataset for covariates, one for exposures, and one for outcomes
   dat <- list()
+  cat("\nThe following exposures were not found:\n")
+  cat(setdiff(
+    params_dat$variables[[rq]]$exposures, 
+    colnames(dat_request$dat)
+  ), sep = "\n")
+  cat("\n")
   dat$exposures <- dat_request$dat |>
-    dplyr::select(params_dat$variables$identifier, 
-                  dplyr::contains(params_dat$variables[[rq]]$exposures, 
-                                  ignore.case = TRUE))
+    dplyr::select(dplyr::any_of(c(
+      params_dat$variables$identifier, 
+      params_dat$variables[[rq]]$exposures
+    )))
   dat$outcome <- dat_request$dat |>
     dplyr::select(params_dat$variables$identifier, 
                   params_dat$variables[[rq]]$outcome)
@@ -123,7 +130,7 @@ rq_load_data <- function(ids_other_covars, res_dag) {
                                 \(x) factor(x)))
   
   return(dat)
-} # End function load data
+} # End function rq_load_data
 ################################################################################
 
 #' Estimate weights and explore covariance balance
@@ -138,7 +145,11 @@ rq_estimate_weights <- function(dat, save_results) {
   rq <- Sys.getenv("TAR_PROJECT")
   rq <- switch(rq, 
                "rq01" = "rq1", 
-               "rq1" = "rq1")
+               "rq1" = "rq1", 
+               "rq02" = "rq2", 
+               "rq2" = "rq2", 
+               "rq03" = "rq3", 
+               "rq3" = "rq3")
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   id_var <- params_dat$variables$identifier
   outcome <- params_dat$variables[[rq]]$outcome
@@ -153,7 +164,7 @@ rq_estimate_weights <- function(dat, save_results) {
                              id_var)
   ## Loop over exposures
   future::plan(future::multisession, 
-               workers = floor(future::availableCores() / 5))
+               workers = floor(future::availableCores() / 6))
   progressr::with_progress({
     p <- progressr::progressor(steps = length(list_exposures))
     
@@ -203,7 +214,7 @@ rq_estimate_weights <- function(dat, save_results) {
   
   # Step 2: explore balance
   future::plan(future::multisession, 
-               workers = floor(future::availableCores() / 10))
+               workers = floor(future::availableCores() / 6))
   balance <- furrr::future_map(names(estimated_weights), function(x) {
     myphd::explore_balance(exposure = strsplit(x, split = "_")[[1]][2],
                            covariates = estimated_weights[[x]]$covs |>
@@ -289,7 +300,7 @@ rq_estimate_weights <- function(dat, save_results) {
     estimated_weights = estimated_weights, 
     balance = balance
   ))
-} # End function `rq_estimate_weights`
+} # End function rq_estimate_weights
 ################################################################################
 
 #' Title
@@ -346,7 +357,7 @@ rq_fit_model_weighted <- function(dat, weights) {
   
   ## Loop over each exposure
   future::plan(future::multisession, 
-               workers = floor(future::availableCores() / 3))
+               workers = floor(future::availableCores() / 6))
   progressr::with_progress({
     p <- progressr::progressor(steps = length(list_exposures))
     
@@ -363,7 +374,6 @@ rq_fit_model_weighted <- function(dat, weights) {
       
       weights_exposure <- weights[[exposure]]$weights[-idxs_missing_outcome]
       
-      cat(paste0("Fitting weighted model for exposure: ", exposure, "."))
       fit <- myphd::fit_model_weighted(
         dat = dat_analysis, 
         outcome = outcome, 
@@ -383,6 +393,7 @@ rq_fit_model_weighted <- function(dat, weights) {
       
       return(list(
         fit = fit$fit, 
+        dat = dat_analysis, 
         weights = weights_exposure
       ))
     }, 
@@ -403,79 +414,138 @@ rq_fit_model_weighted <- function(dat, weights) {
 #' Title
 #'
 #' @param fits 
-#' @param shifts_exposure 
 #'
 #' @return
 #'
 #' @export
-rq_estimate_marginal_effects <- function(fits, shifts_exposure) {
-  if (is.null(shifts_exposure)) {
-    shifts_exposure <- c(0.0001, 0.001, 0.01, 0.1, 
-                         1, 1.3, 1.6, 
-                         2)
-  }
+rq_estimate_marginal_effects <- function(fits) {
+  rq <- Sys.getenv("TAR_PROJECT")
+  params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   
   # Loop over the fitted models to estimate marginal effects
-  ret <- lapply(seq_along(fits), function(idx) {
-    exposure <- names(fits)[[idx]]
-    mod <- fits[[exposure]]$fit
-    weights <- fits[[exposure]]$weights
+  future::plan(future::multisession, 
+               workers = floor(future::availableCores() / 6))
+  progressr::with_progress({
+    p <- progressr::progressor(steps = length(list_exposures))
     
-    ## Average comparisons for different shifts
-    res <- lapply(shifts_exposure, function(x) {
-      tmp <- eval(parse(
-        text = glue::glue(
-          "marginaleffects::avg_comparisons(
+    ret <- furrr::future_map(seq_along(fits), function(idx, p) {
+      p()
+      
+      exposure <- names(fits)[[idx]]
+      mod <- fits[[exposure]]$fit
+      dat <- fits[[exposure]]$dat
+      weights <- fits[[exposure]]$weights
+      
+      ############################################################################
+      # G-computation (ADRF)
+      values <- with(dat, seq(
+        quantile(get(exposure), 0.1), 
+        quantile(get(exposure), 0.9), 
+        length.out = 50
+      ))
+      gcomp <- eval(
+        parse(
+          text = glue::glue(
+            "marginaleffects::avg_predictions(
             model = mod, 
             variables = list(
-              {exposure} = mod$data[[exposure]] * x
+              {exposure} = values
             ), 
             wts = weights
           )", 
-        exposure = exposure)
-      )) |>
-        marginaleffects::tidy()
-      tmp <- tmp |>
-        dplyr::rename(variable = term) |>
-        dplyr::mutate(contrast = x)
-    }) |>
-      dplyr::bind_rows() # End loop over shifts exposure
-  }) |>
-    dplyr::bind_rows() # End loop extract effect estimates
-  ##############################################################################
-  
-  # Plot estimates for each exposure and contrast
-  plts <- lapply(unique(ret$variable), function(x) {
-    ret |>
-      dplyr::filter(variable == x) |>
-      ggplot2::ggplot(ggplot2::aes(x = as.factor(contrast), 
-                                   y = estimate)) +
-      ggplot2::geom_point(ggplot2::aes(), 
-                          size = 2, 
-                          position = ggplot2::position_dodge(width = 0.5)) +
-      ggplot2::geom_errorbar(ggplot2::aes(
-        ymin = conf.low, ymax = conf.high
-      ), 
-      width = 0.1, 
-      linewidth = 0.3, 
-      position = ggplot2::position_dodge(width = 0.5)) +
-      ggplot2::geom_hline(yintercept = 0, 
-                          col = "black") +
-      ggplot2::scale_x_discrete(
-        breaks = shifts_exposure, 
-        labels = as.character(shifts_exposure)
-      ) +
-      ggplot2::labs(
-        title = x, 
-        x = "contrast"
-      ) +
-      ggplot2::theme_minimal()
-  }) # End loop plotting
-  ##############################################################################
+            exposure = exposure
+          )
+        )
+      ) # End G-computation (avg_predictions)
+      
+      # Plot ADRF
+      adrf <- gcomp |>
+        ggplot2::ggplot(ggplot2::aes(x = .data[[exposure]])) +
+        ggplot2::geom_point(ggplot2::aes(y = estimate)) +
+        ggplot2::geom_line(ggplot2::aes(y = estimate), 
+                           linewidth = 0.2) +
+        ggplot2::geom_ribbon(ggplot2::aes(
+          ymin = conf.low, 
+          ymax = conf.high
+        ), alpha = 0.2) +
+        ggplot2::geom_rug(
+          mapping = ggplot2::aes(x = .data[[exposure]]), 
+          data = dat, 
+          inherit.aes = FALSE
+        ) +
+        ggplot2::scale_x_continuous(limits = c(
+          values[1], 
+          values[length(values)]
+        )) +
+        ggplot2::labs(x = exposure, y = "E[Y|A]") +
+        ggplot2::theme_minimal()
+      ############################################################################
+      
+      ############################################################################
+      # Slopes (AMEF)
+      weights_repeated = rep(weights, 
+                             times = length(values))
+      slopes <- eval(
+        parse(
+          text = glue::glue(
+            "marginaleffects::avg_slopes(
+            model = mod, 
+            variables = {glue::double_quote(exposure)}, 
+            newdata = marginaleffects::datagridcf({exposure} = values), 
+            by = {glue::double_quote(exposure)}, 
+            wts = weights_repeated
+          )", 
+            exposure = exposure
+          )
+        )
+      ) # End slopes (avg_slopes)
+      
+      # Plot AMEF
+      amef <- slopes |>
+        ggplot2::ggplot(ggplot2::aes(x = .data[[exposure]])) +
+        ggplot2::geom_point(ggplot2::aes(y = estimate)) +
+        ggplot2::geom_line(ggplot2::aes(y = estimate), 
+                           linewidth = 0.2) +
+        ggplot2::geom_ribbon(ggplot2::aes(
+          ymin = conf.low, 
+          ymax = conf.high
+        ), alpha = 0.2) +
+        ggplot2::geom_hline(yintercept = 0, 
+                            linetype = "dashed") +
+        ggplot2::geom_rug(
+          mapping = ggplot2::aes(x = .data[[exposure]]), 
+          data = dat, 
+          inherit.aes = FALSE
+        ) +
+        ggplot2::scale_x_continuous(limits = c(
+          values[1], 
+          values[length(values)]
+        )) +
+        ggplot2::labs(x = exposure, y = "dE[Y|A]/dA") +
+        ggplot2::theme_minimal()
+      ############################################################################
+      
+      ############################################################################
+      #
+      ############################################################################
+      
+      return(list(
+        gcomp = gcomp, 
+        adrf = adrf, 
+        slopes = slopes, 
+        amef = amef
+      ))
+    }, 
+    .options = furrr::furrr_options(
+      seed = TRUE
+    ), 
+    p = p) # End loop over fitted models
+  }) # End progress bar
+  future::plan(future::sequential)
+  names(ret) <- names(fits)
   
   return(list(
-    comparisons = ret, 
-    plots = plts
+    marginal_effects = ret
   ))
 } # End function rq_estimate_marginal_effects
 ################################################################################
@@ -585,5 +655,5 @@ run_mtp <- function(dat, shift_exposure) {
   names(res) <- list_exposures
   
   return(res)
-} # End function run analysis mtp
+} # End function run_mtp
 ################################################################################

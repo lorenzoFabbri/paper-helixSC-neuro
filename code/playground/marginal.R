@@ -18,8 +18,8 @@ path_store_res <- ifelse(
   "~/mounts/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/results/"
 )
 Sys.setenv(path_store_res = path_store_res)
-Sys.setenv(TAR_PROJECT = "rq01")
-store <- paste0(path_store, "01")
+Sys.setenv(TAR_PROJECT = "rq1")
+store <- paste0(path_store, "1")
 params_dag <- list(
   type = "minimal", 
   effect = "total"

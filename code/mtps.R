@@ -13,6 +13,7 @@ mtp_add <- function(dat, trt) {
   
   return(dd)
 }
+################################################################################
 
 #' Multiplicative shift function
 #'

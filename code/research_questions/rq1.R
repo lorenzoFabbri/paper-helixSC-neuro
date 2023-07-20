@@ -28,5 +28,5 @@ rq1_prepare_data <- function(dat) {
                                         by_var = "cohort")
   
   return(dat)
-} # End function prepare data
+} # End function rq1_prepare_data
 ################################################################################

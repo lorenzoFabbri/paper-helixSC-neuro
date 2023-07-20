@@ -36,6 +36,35 @@ params <- function(is_hpc) {
   })
   ##############################################################################
   
+  chemicals <- c(
+    "hs_mep_", 
+    "hs_mibp_", 
+    "hs_mnbp_", 
+    "hs_mbzp_", 
+    "hs_mehp_", 
+    "hs_mehhp_", 
+    "hs_meohp_", 
+    "hs_mecpp_", 
+    "hs_ohminp_", 
+    "hs_oxominp_", 
+    "hs_mepa_", 
+    "hs_etpa_", 
+    "hs_prpa_", 
+    "hs_bpa_", 
+    "hs_bupa_", 
+    "hs_oxbe_", 
+    "hs_trcs_", 
+    "hs_dmp_", 
+    "hs_dmtp_", 
+    "hs_dmdtp_", 
+    "hs_dep_", 
+    "hs_detp_", 
+    "hs_dedtp_"
+  ) # End list of chemicals
+  metabolites <- c(
+    ""
+  ) # End list of metabolites
+  chemicals <- paste0(chemicals, "c")
   clinical_outcome <- "hs_hitrtse"
   variables <- list(
     identifier = "HelixID", 
@@ -46,34 +75,34 @@ params <- function(is_hpc) {
     rq01 = list(
       outcome = clinical_outcome, 
       outcome_negative = "", 
-      exposures = "cadj"
+      exposures = chemicals
     ), 
     rq1 = list(
       outcome = clinical_outcome, 
       outcome_negative = "", 
-      exposures = "_cadj"
+      exposures = chemicals
     ), # End options RQ1
     ############################################################################
     rq02 = list(
-      outcome = "metab", 
+      outcome = metabolites, 
       outcome_negative = "", 
-      exposures = "cadj"
+      exposures = chemicals
     ), 
     rq2 = list(
-      outcome = "metab", 
+      outcome = metabolites, 
       outcome_negative = "", 
-      exposures = "_cadj"
+      exposures = chemicals
     ), # End options RQ2
     ############################################################################
     rq03 = list(
       outcome = clinical_outcome, 
       outcome_negative = "", 
-      exposures = "metab"
+      exposures = metabolites
     ), 
     rq3 = list(
       outcome = clinical_outcome, 
       outcome_negative = "", 
-      exposures = "_metab"
+      exposures = metabolites
     ), # End options RQ3
     ############################################################################
     preproc_exposures = list(
@@ -147,15 +176,16 @@ params_analyses <- function() {
     shift_amount = 0.01, 
     ############################################################################
     # WeightIt, Cobalt, marginaleffects
-    method_weightit = "super", 
+    method_weightit = "energy", 
     weights_trim = 0.90, 
     use_kernel = TRUE, 
     sl_discrete = FALSE, 
     sl_lib = c("SL.glm", 
                "SL.gam", "SL.glmnet"), 
-    method_marginal = "gam", 
+    method_marginal = "glm", 
     #family_marginal = mgcv::ocat(R = 36), 
-    family_marginal = gaussian(link = "identity"), 
+    #family_marginal = gaussian(link = "identity"), 
+    family_marginal = "gaussian", 
     add_inter_exposure = TRUE, 
     add_splines_exposure = TRUE, 
     df_splines = 3, 
