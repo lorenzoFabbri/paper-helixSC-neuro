@@ -30,7 +30,17 @@ dags <- function() {
   
   ##############################################################################
   chem_to_marker <- ggdag::dagify(
-    
+    airPollution_child ~ cohort + ethnicity_child + familySEP + season_visit,
+    biomarker ~ age_child + airPollution_child + characteristics_child + chemical + child_diet + child_smoking + cohort + creatinine + ethnicity_child + familySEP + maternalAlcohol_preg + maternalSmoking_preg + otherChemicals_child + season_visit + sex_child + time_lastMeal,
+    characteristics_child ~ age_child + airPollution_child + child_diet + child_smoking + cohort + ethnicity_child + familySEP + maternalAlcohol_preg + maternalSmoking_preg + otherChemicals_child + sex_child,
+    chemical ~ characteristics_child + child_diet + cohort + creatinine + ethnicity_child + familySEP + season_visit + time_lastMeal,
+    child_diet ~ cohort + ethnicity_child + familySEP + sex_child,
+    child_smoking ~ cohort + ethnicity_child + familySEP + sex_child,
+    creatinine ~ age_child + characteristics_child + ethnicity_child + sex_child,
+    familySEP ~ cohort,
+    otherChemicals_child ~ child_diet + child_smoking + cohort + ethnicity_child + familySEP + season_visit,
+    exposure = "chemical",
+    outcome = "biomarker"
   )
   ##############################################################################
   

@@ -7,7 +7,7 @@ params <- function(is_hpc) {
   if (is_hpc == TRUE) {
     common_path <- "../../../../"
   } else {
-    common_path <- "~/mounts/PROJECTES/HELIX_OMICS/"
+    common_path <- "~/mounts/rstudioserver/PROJECTES/HELIX_OMICS/"
   }
   
   paths <- list(
@@ -61,10 +61,10 @@ params <- function(is_hpc) {
     "hs_detp_", 
     "hs_dedtp_"
   ) # End list of chemicals
+  chemicals <- paste0(chemicals, "c")
   metabolites <- c(
     ""
   ) # End list of metabolites
-  chemicals <- paste0(chemicals, "c")
   clinical_outcome <- "hs_hitrtse"
   variables <- list(
     identifier = "HelixID", 
@@ -134,27 +134,9 @@ params <- function(is_hpc) {
   )
   ##############################################################################
   
-  variables_desc_population <- list(
-    general = c("hs_bf", 
-                "hs_tob", "e3_asmokyn_p", 
-                "h_pass_smok_4m", "h_pass_smok_8m", "h_pass_smok_6m", 
-                "h_pass_smok_1y", "h_pass_smok_2y", "h_pass_smok_3yr", 
-                "h_pass_smok_4_5yr", "h_pass_smok_7y", "h_pass_smok_8y", 
-                "cohort", "h_ethnicity_c", "h_ethnicity_m"), 
-    anthropometric = c("e3_bw", "e3_gac", "hs_age_years", "e3_sex", 
-                       "hs_c_height", "hs_c_weight"), 
-    outcomes = c("hs_fam_car", "hs_c_room", "hs_neuro_diag", 
-                 clinical_outcome), 
-    sep = c("hs_wrk_m", "FAS_score", "e3_edumc", 
-            "e3_marital", "e3_ses", "e3_edupc", "e3_edufc"), 
-    biomarkers = c("hs_dift_mealblood")
-  )
-  ##############################################################################
-  
   return(list(
     paths = paths, 
-    variables = variables, 
-    variables_desc_population = variables_desc_population
+    variables = variables
   ))
 }
 
@@ -186,7 +168,7 @@ params_analyses <- function() {
     #family_marginal = mgcv::ocat(R = 36), 
     #family_marginal = gaussian(link = "identity"), 
     family_marginal = "gaussian", 
-    add_inter_exposure = TRUE, 
+    add_inter_exposure = FALSE, 
     add_splines_exposure = TRUE, 
     df_splines = 3, 
     threshold_smooth = 10, 

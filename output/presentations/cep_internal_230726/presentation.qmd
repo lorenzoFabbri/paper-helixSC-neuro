@@ -1,5 +1,6 @@
 ---
 title: "CEP Group Meeting"
+subtitle: "Update on *paper 3* of my PhD"
 date: 2023-07-26
 author: Lorenzo Fabbri
 institute: ISGlobal
@@ -10,6 +11,9 @@ format:
     fontsize: "9pt"
     toc: false
     toc-depth: 2
+geometry:
+  - left=10mm
+  - right=10mm
 
 slide-number: true
 
@@ -34,21 +38,17 @@ here::i_am("presentation.qmd")
 
 ## Overview
 
-- **Aim**: to research the *short-term* effects of postnatal exposures to non-persistent EDCs on neurodevelopment and neurobehavior in childhood, and how the metabolome and the proteome might *mediate* these effects.
-- **How**: by making use of the principles and criteria of triangulation. We will primarily rely on the use of MTPs in combination with TMLE.
+- **Aim**: to research the *short-term* effects of childhood exposures to non-persistent EDCs on neurodevelopment in childhood, and how the metabolome **might** *mediate* these effects.
+- **How**: by making use of the principles and criteria of triangulation.
 - **Population**: the HELIX sub-cohort, consisting of $\text{N}=1200$ mother-child pairs.
 - **Exposures**: non-persistent EDCs (phenols, phthalates, and organophosphate compounds), measured in childhood in a pool of two urine samples.
-- **Outcomes**
-  - Raven’s Coloured Progressive Matrices, for assessing non-verbal intelligence.
-  - Computerised n-back test, for assessing working memory.
-  - Attention Network Test, to provide a measure of the efficiency of three different functions of attention.
-  - Child Behavior Checklist, for assessing behavioural and emotional problems.
-- ***Mediators***: serum and urine metabolome, plasma proteome.
+- **Outcome**: Attention Network Test, to provide a measure of the efficiency of three different functions of attention.
+- ***Mediators***: urine metabolites (focus on corticosteroids).
 
 ## The Research Questions
 
 ```{mermaid}
-%%| fig-cap: Simplified DAG.
+%%| fig-cap: Simplified *DAG*.
 %%| label: fig-diag-dag
 %%| fig-align: center
 flowchart LR
@@ -56,6 +56,12 @@ flowchart LR
   mediator --> outcome(neurodevelopment)
   exposure --> outcome
 ```
+
+Issues and limitations:
+
+- The effect of exposure to these chemicals on neurodevelopment has been studied already, although there are clear issues with that study (e.g., wrong model, DAG **not** tailored to the exposures of interest).
+- The effect of exposure to these chemicals on these **newly** measured metabolites could be identifiable, although they were measured in the same samples. This question poses some challenges since they were all measured in urine (inter-individual variability in urine dilution).
+- The effect of these **newly** measured metabolites on neurodevelopment could be identifiable, since they were measure in the urine samples (\textcolor{red}{which aliquot?}) collected before the visit.
 
 ## Triangulation
 
@@ -90,4 +96,75 @@ flowchart LR
   rq3            --> rqCrossCohort
   rq3            --> rq3mr("Mendelian Randomization.
                             Causal estimand: .")
+  style rq2 fill:#7faac2
+  style rq3 fill:#7faac2
 ```
+
+## `myphd` R package
+
+![`myphd`](artwork/myphd.png){width=300}
+
+- URL manual: https://isglobal-cep.github.io/myphd/
+- To install it: `remotes::install_github("isglobal-cep/myphd")`
+
+:::: {.columns align=center}
+
+::: {.column width="33%" align=top}
+```{r, eval=FALSE, echo=TRUE}
+myphd::create_formula(
+  dat,
+  outcome,
+  exposure,
+  covariates,
+  method,
+  add_inter_exposure,
+  add_splines_exposure,
+  df_splines,
+  threshold_smooth,
+  threshold_k
+)
+```
+:::
+
+::: {.column width="33%" align=top}
+```{r, eval=FALSE, echo=TRUE}
+myphd::describe_data(
+  dat,
+  id_var,
+  grouping_var
+)
+```
+:::
+
+::: {.column width="33%" align=top}
+```{r, eval=FALSE, echo=TRUE}
+myphd::preproc_data(
+  dat,
+  outcome = NULL,
+  dic_steps,
+  id_var,
+  by_var
+)
+```
+:::
+
+::::
+
+## Current setup
+
+Variables:
+
+- Clinical outcome: Attention Network Test (`hs_hitrtse`, Hit Reaction Time Standard Error).
+
+Methods:
+
+- Weights estimation (`chemical ~ covariates`): energy balancing.
+- Effect estimation (`outcome ~ chemical + covariates`): `glm` with natural splines for exposure.
+
+## Population description: correlations
+
+![`Correlation numerical variables.`](artwork/corr.png)
+
+## Preliminary results
+
+## Next steps

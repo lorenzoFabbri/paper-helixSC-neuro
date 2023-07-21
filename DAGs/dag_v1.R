@@ -183,7 +183,84 @@ dag_raw <- function() {
   ##############################################################################
   
   ##############################################################################
-  chem_to_marker <- ''
+  chem_to_marker <- 'dag {
+  bb="0,0,1,1"
+  age_child [pos="0.403,0.100"]
+  airPollution_child [pos="0.148,0.779"]
+  biomarker [outcome,pos="0.889,0.490"]
+  characteristics_child [pos="0.403,0.169"]
+  chemical [exposure,pos="0.154,0.487"]
+  child_diet [pos="0.417,0.647"]
+  child_smoking [pos="0.178,0.107"]
+  cohort [pos="0.608,0.188"]
+  creatinine [pos="0.508,0.573"]
+  ethnicity_child [pos="0.262,0.103"]
+  familySEP [pos="0.602,0.089"]
+  maternalAlcohol_preg [pos="0.829,0.694"]
+  maternalSmoking_preg [pos="0.832,0.771"]
+  otherChemicals_child [pos="0.150,0.695"]
+  season_visit [pos="0.511,0.174"]
+  sex_child [pos="0.337,0.099"]
+  time_lastMeal [pos="0.507,0.648"]
+  age_child -> biomarker
+  age_child -> characteristics_child
+  age_child -> creatinine
+  airPollution_child -> biomarker
+  airPollution_child -> characteristics_child
+  characteristics_child -> biomarker
+  characteristics_child -> chemical
+  characteristics_child -> creatinine
+  chemical -> biomarker
+  child_diet -> biomarker
+  child_diet -> characteristics_child
+  child_diet -> chemical
+  child_diet -> otherChemicals_child
+  child_smoking -> biomarker
+  child_smoking -> characteristics_child
+  child_smoking -> otherChemicals_child
+  cohort -> airPollution_child
+  cohort -> biomarker
+  cohort -> characteristics_child
+  cohort -> chemical
+  cohort -> child_diet
+  cohort -> child_smoking
+  cohort -> familySEP
+  cohort -> otherChemicals_child
+  creatinine -> biomarker
+  creatinine -> chemical
+  ethnicity_child -> airPollution_child
+  ethnicity_child -> biomarker
+  ethnicity_child -> characteristics_child
+  ethnicity_child -> chemical
+  ethnicity_child -> child_diet
+  ethnicity_child -> child_smoking
+  ethnicity_child -> creatinine
+  ethnicity_child -> otherChemicals_child
+  familySEP -> airPollution_child
+  familySEP -> biomarker
+  familySEP -> characteristics_child
+  familySEP -> chemical
+  familySEP -> child_diet
+  familySEP -> child_smoking
+  familySEP -> otherChemicals_child
+  maternalAlcohol_preg -> biomarker
+  maternalAlcohol_preg -> characteristics_child
+  maternalSmoking_preg -> biomarker
+  maternalSmoking_preg -> characteristics_child
+  otherChemicals_child -> biomarker
+  otherChemicals_child -> characteristics_child
+  season_visit -> airPollution_child
+  season_visit -> biomarker
+  season_visit -> chemical
+  season_visit -> otherChemicals_child
+  sex_child -> biomarker
+  sex_child -> characteristics_child
+  sex_child -> child_diet
+  sex_child -> child_smoking
+  sex_child -> creatinine
+  time_lastMeal -> biomarker
+  time_lastMeal -> chemical
+  }'
   ##############################################################################
   
   ##############################################################################
