@@ -159,6 +159,9 @@ process_steroids <- function() {
   # Merged data
   metabs <- purrr::reduce(lapply(tbls, "[[", "met"), 
                           .f = dplyr::full_join)
+  ## Replace "EDP" with "EDE"
+  metabs <- metabs |>
+    dplyr::mutate(HelixID = stringr::str_replace(HelixID, "EDP", "EDE"))
   descs <- as.data.frame(
     purrr::reduce(
       lapply(tbls, function(x) {
@@ -174,6 +177,13 @@ process_steroids <- function() {
   # Some sanity checks
   assertthat::are_equal(nrow(metabs), 
                         length(unique(metabs$HelixID)))
+  
+  # Save metabolites data to file
+  readr::write_csv(metabs, 
+                   file = paste0(
+                     Sys.getenv("path_store_res"), 
+                     "steroids.csv"
+                   ))
   
   return(list(
     metabolome = metabs, 
@@ -328,8 +338,21 @@ load_dat_request <- function() {
     # Exclude subjects with not usable test
     dplyr::filter(hs_qual_test != 3)
   
-  if (Sys.getenv("TAR_PROJECT") %in% c("rq2" ,"rq3")) {
-  }
+  # Eventually load metabolites
+  if (Sys.getenv("TAR_PROJECT") %in% c("rq02" ,"rq03", "rq2" ,"rq3")) {
+    metabolites <- suppressMessages(readr::read_csv(
+      file = paste0(
+        Sys.getenv("path_store_res"), 
+        "steroids.csv"
+      )
+    )) |>
+      tibble::as_tibble()
+    
+    dat <- dplyr::inner_join(
+      dat, metabolites, 
+      by = "HelixID"
+    )
+  } # End load metabolites
   
   which_meta <- switch(Sys.getenv("TAR_PROJECT"), 
                        "rq01" = "_rq1", 

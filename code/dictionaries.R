@@ -63,7 +63,7 @@ params <- function(is_hpc) {
   ) # End list of chemicals
   chemicals <- paste0(chemicals, "c")
   metabolites <- c(
-    ""
+    "Cortisone_E"
   ) # End list of metabolites
   clinical_outcome <- "hs_hitrtse"
   variables <- list(
@@ -72,71 +72,113 @@ params <- function(is_hpc) {
     strategy_loq_urine = "div2", 
     creatinine_threshold = 10, 
     ############################################################################
-    rq01 = list(
-      outcome = clinical_outcome, 
-      outcome_negative = "", 
-      exposures = chemicals
-    ), 
     rq1 = list(
       outcome = clinical_outcome, 
       outcome_negative = "", 
       exposures = chemicals
     ), # End options RQ1
-    ############################################################################
-    rq02 = list(
-      outcome = metabolites, 
-      outcome_negative = "", 
-      exposures = chemicals
-    ), 
     rq2 = list(
       outcome = metabolites, 
       outcome_negative = "", 
       exposures = chemicals
     ), # End options RQ2
-    ############################################################################
-    rq03 = list(
-      outcome = clinical_outcome, 
-      outcome_negative = "", 
-      exposures = metabolites
-    ), 
     rq3 = list(
       outcome = clinical_outcome, 
       outcome_negative = "", 
       exposures = metabolites
-    ), # End options RQ3
-    ############################################################################
-    preproc_exposures = list(
-      missings = list(
-        do = TRUE, 
-        threshold_within = 40, 
-        threshold_overall = 40
-      ), 
-      standardization = list(
-        do = TRUE, 
-        center_fun = mean, 
-        scale_fun = sd
-      )
-    ), # End preproc_exposures
-    ############################################################################
-    preproc_outcome = list(
-      bound = list(
-        do = FALSE
-      )
-    ), # End preproc_outcome
-    ############################################################################
-    preproc_covars = list(
-      missings = list(
-        do = TRUE, 
-        threshold_within = 40, 
-        threshold_overall = 40
-      )
-    ) # End preproc_covars
+    ) # End options RQ3
   )
+  ##############################################################################
+  
+  steps <- list(
+    rq1 = list(
+      preproc_exposures = list(
+        missings = list(
+          do = TRUE, 
+          threshold_within = 40, 
+          threshold_overall = 40
+        ), 
+        standardization = list(
+          do = TRUE, 
+          center_fun = mean, 
+          scale_fun = sd
+        )
+      ), # End preproc_exposures
+      preproc_outcome = list(
+        bound = list(
+          do = NULL
+        )
+      ), # End preproc_outcome
+      preproc_covars = list(
+        missings = list(
+          do = TRUE, 
+          threshold_within = 40, 
+          threshold_overall = 40
+        )
+      ) # End preproc_covars
+    ), # End steps RQ1
+    ############################################################################
+    rq2 = list(
+      preproc_exposures = list(
+        missings = list(
+          do = TRUE, 
+          threshold_within = 40, 
+          threshold_overall = 40
+        ), 
+        standardization = list(
+          do = TRUE, 
+          center_fun = mean, 
+          scale_fun = sd
+        )
+      ), # End preproc_exposures
+      preproc_outcome = list(
+        bound = list(
+          do = NULL
+        )
+      ), # End preproc_outcome
+      preproc_covars = list(
+        missings = list(
+          do = TRUE, 
+          threshold_within = 40, 
+          threshold_overall = 40
+        )
+      ) # End preproc_covars
+    ), # End steps RQ2
+    ############################################################################
+    rq3 = list(
+      preproc_exposures = list(
+        missings = list(
+          do = TRUE, 
+          threshold_within = 40, 
+          threshold_overall = 40
+        ), 
+        standardization = list(
+          do = TRUE, 
+          center_fun = mean, 
+          scale_fun = sd
+        )
+      ), # End preproc_exposures
+      preproc_outcome = list(
+        bound = list(
+          do = NULL
+        )
+      ), # End preproc_outcome
+      preproc_covars = list(
+        missings = list(
+          do = TRUE, 
+          threshold_within = 40, 
+          threshold_overall = 40
+        )
+      ) # End preproc_covars
+    ) # End steps RQ3
+    ############################################################################
+  ) # End list of steps
   ##############################################################################
   
   return(list(
     paths = paths, 
-    variables = variables
+    variables = variables, 
+    steps = steps
   ))
 }
 

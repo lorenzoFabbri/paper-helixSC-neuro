@@ -13,7 +13,11 @@ load_dag <- function(dags, exposure, outcome, params_dag) {
   rq <- Sys.getenv("TAR_PROJECT")
   which_dag <- switch(rq, 
                       "rq01" = "chem_to_out", 
-                      "rq1" = "chem_to_out")
+                      "rq1" = "chem_to_out", 
+                      "rq02" = "chem_to_marker", 
+                      "rq2" = "chem_to_marker", 
+                      "rq03" = "marker_to_out", 
+                      "rq3" = "marker_to_out")
   
   dag <- dags[[which_dag]]
   ret$dag <- dag
@@ -80,17 +84,19 @@ select_adjustment_set <- function(dat, meta, res_dag, strategy) {
 #' @return A named list of exposures, covariates, and outcomes. A list.
 #'
 #' @export
-rq_load_data <- function(ids_other_covars, res_dag) {
+rq_load_data <- function(res_dag) {
   rq <- Sys.getenv("TAR_PROJECT")
+  rq <- switch(rq, 
+               "rq01" = "rq1", 
+               "rq1" = "rq1", 
+               "rq02" = "rq2", 
+               "rq2" = "rq2", 
+               "rq03" = "rq3", 
+               "rq3" = "rq3")
   
   # Load data request
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   dat_request <- load_dat_request()
-  
-  # Load eventual other covariates
-  if (!is.null(ids_other_covars)) {
-    other_covars <- lapply(which_covars, function(.path) {})
-  }
   
   # Create one dataset for covariates, one for exposures, and one for outcomes
   dat <- list()
@@ -132,6 +138,47 @@ rq_load_data <- function(ids_other_covars, res_dag) {
 } # End function rq_load_data
 ################################################################################
 
+#' Pre-process data for research questions
+#'
+#' @param dat A named list of tibbles containing the variables of interest. A list.
+#'
+#' @return A named list of pre-processed tibbles containing the variables of interest.
+#' A list.
+#'
+#' @export
+rq_prepare_data <- function(dat) {
+  rq <- Sys.getenv("TAR_PROJECT")
+  rq <- switch(rq, 
+               "rq01" = "rq1", 
+               "rq1" = "rq1", 
+               "rq02" = "rq2", 
+               "rq2" = "rq2", 
+               "rq03" = "rq3", 
+               "rq3" = "rq3")
+  params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
+  steps_exposures <- params_dat$steps[[rq]]$preproc_exposures
+  steps_covars <- params_dat$steps[[rq]]$preproc_covars
+  
+  # Process exposures
+  dat$exposures <- myphd::extract_cohort(dat = dat$exposures, 
+                                         id_var = params_dat$variables$identifier)
+  dat$exposures <- myphd::preproc_data(dat = dat$exposures, 
+                                       dic_steps = steps_exposures, 
+                                       id_var = params_dat$variables$identifier, 
+                                       by_var = "cohort")
+  dat$exposures <- dplyr::select(dat$exposures, 
+                                 -dplyr::any_of("cohort"))
+  
+  # Process covariates
+  dat$covariates <- myphd::preproc_data(dat = dat$covariates, 
+                                        dic_steps = steps_covars, 
+                                        id_var = params_dat$variables$identifier, 
+                                        by_var = "cohort")
+  
+  return(dat)
+} # End function rq_prepare_data
+################################################################################
+
 #' Estimate weights and explore covariance balance
 #'
 #' @param dat A named list of tibbles containing the variables of interest. A list.
@@ -150,17 +197,15 @@ rq_estimate_weights <- function(dat, save_results) {
                "rq03" = "rq3", 
                "rq3" = "rq3")
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
-  id_var <- params_dat$variables$identifier
   outcome <- params_dat$variables[[rq]]$outcome
-  steps_outcome <- params_dat$variables$preproc_outcome
   params_ana <- params_analyses()[[rq]]
   
   # Step 1: estimate weights for covariate balance
   list_exposures <- names(dat$exposures)
   list_exposures <- setdiff(list_exposures, 
-                            id_var)
+                            params_dat$variables$identifier)
   list_covariates <- setdiff(colnames(dat$covariates), 
-                             id_var)
+                             params_dat$variables$identifier)
   ## Loop over exposures
   future::plan(future::multisession, 
                workers = floor(future::availableCores() / 6))
@@ -174,7 +219,7 @@ rq_estimate_weights <- function(dat, save_results) {
                                              dplyr::all_of(c(x, 
                                                              params_dat$variables$identifier))), 
                                dat$covariates, 
-                               by = id_var) |>
+                               by = params_dat$variables$identifier) |>
           dplyr::select(-params_dat$variables$identifier), 
         exposure = x, 
         covariates = list_covariates, 
@@ -205,6 +250,7 @@ rq_estimate_weights <- function(dat, save_results) {
   qs::qsave(x = estimated_weights, 
             file = paste0(
               path_save_weights, 
+              rq, "_", 
               params_ana$method_weightit, 
               ".qs"
             ), 
@@ -314,7 +360,7 @@ rq_fit_model_weighted <- function(dat, weights) {
   rq <- Sys.getenv("TAR_PROJECT")
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   outcome <- params_dat$variables[[rq]]$outcome
-  steps_outcome <- params_dat$variables$preproc_outcome
+  steps_outcome <- params_dat$steps[[rq]]$preproc_outcome
   params_ana <- params_analyses()[[rq]]
   
   # Process outcome
@@ -371,7 +417,11 @@ rq_fit_model_weighted <- function(dat, weights) {
         dplyr::select(-params_dat$variables$identifier) |>
         dplyr::filter(!is.na(.data[[outcome]]))
       
-      weights_exposure <- weights[[exposure]]$weights[-idxs_missing_outcome]
+      if (length(idxs_missing_outcome) > 0) {
+        weights_exposure <- weights[[exposure]]$weights[-idxs_missing_outcome]
+      } else {
+        weights_exposure <- weights[[exposure]]$weights
+      }
       
       fit <- myphd::fit_model_weighted(
         dat = dat_analysis, 
@@ -561,7 +611,7 @@ run_mtp <- function(dat, shift_exposure) {
   rq <- Sys.getenv("TAR_PROJECT")
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   outcome <- params_dat$variables[[rq]]$outcome
-  steps_outcome <- params_dat$variables$preproc_outcome
+  steps_outcome <- params_dat$steps[[rq]]$preproc_outcome
   params_ana <- params_analyses()[[rq]]
   
   # Process outcome

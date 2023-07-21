@@ -1,13 +1,11 @@
 source("DAGs/dag_v2.R")
 source("code/dictionaries.R")
 source("code/data.R")
-source("code/research_questions/rq1.R")
-source("code/research_questions/utils.R")
+source("code/utils.R")
 
 targets::tar_option_set(
   format = "qs"
 )
-options(clustermq.scheduler = "multicore")
 
 params_dag <- list(
   type = "minimal", 
@@ -15,19 +13,26 @@ params_dag <- list(
 )
 id_var <- "HelixID"
 grouping_var <- "cohort"
+exposure <- switch(Sys.getenv("TAR_PROJECT"), 
+                   "rq01" = "chemical", 
+                   "rq02" = "chemical", 
+                   "rq03" = "biomarker")
+outcome <- switch(Sys.getenv("TAR_PROJECT"), 
+                  "rq01" = "intelligence", 
+                  "rq02" = "biomarker", 
+                  "rq03" = "intelligence")
 
 list(
   targets::tar_target(
     name = dag, 
     command = load_dag(dags = dags(), 
-                       exposure = "chemical", 
-                       outcome = "intelligence", 
+                       exposure = exposure, 
+                       outcome = outcome, 
                        params_dag = params_dag)
   ), # End dag target
   targets::tar_target(
     name = load_dat, 
-    command = rq_load_data(ids_other_covars = c(), 
-                           res_dag = dag)
+    command = rq_load_data(res_dag = dag)
   ), # End load_dat target
   ##############################################################################
   targets::tar_target(
@@ -85,7 +90,7 @@ list(
   ##############################################################################
   targets::tar_target(
     name = preproc_dat, 
-    command = rq1_prepare_data(dat = load_dat)
+    command = rq_prepare_data(dat = load_dat)
   ), # End preproc_dat target
   ##############################################################################
   targets::tar_target(

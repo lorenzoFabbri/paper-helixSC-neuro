@@ -4,7 +4,7 @@ Sys.setenv(is_hpc = TRUE)
 path_store <- ifelse(
   Sys.getenv("is_hpc"), 
   "/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/_targets/_targetsRQ", 
-  "~/mounts/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/_targets/_targetsRQ"
+  "~/mounts/rstudioserver/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/_targets/_targetsRQ"
 )
 Sys.setenv(path_store = path_store)
 
@@ -12,21 +12,17 @@ Sys.setenv(path_store = path_store)
 path_store_res <- ifelse(
   Sys.getenv("is_hpc"), 
   "/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/results/", 
-  "~/mounts/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/results/"
+  "~/mounts/rstudioserver/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/results/"
 )
 Sys.setenv(path_store_res = path_store_res)
-
 ################################################################################
-Sys.setenv(TAR_PROJECT = "rq01")
-store <- paste0(path_store, "01")
-targets::tar_make(script = "_targets_rq01.R", 
-                  store = store)
-targets::tar_load_everything(store = store)
 
-################################################################################
-Sys.setenv(TAR_PROJECT = "rq1")
-store <- paste0(path_store, "1")
-targets::tar_make(script = "_targets_rq1.R", 
+rq <- "2"
+Sys.setenv(TAR_PROJECT = paste0("rq0", rq))
+store <- paste0(path_store, paste("0", rq))
+targets::tar_make(script = "_targets_rq0X.R", 
                   store = store)
-targets::tar_load_everything(store = store)
-#targets::tar_destroy(destroy = "all", store = store)
+Sys.setenv(TAR_PROJECT = paste0("rq", rq))
+store <- paste0(path_store, rq)
+targets::tar_make(script = "_targets_rqX.R", 
+                  store = store)
