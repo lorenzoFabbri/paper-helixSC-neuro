@@ -187,7 +187,7 @@ rq_prepare_data <- function(dat) {
 #' balance exploration. A list.
 #'
 #' @export
-rq_estimate_weights <- function(dat, save_results) {
+rq_estimate_weights <- function(dat, save_results, parallel, workers) {
   rq <- Sys.getenv("TAR_PROJECT")
   rq <- switch(rq, 
                "rq01" = "rq1", 
@@ -207,8 +207,12 @@ rq_estimate_weights <- function(dat, save_results) {
   list_covariates <- setdiff(colnames(dat$covariates), 
                              params_dat$variables$identifier)
   ## Loop over exposures
-  future::plan(future::multisession, 
-               workers = floor(future::availableCores() / 6))
+  if (parallel == TRUE) {
+    future::plan(future::multisession, 
+                 workers = workers)
+  } else {
+    future::plan(future::sequential())
+  }
   progressr::with_progress({
     p <- progressr::progressor(steps = length(list_exposures))
     
@@ -258,8 +262,12 @@ rq_estimate_weights <- function(dat, save_results) {
   ##############################################################################
   
   # Step 2: explore balance
-  future::plan(future::multisession, 
-               workers = floor(future::availableCores() / 6))
+  if (parallel == TRUE) {
+    future::plan(future::multisession, 
+                 workers = 2)
+  } else {
+    future::plan(future::sequential())
+  }
   balance <- furrr::future_map(names(estimated_weights), function(x) {
     myphd::explore_balance(exposure = strsplit(x, split = "_")[[1]][2],
                            covariates = estimated_weights[[x]]$covs |>
@@ -274,8 +282,12 @@ rq_estimate_weights <- function(dat, save_results) {
   
   ## Save results
   if (save_results) {
-    future::plan(future::multisession, 
-                 workers = floor(future::availableCores() / 10))
+    if (parallel == TRUE) {
+      future::plan(future::multisession, 
+                   workers = 2)
+    } else {
+      future::plan(future::sequential())
+    }
     furrr::future_map(names(balance), function(x) {
       ### bal.plot
       .path <- paste0(
@@ -356,7 +368,7 @@ rq_estimate_weights <- function(dat, save_results) {
 #' @return
 #'
 #' @export
-rq_fit_model_weighted <- function(dat, weights) {
+rq_fit_model_weighted <- function(dat, weights, parallel, workers) {
   rq <- Sys.getenv("TAR_PROJECT")
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   outcome <- params_dat$variables[[rq]]$outcome
@@ -401,8 +413,12 @@ rq_fit_model_weighted <- function(dat, weights) {
   } # End check if weights are not provided
   
   ## Loop over each exposure
-  future::plan(future::multisession, 
-               workers = floor(future::availableCores() / 6))
+  if (parallel == TRUE) {
+    future::plan(future::multisession, 
+                 workers = workers)
+  } else {
+    future::plan(future::sequential())
+  }
   progressr::with_progress({
     p <- progressr::progressor(steps = length(list_exposures))
     
@@ -467,13 +483,17 @@ rq_fit_model_weighted <- function(dat, weights) {
 #' @return
 #'
 #' @export
-rq_estimate_marginal_effects <- function(fits) {
+rq_estimate_marginal_effects <- function(fits, parallel, workers) {
   rq <- Sys.getenv("TAR_PROJECT")
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   
   # Loop over the fitted models to estimate marginal effects
-  future::plan(future::multisession, 
-               workers = floor(future::availableCores() / 6))
+  if (parallel == TRUE) {
+    future::plan(future::multisession, 
+                 workers = workers)
+  } else {
+    future::plan(future::sequential())
+  }
   progressr::with_progress({
     p <- progressr::progressor(steps = length(list_exposures))
     
@@ -487,6 +507,7 @@ rq_estimate_marginal_effects <- function(fits) {
       
       ############################################################################
       # G-computation (ADRF)
+      ## Values of exposure for counterfactual predictions, based on quantiles
       values <- with(dat, seq(
         quantile(get(exposure), 0.1), 
         quantile(get(exposure), 0.9), 

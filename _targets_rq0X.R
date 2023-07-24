@@ -110,11 +110,5 @@ list(
     command = myphd::describe_data(dat = preproc_dat$outcome, 
                                    id_var = id_var, 
                                    grouping_var = grouping_var)
-  ), # End desc_data_out_proc target
-  ##############################################################################
-  targets::tar_target(
-    name = weights, 
-    command = rq_estimate_weights(dat = preproc_dat, 
-                                  save_results = TRUE)
-  ) # End weights target
+  ) # End desc_data_out_proc target
 )

@@ -31,8 +31,7 @@ list(
   ), # End dag target
   targets::tar_target(
     name = load_dat, 
-    command = rq_load_data(ids_other_covars = c(), 
-                           res_dag = dag)
+    command = rq_load_data(res_dag = dag)
   ), # End load_dat target
   ##############################################################################
   targets::tar_target(
@@ -43,16 +42,20 @@ list(
   targets::tar_target(
     name = weights, 
     command = rq_estimate_weights(dat = preproc_dat, 
-                                  save_results = FALSE)
+                                  save_results = FALSE, 
+                                  parallel = FALSE)
   ), # End weights target
   targets::tar_target(
     name = weighted_fits, 
     command = rq_fit_model_weighted(dat = preproc_dat, 
-                                    weights = weights$estimated_weights)
+                                    weights = weights$estimated_weights, 
+                                    parallel = FALSE)
   ), # End weighted_fits target
   targets::tar_target(
     name = marginal, 
-    command = rq_estimate_marginal_effects(fits = weighted_fits$fits)
+    command = rq_estimate_marginal_effects(fits = weighted_fits$fits, 
+                                           parallel = TRUE, 
+                                           workers = 6)
   ) # End marginal target
   ##############################################################################
 )

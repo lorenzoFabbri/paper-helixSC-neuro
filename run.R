@@ -26,3 +26,5 @@ Sys.setenv(TAR_PROJECT = paste0("rq", rq))
 store <- paste0(path_store, rq)
 targets::tar_make(script = "_targets_rqX.R", 
                   store = store)
+
+targets::tar_load_everything(store = store)

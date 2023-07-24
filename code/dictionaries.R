@@ -1,4 +1,4 @@
-# Script containing dictionaries (e.g., exposures)
+# Script containing dictionaries
 
 ################################################################################
 # Parameters for entire paper
