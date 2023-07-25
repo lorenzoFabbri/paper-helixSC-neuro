@@ -288,6 +288,19 @@ rq_estimate_weights <- function(dat, save_results, parallel, workers) {
     } else {
       future::plan(future::sequential())
     }
+    
+    invisible(
+      lapply(c("figures", "tables"), function(x) {
+        path_save_res <- paste0(
+          "results/", x, "/", 
+          Sys.getenv("TAR_PROJECT")
+        )
+        if (!dir.exists(path_save_res)) {
+          dir.create(path_save_res)
+        }
+      })
+    )
+    
     furrr::future_map(names(balance), function(x) {
       ### bal.plot
       .path <- paste0(
@@ -302,7 +315,7 @@ rq_estimate_weights <- function(dat, save_results, parallel, workers) {
                       gridExtra::marrangeGrob(grobs = balance[[x]]$graph,
                                               nrow = 1,
                                               ncol = 1),
-                      dpi = 480, type = "cairo")
+                      dpi = 480)
       
       ### bal.tab
       .path <- paste0(
@@ -315,10 +328,14 @@ rq_estimate_weights <- function(dat, save_results, parallel, workers) {
       )
       tab <- balance[[x]]$tab$Balance |>
         as.data.frame() |>
-        tibble::rownames_to_column(var = "variable")
-      colnames(tab) <- c("variable", "type",
-                         "unadj. correlation", "adj. correlation",
-                         "threshold", "adj. KS")
+        tibble::rownames_to_column(var = "variable") |>
+        dplyr::rename(
+          variable = variable, 
+          type = Type, 
+          `unadj. correlation` = `Corr.Un`, 
+          `adj. correlation` = `Corr.Adj`, 
+          threshold = `R.Threshold`
+        )
       tab <- tab |>
         dplyr::arrange(dplyr::desc(`adj. correlation`),
                        variable) |>
@@ -347,10 +364,10 @@ rq_estimate_weights <- function(dat, save_results, parallel, workers) {
       ".pdf"
     )
     ggplot2::ggsave(.path,
-                    gridExtra::marrangeGrob(grobs = sapply(balance, `[[`, "love"),
+                    gridExtra::marrangeGrob(grobs = lapply(balance, `[[`, "love"),
                                             nrow = 1,
                                             ncol = 1),
-                    dpi = 480, height = 6, type = "cairo")
+                    dpi = 480, height = 6)
   } # End save_results
   
   return(list(
@@ -495,7 +512,7 @@ rq_estimate_marginal_effects <- function(fits, parallel, workers) {
     future::plan(future::sequential())
   }
   progressr::with_progress({
-    p <- progressr::progressor(steps = length(list_exposures))
+    p <- progressr::progressor(steps = length(fits))
     
     ret <- furrr::future_map(seq_along(fits), function(idx, p) {
       p()
@@ -596,14 +613,35 @@ rq_estimate_marginal_effects <- function(fits, parallel, workers) {
       ############################################################################
       
       ############################################################################
-      #
+      # Comparisons (marginal estimates)
+      avg_comp <- eval(
+        parse(
+          text = glue::glue(
+            "marginaleffects::avg_comparisons(
+            model = mod, 
+            variables = list(
+              {exposure} = {glue::double_quote(type)}
+            ), 
+            wts = weights
+          )", 
+            exposure = exposure, 
+            type = "iqr"
+          )
+        )
+      ) |> # End marginal estimates (avg_comparisons)
+        marginaleffects::tidy() |>
+        dplyr::rename(
+          variable = term, 
+          se = std.error
+        )
       ############################################################################
       
       return(list(
         gcomp = gcomp, 
         adrf = adrf, 
         slopes = slopes, 
-        amef = amef
+        amef = amef, 
+        comparisons = avg_comp
       ))
     }, 
     .options = furrr::furrr_options(

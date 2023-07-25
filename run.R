@@ -27,4 +27,5 @@ store <- paste0(path_store, rq)
 targets::tar_make(script = "_targets_rqX.R", 
                   store = store)
 
-targets::tar_load_everything(store = store)
+#targets::tar_destroy(destroy = "all", store = store)
+#targets::tar_load_everything(store = store)

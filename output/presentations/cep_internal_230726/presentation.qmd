@@ -4,7 +4,6 @@ subtitle: "Update on *paper 3* of my PhD"
 date: 2023-07-26
 author: Lorenzo Fabbri
 institute: ISGlobal
-
 format:
   beamer:
     pdf-engine: xelatex
@@ -14,19 +13,15 @@ format:
 geometry:
   - left=10mm
   - right=10mm
-
 slide-number: true
-
 bibliography: ../../../../../PhD.bib
 link-citations: true
 linkcolor: blue
-
 execute:
   echo: false
   warning: false
   error: false
   message: false
-
 editor_options: 
   chunk_output_type: console
 ---
@@ -168,3 +163,5 @@ Methods:
 ## Preliminary results
 
 ## Next steps
+
+- `lmtp` will be the focus of my research stay with ... at ...
