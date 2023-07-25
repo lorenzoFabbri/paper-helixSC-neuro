@@ -29,6 +29,8 @@ editor_options:
 ```{r}
 #| include: false
 here::i_am("presentation.qmd")
+
+library(patchwork)
 ```
 
 ## Overview
@@ -100,7 +102,7 @@ flowchart LR
 ![`myphd`](artwork/myphd.png){width=300}
 
 - URL manual: https://isglobal-cep.github.io/myphd/
-- To install it: `remotes::install_github("isglobal-cep/myphd")`
+- To install it: `remotes::install_github("isglobal-cep/myphd")`.
 
 :::: {.columns align=center}
 
@@ -158,10 +160,57 @@ Methods:
 
 ## Population description: correlations
 
-![`Correlation numerical variables.`](artwork/corr.png)
+![Correlation numerical variables.](artwork/corr.png)
 
-## Preliminary results
+## Preliminary results: weights
+
+```{r}
+targets::tar_load(c("weights", 
+                    "weighted_fits", 
+                    "marginal"), 
+                  store = paste0(
+                    "~/mounts/rstudioserver/PROJECTES/HELIX_OMICS/",  
+                    "DATA_PREVIOUS_MIGRATION/lorenzoF/", 
+                    "data/data_paper3/_targets/_targetsRQ2/"
+                  ))
+```
+
+```{r}
+weights$balance$hs_bpa_c$love
+```
+
+## Preliminary results: weighted G-computation
+
+- Marginal effects of exposure to non-persistent EDCs on Cortisone: comparison `Q3 - Q1`.
+
+![Effect estimates for EDCs and Cortisone.](artwork/effects_cortisone.png){width=130%, fig-align="center"}
+
+```{r}
+gtsummary::tbl_summary(weighted_fits$fits$hs_bpa_c$dat |>
+                         dplyr::rename(BPA = hs_bpa_c, 
+                                       cortisone = Cortisone_E), 
+                       include = c("BPA", "cortisone"), 
+                       by = "cohort") |>
+  gtsummary::add_overall() |>
+  gtsummary::as_kable_extra(booktabs = TRUE) |>
+  kableExtra::kable_styling(latex_options = "scale_down")
+```
+
+## Preliminary results: ADRF and AMEF
+
+```{r}
+marginal$marginal_effects$hs_bpa_c$adrf / 
+  marginal$marginal_effects$hs_bpa_c$amef
+```
 
 ## Next steps
 
-- `lmtp` will be the focus of my research stay with ... at ...
+- Dealing with creatinine.
+
+![Comparison of effect estimation.](artwork/comp_creatinineAdj.png)
+
+- Developing a more appropriate pipeline to deal with censored exposures and metabolites.
+
+- Dealing with more appropriate modeling strategies?
+
+  - `lmtp` will be the focus of my research stay (*Mixtures done right*) under the supervision of Prof. Jessica G. Young and Prof. Ivan Diaz (who formalized causal identification of interventions that depend on the natural value of treatment).
