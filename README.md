@@ -1,5 +1,5 @@
-# Paper 3: multiple exposures, multi-omics, and neuro-development (HELIX sub-cohort)
+# Paper 3: endocrine disruptors, corticosteroids, and neuro-development (HELIX sub-cohort)
 
 ## Things to do
-* [OSF project](https://osf.io/rwsge/);
-* Add DOI to the repository with Zenodo.
+* [OSF project](https://osf.io/rwsge/).
+* Add DOI to the repository with [Zenodo](https://zenodo.org/).
