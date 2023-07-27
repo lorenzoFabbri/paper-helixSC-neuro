@@ -2,43 +2,23 @@
 
 dags <- function() {
   ##############################################################################
-  chem_to_out <- ggdag::dagify(
-    airPollution_child ~ cohort + familySEP + season_visit,
-    airPollution_preg ~ cohort + maternalSEP_preg + paternalSEP_preg,
-    breastfeeding ~ ethnicity_mother + maternalSEP_preg,
-    bw ~ airPollution_preg + breastfeeding + cohort + ethnicity_child + ethnicity_mother + maternalAlcohol_preg + maternalDiet_preg + maternalSEP_preg + maternalSmoking_preg + otherChemicals_preg + paternalSEP_preg + sex_child,
-    characteristics_child ~ age_child + child_diet + child_smoking + cohort + ethnicity_child + ethnicity_mother + sex_child,
-    chemical ~ characteristics_child + child_diet + cohort + familySEP + season_visit + time_lastMeal,
-    child_diet ~ age_child + cohort + ethnicity_mother + familySEP + sex_child,
-    child_smoking ~ age_child + ethnicity_child + familySEP + sex_child,
-    envFactors_visit ~ season_visit,
-    familySEP ~ ethnicity_mother,
-    gestational_age ~ airPollution_preg + ethnicity_child + ethnicity_mother + maternalAlcohol_preg + maternalDiet_preg + maternalSEP_preg + maternalSmoking_preg + otherChemicals_preg + paternalSEP_preg,
-    intelligence ~ age_child + airPollution_child + airPollution_preg + breastfeeding + bw + characteristics_child + chemical + child_diet + child_smoking + familySEP + gestational_age + maternalAlcohol_preg + maternalDiet_preg + maternalSEP_preg + maternalSmoking_preg + neuropsychologicalDiagnosis_child + otherChemicals_child + otherChemicals_preg + paternalSEP_preg + qualityTesting_child,
+  chem_to_marker <- ggdag::dagify(
+    biomarker ~ age_child + characteristics_child + chemical + child_diet + child_smoking + cohort + creatinine + ethnicity_child + ethnicity_mother + familySEP + season_visit + sex_child + time_lastMeal,
+    breastfeeding ~ ethnicity_mother + maternalSEP_preg + paternalSEP_preg,
+    bw ~ cohort + ethnicity_child + ethnicity_mother + gestational_age + maternalAlcohol_preg + maternalSEP_preg + maternalSmoking_preg + paternalSEP_preg,
+    characteristics_child ~ age_child + bw + child_diet + child_smoking + cohort + ethnicity_child + ethnicity_mother + familySEP + gestational_age + maternalAlcohol_preg + maternalDiet_preg + maternalSEP_preg + maternalSmoking_preg + paternalSEP_preg + sex_child,
+    chemical ~ characteristics_child + child_diet + cohort + creatinine + ethnicity_child + familySEP + season_visit + sex_child + time_lastMeal,
+    child_diet ~ cohort + ethnicity_child + ethnicity_mother + familySEP + sex_child,
+    child_smoking ~ ethnicity_child + familySEP + sex_child,
+    creatinine ~ age_child + characteristics_child + child_smoking + ethnicity_child + familySEP + sex_child,
+    familySEP ~ ethnicity_mother + maternalSEP_preg + paternalSEP_preg,
     maternalAlcohol_preg ~ ethnicity_mother + maternalSEP_preg + paternalSEP_preg,
-    maternalDiet_preg ~ cohort + ethnicity_mother + maternalSEP_preg + paternalSEP_preg,
+    maternalDiet_preg ~ ethnicity_mother + maternalSEP_preg + paternalSEP_preg,
     maternalSEP_preg ~ ethnicity_mother,
     maternalSmoking_preg ~ ethnicity_mother + maternalSEP_preg + paternalSEP_preg,
-    neuropsychologicalDiagnosis_child ~ age_child + airPollution_child + airPollution_preg + breastfeeding + bw + child_diet + child_smoking + ethnicity_child + ethnicity_mother + familySEP + gestational_age + maternalAlcohol_preg + maternalDiet_preg + maternalSEP_preg + maternalSmoking_preg + otherChemicals_child + otherChemicals_preg + paternalSEP_preg + sex_child,
-    otherChemicals_child ~ child_diet + child_smoking + cohort + familySEP,
-    otherChemicals_preg ~ cohort + maternalSEP_preg + maternalSmoking_preg + paternalSEP_preg,
+    neuropsychologicalDiagnosis_child ~ maternalSEP_preg + sex_child,
+    outcome ~ age_child + biomarker + breastfeeding + characteristics_child + chemical + child_diet + child_smoking + cohort + creatinine + envFactors_visit + ethnicity_child + ethnicity_mother + familySEP + maternalAlcohol_preg + maternalDiet_preg + maternalSEP_preg + maternalSmoking_preg + neuropsychologicalDiagnosis_child + paternalSEP_preg + sex_child,
     qualityTesting_child ~ envFactors_visit,
-    exposure = "chemical",
-    outcome = "intelligence"
-  )
-  ##############################################################################
-  
-  ##############################################################################
-  chem_to_marker <- ggdag::dagify(
-    airPollution_child ~ cohort + ethnicity_child + familySEP + season_visit,
-    biomarker ~ age_child + airPollution_child + characteristics_child + chemical + child_diet + child_smoking + cohort + creatinine + ethnicity_child + familySEP + maternalAlcohol_preg + maternalSmoking_preg + otherChemicals_child + season_visit + sex_child + time_lastMeal,
-    characteristics_child ~ age_child + airPollution_child + child_diet + child_smoking + cohort + ethnicity_child + familySEP + maternalAlcohol_preg + maternalSmoking_preg + otherChemicals_child + sex_child,
-    chemical ~ characteristics_child + child_diet + cohort + creatinine + ethnicity_child + familySEP + season_visit + time_lastMeal,
-    child_diet ~ cohort + ethnicity_child + familySEP + sex_child,
-    child_smoking ~ cohort + ethnicity_child + familySEP + sex_child,
-    creatinine ~ age_child + characteristics_child + ethnicity_child + sex_child,
-    familySEP ~ cohort,
-    otherChemicals_child ~ child_diet + child_smoking + cohort + ethnicity_child + familySEP + season_visit,
     exposure = "chemical",
     outcome = "biomarker"
   )
@@ -46,36 +26,29 @@ dags <- function() {
   
   ##############################################################################
   marker_to_out <- ggdag::dagify(
-    airPollution_child ~ cohort + familySEP + season_visit,
-    airPollution_preg ~ cohort + maternalSEP_preg + paternalSEP_preg,
-    biomarker ~ age_child + airPollution_child + characteristics_child + chemical + child_diet + child_smoking + cohort + ethnicity_child + ethnicity_mother + familySEP + otherChemicals_child + season_visit + sex_child + time_lastMeal,
-    breastfeeding ~ ethnicity_mother + maternalSEP_preg,
-    bw ~ airPollution_preg + breastfeeding + cohort + ethnicity_child + ethnicity_mother + maternalAlcohol_preg + maternalDiet_preg + maternalSEP_preg + maternalSmoking_preg + otherChemicals_preg + paternalSEP_preg + sex_child,
-    characteristics_child ~ age_child + child_diet + child_smoking + cohort + ethnicity_child + ethnicity_mother + sex_child,
-    chemical ~ characteristics_child + child_diet + cohort + familySEP + season_visit + time_lastMeal,
-    child_diet ~ age_child + cohort + ethnicity_mother + familySEP + sex_child,
-    child_smoking ~ age_child + ethnicity_child + familySEP + sex_child,
-    envFactors_visit ~ season_visit,
-    familySEP ~ ethnicity_mother,
-    gestational_age ~ airPollution_preg + ethnicity_child + ethnicity_mother + maternalAlcohol_preg + maternalDiet_preg + maternalSEP_preg + maternalSmoking_preg + otherChemicals_preg + paternalSEP_preg,
-    intelligence ~ age_child + airPollution_child + airPollution_preg + biomarker + breastfeeding + bw + characteristics_child + chemical + child_diet + child_smoking + familySEP + gestational_age + maternalAlcohol_preg + maternalDiet_preg + maternalSEP_preg + maternalSmoking_preg + neuropsychologicalDiagnosis_child + otherChemicals_child + otherChemicals_preg + paternalSEP_preg + qualityTesting_child,
+    biomarker ~ age_child + characteristics_child + chemical + child_diet + child_smoking + cohort + creatinine + ethnicity_child + ethnicity_mother + familySEP + season_visit + sex_child + time_lastMeal,
+    breastfeeding ~ ethnicity_mother + maternalSEP_preg + paternalSEP_preg,
+    bw ~ cohort + ethnicity_child + ethnicity_mother + gestational_age + maternalAlcohol_preg + maternalSEP_preg + maternalSmoking_preg + paternalSEP_preg,
+    characteristics_child ~ age_child + bw + child_diet + child_smoking + cohort + ethnicity_child + ethnicity_mother + familySEP + gestational_age + maternalAlcohol_preg + maternalDiet_preg + maternalSEP_preg + maternalSmoking_preg + paternalSEP_preg + sex_child,
+    chemical ~ characteristics_child + child_diet + cohort + creatinine + ethnicity_child + familySEP + season_visit + sex_child + time_lastMeal,
+    child_diet ~ cohort + ethnicity_child + ethnicity_mother + familySEP + sex_child,
+    child_smoking ~ ethnicity_child + familySEP + sex_child,
+    creatinine ~ age_child + characteristics_child + child_smoking + ethnicity_child + familySEP + sex_child,
+    familySEP ~ ethnicity_mother + maternalSEP_preg + paternalSEP_preg,
     maternalAlcohol_preg ~ ethnicity_mother + maternalSEP_preg + paternalSEP_preg,
-    maternalDiet_preg ~ cohort + ethnicity_mother + maternalSEP_preg + paternalSEP_preg,
+    maternalDiet_preg ~ ethnicity_mother + maternalSEP_preg + paternalSEP_preg,
     maternalSEP_preg ~ ethnicity_mother,
     maternalSmoking_preg ~ ethnicity_mother + maternalSEP_preg + paternalSEP_preg,
-    neuropsychologicalDiagnosis_child ~ age_child + airPollution_child + airPollution_preg + breastfeeding + bw + child_diet + child_smoking + ethnicity_child + ethnicity_mother + familySEP + gestational_age + maternalAlcohol_preg + maternalDiet_preg + maternalSEP_preg + maternalSmoking_preg + otherChemicals_child + otherChemicals_preg + paternalSEP_preg + sex_child,
-    otherChemicals_child ~ child_diet + child_smoking + cohort + familySEP,
-    otherChemicals_preg ~ cohort + maternalSEP_preg + maternalSmoking_preg + paternalSEP_preg,
+    neuropsychologicalDiagnosis_child ~ maternalSEP_preg + sex_child,
+    outcome ~ age_child + biomarker + breastfeeding + characteristics_child + chemical + child_diet + child_smoking + cohort + creatinine + envFactors_visit + ethnicity_child + ethnicity_mother + familySEP + maternalAlcohol_preg + maternalDiet_preg + maternalSEP_preg + maternalSmoking_preg + neuropsychologicalDiagnosis_child + paternalSEP_preg + sex_child,
     qualityTesting_child ~ envFactors_visit,
     exposure = "biomarker",
-    outcome = "intelligence"
+    outcome = "outcome"
   )
   ##############################################################################
   
   return(list(
-    chem_to_out = chem_to_out, 
     chem_to_marker = chem_to_marker, 
     marker_to_out = marker_to_out)
     )
-  
 }

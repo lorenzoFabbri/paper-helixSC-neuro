@@ -17,9 +17,9 @@ exposure <- switch(Sys.getenv("TAR_PROJECT"),
                    "rq2" = "chemical", 
                    "rq3" = "biomarker")
 outcome <- switch(Sys.getenv("TAR_PROJECT"), 
-                  "rq1" = "intelligence", 
+                  "rq1" = "outcome", 
                   "rq2" = "biomarker", 
-                  "rq3" = "intelligence")
+                  "rq3" = "outcome")
 
 list(
   targets::tar_target(
