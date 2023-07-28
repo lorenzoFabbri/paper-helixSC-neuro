@@ -4,23 +4,23 @@
     "Repositories": [
       {
         "Name": "BioCsoft",
-        "URL": "https://bioconductor.org/packages/3.14/bioc"
+        "URL": "https://bioconductor.org/packages/3.17/bioc"
       },
       {
         "Name": "BioCann",
-        "URL": "https://bioconductor.org/packages/3.14/data/annotation"
+        "URL": "https://bioconductor.org/packages/3.17/data/annotation"
       },
       {
         "Name": "BioCexp",
-        "URL": "https://bioconductor.org/packages/3.14/data/experiment"
+        "URL": "https://bioconductor.org/packages/3.17/data/experiment"
       },
       {
         "Name": "BioCworkflows",
-        "URL": "https://bioconductor.org/packages/3.14/workflows"
+        "URL": "https://bioconductor.org/packages/3.17/workflows"
       },
       {
         "Name": "BioCbooks",
-        "URL": "https://bioconductor.org/packages/3.14/books"
+        "URL": "https://bioconductor.org/packages/3.17/books"
       },
       {
         "Name": "CRAN",
@@ -2881,7 +2881,7 @@
       "RemoteRepo": "myphd",
       "RemoteUsername": "isglobal-cep",
       "RemoteRef": "HEAD",
-      "RemoteSha": "c6c065d94de7626162919fd6cbeef03d398bbadd",
+      "RemoteSha": "9c22c17aade0e8b158d753dd45aec192ad2277f8",
       "Requirements": [
         "Hmisc",
         "WeightIt",
@@ -2907,7 +2907,6 @@
         "magrittr",
         "mgcv",
         "missRanger",
-        "myphd",
         "naniar",
         "pkgdown",
         "purrr",
@@ -2921,7 +2920,7 @@
         "tidyr",
         "visdat"
       ],
-      "Hash": "d063682ce7e988de21f740415a568481"
+      "Hash": "83f4a26a788e15825f4739751bef0663"
     },
     "naniar": {
       "Package": "naniar",

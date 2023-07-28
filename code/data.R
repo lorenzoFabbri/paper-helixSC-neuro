@@ -126,15 +126,15 @@ process_steroids <- function() {
     dd <- dplyr::inner_join(dd, creat, 
                             by = params_dat$variables$identifier)
     
-    ## Take care of <LOQ
+    ## Take care of <LOD/LOQ
     cols <- colnames(dd) |>
       setdiff(params_dat$variables$identifier)
     dd <- dd |>
       dplyr::mutate(dplyr::across(dplyr::all_of(cols), 
                                   ~ ifelse(is.na(.) & creatinine > params_dat$variables$creatinine_threshold, 
-                                           handle_loq_urine(loq[loq$metabolite == dplyr::cur_column(), 
-                                                                "loq"], 
-                                                            params_dat$variables$strategy_loq_urine), 
+                                           handle_llodq_urine(loq[loq$metabolite == dplyr::cur_column(), 
+                                                                  "loq"], 
+                                                              params_dat$variables$strategy_loq_urine), 
                                            .)))
     
     ### Take care of contamination and non-detected
@@ -200,7 +200,7 @@ process_steroids <- function() {
 #' @return
 #'
 #' @export
-handle_loq_urine <- function(loq, strategy) {
+handle_llodq_urine <- function(loq, strategy) {
   if (strategy == "div2") {
     new_val <- as.numeric(loq) / 2
   }

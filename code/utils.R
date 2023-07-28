@@ -159,21 +159,36 @@ rq_prepare_data <- function(dat) {
   steps_exposures <- params_dat$steps[[rq]]$preproc_exposures
   steps_covars <- params_dat$steps[[rq]]$preproc_covars
   
+  # Process covariates
+  dat$covariates <- myphd::preproc_data(dat = dat$covariates, 
+                                        covariates = NULL, 
+                                        outcome = NULL, 
+                                        creatinine_var_names = NULL, 
+                                        creatinine_covariates_names = NULL, 
+                                        creatinine_name = NULL,
+                                        dic_steps = steps_covars, 
+                                        id_var = params_dat$variables$identifier, 
+                                        by_var = "cohort")
+  
   # Process exposures
+  creatinine_var_names <- setdiff(
+    colnames(dat$exposures), 
+    params_dat$variables$identifier
+  )
   dat$exposures <- myphd::extract_cohort(dat = dat$exposures, 
                                          id_var = params_dat$variables$identifier)
   dat$exposures <- myphd::preproc_data(dat = dat$exposures, 
+                                       covariates = dat$covariates |>
+                                         dplyr::select(-cohort), 
+                                       outcome = NULL, 
+                                       creatinine_var_names = creatinine_var_names, 
+                                       creatinine_covariates_names = params_dat$variables$creatinine_covariates_names, 
+                                       creatinine_name = params_dat$variables$creatinine_name,
                                        dic_steps = steps_exposures, 
                                        id_var = params_dat$variables$identifier, 
                                        by_var = "cohort")
   dat$exposures <- dplyr::select(dat$exposures, 
                                  -dplyr::any_of("cohort"))
-  
-  # Process covariates
-  dat$covariates <- myphd::preproc_data(dat = dat$covariates, 
-                                        dic_steps = steps_covars, 
-                                        id_var = params_dat$variables$identifier, 
-                                        by_var = "cohort")
   
   return(dat)
 } # End function rq_prepare_data
@@ -264,7 +279,7 @@ rq_estimate_weights <- function(dat, save_results, parallel, workers) {
   # Step 2: explore balance
   if (parallel == TRUE) {
     future::plan(future::multisession, 
-                 workers = 2)
+                 workers = workers)
   } else {
     future::plan(future::sequential())
   }
@@ -284,7 +299,7 @@ rq_estimate_weights <- function(dat, save_results, parallel, workers) {
   if (save_results) {
     if (parallel == TRUE) {
       future::plan(future::multisession, 
-                   workers = 2)
+                   workers = workers)
     } else {
       future::plan(future::sequential())
     }
@@ -393,20 +408,23 @@ rq_fit_model_weighted <- function(dat, weights, parallel, workers) {
   params_ana <- params_analyses()[[rq]]
   
   # Process outcome
-  if (params_ana$method_marginal == "super") {
-    steps_outcome$bound$do <- TRUE
-  } else {
-    steps_outcome$bound$do <- FALSE
-  }
+  creatinine_var_names <- setdiff(
+    colnames(dat$outcome), 
+    params_dat$variables$identifier
+  )
   dat$outcome <- myphd::extract_cohort(dat = dat$outcome, 
                                        id_var = params_dat$variables$identifier)
   dat$outcome <- myphd::preproc_data(dat = dat$outcome, 
+                                     covariates = dat$covariates, 
                                      outcome = outcome, 
+                                     creatinine_var_names = creatinine_var_names, 
+                                     creatinine_covariates_names = params_dat$variables$creatinine_covariates_names, 
+                                     creatinine_name = params_dat$variables$creatinine_name,
                                      dic_steps = steps_outcome, 
                                      id_var = params_dat$variables$identifier, 
                                      by_var = "cohort")
   dat$outcome <- dat$outcome |>
-    dplyr::select(-cohort)
+    dplyr::select(-dplyr::any_of("cohort"))
   idxs_missing_outcome <- which(is.na(dat$outcome[[outcome]]))
   
   # Fit model(s) using estimated weights

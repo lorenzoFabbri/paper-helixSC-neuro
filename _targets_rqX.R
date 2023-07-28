@@ -42,7 +42,7 @@ list(
   targets::tar_target(
     name = weights, 
     command = rq_estimate_weights(dat = preproc_dat, 
-                                  save_results = TRUE, 
+                                  save_results = FALSE, 
                                   parallel = FALSE)
   ), # End weights target
   targets::tar_target(

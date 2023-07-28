@@ -69,6 +69,11 @@ params <- function(is_hpc) {
   variables <- list(
     identifier = "HelixID", 
     strategy_select_adj_set = "smallest", 
+    creatinine_name = "hs_creatinine_cg", 
+    creatinine_covariates_names = list(
+      numerical = c("hs_age_years", "hs_c_weight", "hs_c_height"), 
+      categorical = c("e3_sex", "h_ethnicity_spiro")
+    ), 
     strategy_loq_urine = "div2", 
     creatinine_threshold = 10, 
     ############################################################################
@@ -91,54 +96,44 @@ params <- function(is_hpc) {
   ##############################################################################
   
   steps <- list(
-    rq1 = list(
-      preproc_exposures = list(
-        missings = list(
-          do = TRUE, 
-          threshold_within = 40, 
-          threshold_overall = 40
-        ), 
-        standardization = list(
-          do = TRUE, 
-          center_fun = mean, 
-          scale_fun = sd
-        )
-      ), # End preproc_exposures
-      preproc_outcome = list(
-        bound = list(
-          do = NULL
-        )
-      ), # End preproc_outcome
-      preproc_covars = list(
-        missings = list(
-          do = TRUE, 
-          threshold_within = 40, 
-          threshold_overall = 40
-        )
-      ) # End preproc_covars
-    ), # End steps RQ1
-    ############################################################################
     rq2 = list(
       preproc_exposures = list(
         missings = list(
-          do = TRUE, 
           threshold_within = 40, 
           threshold_overall = 40
         ), 
-        standardization = list(
-          do = TRUE, 
-          center_fun = mean, 
-          scale_fun = sd
-        )
+        creatinine = list(
+          method = "cas", 
+          method_fit_args = list(
+            family = gaussian(link = "identity")
+          )
+        )#, 
+        # standardization = list(
+        #   center_fun = median, 
+        #   scale_fun = IQR
+        # )
       ), # End preproc_exposures
       preproc_outcome = list(
-        bound = list(
-          do = NULL
-        )
+        llodq = list(
+          method = "div2"
+        ), 
+        missings = list(
+          threshold_within = 40, 
+          threshold_overall = 40
+        ), 
+        creatinine = list(
+          method = "cas", 
+          method_fit_args = list(
+            family = gaussian(link = "identity")
+          )
+        )#, 
+        # standardization = list(
+        #   center_fun = median, 
+        #   scale_fun = IQR
+        # )
       ), # End preproc_outcome
       preproc_covars = list(
         missings = list(
-          do = TRUE, 
           threshold_within = 40, 
           threshold_overall = 40
         )
@@ -147,25 +142,32 @@ params <- function(is_hpc) {
     ############################################################################
     rq3 = list(
       preproc_exposures = list(
+        llodq = list(
+          method = "div2"
+        ), 
         missings = list(
-          do = TRUE, 
           threshold_within = 40, 
           threshold_overall = 40
         ), 
+        creatinine = list(
+          method = "cas", 
+          method_fit_args = list(
+            family = gaussian(link = "identity")
+          )
+        ), 
         standardization = list(
-          do = TRUE, 
-          center_fun = mean, 
-          scale_fun = sd
+          center_fun = median, 
+          scale_fun = IQR
         )
       ), # End preproc_exposures
       preproc_outcome = list(
-        bound = list(
-          do = NULL
+        standardization = list(
+          center_fun = median, 
+          scale_fun = IQR
         )
       ), # End preproc_outcome
       preproc_covars = list(
         missings = list(
-          do = TRUE, 
           threshold_within = 40, 
           threshold_overall = 40
         )
