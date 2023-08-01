@@ -1,30 +1,29 @@
 targets::tar_option_set(
   format = "qs"
 )
-options(clustermq.scheduler = "future")
 
 list(
   tarchetypes::tar_quarto(
     name = figures, 
-    path = "figures.qmd", 
+    path = "output/paper/figures.qmd", 
     quiet = FALSE
   ), # End target manuscript
   ##############################################################################
   tarchetypes::tar_quarto(
     name = tables, 
-    path = "tables.qmd", 
+    path = "output/paper/tables.qmd", 
     quiet = FALSE
   ), # End target manuscript
   ##############################################################################
   tarchetypes::tar_quarto(
     name = manuscript, 
-    path = "manuscript.qmd", 
+    path = "output/paper/manuscript.qmd", 
     quiet = FALSE
   ), # End target manuscript
   ##############################################################################
   tarchetypes::tar_quarto(
     name = si, 
-    path = "si.qmd", 
+    path = "output/paper/si.qmd", 
     quiet = FALSE
   ) # End target manuscript
   ##############################################################################

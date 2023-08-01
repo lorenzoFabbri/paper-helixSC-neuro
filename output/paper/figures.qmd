@@ -1,5 +1,6 @@
 ---
 title: "Paper 3 - Figures"
+
 format:
   pdf:
     pdf-engine: pdflatex
@@ -9,8 +10,10 @@ format:
         \usepackage{rotating}
         \usepackage{float}
         \usepackage{typearea}
+
 link-citations: true
 linkcolor: blue
+
 execute:
   echo: false
   warning: false
@@ -18,16 +21,7 @@ execute:
   message: false
 editor_options: 
   chunk_output_type: console
-project:
-  execute_dir: project
 ---
-
-```{r}
-#| include: false
-here::i_am("figures.qmd")
-
-library(tidyverse)
-```
 
 <!-- ####################################################################### -->
 # CTD Results

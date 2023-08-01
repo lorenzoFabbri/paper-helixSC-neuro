@@ -1,9 +1,10 @@
 ---
 metadata-files:
   - ../../../../all_phd/authors.yml
+
 format:
   pdf:
-    pdf-engine: pdflatex
+    pdf-engine: xelatex
     number-sections: true
     toc: false
     include-in-header:
@@ -11,9 +12,11 @@ format:
         \usepackage{rotating}
         \usepackage{float}
         \usepackage{typearea}
+
 bibliography: ../../../../PhD.bib
 link-citations: true
 linkcolor: blue
+
 execute:
   echo: false
   warning: false
@@ -21,6 +24,7 @@ execute:
   message: false
 editor_options: 
   chunk_output_type: console
+
 filters:
   - ../../../../all_phd/_extensions/acronyms/parse-acronyms.lua
   - ../../../../all_phd/_extensions/authors-block/authors-block.lua
@@ -29,6 +33,7 @@ acronyms:
   insert_links: false
   insert_loa: false
   sorting: alphabetical
+
 abstract: |
  **Background**
  
@@ -46,50 +51,43 @@ abstract: |
 \tableofcontents
 ```
 
-```{r}
-#| include: false
-
-here::i_am("manuscript.qmd")
-source("../../../../all_phd/info_phd.R")
-infos <- info_phd()
-```
-
 ---
-title: "`r infos$paper3$title`"
+title: "Some Title"
 ---
 
 <!-- ####################################################################### -->
-<!-- INTRODUCTION -->
 # Introduction {#intro}
 ```{r}
-#| child: sections/introduction.qmd
+#| child: output/paper/sections/introduction.qmd
 ```
 <!-- ####################################################################### -->
 
 <!-- ####################################################################### -->
-<!-- METHODS -->
 # Methods {#methods}
 ```{r}
-#| child: sections/methods.qmd
+#| child: output/paper/sections/methods.qmd
 ```
 <!-- ####################################################################### -->
 
 <!-- ####################################################################### -->
-<!-- RESULTS -->
 # Results {#res}
 ```{r}
-#| child: sections/results.qmd
+#| child: output/paper/sections/results.qmd
 ```
 <!-- ####################################################################### -->
 
 <!-- ####################################################################### -->
-<!-- DISCUSSION -->
 # Discussion {#discussion}
 ```{r}
-#| child: sections/discussion.qmd
+#| child: output/paper/sections/discussion.qmd
 ```
 <!-- ####################################################################### -->
 
 \newpage
 
-# References
+<!-- ####################################################################### -->
+# References {.unnumbered}
+<!-- ####################################################################### -->
+
+::: {#refs}
+:::
