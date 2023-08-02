@@ -4,7 +4,7 @@ metadata-files:
 
 format:
   pdf:
-    pdf-engine: xelatex
+    pdf-engine: lualatex
     number-sections: true
     toc: false
     include-in-header:
@@ -56,28 +56,28 @@ title: "Some Title"
 ---
 
 <!-- ####################################################################### -->
-# Introduction {#intro}
+# Introduction {#sec-intro}
 ```{r}
 #| child: output/paper/sections/introduction.qmd
 ```
 <!-- ####################################################################### -->
 
 <!-- ####################################################################### -->
-# Methods {#methods}
+# Methods {#sec-methods}
 ```{r}
 #| child: output/paper/sections/methods.qmd
 ```
 <!-- ####################################################################### -->
 
 <!-- ####################################################################### -->
-# Results {#res}
+# Results {#sec-res}
 ```{r}
 #| child: output/paper/sections/results.qmd
 ```
 <!-- ####################################################################### -->
 
 <!-- ####################################################################### -->
-# Discussion {#discussion}
+# Discussion {#sec-discussion}
 ```{r}
 #| child: output/paper/sections/discussion.qmd
 ```

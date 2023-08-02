@@ -4,23 +4,23 @@
     "Repositories": [
       {
         "Name": "BioCsoft",
-        "URL": "https://bioconductor.org/packages/3.17/bioc"
+        "URL": "https://bioconductor.org/packages/3.16/bioc"
       },
       {
         "Name": "BioCann",
-        "URL": "https://bioconductor.org/packages/3.17/data/annotation"
+        "URL": "https://bioconductor.org/packages/3.16/data/annotation"
       },
       {
         "Name": "BioCexp",
-        "URL": "https://bioconductor.org/packages/3.17/data/experiment"
+        "URL": "https://bioconductor.org/packages/3.16/data/experiment"
       },
       {
         "Name": "BioCworkflows",
-        "URL": "https://bioconductor.org/packages/3.17/workflows"
+        "URL": "https://bioconductor.org/packages/3.16/workflows"
       },
       {
         "Name": "BioCbooks",
-        "URL": "https://bioconductor.org/packages/3.17/books"
+        "URL": "https://bioconductor.org/packages/3.16/books"
       },
       {
         "Name": "CRAN",
@@ -29,7 +29,7 @@
     ]
   },
   "Bioconductor": {
-    "Version": "3.17"
+    "Version": "3.16"
   },
   "Packages": {
     "AsioHeaders": {
@@ -41,7 +41,7 @@
     },
     "Biobase": {
       "Package": "Biobase",
-      "Version": "2.60.0",
+      "Version": "2.58.0",
       "Source": "Bioconductor",
       "Requirements": [
         "BiocGenerics",
@@ -49,11 +49,11 @@
         "methods",
         "utils"
       ],
-      "Hash": "ed269b250f5844d54dfdc7e749f901aa"
+      "Hash": "96e8b620897cc9a03deff4097fa8b265"
     },
     "BiocGenerics": {
       "Package": "BiocGenerics",
-      "Version": "0.46.0",
+      "Version": "0.44.0",
       "Source": "Bioconductor",
       "Requirements": [
         "R",
@@ -62,7 +62,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "c179ae59955c36f5d0068ed29ce832f7"
+      "Hash": "0de19224c2cd94f48fbc0d0bc663ce3b"
     },
     "BiocManager": {
       "Package": "BiocManager",
@@ -76,12 +76,12 @@
     },
     "BiocVersion": {
       "Package": "BiocVersion",
-      "Version": "3.17.1",
+      "Version": "3.16.0",
       "Source": "Bioconductor",
       "Requirements": [
         "R"
       ],
-      "Hash": "f7c0d5521799b7b0d0a211143ed0bfcb"
+      "Hash": "44c5824508b9a10e52dbb505c34fa880"
     },
     "DEoptimR": {
       "Package": "DEoptimR",
@@ -198,18 +198,18 @@
     },
     "KernSmooth": {
       "Package": "KernSmooth",
-      "Version": "2.23-20",
+      "Version": "2.23-22",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R",
         "stats"
       ],
-      "Hash": "8dcfa99b14c296bc9f1fd64d52fd3ce7"
+      "Hash": "2fecebc3047322fa5930f74fae5de70f"
     },
     "MASS": {
       "Package": "MASS",
-      "Version": "7.3-58.4",
+      "Version": "7.3-60",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -220,7 +220,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "a3142b2a022b8174ca675bc8b80cdc4e"
+      "Hash": "a56a6365b3fa73293ea8d084be0d9bb0"
     },
     "Matrix": {
       "Package": "Matrix",
@@ -355,7 +355,7 @@
     },
     "S4Vectors": {
       "Package": "S4Vectors",
-      "Version": "0.38.1",
+      "Version": "0.36.2",
       "Source": "Bioconductor",
       "Requirements": [
         "BiocGenerics",
@@ -365,7 +365,7 @@
         "stats4",
         "utils"
       ],
-      "Hash": "f0a46e23a2a7d6aa27e945faf7f242c7"
+      "Hash": "8f371bac4b09106b66aeff10b85bd933"
     },
     "SparseM": {
       "Package": "SparseM",
@@ -2126,12 +2126,12 @@
     },
     "impute": {
       "Package": "impute",
-      "Version": "1.74.1",
+      "Version": "1.72.3",
       "Source": "Bioconductor",
       "Requirements": [
         "R"
       ],
-      "Hash": "668ff08a658c10b0c2fdc6c98c8b7aa1"
+      "Hash": "df5901dfa52e42501a2d7cdefec0dbe1"
     },
     "imputeLCMD": {
       "Package": "imputeLCMD",
@@ -2560,7 +2560,7 @@
     },
     "mgcv": {
       "Package": "mgcv",
-      "Version": "1.8-42",
+      "Version": "1.9-0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -2573,7 +2573,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "3460beba7ccc8946249ba35327ba902a"
+      "Hash": "086028ca0460d0c368028d3bda58f31b"
     },
     "mice": {
       "Package": "mice",
@@ -2706,7 +2706,7 @@
       "RemoteRepo": "myphd",
       "RemoteUsername": "isglobal-cep",
       "RemoteRef": "HEAD",
-      "RemoteSha": "9c22c17aade0e8b158d753dd45aec192ad2277f8",
+      "RemoteSha": "2c98c8beab57075a92284a52b83d18cc653c9aba",
       "Requirements": [
         "Hmisc",
         "WeightIt",
@@ -2745,7 +2745,7 @@
         "tidyr",
         "visdat"
       ],
-      "Hash": "83f4a26a788e15825f4739751bef0663"
+      "Hash": "eaa6258303bc304fd08d41e60a157e3a"
     },
     "naniar": {
       "Package": "naniar",
@@ -2799,7 +2799,7 @@
     },
     "nnet": {
       "Package": "nnet",
-      "Version": "7.3-18",
+      "Version": "7.3-19",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -2807,7 +2807,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "170da2130d5332bea7d6ede01875ba1d"
+      "Hash": "2c797b46eea7fb58ede195bc0b1f1138"
     },
     "nnls": {
       "Package": "nnls",
@@ -2995,7 +2995,7 @@
     },
     "pcaMethods": {
       "Package": "pcaMethods",
-      "Version": "1.92.0",
+      "Version": "1.90.0",
       "Source": "Bioconductor",
       "Requirements": [
         "Biobase",
@@ -3004,7 +3004,7 @@
         "Rcpp",
         "methods"
       ],
-      "Hash": "94f04bbc920fbee5a2966ac2de85822f"
+      "Hash": "00ec2ffb9c914f8cfc0ca85e22128b3f"
     },
     "permute": {
       "Package": "permute",

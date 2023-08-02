@@ -7,29 +7,13 @@ params <- function(is_hpc) {
   if (is_hpc == TRUE) {
     common_path <- "../../../../"
   } else {
-    common_path <- "~/mounts/rstudioserver/PROJECTES/HELIX_OMICS/"
+    common_path <- "~/mounts/rstudioserver/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF"
   }
   
   paths <- list(
     # Raw
-    path_covariates_post = "", 
-    path_covariates_preg = "", 
-    path_snps = "", 
-    path_exposures_backtrans = "data_raw/exposome.backtransf/child/preg_8y/20180901/20180919_v2_3_backtransformed.Rdata", 
-    path_exposures_post_raw = "data_final/exposome/child/preg_8y/v2_3_20180601/exppostnatal_raw_v2_3.RData", 
-    path_exposures_preg_raw = "data_final/exposome/child/preg_8y/v2_3_20180601/exppregnancy_raw_v2_3.RData", 
-    path_exposures_post_final = "data_final/exposome/child/preg_8y/v2_3_20180601/exppostnatal_v2_3.RData", 
-    path_exposures_preg_final = "data_final/exposome/child/preg_8y/v2_3_20180601/exppregnancy_v2_3.RData", 
-    path_metabolome_serum = "data_final/metab/child/8y/serum.urine_Biocrates.NMR_QChelix_20170101/metab_serum_subcohort_v3.RData", 
-    path_metabolome_urine = "data_final/metab/child/8y/serum.urine_Biocrates.NMR_QChelix_20170101/metab_urine_subcohort_v3.RData", 
-    path_dat_request = "DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/requests/AP136/HELIX_AP_136_request_updated12jun.2023.csv", 
-    path_all_steroids = "DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/requests/AP136/steroids/", 
-    
-    # Processed during analyses
-    path_exposures_post_procme = "DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/processed/exposures/", 
-    path_exposures_preg_procme = "DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/processed/exposures/", 
-    path_metabolome_serum = "DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/processed/omics/", 
-    path_metabolome_urine = "DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/processed/omics/"
+    path_dat_request = "data/data_paper3/requests/AP136/HELIX_AP_136_request_updated12jun.2023.csv", 
+    path_all_steroids = "data/data_paper3/requests/AP136/steroids/"
   )
   paths <- lapply(paths, function(x) {
     paste0(common_path, x)

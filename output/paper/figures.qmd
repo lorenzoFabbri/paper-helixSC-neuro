@@ -3,7 +3,7 @@ title: "Paper 3 - Figures"
 
 format:
   pdf:
-    pdf-engine: pdflatex
+    pdf-engine: lualatex
     toc: false
     include-in-header:
       text: |
@@ -31,7 +31,7 @@ editor_options:
 #| fig.cap: Barplot CTD.
 #| fig.height: 10
 #| fig.width: 10
-path <- "../../results/files/CTD_chem_diseases_1680702221550_05042023.csv"
+path <- "results/files/CTD_chem_diseases_1680702221550_05042023.csv"
 ctd <- myphd::load_ctd(path = path, 
                        filter_evidence = TRUE)
 myphd::plot_ctd(ctd)

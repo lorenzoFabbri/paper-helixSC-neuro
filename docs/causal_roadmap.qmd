@@ -12,7 +12,6 @@ keywords:
   - Neurobehavior
 metadata-files:
   - ../../../all_phd/authors.yml
-
 format:
   pdf:
     pdf-engine: pdflatex
@@ -27,11 +26,9 @@ format:
         \usepackage{rotating}
         \usepackage{float}
         \usepackage{typearea}
-
 bibliography: ../../../PhD.bib
 link-citations: true
 linkcolor: blue
-
 execute:
   echo: false
   warning: false
@@ -39,7 +36,6 @@ execute:
   message: false
 editor_options: 
   chunk_output_type: console
-
 filters:
   - ../../../all_phd/_extensions/acronyms/parse-acronyms.lua
   - ../../../all_phd/_extensions/authors-block/authors-block.lua

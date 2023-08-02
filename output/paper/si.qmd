@@ -1,0 +1,18 @@
+---
+title: "Paper 3 - Supplementary Information"
+
+format:
+  docx:
+    reference-doc: reference_document.docx
+
+link-citations: true
+linkcolor: blue
+
+execute:
+  echo: false
+  warning: false
+  error: false
+  message: false
+editor_options: 
+  chunk_output_type: console
+---
