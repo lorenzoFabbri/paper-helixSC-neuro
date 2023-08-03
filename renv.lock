@@ -383,16 +383,20 @@
     },
     "SuperLearner": {
       "Package": "SuperLearner",
-      "Version": "2.0-28.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
+      "Version": "2.0-29-9000",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "SuperLearner",
+      "RemoteUsername": "ecpolley",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "801aa6039460648d4dfd87c1fad77e5f29391cb7",
       "Requirements": [
         "R",
         "cvAUC",
-        "gam",
         "nnls"
       ],
-      "Hash": "1779fb40d0e1189fb1a1cb3bd3ce906e"
+      "Hash": "ff51746de15e35ac00dcbefb00f62a90"
     },
     "TSP": {
       "Package": "TSP",
@@ -1493,20 +1497,6 @@
         "future"
       ],
       "Hash": "e76426c4a99a1798a9376c6fe9070a68"
-    },
-    "gam": {
-      "Package": "gam",
-      "Version": "1.22-2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "foreach",
-        "methods",
-        "splines",
-        "stats"
-      ],
-      "Hash": "fed7831c88d8eb0fad64437c6d8febaf"
     },
     "gclus": {
       "Package": "gclus",

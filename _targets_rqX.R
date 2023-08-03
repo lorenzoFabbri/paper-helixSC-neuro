@@ -26,6 +26,11 @@ outcome <- switch(rq,
                   "rq1" = "outcome", 
                   "rq2" = "biomarker", 
                   "rq3" = "outcome")
+tbl_outcomes <- tibble::tibble(
+  name = params(is_hpc = Sys.getenv("is_hpc"))$variables[[rq]]$outcome |>
+    stringr::str_to_lower(), 
+  outcome = params(is_hpc = Sys.getenv("is_hpc"))$variables[[rq]]$outcome
+)
 
 list(
   targets::tar_target(
@@ -52,13 +57,11 @@ list(
                                   parallel = FALSE)
   ), # End weights target
   tarchetypes::tar_map(
-    values = params(is_hpc = Sys.getenv("is_hpc"))$variables[[rq]]$outcome, 
-    names = stringr::str_to_lower(
-      params(is_hpc = Sys.getenv("is_hpc"))$variables[[rq]]$outcome
-    ), 
+    values = tbl_outcomes, 
+    names = "name", 
     targets::tar_target(
       name = weighted_fits, 
-      command = rq_fit_model_weighted(dat = preproc_dat, outcome = , 
+      command = rq_fit_model_weighted(dat = preproc_dat, outcome = outcome, 
                                       weights = weights$estimated_weights, 
                                       parallel = FALSE)
     ), # End weighted_fits target
@@ -66,7 +69,7 @@ list(
       name = marginal, 
       command = rq_estimate_marginal_effects(fits = weighted_fits$fits, 
                                              parallel = TRUE, 
-                                             workers = 6)
+                                             workers = 10)
     ) # End marginal target
   ) # End loop over outcomes
   ##############################################################################
