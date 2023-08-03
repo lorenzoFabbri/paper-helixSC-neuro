@@ -12,11 +12,17 @@ params_dag <- list(
   type = "minimal", 
   effect = "total"
 )
-exposure <- switch(Sys.getenv("TAR_PROJECT"), 
+rq <- Sys.getenv("TAR_PROJECT")
+rq <- switch(rq, 
+             "rq01" = "rq1", 
+             "rq02" = "rq2", 
+             "rq03" = "rq3", 
+             rq)
+exposure <- switch(rq, 
                    "rq1" = "chemical", 
                    "rq2" = "chemical", 
                    "rq3" = "biomarker")
-outcome <- switch(Sys.getenv("TAR_PROJECT"), 
+outcome <- switch(rq, 
                   "rq1" = "outcome", 
                   "rq2" = "biomarker", 
                   "rq3" = "outcome")
@@ -45,17 +51,23 @@ list(
                                   save_results = FALSE, 
                                   parallel = FALSE)
   ), # End weights target
-  targets::tar_target(
-    name = weighted_fits, 
-    command = rq_fit_model_weighted(dat = preproc_dat, 
-                                    weights = weights$estimated_weights, 
-                                    parallel = FALSE)
-  ), # End weighted_fits target
-  targets::tar_target(
-    name = marginal, 
-    command = rq_estimate_marginal_effects(fits = weighted_fits$fits, 
-                                           parallel = TRUE, 
-                                           workers = 6)
-  ) # End marginal target
+  tarchetypes::tar_map(
+    values = params(is_hpc = Sys.getenv("is_hpc"))$variables[[rq]]$outcome, 
+    names = stringr::str_to_lower(
+      params(is_hpc = Sys.getenv("is_hpc"))$variables[[rq]]$outcome
+    ), 
+    targets::tar_target(
+      name = weighted_fits, 
+      command = rq_fit_model_weighted(dat = preproc_dat, outcome = , 
+                                      weights = weights$estimated_weights, 
+                                      parallel = FALSE)
+    ), # End weighted_fits target
+    targets::tar_target(
+      name = marginal, 
+      command = rq_estimate_marginal_effects(fits = weighted_fits$fits, 
+                                             parallel = TRUE, 
+                                             workers = 6)
+    ) # End marginal target
+  ) # End loop over outcomes
   ##############################################################################
 )

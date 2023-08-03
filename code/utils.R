@@ -88,11 +88,9 @@ rq_load_data <- function(res_dag) {
   rq <- Sys.getenv("TAR_PROJECT")
   rq <- switch(rq, 
                "rq01" = "rq1", 
-               "rq1" = "rq1", 
                "rq02" = "rq2", 
-               "rq2" = "rq2", 
                "rq03" = "rq3", 
-               "rq3" = "rq3")
+               rq)
   
   # Load data request
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
@@ -150,11 +148,9 @@ rq_prepare_data <- function(dat) {
   rq <- Sys.getenv("TAR_PROJECT")
   rq <- switch(rq, 
                "rq01" = "rq1", 
-               "rq1" = "rq1", 
                "rq02" = "rq2", 
-               "rq2" = "rq2", 
                "rq03" = "rq3", 
-               "rq3" = "rq3")
+               rq)
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   steps_exposures <- params_dat$steps[[rq]]$preproc_exposures
   steps_covars <- params_dat$steps[[rq]]$preproc_covars
@@ -206,13 +202,10 @@ rq_estimate_weights <- function(dat, save_results, parallel, workers) {
   rq <- Sys.getenv("TAR_PROJECT")
   rq <- switch(rq, 
                "rq01" = "rq1", 
-               "rq1" = "rq1", 
                "rq02" = "rq2", 
-               "rq2" = "rq2", 
                "rq03" = "rq3", 
-               "rq3" = "rq3")
+               rq)
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
-  outcome <- params_dat$variables[[rq]]$outcome
   params_ana <- params_analyses()[[rq]]
   
   # Step 1: estimate weights for covariate balance
@@ -400,10 +393,11 @@ rq_estimate_weights <- function(dat, save_results, parallel, workers) {
 #' @return
 #'
 #' @export
-rq_fit_model_weighted <- function(dat, weights, parallel, workers) {
+rq_fit_model_weighted <- function(dat, outcome, 
+                                  weights, 
+                                  parallel, workers) {
   rq <- Sys.getenv("TAR_PROJECT")
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
-  outcome <- params_dat$variables[[rq]]$outcome
   steps_outcome <- params_dat$steps[[rq]]$preproc_outcome
   params_ana <- params_analyses()[[rq]]
   
@@ -424,7 +418,11 @@ rq_fit_model_weighted <- function(dat, weights, parallel, workers) {
                                      id_var = params_dat$variables$identifier, 
                                      by_var = "cohort")
   dat$outcome <- dat$outcome |>
-    dplyr::select(-dplyr::any_of("cohort"))
+    dplyr::select(-dplyr::any_of("cohort")) |>
+    dplyr::select(dplyr::all_of(c(
+      params_dat$variables$identifier, 
+      outcome
+    )))
   idxs_missing_outcome <- which(is.na(dat$outcome[[outcome]]))
   
   # Fit model(s) using estimated weights

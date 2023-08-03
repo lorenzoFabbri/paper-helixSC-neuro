@@ -47,9 +47,10 @@ params <- function(is_hpc) {
   ) # End list of chemicals
   chemicals <- paste0(chemicals, "c")
   metabolites <- c(
-    "Cortisone_E"
+    "Cortisone_E", 
+    "Andros"
   ) # End list of metabolites
-  clinical_outcome <- "hs_hitrtse"
+  clinical_outcome <- c("hs_hitrtse")
   variables <- list(
     identifier = "HelixID", 
     strategy_select_adj_set = "smallest", 

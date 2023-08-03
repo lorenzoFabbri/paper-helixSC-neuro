@@ -355,16 +355,26 @@ load_dat_request <- function() {
   } # End load metabolites
   
   which_meta <- switch(Sys.getenv("TAR_PROJECT"), 
-                       "rq01" = "_rq1", 
-                       "rq1" = "_rq1", 
-                       "rq02" = "_rq2", 
-                       "rq2" = "_rq2", 
-                       "rq03" = "_rq3", 
-                       "rq3" = "_rq3")
-  meta <- readODS::read_ods(paste0("docs/data_request_relevant", 
-                                   which_meta, ".ods"), 
-                            col_names = TRUE, strings_as_factors = TRUE) |>
-    tibble::as_tibble()
+                       "rq01" = "rq1", 
+                       "rq1" = "rq1", 
+                       "rq02" = "rq2", 
+                       "rq2" = "rq2", 
+                       "rq03" = "rq3", 
+                       "rq3" = "rq3")
+  meta <- readODS::read_ods("docs/data_request_all.ods", 
+                            col_names = TRUE, 
+                            strings_as_factors = TRUE) |>
+    tibble::as_tibble() |>
+    dplyr::mutate(variable = dplyr::case_when(
+      variable == "hs_dedtp_crawadj" ~ "hs_dedtp_cadj", 
+      TRUE ~ variable
+    )) |>
+    dplyr::mutate(
+      group = stringr::str_to_lower(group), 
+      tab = stringr::str_to_lower(tab), 
+      period = stringr::str_to_lower(period), 
+    ) |>
+    dplyr::filter(.data[[which_meta]] == TRUE)
   cols_to_change_type <- c("dag", "variable", 
                            "description", "code", "label", 
                            "comments")
