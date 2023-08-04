@@ -3,23 +3,7 @@
 ################################################################################
 # Parameters for entire paper
 ################################################################################
-params <- function(is_hpc) {
-  if (is_hpc == TRUE) {
-    common_path <- "../../../../"
-  } else {
-    common_path <- "~/mounts/rstudioserver/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF"
-  }
-  
-  paths <- list(
-    # Raw
-    path_dat_request = "data/data_paper3/requests/AP136/HELIX_AP_136_request_updated12jun.2023.csv", 
-    path_all_steroids = "data/data_paper3/requests/AP136/steroids/"
-  )
-  paths <- lapply(paths, function(x) {
-    paste0(common_path, x)
-  })
-  ##############################################################################
-  
+vars_of_interest <- function(append_to_chem = NULL) {
   chemicals <- c(
     "hs_mep_", 
     "hs_mibp_", 
@@ -44,13 +28,46 @@ params <- function(is_hpc) {
     "hs_dep_", 
     "hs_detp_", 
     "hs_dedtp_"
-  ) # End list of chemicals
-  chemicals <- paste0(chemicals, "c")
+  )
+  chemicals <- paste0(chemicals, append_to_chem)
   metabolites <- c(
     "Cortisone_E", 
     "Andros"
-  ) # End list of metabolites
-  clinical_outcome <- c("hs_hitrtse")
+  )
+  outcomes <- c(
+    "hs_hitrtse"
+  )
+  
+  return(list(
+    chemicals = chemicals, 
+    metabolites = metabolites, 
+    outcomes = outcomes
+  ))
+} # End function vars_of_interest
+
+################################################################################
+# Parameters for entire paper
+################################################################################
+params <- function(is_hpc) {
+  if (is_hpc == TRUE) {
+    common_path <- "../../../../"
+  } else {
+    common_path <- "~/mounts/rstudioserver/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF"
+  }
+  
+  paths <- list(
+    # Raw
+    path_dat_request = "data/data_paper3/requests/AP136/HELIX_AP_136_request_updated12jun.2023.csv", 
+    path_all_steroids = "data/data_paper3/requests/AP136/steroids/"
+  )
+  paths <- lapply(paths, function(x) {
+    paste0(common_path, x)
+  })
+  ##############################################################################
+  
+  chemicals <- vars_of_interest(append_to_chem = "c")$chemicals
+  metabolites <- vars_of_interest()$metabolites
+  clinical_outcome <- vars_of_interest()$outcomes
   variables <- list(
     identifier = "HelixID", 
     strategy_select_adj_set = "smallest", 
@@ -167,7 +184,7 @@ params <- function(is_hpc) {
     variables = variables, 
     steps = steps
   ))
-}
+} # End function params
 
 ################################################################################
 # Parameters for running analyses
@@ -212,4 +229,4 @@ params_analyses <- function() {
   )
   
   return(ret)
-}
+} # End function params_analyses
