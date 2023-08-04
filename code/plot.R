@@ -17,7 +17,7 @@ viz_desc_vars <- function(dat, meta, vars, fct_levels) {
     tidyr::pivot_longer(cols = -cohort) |>
     dplyr::count(cohort, name, value)
   df_long$value <- factor(df_long$value, 
-                          levels = levels)
+                          levels = fct_levels)
   # Pivot to long and compute frequencies
   freqs <- df |>
     tidyr::pivot_longer(cols = -cohort) |>
@@ -62,6 +62,11 @@ viz_desc_vars <- function(dat, meta, vars, fct_levels) {
       panel.grid.minor = ggplot2::element_blank(), 
       panel.border = ggplot2::element_blank()
     )
+  
+  df_plot <- df_plot |>
+    dplyr::arrange(dplyr::desc(value), 
+                   name, 
+                   dplyr::desc(f))
   
   return(list(
     dat = df_plot, 

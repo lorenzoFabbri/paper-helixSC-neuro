@@ -31,8 +31,38 @@ vars_of_interest <- function(append_to_chem = NULL) {
   )
   chemicals <- paste0(chemicals, append_to_chem)
   metabolites <- c(
+    "F", 
+    "X20aDHF", 
+    "X20bDHF", 
+    "X5bDHF", 
+    "X5aTHF", 
+    "X5bTHF", 
+    "X6OHF", 
+    "X5a20acortol", 
+    "X5a20bcortol", 
+    "X5b20acortol", 
+    "X5b20bcortol", 
+    "X11OHAndros", 
     "Cortisone_E", 
-    "Andros"
+    "X20aDHE", 
+    "X20bDHE", 
+    "X5aTHE", 
+    "X5bTHE", 
+    "X6OHE", 
+    "X5b20acortolone", 
+    "X5b20bcortolone", 
+    "X5aTHB", 
+    "X5bTHB", 
+    "A", 
+    "X17_DO_cortolone", 
+    "S", 
+    "X5bDHS", 
+    "X5bTHS", 
+    "X17HP", 
+    "PT", 
+    "T", 
+    "Andros", 
+    "Etio"
   )
   outcomes <- c(
     "hs_hitrtse"
