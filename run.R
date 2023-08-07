@@ -19,7 +19,7 @@ Sys.setenv(path_store_res = path_store_res)
 
 rq <- "2"
 Sys.setenv(TAR_PROJECT = paste0("rq0", rq))
-store <- paste0(path_store, paste("0", rq))
+store <- paste0(path_store, paste0("0", rq))
 targets::tar_make(script = "_targets_rq0X.R", 
                   store = store)
 Sys.setenv(TAR_PROJECT = paste0("rq", rq))

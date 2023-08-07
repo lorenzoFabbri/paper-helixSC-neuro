@@ -2,6 +2,7 @@ source("DAGs/dag_v2.R")
 source("code/dictionaries.R")
 source("code/data.R")
 source("code/utils.R")
+source("code/plot.R")
 
 targets::tar_option_set(
   format = "qs"
@@ -34,10 +35,19 @@ list(
     name = load_dat, 
     command = rq_load_data(res_dag = dag)
   ), # End load_dat target
+  targets::tar_target(
+    name = viz_desc_chems, 
+    command = viz_desc_vars(
+      dat = load_dat_request()$dat, 
+      vars = vars_of_interest(append_to_chem = "cdesc")$chemicals, 
+      fct_levels = c(1, 2, 3, 4)
+    )
+  ), # End target viz_desc_chems
   ##############################################################################
   targets::tar_target(
     name = viz_miss_covars, 
-    command = myphd::explore_missings(load_dat$covariates, 
+    command = myphd::explore_missings(myphd::extract_cohort(load_dat$covariates, 
+                                                            id_var = id_var), 
                                       id_var = id_var, 
                                       grouping_var = grouping_var, 
                                       path_save = paste0(
@@ -48,7 +58,8 @@ list(
   ), # End viz_miss_covars target
   targets::tar_target(
     name = viz_miss_exp, 
-    command = myphd::explore_missings(load_dat$exposures, 
+    command = myphd::explore_missings(myphd::extract_cohort(load_dat$exposures, 
+                                                            id_var = id_var), 
                                       id_var = id_var, 
                                       grouping_var = grouping_var, 
                                       path_save = paste0(
@@ -59,7 +70,8 @@ list(
   ), # End viz_miss_exp target
   targets::tar_target(
     name = viz_miss_out, 
-    command = myphd::explore_missings(load_dat$outcome, 
+    command = myphd::explore_missings(myphd::extract_cohort(load_dat$outcome, 
+                                                            id_var = id_var), 
                                       id_var = id_var, 
                                       grouping_var = grouping_var, 
                                       path_save = paste0(
@@ -71,19 +83,22 @@ list(
   ##############################################################################
   targets::tar_target(
     name = desc_data_covars, 
-    command = myphd::describe_data(dat = load_dat$covariates, 
+    command = myphd::describe_data(dat = myphd::extract_cohort(load_dat$covariates, 
+                                                               id_var = id_var), 
                                    id_var = id_var, 
                                    grouping_var = grouping_var)
   ), # End desc_data_covars target
   targets::tar_target(
     name = desc_data_exp, 
-    command = myphd::describe_data(dat = load_dat$exposures, 
+    command = myphd::describe_data(dat = myphd::extract_cohort(load_dat$exposures, 
+                                                               id_var = id_var), 
                                    id_var = id_var, 
                                    grouping_var = grouping_var)
   ), # End desc_data_exp target
   targets::tar_target(
     name = desc_data_out, 
-    command = myphd::describe_data(dat = load_dat$outcome, 
+    command = myphd::describe_data(dat = myphd::extract_cohort(load_dat$outcome, 
+                                                               id_var = id_var), 
                                    id_var = id_var, 
                                    grouping_var = grouping_var)
   ), # End desc_data_out target
@@ -95,19 +110,22 @@ list(
   ##############################################################################
   targets::tar_target(
     name = desc_data_covars_proc, 
-    command = myphd::describe_data(dat = preproc_dat$covariates, 
+    command = myphd::describe_data(dat = myphd::extract_cohort(preproc_dat$covariates, 
+                                                               id_var = id_var), 
                                    id_var = id_var, 
                                    grouping_var = grouping_var)
   ), # End desc_data_covars_proc target
   targets::tar_target(
     name = desc_data_exp_proc, 
-    command = myphd::describe_data(dat = preproc_dat$exposures, 
+    command = myphd::describe_data(dat = myphd::extract_cohort(preproc_dat$exposures, 
+                                                               id_var = id_var), 
                                    id_var = id_var, 
                                    grouping_var = grouping_var)
   ), # End desc_data_exp_proc target
   targets::tar_target(
     name = desc_data_out_proc, 
-    command = myphd::describe_data(dat = preproc_dat$outcome, 
+    command = myphd::describe_data(dat = myphd::extract_cohort(preproc_dat$outcome, 
+                                                               id_var = id_var), 
                                    id_var = id_var, 
                                    grouping_var = grouping_var)
   ) # End desc_data_out_proc target

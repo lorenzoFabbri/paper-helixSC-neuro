@@ -1,13 +1,12 @@
 #' Title
 #'
 #' @param dat 
-#' @param meta 
 #' @param vars 
 #' @param fct_levels 
 #'
 #' @return
 #' @export
-viz_desc_vars <- function(dat, meta, vars, fct_levels) {
+viz_desc_vars <- function(dat, vars, fct_levels) {
   # Select only cohort and variables of interest (e.g., chemicals w/ `cdesc`)
   df <- dat |>
     dplyr::select(cohort, 
