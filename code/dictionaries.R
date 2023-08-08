@@ -103,8 +103,10 @@ params <- function(is_hpc) {
     strategy_select_adj_set = "smallest", 
     creatinine_name = "hs_creatinine_cg", 
     creatinine_covariates_names = list(
-      numerical = c("hs_age_years", "hs_c_weight", "hs_c_height"), 
-      categorical = c("e3_sex", "h_ethnicity_spiro")
+      numerical = c("hs_age_years", "hs_c_weight", "hs_c_height", 
+                    "FAS_score"), 
+      categorical = c("e3_sex", "h_ethnicity_spiro", 
+                      "cohort")
     ), 
     strategy_loq_urine = "div2", 
     creatinine_threshold = 10, 

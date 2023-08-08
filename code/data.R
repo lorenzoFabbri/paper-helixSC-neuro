@@ -232,7 +232,7 @@ load_dat_request <- function() {
                         "hs_sample_c", 
                         "hs_tob", "hs_smk_parents", "hs_globalexp", 
                         "hs_fam_car", "hs_c_room", 
-                        "hs_wrk_m", "hs_finance", "FAS_cat", 
+                        "hs_wrk_m", "hs_finance", "FAS_cat", "FAS_score", 
                         "hs_neuro_diag", 
                         "hs_temp", "hs_noise", "hs_qual_test", "hs_rest_nth", 
                         "hs_mood", "hs_healthc_tday")), 

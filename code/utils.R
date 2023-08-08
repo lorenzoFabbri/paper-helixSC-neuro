@@ -242,8 +242,10 @@ rq_estimate_weights <- function(dat, save_results, parallel, workers) {
           sl_lib = params_ana$sl_lib
         ))
       )) # End estimation weights current exposure
+      # Trim weights
       ret <- suppressMessages(WeightIt::trim(tmp$weights, 
-                                             params_ana$weights_trim))
+                                             at = params_ana$weights_trim, 
+                                             lower = TRUE))
     }, 
     .options = furrr::furrr_options(
       seed = TRUE
@@ -438,6 +440,7 @@ rq_fit_model_weighted <- function(dat, outcome,
       file = paste0(
         Sys.getenv("path_store_res"), 
         "weights_exposure_model/", 
+        rq, "_", 
         params_ana$method_weightit, 
         ".qs"
       ), 
@@ -554,9 +557,11 @@ rq_estimate_marginal_effects <- function(fits, parallel, workers) {
             variables = list(
               {exposure} = values
             ), 
-            wts = weights
+            wts = weights, 
+            vcov = {glue::double_quote(vcov)}
           )", 
-            exposure = exposure
+            exposure = exposure, 
+            vcov = "HC3"
           )
         )
       ) # End G-computation (avg_predictions)
@@ -596,9 +601,11 @@ rq_estimate_marginal_effects <- function(fits, parallel, workers) {
             variables = {glue::double_quote(exposure)}, 
             newdata = marginaleffects::datagridcf({exposure} = values), 
             by = {glue::double_quote(exposure)}, 
-            wts = weights_repeated
+            wts = weights_repeated, 
+            vcov = {glue::double_quote(vcov)}
           )", 
-            exposure = exposure
+            exposure = exposure, 
+            vcov = "HC3"
           )
         )
       ) # End slopes (avg_slopes)
@@ -638,10 +645,12 @@ rq_estimate_marginal_effects <- function(fits, parallel, workers) {
             variables = list(
               {exposure} = {glue::double_quote(type)}
             ), 
-            wts = weights
+            wts = weights, 
+            vcov = {glue::double_quote(vcov)}
           )", 
             exposure = exposure, 
-            type = "iqr"
+            type = "iqr", 
+            vcov = "HC3"
           )
         )
       ) |> # End marginal estimates (avg_comparisons)
