@@ -522,6 +522,7 @@ rq_fit_model_weighted <- function(dat, outcome,
 rq_estimate_marginal_effects <- function(fits, parallel, workers) {
   rq <- Sys.getenv("TAR_PROJECT")
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
+  params_ana <- params_analyses()[[rq]]
   
   # Loop over the fitted models to estimate marginal effects
   if (parallel == TRUE) {
@@ -545,8 +546,8 @@ rq_estimate_marginal_effects <- function(fits, parallel, workers) {
       # G-computation (ADRF)
       ## Values of exposure for counterfactual predictions, based on quantiles
       values <- with(dat, seq(
-        quantile(get(exposure), 0.1), 
-        quantile(get(exposure), 0.9), 
+        quantile(get(exposure), params_ana$type_avg_comparison[1]), 
+        quantile(get(exposure), params_ana$type_avg_comparison[2]), 
         length.out = 50
       ))
       gcomp <- eval(
@@ -637,19 +638,26 @@ rq_estimate_marginal_effects <- function(fits, parallel, workers) {
       
       ############################################################################
       # Comparisons (marginal estimates)
+      ## Create dataframe with `high` and `low` values for exposure
+      df_comparisons <- myphd::create_df_marginal_comparisons(
+        dat = dat, 
+        var = exposure, 
+        percentiles = params_ana$type_avg_comparison, 
+        group_var = "cohort"
+      )
+      
       avg_comp <- eval(
         parse(
           text = glue::glue(
             "marginaleffects::avg_comparisons(
             model = mod, 
             variables = list(
-              {exposure} = {glue::double_quote(type)}
+              {exposure} = df_comparisons
             ), 
             wts = weights, 
             vcov = {glue::double_quote(vcov)}
           )", 
             exposure = exposure, 
-            type = "iqr", 
             vcov = "HC3"
           )
         )

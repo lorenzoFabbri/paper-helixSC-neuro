@@ -1,5 +1,57 @@
 #' Title
 #'
+#' @param dat 
+#' @param id_var 
+#' @param group_var 
+#' @param lower_percentile 
+#' @param upper_percentile 
+#'
+#' @return
+#' @export
+viz_overlap_quantiles <- function(dat, id_var, group_var, 
+                                  lower_percentile, upper_percentile) {
+  # Process data
+  dat_proc <- dat |>
+    dplyr::select(-dplyr::any_of(id_var))
+  vars <- setdiff(colnames(dat_proc), group_var)
+  
+  # Plot
+  ret <- lapply(vars, function(x) {
+    dat_proc |>
+      dplyr::select(dplyr::all_of(c(x, group_var))) |>
+      ggplot2::ggplot(ggplot2::aes(x = .data[[x]], 
+                                   y = .data[[group_var]], 
+                                   fill = 0.5 - abs(0.5 - stat(ecdf)))) +
+      ggridges::stat_density_ridges(
+        scale = 0.95, 
+        jittered_points = TRUE, 
+        position = ggridges::position_points_jitter(
+          width = 0.05, 
+          height = 0
+        ), 
+        point_size = 3, 
+        point_alpha = 1, 
+        point_shape = "|", 
+        geom = "density_ridges_gradient", 
+        calc_ecdf = TRUE, 
+        quantile_lines = TRUE, 
+        vline_color = "red", 
+        quantiles = c(lower_percentile, upper_percentile)
+      ) +
+      ggplot2::scale_fill_viridis_c(name = "Tail probability", 
+                                    direction = -1) +
+      ggplot2::labs(caption = glue::glue(
+                      "Lower percentile: {lower}th. Upper percentile: {upper}th.", 
+                      lower = lower_percentile * 100, 
+                      upper = upper_percentile * 100
+                    ))
+  }) # End loop over variables to plot
+  
+  return(ret)
+} # End function viz_overlap_quantiles
+
+#' Title
+#'
 #' @return
 #' @export
 viz_clinical_outcome <- function() {
@@ -11,7 +63,7 @@ viz_clinical_outcome <- function() {
     dplyr::select(
       cohort, 
       hs_age_years, e3_sex, 
-      outcome
+      dplyr::all_of(outcome)
     ) |>
     dplyr::mutate(
       hs_age_years = as.factor(round(hs_age_years, 0))

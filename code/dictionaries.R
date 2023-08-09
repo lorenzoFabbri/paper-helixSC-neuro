@@ -249,7 +249,8 @@ params_analyses <- function() {
     add_splines_exposure = TRUE, 
     df_splines = 3, 
     threshold_smooth = 10, 
-    threshold_k = 3
+    threshold_k = 3, 
+    type_avg_comparison = c(0.1, 0.9)
   ) # End dictionary parameters RQ1
   rq2 <- rq1
   rq3 <- rq1
