@@ -20,7 +20,6 @@ load_dag <- function(dags, exposure, outcome, params_dag) {
                       "rq3" = "marker_to_out")
   
   dag <- dags[[which_dag]]
-  ret$dag <- dag
   
   # Find the adjustment set(s) of interest
   adjustment_set <- dagitty::adjustmentSets(x = dag, 
@@ -28,18 +27,21 @@ load_dag <- function(dags, exposure, outcome, params_dag) {
                                             outcome = outcome, 
                                             type = params_dag$type, 
                                             effect = params_dag$effect)
-  ret$adjustment_sets <- adjustment_set
   
   # Identify precision covariates to add to adjustment set
   prec_covars <- dagitty::parents(x = dag, 
                                   v = outcome)
   parents_exposure <- dagitty::parents(x = dag, 
                                        v = exposure)
-  ret$prec_covars <- setdiff(setdiff(prec_covars, 
-                                     exposure), 
-                             parents_exposure)
+  prec_covars <- setdiff(setdiff(prec_covars, 
+                                 exposure), 
+                         parents_exposure)
   
-  return(ret)
+  return(list(
+    dag = dag, 
+    adjustment_sets = adjustment_sets, 
+    prec_covars = prec_covars
+  ))
 } # End function load_dag
 ################################################################################
 
@@ -103,19 +105,29 @@ rq_load_data <- function(res_dag) {
     params_dat$variables[[rq]]$exposures, 
     colnames(dat_request$dat)
   ), sep = "\n")
+  
+  ## Exposures
   dat$exposures <- dat_request$dat |>
     dplyr::select(dplyr::any_of(c(
       params_dat$variables$identifier, 
       params_dat$variables[[rq]]$exposures
     )))
+  
+  ## Outcome
   dat$outcome <- dat_request$dat |>
     dplyr::select(params_dat$variables$identifier, 
                   params_dat$variables[[rq]]$outcome)
-  adj_set <- select_adjustment_set(dat = dat_request$dat, 
-                                   meta = dat_request$meta, 
-                                   res_dag = res_dag, 
-                                   strategy = params_dat$variables$strategy_select_adj_set)
-  # Add precision covariates
+  
+  ## Covariates
+  if (length(res_dag$adjustment_sets) > 1) {
+    adj_set <- select_adjustment_set(dat = dat_request$dat, 
+                                     meta = dat_request$meta, 
+                                     res_dag = res_dag, 
+                                     strategy = params_dat$variables$strategy_select_adj_set)
+  } else {
+    adj_set <- res_dag$adjustment_sets
+  } # End choice adjustment set
+  ### Add precision covariates
   adj_set <- unique(c(adj_set, 
                       res_dag$prec_covars))
   mapping_covars <- dat_request$meta[dat_request$meta$dag %in% adj_set, 
