@@ -39,7 +39,7 @@ load_dag <- function(dags, exposure, outcome, params_dag) {
   
   return(list(
     dag = dag, 
-    adjustment_sets = adjustment_sets, 
+    adjustment_sets = adjustment_set, 
     prec_covars = prec_covars
   ))
 } # End function load_dag
@@ -137,12 +137,13 @@ rq_load_data <- function(res_dag) {
     adj_set <- res_dag$adjustment_sets
   } # End choice adjustment set
   ### Add precision covariates
-  adj_set <- unique(c(adj_set, 
-                      res_dag$prec_covars))
+  adj_set <- c(adj_set, res_dag$prec_covars) |>
+    unlist() |>
+    unique()
   mapping_covars <- dat_request$meta[dat_request$meta$dag %in% adj_set, 
                                      ]$variable |>
     as.character()
-  dat$adjustment_set <- adj_set
+  dat$adjustment_set <- c(adj_set)
   dat$mapping_covariates <- mapping_covars
   dat$covariates <- dat_request$dat |>
     dplyr::select(params_dat$variables$identifier, 
