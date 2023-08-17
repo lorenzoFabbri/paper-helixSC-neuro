@@ -97,6 +97,15 @@ rq_load_data <- function(res_dag) {
   # Load data request
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   dat_request <- load_dat_request()
+  ## Eventually load also steroid data
+  if (Sys.getenv("TAR_PROJECT") %in% c("rq02" ,"rq03", "rq2" ,"rq3")) {
+    metabolites <- load_steroids()
+    
+    dat_request$dat <- dplyr::inner_join(
+      dat_request$dat, metabolites$metabolome, 
+      by = params_dat$variables$identifier
+    )
+  }
   
   # Create one dataset for covariates, one for exposures, and one for outcomes
   dat <- list()

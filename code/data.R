@@ -1,11 +1,9 @@
-#' Process the steroid metabolomics data
+#' Load the steroid metabolomics data
 #'
 #' @return
 #'
 #' @export
-process_steroids <- function() {
-  rq <- Sys.getenv("TAR_PROJECT")
-  
+load_steroids <- function() {
   # Load data
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   paths <- params_dat$paths
@@ -13,7 +11,11 @@ process_steroids <- function() {
   datasets <- c("urine_bib", "urine_inma_rhea_eden_kanc", "urine_moba")
   datasets <- paste0(datasets, ".xlsx")
   
+  # Loop over datasets
   tbls <- lapply(datasets, function(x) {
+    cat(paste0("Loading dataset: ", x, "...\n"))
+    
+    # Metabolites
     dd <- readxl::read_xlsx(paste0(steroids, x), 
                             sheet = 1, 
                             col_names = TRUE, trim_ws = TRUE) |>
@@ -22,65 +24,27 @@ process_steroids <- function() {
     colnames(dd)[[1]] <- params_dat$variables$identifier
     # Tidy names
     dd <- dd |>
-      dplyr::mutate(dplyr::across(
-        dplyr::all_of(params_dat$variables$identifier), 
-        ~ stringr::str_trim(., side = "both")
-      )) |>
+      dplyr::mutate(HelixID = stringr::str_trim(HelixID, side = "both")) |>
       dplyr::rowwise() |>
       dplyr::mutate(HelixID = dplyr::case_when(
-        grepl("KAN|EDP", HelixID) ~ stringr::str_split(HelixID, "_")[[1]][1], 
-        grepl("SAB", HelixID) ~ paste0(stringr::str_split(HelixID, " ")[[1]][1], 
-                                       stringr::str_split(HelixID, " ")[[1]][2]), 
-        grepl("^[[:digit:]]+", HelixID) ~ paste0("RHE", HelixID), 
-        .default = HelixID
-      ))
-    
-    if (x == "urine_bib.xlsx") {
-      creat <- readxl::read_xlsx(paste0(steroids, x), 
-                                 sheet = 3, skip = 1, 
-                                 col_names = TRUE, trim_ws = TRUE) |>
-        tibble::as_tibble()
-    } else {
-      creat <- readxl::read_xlsx(paste0(steroids, 
-                                        "creatinine.xlsx"), 
-                                 sheet = 2, 
-                                 col_names = TRUE, trim_ws = TRUE) |>
-        tibble::as_tibble()
-    }
-    colnames(creat) <- c(params_dat$variables$identifier, "creatinine")
-    # Tidy names
-    creat <- creat |>
-      dplyr::mutate(dplyr::across(
-        dplyr::all_of(params_dat$variables$identifier), 
-        ~ stringr::str_trim(., side = "both")
-      )) |>
-      dplyr::rowwise() |>
-      dplyr::mutate(HelixID = dplyr::case_when(
-        grepl("KAN|EDP|MOB", HelixID) ~ stringr::str_split(HelixID, "_")[[1]][1], 
-        grepl("SAB", HelixID) ~ paste0(stringr::str_split(HelixID, "_")[[1]][1], 
-                                       stringr::str_split(HelixID, "_")[[1]][4]), 
-        grepl("^[[:digit:]]+", HelixID) ~ paste0("RHE", HelixID), 
-        .default = HelixID
-      )) |>
-      dplyr::mutate(HelixID = dplyr::case_when(
-        grepl("MOB", HelixID) ~ ifelse(
-          nchar(HelixID) == 6, 
-          HelixID, 
-          ifelse(
-            nchar(HelixID) == 5, 
-            paste0(substring(HelixID, 1, 3), 
-                   "0", 
-                   substring(HelixID, 4, 5)), 
-            paste0(substring(HelixID, 1, 3), 
-                   "00", 
-                   substring(HelixID, 4))
-          )
+        grepl("KAN|EDP", HelixID) ~ stringr::str_split(HelixID, "_|-")[[1]][1], 
+        grepl("SAB", HelixID) ~ paste0(
+          stringr::str_split(HelixID, " ")[[1]][1], 
+          stringr::str_split(HelixID, " ")[[1]][2] |>
+            stringr::str_remove("^0+")
         ), 
-        grepl("SAB", HelixID) ~ paste0(substring(HelixID, 1, 3), 
-                                       substring(HelixID, 5, 7)), 
-        .default = HelixID
-      ))
+        grepl("^[[:digit:]]+", HelixID) ~ paste0("RHE", HelixID), 
+        # Remove leading zeros to match HELIX dataset
+        grepl("MOB", HelixID) ~ paste0(
+          "MOB", 
+          stringr::str_split(HelixID, "MOB")[[1]][2] |>
+            stringr::str_remove("^0+")
+        ), 
+        TRUE ~ HelixID
+      )) |>
+      dplyr::mutate(HelixID = stringr::str_replace(HelixID, "EDP", "EDE"))
     
+    # LOQ information
     loq <- readxl::read_xlsx(paste0(steroids, x), 
                              sheet = 2, 
                              col_names = TRUE, trim_ws = TRUE) |>
@@ -90,123 +54,76 @@ process_steroids <- function() {
                                                 case = "none")
     ############################################################################
     
-    # Descriptive bad values
-    descs <- lapply(dd, function(x) {
-      list(
-        loq = sum(x == "<LOQ" | x == "<LLOQ"), 
-        nd = sum(x == "n.d."), 
-        out = sum(stringr::str_detect(x, "\\*"))
-      )
-    }) |>
-      purrr::transpose() |>
-      purrr::map_df(~ .x, .id = "statistic") |>
-      dplyr::select(-params_dat$variables$identifier, 
-                    -statistic)
-    ############################################################################
-    
     # Cleaning
     cols <- colnames(dd) |>
       setdiff(params_dat$variables$identifier)
-    dd <- dd |>
-      dplyr::mutate(
-        # Values below the limit of quantification
-        dplyr::across(dplyr::all_of(cols), 
-                      ~ ifelse(. %in% c("<LOQ", "<LLOQ"), NA, .)), 
-        # Values not detected
-        dplyr::across(dplyr::all_of(cols), 
-                      ~ ifelse(. == "n.d.", "-777", .)), 
-        # Potential contamination
-        dplyr::across(dplyr::all_of(cols), 
-                      ~ ifelse(stringr::str_detect(., "\\*"), "-999", .)), 
-        # Convert to numeric since now no text
-        dplyr::across(dplyr::all_of(cols), 
-                      as.numeric)
-      ) |>
-      dplyr::select(-AED)
-    dd <- dplyr::inner_join(dd, creat, 
-                            by = params_dat$variables$identifier)
+    ## Create new dataset for `_cdesc`
+    dd_cdesc <- dd
+    dd_cdesc <- dd_cdesc |>
+      dplyr::mutate(dplyr::across(
+        dplyr::all_of(cols), 
+        \(x) dplyr::case_when(
+          # Value below the limit of quantification
+          x %in% c("<LOQ", "<LLOQ") ~ 2, 
+          # Interference or out of range
+          stringr::str_detect(x, "\\*") ~ 3, 
+          # Value not detected
+          x == "n.d." ~ 4, 
+          # Quantifiable
+          TRUE ~ 1
+        )
+      ), .keep = "unused")
+    dd_cdesc <- dplyr::rename_with(dd_cdesc, 
+                                   ~ paste0(.x, "_cdesc", recycle0 = TRUE), 
+                                   !dplyr::starts_with(params_dat$variables$identifier))
     
-    ## Take care of <LOD/LOQ
-    cols <- colnames(dd) |>
-      setdiff(params_dat$variables$identifier)
+    ## Remove unwanted columns and change to numeric
+    unwanted_cols <- c("AED")
     dd <- dd |>
-      dplyr::mutate(dplyr::across(dplyr::all_of(cols), 
-                                  ~ ifelse(is.na(.) & creatinine > params_dat$variables$creatinine_threshold, 
-                                           handle_llodq_urine(loq[loq$metabolite == dplyr::cur_column(), 
-                                                                  "loq"], 
-                                                              params_dat$variables$strategy_loq_urine), 
-                                           .)))
-    
-    ### Take care of contamination and non-detected
-    dd <- dd |>
+      dplyr::select(-dplyr::all_of(unwanted_cols)) |>
       dplyr::mutate(
         dplyr::across(
-          dplyr::all_of(cols), 
+          dplyr::all_of(setdiff(cols, unwanted_cols)), 
           \(x) dplyr::case_when(
-            x == -999 ~ NA, 
-            x == -777 ~ NA, 
-            .default = x
+            x %in% c("<LOQ", "<LLOQ") ~ NA, 
+            stringr::str_detect(x, "\\*") ~ NA, 
+            x == "n.d." ~ NA, 
+            TRUE ~ x
           )
-        )
+        ), 
+        dplyr::across(dplyr::all_of(setdiff(cols, unwanted_cols)), 
+                      as.numeric)
       )
+    dd_cdesc <- dd_cdesc |>
+      dplyr::select(-dplyr::all_of(paste0(unwanted_cols, "_cdesc")))
+    ############################################################################
     
     return(list(
       met = dd, 
-      descs = descs
+      loq = loq, 
+      cdesc = dd_cdesc
     ))
   }) # End loop read data
   
   # Merged data
   metabs <- purrr::reduce(lapply(tbls, "[[", "met"), 
-                          .f = dplyr::full_join)
-  ## Replace "EDP" with "EDE"
-  metabs <- metabs |>
-    dplyr::mutate(HelixID = stringr::str_replace(HelixID, "EDP", "EDE"))
-  descs <- as.data.frame(
-    purrr::reduce(
-      lapply(tbls, function(x) {
-        as.matrix(x$descs)
-      }), 
-      .f = `+`
-    )
-  ) |>
-    tibble::as_tibble() |>
-    dplyr::mutate(statistic = c("loq", "nd", "out")) |>
-    dplyr::relocate("statistic")
+                          .f = dplyr::bind_rows)
+  cdescs <- purrr::reduce(lapply(tbls, "[[", "cdesc"), 
+                          .f = dplyr::bind_rows)
+  loqs <- tbls[[1]]$loq
   
   # Some sanity checks
   assertthat::are_equal(nrow(metabs), 
-                        length(unique(metabs$HelixID)))
-  
-  # Save metabolites data to file
-  readr::write_csv(metabs, 
-                   file = paste0(
-                     Sys.getenv("path_store_res"), 
-                     "steroids.csv"
-                   ))
+                        length(unique(metabs[[params_dat$variables$identifier]])))
+  assertthat::are_equal(nrow(metabs), nrow(cdescs))
+  assertthat::are_equal(ncol(metabs), ncol(cdescs))
   
   return(list(
     metabolome = metabs, 
-    descriptives = descs
+    desc = cdescs, 
+    loq = loqs
   ))
-} # End function process_steroids
-################################################################################
-
-#' Title
-#'
-#' @param loq 
-#' @param strategy 
-#'
-#' @return
-#'
-#' @export
-handle_llodq_urine <- function(loq, strategy) {
-  if (strategy == "div2") {
-    new_val <- as.numeric(loq) / 2
-  }
-  
-  return(new_val)
-} # End function handle_loq_urine
+} # End function load_steroids
 ################################################################################
 
 #' Load and clean the dataset corresponding to the HELIX data request
@@ -337,22 +254,6 @@ load_dat_request <- function() {
     ) |>
     # Exclude subjects with not usable test
     dplyr::filter(hs_qual_test != 3)
-  
-  # Eventually load metabolites
-  if (Sys.getenv("TAR_PROJECT") %in% c("rq02" ,"rq03", "rq2" ,"rq3")) {
-    metabolites <- suppressMessages(readr::read_csv(
-      file = paste0(
-        Sys.getenv("path_store_res"), 
-        "steroids.csv"
-      )
-    )) |>
-      tibble::as_tibble()
-    
-    dat <- dplyr::inner_join(
-      dat, metabolites, 
-      by = "HelixID"
-    )
-  } # End load metabolites
   
   which_meta <- switch(Sys.getenv("TAR_PROJECT"), 
                        "rq01" = "rq1", 
