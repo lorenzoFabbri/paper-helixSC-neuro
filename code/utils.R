@@ -196,8 +196,7 @@ rq_prepare_data <- function(dat) {
   dat$exposures <- myphd::extract_cohort(dat = dat$exposures, 
                                          id_var = params_dat$variables$identifier)
   dat$exposures <- myphd::preproc_data(dat = dat$exposures, 
-                                       covariates = dat$covariates |>
-                                         dplyr::select(-cohort), 
+                                       covariates = dat$covariates, 
                                        outcome = NULL, 
                                        creatinine_var_names = creatinine_var_names, 
                                        creatinine_covariates_names = params_dat$variables$creatinine_covariates_names, 

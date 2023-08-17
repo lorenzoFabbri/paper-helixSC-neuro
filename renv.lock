@@ -613,7 +613,7 @@
     },
     "bslib": {
       "Package": "bslib",
-      "Version": "0.5.0",
+      "Version": "0.5.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -629,7 +629,7 @@
         "rlang",
         "sass"
       ],
-      "Hash": "1b117970533deb6d4e992c1b34e9d905"
+      "Hash": "283015ddfbb9d7bf15ea9f0b5698f0d9"
     },
     "ca": {
       "Package": "ca",
@@ -971,13 +971,13 @@
     },
     "curl": {
       "Package": "curl",
-      "Version": "5.0.1",
+      "Version": "5.0.2",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
-      "Hash": "2118af9cb164c8d2dddc7b89eaf732d9"
+      "Hash": "511bacbfa153a15251166b463b4da4f9"
     },
     "cvAUC": {
       "Package": "cvAUC",
@@ -1612,7 +1612,7 @@
     },
     "ggplot2": {
       "Package": "ggplot2",
-      "Version": "3.4.2",
+      "Version": "3.4.3",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1633,7 +1633,7 @@
         "vctrs",
         "withr"
       ],
-      "Hash": "3a147ee02e85a8941aad9909f1b43b7b"
+      "Hash": "85846544c596e71f8f46483ab165da33"
     },
     "ggraph": {
       "Package": "ggraph",
@@ -1757,9 +1757,9 @@
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteRepo": "glossary",
       "RemoteUsername": "psyteachr",
-      "RemoteRef": "HEAD",
+      "RemoteRepo": "glossary",
+      "RemoteRef": "master",
       "RemoteSha": "afad260aeacd519a5921dffd1dd3dfc864aee184",
       "Requirements": [
         "R.utils",
@@ -1781,7 +1781,7 @@
         "webexercises",
         "xml2"
       ],
-      "Hash": "711903613ebb60596aa31b2c26d25c04"
+      "Hash": "7e481ebb49bc8d1f888fe744c069a68e"
     },
     "glue": {
       "Package": "glue",
@@ -2068,7 +2068,7 @@
     },
     "httr": {
       "Package": "httr",
-      "Version": "1.4.6",
+      "Version": "1.4.7",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -2079,7 +2079,7 @@
         "mime",
         "openssl"
       ],
-      "Hash": "7e5e3cbd2a7bc07880c94e22348fb661"
+      "Hash": "ac107251d9d9fd72f0ca8049988f1d7f"
     },
     "httr2": {
       "Package": "httr2",
@@ -2694,7 +2694,7 @@
       "RemoteRepo": "myphd",
       "RemoteUsername": "isglobal-cep",
       "RemoteRef": "HEAD",
-      "RemoteSha": "05c18270539efb5593fa879da155f1a4e1450db7",
+      "RemoteSha": "b76a4e6f189e33f5e8ca297929260c9af2a539aa",
       "Requirements": [
         "Hmisc",
         "WeightIt",
@@ -2733,7 +2733,7 @@
         "tidyr",
         "visdat"
       ],
-      "Hash": "b21298782264ea378c418d61e409b89f"
+      "Hash": "7bb3c24906a90f7d2a64103b13f25746"
     },
     "naniar": {
       "Package": "naniar",
@@ -2920,9 +2920,9 @@
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteRepo": "papaja",
       "RemoteUsername": "crsh",
-      "RemoteRef": "HEAD",
+      "RemoteRepo": "papaja",
+      "RemoteRef": "main",
       "RemoteSha": "1c488f73598ae088a4f0201e767aaa87f28387d3",
       "Requirements": [
         "R",
@@ -2938,7 +2938,7 @@
         "yaml",
         "zip"
       ],
-      "Hash": "95eb3287a4df45bfaa56cfc863ed7b69"
+      "Hash": "5d003cf61a47ec7737ca02100383db34"
     },
     "parallelly": {
       "Package": "parallelly",
@@ -3491,8 +3491,13 @@
     },
     "renv": {
       "Package": "renv",
-      "Version": "1.0.1",
-      "Source": "Repository"
+      "Version": "1.0.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "utils"
+      ],
+      "Hash": "4b22ac016fe54028b88d0c68badbd061"
     },
     "reshape2": {
       "Package": "reshape2",
@@ -3520,7 +3525,7 @@
     },
     "rmarkdown": {
       "Package": "rmarkdown",
-      "Version": "2.23",
+      "Version": "2.24",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -3540,7 +3545,7 @@
         "xfun",
         "yaml"
       ],
-      "Hash": "79f14e53725f28900d936f692bfdd69f"
+      "Hash": "3854c37590717c08c32ec8542a2e0a35"
     },
     "rmdfiltr": {
       "Package": "rmdfiltr",
@@ -3787,7 +3792,7 @@
     },
     "shiny": {
       "Package": "shiny",
-      "Version": "1.7.4.1",
+      "Version": "1.7.5",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -3817,7 +3822,7 @@
         "withr",
         "xtable"
       ],
-      "Hash": "f7f201522eedbc95f10ef323b100ff29"
+      "Hash": "438b99792adbe82a8329ad8697d45afe"
     },
     "shinyjs": {
       "Package": "shinyjs",
@@ -4312,13 +4317,13 @@
     },
     "uuid": {
       "Package": "uuid",
-      "Version": "1.1-0",
+      "Version": "1.1-1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
-      "Hash": "f1cb46c157d080b729159d407be83496"
+      "Hash": "3d78edfb977a69fc7a0341bee25e163f"
     },
     "vctrs": {
       "Package": "vctrs",
