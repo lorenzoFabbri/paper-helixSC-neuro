@@ -769,6 +769,13 @@
       ],
       "Hash": "3f038e5ac7f41d4ac41ce658c85e3042"
     },
+    "clisymbols": {
+      "Package": "clisymbols",
+      "Version": "1.2.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "96c01552bfd5661b9bbdefbc762f4bcd"
+    },
     "cluster": {
       "Package": "cluster",
       "Version": "2.1.4",
@@ -2694,7 +2701,7 @@
       "RemoteRepo": "myphd",
       "RemoteUsername": "isglobal-cep",
       "RemoteRef": "HEAD",
-      "RemoteSha": "b76a4e6f189e33f5e8ca297929260c9af2a539aa",
+      "RemoteSha": "ba7db37d6d537b270343fa20c066ac5e44ff79ee",
       "Requirements": [
         "Hmisc",
         "WeightIt",
@@ -2733,7 +2740,7 @@
         "tidyr",
         "visdat"
       ],
-      "Hash": "7bb3c24906a90f7d2a64103b13f25746"
+      "Hash": "0b3804c62827dd83e4512d30f84a7dd2"
     },
     "naniar": {
       "Package": "naniar",
@@ -4109,6 +4116,19 @@
         "utils"
       ],
       "Hash": "0fc97a52b4b32a0b4a3de4c5241348e2"
+    },
+    "tidylog": {
+      "Package": "tidylog",
+      "Version": "1.0.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "clisymbols",
+        "dplyr",
+        "glue",
+        "tidyr"
+      ],
+      "Hash": "a55d41e241dbe858d1456d952ce3301f"
     },
     "tidyr": {
       "Package": "tidyr",

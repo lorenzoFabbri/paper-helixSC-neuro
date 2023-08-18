@@ -13,11 +13,6 @@ params_dag <- list(
   effect = "total"
 )
 rq <- Sys.getenv("TAR_PROJECT")
-rq <- switch(rq, 
-             "rq01" = "rq1", 
-             "rq02" = "rq2", 
-             "rq03" = "rq3", 
-             rq)
 exposure <- switch(rq, 
                    "rq1" = "chemical", 
                    "rq2" = "chemical", 

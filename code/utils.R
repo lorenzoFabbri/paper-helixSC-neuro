@@ -63,15 +63,15 @@ select_adjustment_set <- function(dat, meta, res_dag, strategy) {
     unlist()
   
   ret <- switch(strategy,
-    "first" = all_as[[1]], 
-    "smallest" = all_as[[which.min(lengths_as)]], 
-    "largest" = all_as[[which.max(lengths_as)]], 
-    "random" = sample(all_as, size = 1), 
-    "minimize_missings" = all_as[[myphd::minimize_missings(
-      dat = dat, 
-      meta = meta, 
-      adjustment_sets = all_as
-    )]]
+                "first" = all_as[[1]], 
+                "smallest" = all_as[[which.min(lengths_as)]], 
+                "largest" = all_as[[which.max(lengths_as)]], 
+                "random" = sample(all_as, size = 1), 
+                "minimize_missings" = all_as[[myphd::minimize_missings(
+                  dat = dat, 
+                  meta = meta, 
+                  adjustment_sets = all_as
+                )]]
   )
   
   return(ret)
@@ -101,7 +101,7 @@ rq_load_data <- function(res_dag) {
   if (Sys.getenv("TAR_PROJECT") %in% c("rq02" ,"rq03", "rq2" ,"rq3")) {
     metabolites <- load_steroids()
     
-    dat_request$dat <- dplyr::inner_join(
+    dat_request$dat <- tidylog::inner_join(
       dat_request$dat, metabolites$metabolome, 
       by = params_dat$variables$identifier
     )
@@ -117,15 +117,15 @@ rq_load_data <- function(res_dag) {
   
   ## Exposures
   dat$exposures <- dat_request$dat |>
-    dplyr::select(dplyr::any_of(c(
+    tidylog::select(dplyr::any_of(c(
       params_dat$variables$identifier, 
       params_dat$variables[[rq]]$exposures
     )))
   
   ## Outcome
   dat$outcome <- dat_request$dat |>
-    dplyr::select(params_dat$variables$identifier, 
-                  params_dat$variables[[rq]]$outcome)
+    tidylog::select(params_dat$variables$identifier, 
+                    params_dat$variables[[rq]]$outcome)
   
   ## Covariates
   if (length(res_dag$adjustment_sets) > 1) {
@@ -141,18 +141,18 @@ rq_load_data <- function(res_dag) {
     unlist() |>
     unique()
   mapping_covars <- dat_request$meta[dat_request$meta$dag %in% adj_set, 
-                                     ]$variable |>
+  ]$variable |>
     as.character()
   dat$adjustment_set <- c(adj_set)
   dat$mapping_covariates <- mapping_covars
   dat$covariates <- dat_request$dat |>
-    dplyr::select(params_dat$variables$identifier, 
-                  dplyr::all_of(mapping_covars))
+    tidylog::select(params_dat$variables$identifier, 
+                    dplyr::all_of(mapping_covars))
   cols_to_season <- c("hs_date_neu", "e3_cbirth")
   dat$covariates <- myphd::convert_time_season(dat = dat$covariates, 
                                                cols = cols_to_season) |>
-    dplyr::mutate(dplyr::across(dplyr::any_of(cols_to_season), 
-                                \(x) factor(x)))
+    tidylog::mutate(dplyr::across(dplyr::any_of(cols_to_season), 
+                                  \(x) factor(x)))
   
   return(dat)
 } # End function rq_load_data
@@ -204,8 +204,8 @@ rq_prepare_data <- function(dat) {
                                        dic_steps = steps_exposures, 
                                        id_var = params_dat$variables$identifier, 
                                        by_var = "cohort")
-  dat$exposures <- dplyr::select(dat$exposures, 
-                                 -dplyr::any_of("cohort"))
+  dat$exposures <- tidylog::select(dat$exposures, 
+                                   -dplyr::any_of("cohort"))
   
   return(dat)
 } # End function rq_prepare_data
@@ -248,12 +248,12 @@ rq_estimate_weights <- function(dat, save_results, parallel, workers) {
     estimated_weights <- furrr::future_map(list_exposures, function(x, p) {
       p()
       tmp <- suppressWarnings(suppressMessages(myphd::estimate_weights(
-        dat = dplyr::full_join(dplyr::select(dat$exposures, 
-                                             dplyr::all_of(c(x, 
-                                                             params_dat$variables$identifier))), 
-                               dat$covariates, 
-                               by = params_dat$variables$identifier) |>
-          dplyr::select(-params_dat$variables$identifier), 
+        dat = tidylog::full_join(tidylog::select(dat$exposures, 
+                                                 dplyr::all_of(c(x, 
+                                                                 params_dat$variables$identifier))), 
+                                 dat$covariates, 
+                                 by = params_dat$variables$identifier) |>
+          tidylog::select(-params_dat$variables$identifier), 
         exposure = x, 
         covariates = list_covariates, 
         method = params_ana$method_weightit, 
@@ -360,7 +360,7 @@ rq_estimate_weights <- function(dat, save_results, parallel, workers) {
       tab <- balance[[x]]$tab$Balance |>
         as.data.frame() |>
         tibble::rownames_to_column(var = "variable") |>
-        dplyr::rename(
+        tidylog::rename(
           variable = variable, 
           type = Type, 
           `unadj. correlation` = `Corr.Un`, 
@@ -370,7 +370,7 @@ rq_estimate_weights <- function(dat, save_results, parallel, workers) {
       tab <- tab |>
         dplyr::arrange(dplyr::desc(`adj. correlation`),
                        variable) |>
-        dplyr::mutate(type = dplyr::recode(
+        tidylog::mutate(type = dplyr::recode(
           type, "Contin." = "continuous",
           "Binary" = "binary"
         )) |>
@@ -441,8 +441,8 @@ rq_fit_model_weighted <- function(dat, outcome,
                                      id_var = params_dat$variables$identifier, 
                                      by_var = "cohort")
   dat$outcome <- dat$outcome |>
-    dplyr::select(-dplyr::any_of("cohort")) |>
-    dplyr::select(dplyr::all_of(c(
+    tidylog::select(-dplyr::any_of("cohort")) |>
+    tidylog::select(dplyr::all_of(c(
       params_dat$variables$identifier, 
       outcome
     )))
@@ -454,8 +454,8 @@ rq_fit_model_weighted <- function(dat, outcome,
                             params_dat$variables$identifier)
   list_covariates <- setdiff(colnames(dat$covariates), 
                              params_dat$variables$identifier)
-  dat_merged <- dplyr::full_join(dat$covariates, dat$outcome, 
-                                 by = params_dat$variables$identifier)
+  dat_merged <- tidylog::full_join(dat$covariates, dat$outcome, 
+                                   by = params_dat$variables$identifier)
   if (is.null(weights)) {
     weights <- qs::qread(
       file = paste0(
@@ -482,13 +482,13 @@ rq_fit_model_weighted <- function(dat, outcome,
     fits <- furrr::future_map(list_exposures, function(exposure, p) {
       p()
       
-      dat_analysis <- dplyr::full_join(dplyr::select(dat$exposures, 
-                                                     dplyr::all_of(c(exposure, 
-                                                                     params_dat$variables$identifier))), 
-                                       dat_merged, 
-                                       by = params_dat$variables$identifier) |>
-        dplyr::select(-params_dat$variables$identifier) |>
-        dplyr::filter(!is.na(.data[[outcome]]))
+      dat_analysis <- tidylog::full_join(tidylog::select(dat$exposures, 
+                                                         dplyr::all_of(c(exposure, 
+                                                                         params_dat$variables$identifier))), 
+                                         dat_merged, 
+                                         by = params_dat$variables$identifier) |>
+        tidylog::select(-params_dat$variables$identifier) |>
+        tidylog::filter(!is.na(.data[[outcome]]))
       
       if (length(idxs_missing_outcome) > 0) {
         weights_exposure <- weights[[exposure]]$weights[-idxs_missing_outcome]
@@ -664,7 +664,7 @@ rq_estimate_marginal_effects <- function(fits, parallel, workers) {
         dat = dat, 
         var = exposure, 
         percentiles = params_ana$type_avg_comparison, 
-        group_var = "cohort"
+        grouping_var = "cohort"
       )
       
       avg_comp <- eval(
@@ -684,7 +684,7 @@ rq_estimate_marginal_effects <- function(fits, parallel, workers) {
         )
       ) |> # End marginal estimates (avg_comparisons)
         marginaleffects::tidy() |>
-        dplyr::rename(
+        tidylog::rename(
           variable = term, 
           se = std.error
         )
@@ -736,7 +736,7 @@ run_mtp <- function(dat, shift_exposure) {
                                      id_var = params_dat$variables$identifier, 
                                      by_var = "cohort")
   dat$outcome <- dat$outcome |>
-    dplyr::select(-cohort)
+    tidylog::select(-cohort)
   
   # Run lmtp
   if (shift_exposure == TRUE) {
@@ -749,23 +749,23 @@ run_mtp <- function(dat, shift_exposure) {
   list_exposures <- names(dat$exposures)
   list_exposures <- setdiff(list_exposures, 
                             params_dat$variables$identifier)
-  dat_merged <- dplyr::full_join(dat$covariates, dat$outcome, 
-                                 by = params_dat$variables$identifier) |>
-    dplyr::mutate(cens = as.integer(!is.na(.data[[outcome]])))
+  dat_merged <- tidylog::full_join(dat$covariates, dat$outcome, 
+                                   by = params_dat$variables$identifier) |>
+    tidylog::mutate(cens = as.integer(!is.na(.data[[outcome]])))
   baseline <- dat$covariates |>
-    dplyr::select(-params_dat$variables$identifier) |>
+    tidylog::select(-params_dat$variables$identifier) |>
     names()
   
   # Loop over each exposure
   res <- lapply(list_exposures, function(exposure) {
-    dat_analysis <- dplyr::full_join(dplyr::select(dat$exposures, 
-                                                   dplyr::all_of(
-                                                     c(params_dat$variables$identifier, 
-                                                     exposure)
-                                                   )), 
-                                     dat_merged, 
-                                     by = params_dat$variables$identifier) |>
-      dplyr::select(-params_dat$variables$identifier)
+    dat_analysis <- tidylog::full_join(tidylog::select(dat$exposures, 
+                                                       dplyr::all_of(
+                                                         c(params_dat$variables$identifier, 
+                                                           exposure)
+                                                       )), 
+                                       dat_merged, 
+                                       by = params_dat$variables$identifier) |>
+      tidylog::select(-params_dat$variables$identifier)
     
     if (params_ana$estimator == "tmle") {
       warning("In lmtp_tmle, some arguments have to be defined.")

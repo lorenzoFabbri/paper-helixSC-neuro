@@ -12,13 +12,13 @@ viz_overlap_quantiles <- function(dat, id_var, group_var,
                                   lower_percentile, upper_percentile) {
   # Process data
   dat_proc <- dat |>
-    dplyr::select(-dplyr::any_of(id_var))
+    tidylog::select(-dplyr::any_of(id_var))
   vars <- setdiff(colnames(dat_proc), group_var)
   
   # Plot
   ret <- lapply(vars, function(x) {
     dat_proc |>
-      dplyr::select(dplyr::all_of(c(x, group_var))) |>
+      tidylog::select(dplyr::all_of(c(x, group_var))) |>
       ggplot2::ggplot(ggplot2::aes(x = .data[[x]], 
                                    y = .data[[group_var]], 
                                    fill = 0.5 - abs(0.5 - stat(ecdf)))) +
@@ -41,10 +41,10 @@ viz_overlap_quantiles <- function(dat, id_var, group_var,
       ggplot2::scale_fill_viridis_c(name = "Tail probability", 
                                     direction = -1) +
       ggplot2::labs(caption = glue::glue(
-                      "Lower percentile: {lower}th. Upper percentile: {upper}th.", 
-                      lower = lower_percentile * 100, 
-                      upper = upper_percentile * 100
-                    ))
+        "Lower percentile: {lower}th. Upper percentile: {upper}th.", 
+        lower = lower_percentile * 100, 
+        upper = upper_percentile * 100
+      ))
   }) # End loop over variables to plot
   
   return(ret)
@@ -60,15 +60,15 @@ viz_clinical_outcome <- function() {
   dat <- myphd::extract_cohort(dat, id_var = "HelixID")
   outcome <- vars_of_interest()$outcomes
   dat_sel <- dat |>
-    dplyr::select(
+    tidylog::select(
       cohort, 
       hs_age_years, e3_sex, 
       dplyr::all_of(outcome)
     ) |>
-    dplyr::mutate(
+    tidylog::mutate(
       hs_age_years = as.factor(round(hs_age_years, 0))
     ) |>
-    dplyr::rename(
+    tidylog::rename(
       age = hs_age_years, 
       sex = e3_sex, 
       hrt = {{outcome}}
@@ -112,25 +112,26 @@ viz_clinical_outcome <- function() {
 viz_desc_vars <- function(dat, vars, fct_levels) {
   # Select only cohort and variables of interest (e.g., chemicals w/ `cdesc`)
   df <- dat |>
-    dplyr::select(cohort, 
-                  dplyr::all_of(vars))
+    tidylog::select(cohort, 
+                    dplyr::all_of(vars))
   # Pivot to long format and count values
   df_long <- df |>
-    tidyr::pivot_longer(cols = -cohort) |>
-    dplyr::count(cohort, name, value)
+    tidylog::pivot_longer(cols = -cohort) |>
+    tidylog::count(cohort, name, value)
   df_long$value <- factor(df_long$value, 
                           levels = fct_levels)
   # Pivot to long and compute frequencies
   freqs <- df |>
-    tidyr::pivot_longer(cols = -cohort) |>
-    dplyr::group_by(cohort, name, value) |>
-    dplyr::summarise(n = dplyr::n()) |>
-    dplyr::group_by(cohort, name) |>
-    dplyr::mutate(f = n / sum(n) * 100) |>
-    dplyr::select(-n)
+    tidylog::pivot_longer(cols = -cohort) |>
+    tidylog::group_by(cohort, name, value) |>
+    tidylog::summarise(n = dplyr::n()) |>
+    tidylog::group_by(cohort, name) |>
+    tidylog::mutate(f = n / sum(n) * 100) |>
+    tidylog::select(-n) |>
+    tidylog::ungroup()
   
   # Join counts and frequencies
-  df_plot <- dplyr::full_join(
+  df_plot <- tidylog::full_join(
     df_long, freqs, 
     by = c("cohort", "name", "value")
   )
@@ -138,8 +139,8 @@ viz_desc_vars <- function(dat, vars, fct_levels) {
   # Heatmap
   plt <- df_plot |>
     dplyr::rowwise() |>
-    dplyr::mutate(name = stringr::str_split(name, "_")[[1]][2]) |>
-    dplyr::rename(
+    tidylog::mutate(name = stringr::str_split(name, "_")[[1]][2]) |>
+    tidylog::rename(
       variable = name, 
       description = value, 
       frequency = f

@@ -11,6 +11,9 @@ load_steroids <- function() {
   datasets <- c("urine_bib", "urine_inma_rhea_eden_kanc", "urine_moba")
   datasets <- paste0(datasets, ".xlsx")
   
+  problematic_ids <- c("KAN1292", "KAN147", "KAN315", "KAN918") |>
+    paste(collapse = "|")
+  
   # Loop over datasets
   tbls <- lapply(datasets, function(x) {
     cat(paste0("Loading dataset: ", x, "...\n"))
@@ -22,11 +25,29 @@ load_steroids <- function() {
       tibble::as_tibble()
     dd <- janitor::clean_names(dd, case = "none")
     colnames(dd)[[1]] <- params_dat$variables$identifier
+    
+    # Problematic IDs
+    dd <- dd |>
+      tidylog::filter(!grepl(problematic_ids, HelixID))
+    if (x == "urine_inma_rhea_eden_kanc.xlsx") {
+      kan <- readxl::read_xlsx(paste0(steroids, 
+                                      "data_anomalies_kan.xlsx"), 
+                               sheet = 1, 
+                               col_names = TRUE, trim_ws = TRUE) |>
+        tibble::as_tibble()
+      kan <- janitor::clean_names(kan, case = "none")
+      colnames(kan)[[1]] <- params_dat$variables$identifier
+      
+      dd <- data.table::rbindlist(list(dd, kan), 
+                                  use.names = TRUE) |>
+        tibble::as_tibble()
+    }
+    
     # Tidy names
     dd <- dd |>
-      dplyr::mutate(HelixID = stringr::str_trim(HelixID, side = "both")) |>
+      tidylog::mutate(HelixID = stringr::str_trim(HelixID, side = "both")) |>
       dplyr::rowwise() |>
-      dplyr::mutate(HelixID = dplyr::case_when(
+      tidylog::mutate(HelixID = dplyr::case_when(
         grepl("KAN|EDP", HelixID) ~ stringr::str_split(HelixID, "_|-")[[1]][1], 
         grepl("SAB", HelixID) ~ paste0(
           stringr::str_split(HelixID, " ")[[1]][1], 
@@ -42,7 +63,9 @@ load_steroids <- function() {
         ), 
         TRUE ~ HelixID
       )) |>
-      dplyr::mutate(HelixID = stringr::str_replace(HelixID, "EDP", "EDE"))
+      tidylog::mutate(HelixID = stringr::str_replace(HelixID, "EDP", "EDE")) |>
+      tidylog::mutate(HelixID = ifelse(HelixID == "SAB5501", 
+                                       "SAB550", HelixID))
     
     # LOQ information
     loq <- readxl::read_xlsx(paste0(steroids, x), 
@@ -55,12 +78,12 @@ load_steroids <- function() {
     ############################################################################
     
     # Cleaning
-    cols <- colnames(dd) |>
-      setdiff(params_dat$variables$identifier)
+    cols <- setdiff(colnames(dd), 
+                    params_dat$variables$identifier)
     ## Create new dataset for `_cdesc`
     dd_cdesc <- dd
     dd_cdesc <- dd_cdesc |>
-      dplyr::mutate(dplyr::across(
+      tidylog::mutate(dplyr::across(
         dplyr::all_of(cols), 
         \(x) dplyr::case_when(
           # Value below the limit of quantification
@@ -73,15 +96,15 @@ load_steroids <- function() {
           TRUE ~ 1
         )
       ), .keep = "unused")
-    dd_cdesc <- dplyr::rename_with(dd_cdesc, 
-                                   ~ paste0(.x, "_cdesc", recycle0 = TRUE), 
-                                   !dplyr::starts_with(params_dat$variables$identifier))
+    dd_cdesc <- tidylog::rename_with(dd_cdesc, 
+                                     ~ paste0(.x, "_cdesc", recycle0 = TRUE), 
+                                     !dplyr::starts_with(params_dat$variables$identifier))
     
     ## Remove unwanted columns and change to numeric
     unwanted_cols <- c("AED")
     dd <- dd |>
-      dplyr::select(-dplyr::all_of(unwanted_cols)) |>
-      dplyr::mutate(
+      tidylog::select(-dplyr::all_of(unwanted_cols)) |>
+      tidylog::mutate(
         dplyr::across(
           dplyr::all_of(setdiff(cols, unwanted_cols)), 
           \(x) dplyr::case_when(
@@ -95,7 +118,7 @@ load_steroids <- function() {
                       as.numeric)
       )
     dd_cdesc <- dd_cdesc |>
-      dplyr::select(-dplyr::all_of(paste0(unwanted_cols, "_cdesc")))
+      tidylog::select(-dplyr::all_of(paste0(unwanted_cols, "_cdesc")))
     ############################################################################
     
     return(list(
@@ -138,9 +161,15 @@ load_dat_request <- function() {
   dat <- read.csv(paths$path_dat_request, 
                   header = TRUE, stringsAsFactors = TRUE, 
                   na.strings = c("NA", "null")) |>
-    tibble::as_tibble()
+    tibble::as_tibble() |>
+    tidylog::mutate(
+      dplyr::across(
+        !dplyr::where(is.numeric), 
+        \(x) stringr::str_trim(x, side = "both")
+      )
+    )
   dat <- dat |>
-    dplyr::mutate(
+    tidylog::mutate(
       e3_cbirth = lubridate::as_date(dat$e3_cbirth), 
       hs_date_neu = lubridate::as_date(dat$hs_date_neu), 
       dplyr::across(
@@ -186,12 +215,12 @@ load_dat_request <- function() {
                             labels = c(1, 2))}
       ), 
       hs_wtr_hm = factor(hs_wtr_hm, 
-                          levels = c("Bottled", 
-                                     "Municipal (tap) filtered", 
-                                     "Municipal (tap ) non-filtered", 
-                                     "Other, specify in the next question", 
-                                     "Don't know"), 
-                          labels = c(1, 2, 3, 4, 5)), 
+                         levels = c("Bottled", 
+                                    "Municipal (tap) filtered", 
+                                    "Municipal (tap ) non-filtered", 
+                                    "Other, specify in the next question", 
+                                    "Don't know"), 
+                         labels = c(1, 2, 3, 4, 5)), 
       dplyr::across(
         dplyr::contains("_ethnicity"), 
         \(x) factor(x)
@@ -227,7 +256,7 @@ load_dat_request <- function() {
                       levels = c("female", "male"), 
                       labels = c(1, 0))
     ) |>
-    dplyr::rename(
+    tidylog::rename(
       hs_dmdtp_cadj = hs_dmdtp_crawadj, 
       hs_dedtp_cadj = hs_dedtp_crawadj, 
       hs_dedtp_madj = hs_dedtp_mrawadj, 
@@ -236,7 +265,7 @@ load_dat_request <- function() {
   
   # Manually modify some factors that have levels w/ few subjects
   dat <- dat |>
-    dplyr::mutate(
+    tidylog::mutate(
       hs_wrk_m = forcats::fct_collapse(
         hs_wrk_m, 
         "Employed" = c(1), 
@@ -253,7 +282,7 @@ load_dat_request <- function() {
         )
     ) |>
     # Exclude subjects with not usable test
-    dplyr::filter(hs_qual_test != 3)
+    tidylog::filter(hs_qual_test %in% c(1, 2))
   
   which_meta <- switch(Sys.getenv("TAR_PROJECT"), 
                        "rq01" = "rq1", 
@@ -266,16 +295,16 @@ load_dat_request <- function() {
                             col_names = TRUE, 
                             strings_as_factors = TRUE) |>
     tibble::as_tibble() |>
-    dplyr::mutate(variable = dplyr::case_when(
+    tidylog::mutate(variable = dplyr::case_when(
       variable == "hs_dedtp_crawadj" ~ "hs_dedtp_cadj", 
       TRUE ~ variable
     )) |>
-    dplyr::mutate(
+    tidylog::mutate(
       group = stringr::str_to_lower(group), 
       tab = stringr::str_to_lower(tab), 
       period = stringr::str_to_lower(period), 
     ) |>
-    dplyr::filter(.data[[which_meta]] == TRUE)
+    tidylog::filter(.data[[which_meta]] == TRUE)
   cols_to_change_type <- c("dag", "variable", 
                            "description", "code", "label", 
                            "comments")
