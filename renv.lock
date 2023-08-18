@@ -3691,9 +3691,14 @@
     },
     "sass": {
       "Package": "sass",
-      "Version": "0.4.7",
-      "Source": "Repository",
-      "Repository": "CRAN",
+      "Version": "0.4.7.9000",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "sass",
+      "RemoteUsername": "rstudio",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "4f42680340264e1655745a99cbd7e0c0481b6a01",
       "Requirements": [
         "R6",
         "fs",
@@ -3701,7 +3706,7 @@
         "rappdirs",
         "rlang"
       ],
-      "Hash": "6bd4d33b50ff927191ec9acbf52fd056"
+      "Hash": "de3db073534d5be979c8804296dfe1ac"
     },
     "scales": {
       "Package": "scales",
