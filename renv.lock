@@ -122,7 +122,7 @@
     },
     "Matrix": {
       "Package": "Matrix",
-      "Version": "1.6-0",
+      "Version": "1.6-1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -135,7 +135,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "31262fd18481fab05c5e7258dac163ca"
+      "Hash": "cb6855ac711958ca734b75e631b2035d"
     },
     "MatrixModels": {
       "Package": "MatrixModels",
@@ -1311,7 +1311,7 @@
     },
     "fontawesome": {
       "Package": "fontawesome",
-      "Version": "0.5.1",
+      "Version": "0.5.2",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1319,7 +1319,7 @@
         "htmltools",
         "rlang"
       ],
-      "Hash": "1e22b8cabbad1eae951a75e9f8b52378"
+      "Hash": "c2efdd5f0bcd1ea861c2d4e2a883a67d"
     },
     "fontquiver": {
       "Package": "fontquiver",
@@ -1433,7 +1433,7 @@
     },
     "future.callr": {
       "Package": "future.callr",
-      "Version": "0.8.1",
+      "Version": "0.8.2",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1441,7 +1441,7 @@
         "callr",
         "future"
       ],
-      "Hash": "e76426c4a99a1798a9376c6fe9070a68"
+      "Hash": "0a5ad2f3fe4bf8a794bbf822d6c285bf"
     },
     "gclus": {
       "Package": "gclus",
@@ -2513,7 +2513,7 @@
     },
     "marginaleffects": {
       "Package": "marginaleffects",
-      "Version": "0.13.0",
+      "Version": "0.14.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -2527,7 +2527,7 @@
         "methods",
         "rlang"
       ],
-      "Hash": "76ff31be3ad5592c280062b18851a125"
+      "Hash": "b1d30a01aa5a229f33f14b744332e531"
     },
     "markdown": {
       "Package": "markdown",
@@ -2701,7 +2701,7 @@
       "RemoteRepo": "myphd",
       "RemoteUsername": "isglobal-cep",
       "RemoteRef": "HEAD",
-      "RemoteSha": "ba7db37d6d537b270343fa20c066ac5e44ff79ee",
+      "RemoteSha": "ad0137532a9ddd1338ac47f6c0e38fc5f185dc7e",
       "Requirements": [
         "Hmisc",
         "WeightIt",
@@ -2740,7 +2740,7 @@
         "tidyr",
         "visdat"
       ],
-      "Hash": "0b3804c62827dd83e4512d30f84a7dd2"
+      "Hash": "951f70a95f647066ae02dfdd774a6918"
     },
     "naniar": {
       "Package": "naniar",
@@ -3212,7 +3212,7 @@
     },
     "progressr": {
       "Package": "progressr",
-      "Version": "0.13.0",
+      "Version": "0.14.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -3220,7 +3220,7 @@
         "digest",
         "utils"
       ],
-      "Hash": "376a8ebcc878f9c1395e212548fc297a"
+      "Hash": "ac50c4ffa8f6a46580dd4d7813add3c4"
     },
     "promises": {
       "Package": "promises",
@@ -3303,7 +3303,7 @@
     },
     "quantreg": {
       "Package": "quantreg",
-      "Version": "5.96",
+      "Version": "5.97",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -3317,7 +3317,7 @@
         "stats",
         "survival"
       ],
-      "Hash": "47a0047c3082b2a285434db2eb418dcc"
+      "Hash": "1bbc97f7d637ab3917c514a69047b2c1"
     },
     "ragg": {
       "Package": "ragg",
@@ -4014,7 +4014,7 @@
     },
     "targets": {
       "Package": "targets",
-      "Version": "1.2.0",
+      "Version": "1.2.2",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -4037,7 +4037,7 @@
         "vctrs",
         "yaml"
       ],
-      "Hash": "a1e56d84e94c41a03391aea66c32b732"
+      "Hash": "b873e80be60dd0110feb00d3151ec3d7"
     },
     "testthat": {
       "Package": "testthat",

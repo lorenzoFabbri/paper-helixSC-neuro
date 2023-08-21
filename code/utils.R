@@ -174,38 +174,41 @@ rq_prepare_data <- function(dat) {
                "rq03" = "rq3", 
                rq)
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
-  steps_exposures <- params_dat$steps[[rq]]$preproc_exposures
   steps_covars <- params_dat$steps[[rq]]$preproc_covars
+  steps_exposures <- params_dat$steps[[rq]]$preproc_exposures
+  steps_outcome <- params_dat$steps[[rq]]$preproc_outcome
   
   # Process covariates
   dat$covariates <- myphd::preproc_data(dat = dat$covariates, 
                                         covariates = NULL, 
                                         outcome = NULL, 
-                                        creatinine_var_names = NULL, 
-                                        creatinine_covariates_names = NULL, 
-                                        creatinine_name = NULL,
                                         dic_steps = steps_covars, 
                                         id_var = params_dat$variables$identifier, 
                                         by_var = "cohort")
   
   # Process exposures
-  creatinine_var_names <- setdiff(
-    colnames(dat$exposures), 
-    params_dat$variables$identifier
-  )
   dat$exposures <- myphd::extract_cohort(dat = dat$exposures, 
                                          id_var = params_dat$variables$identifier)
   dat$exposures <- myphd::preproc_data(dat = dat$exposures, 
                                        covariates = dat$covariates, 
                                        outcome = NULL, 
-                                       creatinine_var_names = creatinine_var_names, 
-                                       creatinine_covariates_names = params_dat$variables$creatinine_covariates_names, 
-                                       creatinine_name = params_dat$variables$creatinine_name,
                                        dic_steps = steps_exposures, 
                                        id_var = params_dat$variables$identifier, 
                                        by_var = "cohort")
   dat$exposures <- tidylog::select(dat$exposures, 
                                    -dplyr::any_of("cohort"))
+  
+  # Process outcome
+  dat$outcome <- myphd::extract_cohort(dat = dat$outcome, 
+                                       id_var = params_dat$variables$identifier)
+  dat$outcome <- myphd::preproc_data(dat = dat$outcome, 
+                                     covariates = dat$covariates, 
+                                     outcome = outcome, 
+                                     dic_steps = steps_outcome, 
+                                     id_var = params_dat$variables$identifier, 
+                                     by_var = "cohort")
+  dat$outcome <- tidylog::select(dat$outcome, 
+                                 -dplyr::any_of("cohort"))
   
   return(dat)
 } # End function rq_prepare_data
@@ -421,27 +424,10 @@ rq_fit_model_weighted <- function(dat, outcome,
                                   parallel, workers) {
   rq <- Sys.getenv("TAR_PROJECT")
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
-  steps_outcome <- params_dat$steps[[rq]]$preproc_outcome
   params_ana <- params_analyses()[[rq]]
   
   # Process outcome
-  creatinine_var_names <- setdiff(
-    colnames(dat$outcome), 
-    params_dat$variables$identifier
-  )
-  dat$outcome <- myphd::extract_cohort(dat = dat$outcome, 
-                                       id_var = params_dat$variables$identifier)
-  dat$outcome <- myphd::preproc_data(dat = dat$outcome, 
-                                     covariates = dat$covariates, 
-                                     outcome = outcome, 
-                                     creatinine_var_names = creatinine_var_names, 
-                                     creatinine_covariates_names = params_dat$variables$creatinine_covariates_names, 
-                                     creatinine_name = params_dat$variables$creatinine_name,
-                                     dic_steps = steps_outcome, 
-                                     id_var = params_dat$variables$identifier, 
-                                     by_var = "cohort")
   dat$outcome <- dat$outcome |>
-    tidylog::select(-dplyr::any_of("cohort")) |>
     tidylog::select(dplyr::all_of(c(
       params_dat$variables$identifier, 
       outcome

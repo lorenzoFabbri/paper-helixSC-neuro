@@ -98,18 +98,16 @@ params <- function(is_hpc) {
   chemicals <- vars_of_interest(append_to_chem = "c")$chemicals
   metabolites <- vars_of_interest()$metabolites
   clinical_outcome <- vars_of_interest()$outcomes
+  creatinine_covariates_names <- list(
+    numerical = c("hs_age_years", "hs_c_weight", "hs_c_height", 
+                  "FAS_score"), 
+    categorical = c("e3_sex", "h_ethnicity_spiro", 
+                    "cohort")
+  )
+  
   variables <- list(
     identifier = "HelixID", 
     strategy_select_adj_set = "smallest", 
-    creatinine_name = "hs_creatinine_cg", 
-    creatinine_covariates_names = list(
-      numerical = c("hs_age_years", "hs_c_weight", "hs_c_height", 
-                    "FAS_score"), 
-      categorical = c("e3_sex", "h_ethnicity_spiro", 
-                      "cohort")
-    ), 
-    strategy_loq_urine = "div2", 
-    creatinine_threshold = 10, 
     ############################################################################
     rq1 = list(
       outcome = clinical_outcome, 
@@ -134,42 +132,45 @@ params <- function(is_hpc) {
       preproc_exposures = list(
         missings = list(
           threshold_within = 40, 
-          threshold_overall = 40
+          threshold_overall = 40, 
+          selected_covariates = c(), 
+          method_imputation = "univariate"
         ), 
         creatinine = list(
           method = "cas", 
           method_fit_args = list(
             family = gaussian(link = "identity")
-          )
-        )#, 
-        # standardization = list(
-        #   center_fun = median, 
-        #   scale_fun = IQR
-        # )
+          ), 
+          creatinine_covariates_names = creatinine_covariates_names, 
+          creatinine_name = "hs_creatinine_cg"
+        )
       ), # End preproc_exposures
       preproc_outcome = list(
         llodq = list(
-          method = "div2"
+          method = "div2", 
+          creatinine_threshold = ""
         ), 
         missings = list(
           threshold_within = 40, 
-          threshold_overall = 40
+          threshold_overall = 40, 
+          selected_covariates = c(), 
+          method_imputation = "univariate"
         ), 
         creatinine = list(
           method = "cas", 
           method_fit_args = list(
             family = gaussian(link = "identity")
-          )
-        )#, 
-        # standardization = list(
-        #   center_fun = median, 
-        #   scale_fun = IQR
-        # )
+          ), 
+          creatinine_covariates_names = creatinine_covariates_names, 
+          creatinine_name = "hs_creatinine_cg"
+        )
       ), # End preproc_outcome
       preproc_covars = list(
         missings = list(
           threshold_within = 40, 
-          threshold_overall = 40
+          threshold_overall = 40, 
+          selected_covariates = c(), 
+          method_imputation = "univariate"
         )
       ) # End preproc_covars
     ), # End steps RQ2
@@ -177,33 +178,38 @@ params <- function(is_hpc) {
     rq3 = list(
       preproc_exposures = list(
         llodq = list(
-          method = "div2"
+          method = "div2", 
+          creatinine_threshold = ""
         ), 
         missings = list(
           threshold_within = 40, 
-          threshold_overall = 40
+          threshold_overall = 40, 
+          selected_covariates = c(), 
+          method_imputation = "univariate"
         ), 
         creatinine = list(
           method = "cas", 
           method_fit_args = list(
             family = gaussian(link = "identity")
-          )
-        ), 
-        standardization = list(
-          center_fun = median, 
-          scale_fun = IQR
+          ), 
+          creatinine_covariates_names = creatinine_covariates_names, 
+          creatinine_name = "hs_creatinine_cg"
         )
       ), # End preproc_exposures
       preproc_outcome = list(
-        standardization = list(
-          center_fun = median, 
-          scale_fun = IQR
+        missings = list(
+          threshold_within = 40, 
+          threshold_overall = 40, 
+          selected_covariates = c(), 
+          method_imputation = "univariate"
         )
       ), # End preproc_outcome
       preproc_covars = list(
         missings = list(
           threshold_within = 40, 
-          threshold_overall = 40
+          threshold_overall = 40, 
+          selected_covariates = c(), 
+          method_imputation = "univariate"
         )
       ) # End preproc_covars
     ) # End steps RQ3
