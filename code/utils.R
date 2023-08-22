@@ -214,7 +214,7 @@ rq_prepare_data <- function(dat) {
 } # End function rq_prepare_data
 ################################################################################
 
-#' Estimate weights and explore covariance balance
+#' Estimate weights and explore covariates balance
 #'
 #' @param dat A named list of tibbles containing the variables of interest. A list.
 #'
