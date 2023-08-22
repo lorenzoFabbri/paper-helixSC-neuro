@@ -238,6 +238,11 @@ rq_estimate_weights <- function(dat, save_results, parallel, workers) {
                             params_dat$variables$identifier)
   list_covariates <- setdiff(colnames(dat$covariates), 
                              params_dat$variables$identifier)
+  dat_analysis <- tidylog::full_join(
+    dat$covariates, 
+    dat$exposures, 
+    by = params_dat$variables$identifier
+  )
   ## Loop over exposures
   if (parallel == TRUE) {
     future::plan(future::multisession, 
@@ -251,14 +256,15 @@ rq_estimate_weights <- function(dat, save_results, parallel, workers) {
     estimated_weights <- furrr::future_map(list_exposures, function(x, p) {
       p()
       tmp <- suppressWarnings(suppressMessages(myphd::estimate_weights(
-        dat = tidylog::full_join(tidylog::select(dat$exposures, 
-                                                 dplyr::all_of(c(x, 
-                                                                 params_dat$variables$identifier))), 
-                                 dat$covariates, 
-                                 by = params_dat$variables$identifier) |>
-          tidylog::select(-params_dat$variables$identifier), 
+        dat = dat_analysis |>
+          tidylog::select(dplyr::all_of(c(
+            params_dat$variables$identifier, 
+            x, 
+            list_covariates
+          ))), 
         exposure = x, 
         covariates = list_covariates, 
+        id_var = params_dat$variables$identifier, 
         method = params_ana$method_weightit, 
         method_args = list(
           use_kernel = params_ana$use_kernel, 
@@ -266,10 +272,18 @@ rq_estimate_weights <- function(dat, save_results, parallel, workers) {
           sl_lib = params_ana$sl_lib
         ))
       )) # End estimation weights current exposure
-      # Trim weights
-      ret <- suppressMessages(WeightIt::trim(tmp$weights, 
-                                             at = params_ana$weights_trim, 
-                                             lower = TRUE))
+      # Eventually trim weights
+      if (!is.null(params_ana$weights_trim)) {
+        ret <- suppressMessages(WeightIt::trim(tmp$weights, 
+                                               at = params_ana$weights_trim, 
+                                               lower = TRUE))
+      } else {
+        ret <- tmp$weights
+      }
+      # Include IDs for safer merging during model fitting
+      ret[[params_dat$variables$identifier]] <- dat_analysis[[params_dat$variables$identifier]]
+      
+      return(ret)
     }, 
     .options = furrr::furrr_options(
       seed = TRUE
@@ -278,21 +292,6 @@ rq_estimate_weights <- function(dat, save_results, parallel, workers) {
   }) # End progress bar
   future::plan(future::sequential)
   names(estimated_weights) <- list_exposures
-  path_save_weights <- paste0(
-    Sys.getenv("path_store_res"), 
-    "weights_exposure_model/"
-  )
-  if (!dir.exists(path_save_weights)) {
-    dir.create(path_save_weights)
-  }
-  qs::qsave(x = estimated_weights, 
-            file = paste0(
-              path_save_weights, 
-              rq, "_", 
-              params_ana$method_weightit, 
-              ".qs"
-            ), 
-            nthreads = 4)
   ##############################################################################
   
   # Step 2: explore balance
@@ -432,29 +431,21 @@ rq_fit_model_weighted <- function(dat, outcome,
       params_dat$variables$identifier, 
       outcome
     )))
-  idxs_missing_outcome <- which(is.na(dat$outcome[[outcome]]))
-  
-  # Fit model(s) using estimated weights
   list_exposures <- names(dat$exposures)
   list_exposures <- setdiff(list_exposures, 
                             params_dat$variables$identifier)
   list_covariates <- setdiff(colnames(dat$covariates), 
                              params_dat$variables$identifier)
-  dat_merged <- tidylog::full_join(dat$covariates, dat$outcome, 
-                                   by = params_dat$variables$identifier)
-  if (is.null(weights)) {
-    weights <- qs::qread(
-      file = paste0(
-        Sys.getenv("path_store_res"), 
-        "weights_exposure_model/", 
-        rq, "_", 
-        params_ana$method_weightit, 
-        ".qs"
-      ), 
-      nthreads = 4
-    )
-  } # End check if weights are not provided
+  dat_analysis <- purrr::reduce(
+    list(dat$covariates, dat$exposures, dat$outcome), 
+    tidylog::full_join, 
+    by = params_dat$variables$identifier
+  )
+  idxs_missing_outcome <- which(is.na(dat_analysis[[outcome]]))
+  ids_missing_outcome <- dat_analysis[idxs_missing_outcome, 
+                                      ][[params_dat$variables$identifier]]
   
+  # Fit model(s) using estimated weights
   ## Loop over each exposure
   if (parallel == TRUE) {
     future::plan(future::multisession, 
@@ -468,26 +459,31 @@ rq_fit_model_weighted <- function(dat, outcome,
     fits <- furrr::future_map(list_exposures, function(exposure, p) {
       p()
       
-      dat_analysis <- tidylog::full_join(tidylog::select(dat$exposures, 
-                                                         dplyr::all_of(c(exposure, 
-                                                                         params_dat$variables$identifier))), 
-                                         dat_merged, 
-                                         by = params_dat$variables$identifier) |>
-        tidylog::select(-params_dat$variables$identifier) |>
-        tidylog::filter(!is.na(.data[[outcome]]))
-      
-      if (length(idxs_missing_outcome) > 0) {
-        weights_exposure <- weights[[exposure]]$weights[-idxs_missing_outcome]
-      } else {
-        weights_exposure <- weights[[exposure]]$weights
-      }
+      # Select columns of interest and make sure order rows same in
+      # dataset and estimated weights
+      dat_tmp <- dat_analysis |>
+        tidylog::select(dplyr::all_of(c(
+          params_dat$variables$identifier, 
+          list_covariates, 
+          exposure, 
+          outcome
+        )))
+      assertthat::assert_that(
+        identical(
+          dat_tmp[[params_dat$variables$identifier]], 
+          weights[[exposure]][[params_dat$variables$identifier]]
+        ), 
+        msg = "The order of the rows changed between weights estimation 
+                and outcome model fitting."
+      )
       
       fit <- myphd::fit_model_weighted(
-        dat = dat_analysis, 
+        dat = dat_tmp, 
         outcome = outcome, 
         exposure = exposure, 
         covariates = list_covariates, 
-        weights = weights_exposure, 
+        id_var = params_dat$variables$identifier, 
+        weights = weights[[exposure]]$weights, 
         method = params_ana$method_marginal, 
         method_args = list(
           family = params_ana$family_marginal, 
@@ -501,8 +497,8 @@ rq_fit_model_weighted <- function(dat, outcome,
       
       return(list(
         fit = fit$fit, 
-        dat = dat_analysis, 
-        weights = weights_exposure
+        dat = dat_tmp, 
+        weights = weights[[exposure]]$weights
       ))
     }, 
     .options = furrr::furrr_options(
