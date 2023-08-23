@@ -66,7 +66,7 @@ list(
       name = marginal, 
       command = rq_estimate_marginal_effects(fits = weighted_fits$fits, 
                                              parallel = TRUE, 
-                                             workers = 5)
+                                             workers = 6)
     ) # End marginal target
   ) # End loop over outcomes
   ##############################################################################

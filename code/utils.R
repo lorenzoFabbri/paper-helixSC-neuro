@@ -97,9 +97,11 @@ rq_load_data <- function(res_dag) {
   # Load data request
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   dat_request <- load_dat_request()
+  dat <- list()
   ## Eventually load also steroid data
   if (Sys.getenv("TAR_PROJECT") %in% c("rq02" ,"rq03", "rq2" ,"rq3")) {
     metabolites <- load_steroids()
+    dat$metab_cdesc <- metabolites[["cdesc"]]
     
     dat_request$dat <- tidylog::inner_join(
       dat_request$dat, metabolites$metabolome, 
@@ -108,7 +110,6 @@ rq_load_data <- function(res_dag) {
   }
   
   # Create one dataset for covariates, one for exposures, and one for outcomes
-  dat <- list()
   warning("The following exposures were not found:")
   cat(setdiff(
     params_dat$variables[[rq]]$exposures, 
@@ -399,7 +400,7 @@ rq_estimate_weights <- function(dat, save_results, parallel, workers) {
                                 strsplit(x, split = "_")[[1]][2], 
                                 x
                               )))
-      gt::gtsave(tab, filename = .path)
+      #gt::gtsave(tab, filename = .path)
     }, 
     .options = furrr::furrr_options(
       seed = TRUE

@@ -148,8 +148,9 @@ params <- function(is_hpc) {
       preproc_outcome = list(
         llodq = list(
           id_val = 2, 
-          method = "div2", 
-          creatinine_threshold = ""
+          method = "truncated_normal", 
+          creatinine_threshold = "", 
+          tune_sigma = 1
         ), 
         missings = list(
           threshold_within = 40, 
@@ -180,8 +181,9 @@ params <- function(is_hpc) {
       preproc_exposures = list(
         llodq = list(
           id_val = 2, 
-          method = "div2", 
-          creatinine_threshold = ""
+          method = "truncated_normal", 
+          creatinine_threshold = "", 
+          tune_sigma = 1
         ), 
         missings = list(
           threshold_within = 40, 
