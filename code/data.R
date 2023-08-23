@@ -136,10 +136,18 @@ load_steroids <- function() {
   loqs <- tbls[[1]]$loq
   
   # Some sanity checks
-  assertthat::are_equal(nrow(metabs), 
-                        length(unique(metabs[[params_dat$variables$identifier]])))
-  assertthat::are_equal(nrow(metabs), nrow(cdescs))
-  assertthat::are_equal(ncol(metabs), ncol(cdescs))
+  assertthat::assert_that(
+    nrow(metabs) == length(unique(metabs[[params_dat$variables$identifier]])), 
+    msg = "Number of unique subjects is different in metabolome data."
+  )
+  assertthat::assert_that(
+    nrow(metabs) == nrow(cdescs), 
+    msg = "Mismatched number of rows in metabolomics and description data."
+  )
+  assertthat::assert_that(
+    ncol(metabs) == ncol(cdescs), 
+    msg = "Mismatched number of columns in metabolomics and description data."
+  )
   
   return(list(
     metabolome = metabs, 

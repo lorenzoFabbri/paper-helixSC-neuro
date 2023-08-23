@@ -49,7 +49,7 @@ list(
     name = weights, 
     command = rq_estimate_weights(dat = preproc_dat, 
                                   save_results = TRUE, 
-                                  parallel = TRUE, 
+                                  parallel = FALSE, 
                                   workers = 10)
   ), # End weights target
   tarchetypes::tar_map(
@@ -59,14 +59,14 @@ list(
       name = weighted_fits, 
       command = rq_fit_model_weighted(dat = preproc_dat, outcome = outcome, 
                                       weights = weights$estimated_weights, 
-                                      parallel = TRUE, 
+                                      parallel = FALSE, 
                                       workers = 10)
     ), # End weighted_fits target
     targets::tar_target(
       name = marginal, 
       command = rq_estimate_marginal_effects(fits = weighted_fits$fits, 
                                              parallel = TRUE, 
-                                             workers = 10)
+                                             workers = 5)
     ) # End marginal target
   ) # End loop over outcomes
   ##############################################################################

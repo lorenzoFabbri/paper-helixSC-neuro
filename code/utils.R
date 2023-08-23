@@ -302,14 +302,20 @@ rq_estimate_weights <- function(dat, save_results, parallel, workers) {
     future::plan(future::sequential())
   }
   balance <- furrr::future_map(names(estimated_weights), function(x) {
-    myphd::explore_balance(exposure = strsplit(x, split = "_")[[1]][2],
-                           covariates = estimated_weights[[x]]$covs |>
-                             colnames(),
-                           weights = estimated_weights[[x]])
+    myphd::explore_balance(
+      exposure = ifelse(
+        rq %in% c("rq1", "rq2"), 
+        strsplit(x, split = "_")[[1]][2], 
+        x
+      ), 
+      covariates = estimated_weights[[x]]$covs |>
+        colnames(), 
+      weights = estimated_weights[[x]]
+    )
   }, 
   .options = furrr::furrr_options(
     seed = TRUE
-  ))
+  )) # End loop explore balance
   future::plan(future::sequential)
   names(balance) <- names(estimated_weights)
   
@@ -341,7 +347,11 @@ rq_estimate_weights <- function(dat, save_results, parallel, workers) {
         Sys.getenv("TAR_PROJECT"),
         "/balplot_",
         params_ana$method_weightit, "_",
-        strsplit(x, split = "_")[[1]][2],
+        ifelse(
+          rq %in% c("rq1", "rq2"), 
+          strsplit(x, split = "_")[[1]][2], 
+          x
+        ),
         ".pdf"
       )
       ggplot2::ggsave(.path,
@@ -356,7 +366,11 @@ rq_estimate_weights <- function(dat, save_results, parallel, workers) {
         Sys.getenv("TAR_PROJECT"),
         "/baltab_",
         params_ana$method_weightit, "_",
-        strsplit(x, split = "_")[[1]][2],
+        ifelse(
+          rq %in% c("rq1", "rq2"), 
+          strsplit(x, split = "_")[[1]][2], 
+          x
+        ), 
         ".docx"
       )
       tab <- balance[[x]]$tab$Balance |>
@@ -380,7 +394,11 @@ rq_estimate_weights <- function(dat, save_results, parallel, workers) {
         gt::tab_options(row_group.as_column = TRUE) |>
         gt::fmt_number(decimals = 3) |>
         gt::tab_header(paste0("Balance statistics: ",
-                              strsplit(x, split = "_")[[1]][2]))
+                              ifelse(
+                                rq %in% c("rq1", "rq2"), 
+                                strsplit(x, split = "_")[[1]][2], 
+                                x
+                              )))
       gt::gtsave(tab, filename = .path)
     }, 
     .options = furrr::furrr_options(
@@ -443,7 +461,7 @@ rq_fit_model_weighted <- function(dat, outcome,
   )
   idxs_missing_outcome <- which(is.na(dat_analysis[[outcome]]))
   ids_missing_outcome <- dat_analysis[idxs_missing_outcome, 
-                                      ][[params_dat$variables$identifier]]
+  ][[params_dat$variables$identifier]]
   
   # Fit model(s) using estimated weights
   ## Loop over each exposure
@@ -673,9 +691,9 @@ rq_estimate_marginal_effects <- function(fits, parallel, workers) {
       ############################################################################
       
       return(list(
-        gcomp = gcomp, 
+        #gcomp = gcomp, 
         adrf = adrf, 
-        slopes = slopes, 
+        #slopes = slopes, 
         amef = amef, 
         comparisons = avg_comp
       ))

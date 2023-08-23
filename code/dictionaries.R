@@ -147,6 +147,7 @@ params <- function(is_hpc) {
       ), # End preproc_exposures
       preproc_outcome = list(
         llodq = list(
+          id_val = 2, 
           method = "div2", 
           creatinine_threshold = ""
         ), 
@@ -178,6 +179,7 @@ params <- function(is_hpc) {
     rq3 = list(
       preproc_exposures = list(
         llodq = list(
+          id_val = 2, 
           method = "div2", 
           creatinine_threshold = ""
         ), 

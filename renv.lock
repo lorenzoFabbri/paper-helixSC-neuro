@@ -199,13 +199,6 @@
       ],
       "Hash": "470851b6d5d0ac559e9d01bb352b4021"
     },
-    "RApiSerialize": {
-      "Package": "RApiSerialize",
-      "Version": "0.1.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "d8a79c95f553670ceffbd190815bbfce"
-    },
     "RColorBrewer": {
       "Package": "RColorBrewer",
       "Version": "1.1-3",
@@ -269,16 +262,6 @@
         "utils"
       ],
       "Hash": "1e035db628cefb315c571202d70202fe"
-    },
-    "RcppParallel": {
-      "Package": "RcppParallel",
-      "Version": "5.1.7",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R"
-      ],
-      "Hash": "a45594a00f5dbb073d5ec9f48592a08a"
     },
     "Rttf2pt1": {
       "Package": "Rttf2pt1",
@@ -2701,7 +2684,7 @@
       "RemoteRepo": "myphd",
       "RemoteUsername": "isglobal-cep",
       "RemoteRef": "HEAD",
-      "RemoteSha": "abbe42c141c47d2dbea4953f53da51ee23782067",
+      "RemoteSha": "c1d15a087c6b94a0417ab47808cab48d2a46b973",
       "Requirements": [
         "Hmisc",
         "WeightIt",
@@ -2740,7 +2723,7 @@
         "tidyr",
         "visdat"
       ],
-      "Hash": "a90a7cc6e96bb4ec0e30347ab74012d2"
+      "Hash": "2a1e47ed6234d5be8952c76a94bf6bf3"
     },
     "naniar": {
       "Package": "naniar",
@@ -3287,19 +3270,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "21c4fc168ebf32add2db6a358ce4714c"
-    },
-    "qs": {
-      "Package": "qs",
-      "Version": "0.25.5",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "RApiSerialize",
-        "Rcpp",
-        "stringfish"
-      ],
-      "Hash": "f40adbb81e0f84f4292c1a1a3e9dfaa5"
     },
     "quantreg": {
       "Package": "quantreg",
@@ -3893,18 +3863,6 @@
         "R"
       ],
       "Hash": "5f5a7629f956619d519205ec475fe647"
-    },
-    "stringfish": {
-      "Package": "stringfish",
-      "Version": "0.15.8",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "Rcpp",
-        "RcppParallel"
-      ],
-      "Hash": "2e67a1c9e054896ea7528535c1baf9b7"
     },
     "stringi": {
       "Package": "stringi",
