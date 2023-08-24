@@ -141,6 +141,17 @@ load_steroids <- function() {
     msg = "Number of unique subjects is different in metabolome data."
   )
   assertthat::assert_that(
+    nrow(cdescs) == length(unique(cdescs[[params_dat$variables$identifier]])), 
+    msg = "Number of unique subjects is different in description data."
+  )
+  l_desc_id <- length(unique(cdescs[[params_dat$variables$identifier]]))
+  l_dat_id <- length(unique(metabs[[params_dat$variables$identifier]]))
+  assertthat::assert_that(
+    l_desc_id == l_dat_id, 
+    msg = "Number of unique subjects is different between metabolomics and 
+          description data."
+  )
+  assertthat::assert_that(
     nrow(metabs) == nrow(cdescs), 
     msg = "Mismatched number of rows in metabolomics and description data."
   )

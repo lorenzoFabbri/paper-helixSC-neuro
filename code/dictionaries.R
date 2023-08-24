@@ -148,9 +148,11 @@ params <- function(is_hpc) {
       preproc_outcome = list(
         llodq = list(
           id_val = 2, 
-          method = "truncated_normal", 
-          creatinine_threshold = "", 
-          tune_sigma = 1
+          method = "replace", 
+          creatinine_threshold = NULL, 
+          threshold_within = "", 
+          threshold_overall = "", 
+          tune_sigma = NULL
         ), 
         missings = list(
           threshold_within = 40, 

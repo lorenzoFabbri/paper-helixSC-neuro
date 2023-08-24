@@ -101,20 +101,58 @@ rq_load_data <- function(res_dag) {
   ## Eventually load also steroid data
   if (Sys.getenv("TAR_PROJECT") %in% c("rq02" ,"rq03", "rq2" ,"rq3")) {
     metabolites <- load_steroids()
-    dat$metab_cdesc <- metabolites[["cdesc"]]
     
+    # Subjects with metabolites available but not in HELIX data
+    ids_metabs <- setdiff(
+      metabolites$metabolome[[params_dat$variables$identifier]], 
+      dat_request$dat[[params_dat$variables$identifier]]
+    )
+    l_ids_metabs <- length(ids_metabs)
+    if (l_ids_metabs > 0) {
+      warning(
+        glue::glue(
+          "Mismatch IDs metabolomics and HELIX (n={l_ids_metabs}):\n{ids_metabs}", 
+          ids_metabs = paste(ids_metabs, collapse = ", ")
+        ), 
+        call. = TRUE
+      )
+    }
+    
+    dat$metab_desc <- metabolites[["desc"]]
     dat_request$dat <- tidylog::inner_join(
       dat_request$dat, metabolites$metabolome, 
       by = params_dat$variables$identifier
     )
+    dat$metab_desc <- dat$metab_desc |>
+      tidylog::filter(
+        .data[[params_dat$variables$identifier]] %in% 
+          dat_request$dat[[params_dat$variables$identifier]]
+      )
+    dat$metab_desc <- dat$metab_desc[match(
+      dat_request$dat[[params_dat$variables$identifier]], 
+      dat$metab_desc[[params_dat$variables$identifier]]
+    ), ]
+    assertthat::assert_that(
+      identical(dat_request$dat[[params_dat$variables$identifier]], 
+                dat$metab_desc[[params_dat$variables$identifier]]), 
+      msg = "Mismatch order rows description metabolites and data request."
+    )
   }
-  
   # Create one dataset for covariates, one for exposures, and one for outcomes
-  warning("The following exposures were not found:")
-  cat(setdiff(
+  miss_exps <- setdiff(
     params_dat$variables[[rq]]$exposures, 
     colnames(dat_request$dat)
-  ), sep = "\n")
+  )
+  l_miss_exps <- length(miss_exps)
+  if (l_miss_exps > 0) {
+    warning(
+      glue::glue(
+        "Missing exposures (n={l_miss_exps}):\n{miss_exps}", 
+        miss_exps = paste(miss_exps, collapse = ", ")
+      ), 
+      call. = TRUE
+    )
+  }
   
   ## Exposures
   dat$exposures <- dat_request$dat |>
@@ -181,6 +219,7 @@ rq_prepare_data <- function(dat) {
   
   # Process covariates
   dat$covariates <- myphd::preproc_data(dat = dat$covariates, 
+                                        dat_desc = NULL, 
                                         covariates = NULL, 
                                         outcome = NULL, 
                                         dic_steps = steps_covars, 
@@ -190,7 +229,14 @@ rq_prepare_data <- function(dat) {
   # Process exposures
   dat$exposures <- myphd::extract_cohort(dat = dat$exposures, 
                                          id_var = params_dat$variables$identifier)
+  dat$metab_desc <- myphd::extract_cohort(dat = dat$metab_desc, 
+                                          id_var = params_dat$variables$identifier)
   dat$exposures <- myphd::preproc_data(dat = dat$exposures, 
+                                       dat_desc = ifelse(
+                                         rq == "rq2", 
+                                         NULL, 
+                                         dat$metab_desc
+                                       ), 
                                        covariates = dat$covariates, 
                                        outcome = NULL, 
                                        dic_steps = steps_exposures, 
@@ -198,11 +244,18 @@ rq_prepare_data <- function(dat) {
                                        by_var = "cohort")
   dat$exposures <- tidylog::select(dat$exposures, 
                                    -dplyr::any_of("cohort"))
+  dat$metab_desc <- tidylog::select(dat$metab_desc, 
+                                    -dplyr::any_of("cohort"))
   
   # Process outcome
   dat$outcome <- myphd::extract_cohort(dat = dat$outcome, 
                                        id_var = params_dat$variables$identifier)
   dat$outcome <- myphd::preproc_data(dat = dat$outcome, 
+                                     dat_desc = ifelse(
+                                       rq == "rq3", 
+                                       NULL, 
+                                       dat$metab_desc
+                                     ), 
                                      covariates = dat$covariates, 
                                      outcome = outcome, 
                                      dic_steps = steps_outcome, 
