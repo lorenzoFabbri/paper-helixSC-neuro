@@ -119,6 +119,12 @@ rq_load_data <- function(res_dag) {
     }
     
     dat$metab_desc <- metabolites[["desc"]]
+    dat$metab_desc <- dat$metab_desc |>
+      dplyr::rename_with(
+        .fn = ~ gsub("_cdesc", "", .x, fixed = TRUE)
+      )
+    dat$lods <- metabolites[["loq"]]
+    colnames(dat$lods) <- c("var", "val")
     dat_request$dat <- tidylog::inner_join(
       dat_request$dat, metabolites$metabolome, 
       by = params_dat$variables$identifier
@@ -219,7 +225,6 @@ rq_prepare_data <- function(dat) {
   
   # Process covariates
   dat$covariates <- myphd::preproc_data(dat = dat$covariates, 
-                                        dat_desc = NULL, 
                                         covariates = NULL, 
                                         outcome = NULL, 
                                         dic_steps = steps_covars, 
@@ -239,6 +244,11 @@ rq_prepare_data <- function(dat) {
                                        ), 
                                        covariates = dat$covariates, 
                                        outcome = NULL, 
+                                       dat_llodq = ifelse(
+                                         rq == "rq2", 
+                                         NULL, 
+                                         dat$lods
+                                       ), 
                                        dic_steps = steps_exposures, 
                                        id_var = params_dat$variables$identifier, 
                                        by_var = "cohort")
@@ -258,6 +268,11 @@ rq_prepare_data <- function(dat) {
                                      ), 
                                      covariates = dat$covariates, 
                                      outcome = outcome, 
+                                     dat_llodq = ifelse(
+                                       rq == "rq3", 
+                                       NULL, 
+                                       dat$lods
+                                     ), 
                                      dic_steps = steps_outcome, 
                                      id_var = params_dat$variables$identifier, 
                                      by_var = "cohort")

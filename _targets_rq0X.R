@@ -40,9 +40,21 @@ list(
     command = viz_desc_vars(
       dat = load_dat_request()$dat, 
       vars = vars_of_interest(append_to_chem = "cdesc")$chemicals, 
-      fct_levels = c(1, 2, 3, 4)
+      fct_levels = c(1, 2, 3, 4), 
+      is_chem = TRUE
     )
   ), # End target viz_desc_chems
+  targets::tar_target(
+    name = viz_desc_metabs, 
+    command = viz_desc_vars(
+      dat = myphd::extract_cohort(load_steroids()$desc, 
+                                  id_var = id_var), 
+      vars = vars_of_interest()$metabolites |>
+        paste0("_cdesc"), 
+      fct_levels = c(1, 2, 3, 4), 
+      is_chem = FALSE
+    )
+  ), # End target viz_desc_metabs
   ##############################################################################
   targets::tar_target(
     name = viz_miss_covars, 

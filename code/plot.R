@@ -109,7 +109,7 @@ viz_clinical_outcome <- function() {
 #'
 #' @return
 #' @export
-viz_desc_vars <- function(dat, vars, fct_levels) {
+viz_desc_vars <- function(dat, vars, fct_levels, is_chem) {
   # Select only cohort and variables of interest (e.g., chemicals w/ `cdesc`)
   df <- dat |>
     tidylog::select(cohort, 
@@ -139,7 +139,11 @@ viz_desc_vars <- function(dat, vars, fct_levels) {
   # Heatmap
   plt <- df_plot |>
     dplyr::rowwise() |>
-    tidylog::mutate(name = stringr::str_split(name, "_")[[1]][2]) |>
+    tidylog::mutate(name = ifelse(
+      is_chem == TRUE, 
+      stringr::str_split(name, "_")[[1]][2], 
+      stringr::str_split(name, "_")[[1]][1]
+    )) |>
     tidylog::rename(
       variable = name, 
       description = value, 
@@ -163,7 +167,10 @@ viz_desc_vars <- function(dat, vars, fct_levels) {
       plot.background = ggplot2::element_blank(), 
       panel.grid.major = ggplot2::element_blank(), 
       panel.grid.minor = ggplot2::element_blank(), 
-      panel.border = ggplot2::element_blank()
+      panel.border = ggplot2::element_blank(), 
+      axis.text.x = ggplot2::element_text(
+        angle = 90, vjust = 0.5, hjust = 1
+      )
     )
   
   df_plot <- df_plot |>

@@ -66,6 +66,11 @@ load_steroids <- function() {
       tidylog::mutate(HelixID = stringr::str_replace(HelixID, "EDP", "EDE")) |>
       tidylog::mutate(HelixID = ifelse(HelixID == "SAB5501", 
                                        "SAB550", HelixID))
+    colnames(dd) <- gsub(
+      pattern = "_", 
+      replacement = "", 
+      x = colnames(dd)
+    )
     
     # LOQ information
     loq <- readxl::read_xlsx(paste0(steroids, x), 
@@ -75,6 +80,10 @@ load_steroids <- function() {
     colnames(loq) <- c("metabolite", "loq")
     loq$metabolite <- janitor::make_clean_names(loq$metabolite, 
                                                 case = "none")
+    loq <- loq |>
+      tidylog::mutate(metabolite = stringr::str_replace_all(
+        metabolite, "_", ""
+      ))
     ############################################################################
     
     # Cleaning
@@ -118,7 +127,13 @@ load_steroids <- function() {
                       as.numeric)
       )
     dd_cdesc <- dd_cdesc |>
-      tidylog::select(-dplyr::all_of(paste0(unwanted_cols, "_cdesc")))
+      tidylog::select(-dplyr::all_of(paste0(unwanted_cols, "_cdesc"))) |>
+      tidylog::mutate(dplyr::across(
+        dplyr::where(is.numeric), 
+        as.factor
+      ))
+    loq <- loq |>
+      tidylog::filter(!metabolite %in% unwanted_cols)
     ############################################################################
     
     return(list(

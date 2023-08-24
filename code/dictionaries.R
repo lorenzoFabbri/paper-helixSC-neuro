@@ -43,7 +43,7 @@ vars_of_interest <- function(append_to_chem = NULL) {
     "X5b20acortol", 
     "X5b20bcortol", 
     "X11OHAndros", 
-    "Cortisone_E", 
+    "CortisoneE", 
     "X20aDHE", 
     "X20bDHE", 
     "X5aTHE", 
@@ -54,7 +54,7 @@ vars_of_interest <- function(append_to_chem = NULL) {
     "X5aTHB", 
     "X5bTHB", 
     "A", 
-    "X17_DO_cortolone", 
+    "X17DOcortolone", 
     "S", 
     "X5bDHS", 
     "X5bTHS", 
@@ -86,7 +86,6 @@ params <- function(is_hpc) {
   }
   
   paths <- list(
-    # Raw
     path_dat_request = "data/data_paper3/requests/AP136/HELIX_AP_136_request_updated12jun.2023.csv", 
     path_all_steroids = "data/data_paper3/requests/AP136/steroids/"
   )
@@ -97,7 +96,7 @@ params <- function(is_hpc) {
   
   chemicals <- vars_of_interest(append_to_chem = "c")$chemicals
   metabolites <- vars_of_interest()$metabolites
-  clinical_outcome <- vars_of_interest()$outcomes
+  clinical_outcomes <- vars_of_interest()$outcomes
   creatinine_covariates_names <- list(
     numerical = c("hs_age_years", "hs_c_weight", "hs_c_height", 
                   "FAS_score"), 
@@ -110,7 +109,7 @@ params <- function(is_hpc) {
     strategy_select_adj_set = "smallest", 
     ############################################################################
     rq1 = list(
-      outcome = clinical_outcome, 
+      outcome = clinical_outcomes, 
       outcome_negative = "", 
       exposures = chemicals
     ), # End options RQ1
@@ -120,7 +119,7 @@ params <- function(is_hpc) {
       exposures = chemicals
     ), # End options RQ2
     rq3 = list(
-      outcome = clinical_outcome, 
+      outcome = clinical_outcomes, 
       outcome_negative = "", 
       exposures = metabolites
     ) # End options RQ3
@@ -150,8 +149,8 @@ params <- function(is_hpc) {
           id_val = 2, 
           method = "replace", 
           creatinine_threshold = NULL, 
-          threshold_within = "", 
-          threshold_overall = "", 
+          threshold_within = 10, 
+          threshold_overall = 10, 
           tune_sigma = NULL
         ), 
         missings = list(
@@ -183,9 +182,11 @@ params <- function(is_hpc) {
       preproc_exposures = list(
         llodq = list(
           id_val = 2, 
-          method = "truncated_normal", 
-          creatinine_threshold = "", 
-          tune_sigma = 1
+          method = "replace", 
+          creatinine_threshold = NULL, 
+          threshold_within = 10, 
+          threshold_overall = 10, 
+          tune_sigma = NULL
         ), 
         missings = list(
           threshold_within = 40, 
@@ -249,13 +250,12 @@ params_analyses <- function() {
     ############################################################################
     # WeightIt, Cobalt, marginaleffects
     method_weightit = "energy", 
-    weights_trim = 0.90, 
+    weights_trim = 0.9, 
     use_kernel = TRUE, 
     sl_discrete = FALSE, 
     sl_lib = c("SL.glm", 
                "SL.gam", "SL.glmnet"), 
     method_marginal = "glm", 
-    #family_marginal = mgcv::ocat(R = 36), 
     family_marginal = gaussian(link = "identity"), 
     add_inter_exposure = FALSE, 
     add_splines_exposure = TRUE, 
