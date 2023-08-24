@@ -138,6 +138,7 @@ rq_load_data <- function(res_dag) {
       dat_request$dat[[params_dat$variables$identifier]], 
       dat$metab_desc[[params_dat$variables$identifier]]
     ), ]
+    dat$metab_desc <- tibble::as_tibble(dat$metab_desc)
     assertthat::assert_that(
       identical(dat_request$dat[[params_dat$variables$identifier]], 
                 dat$metab_desc[[params_dat$variables$identifier]]), 
@@ -224,60 +225,52 @@ rq_prepare_data <- function(dat) {
   steps_outcome <- params_dat$steps[[rq]]$preproc_outcome
   
   # Process covariates
-  dat$covariates <- myphd::preproc_data(dat = dat$covariates, 
-                                        covariates = NULL, 
-                                        outcome = NULL, 
-                                        dic_steps = steps_covars, 
-                                        id_var = params_dat$variables$identifier, 
-                                        by_var = "cohort")
+  dat$covariates <- myphd::preproc_data(
+    dat = dat$covariates, 
+    covariates = NULL, 
+    outcome = NULL, 
+    dic_steps = steps_covars, 
+    id_var = params_dat$variables$identifier, 
+    by_var = "cohort"
+  )
   
   # Process exposures
-  dat$exposures <- myphd::extract_cohort(dat = dat$exposures, 
-                                         id_var = params_dat$variables$identifier)
-  dat$metab_desc <- myphd::extract_cohort(dat = dat$metab_desc, 
-                                          id_var = params_dat$variables$identifier)
-  dat$exposures <- myphd::preproc_data(dat = dat$exposures, 
-                                       dat_desc = ifelse(
-                                         rq == "rq2", 
-                                         NULL, 
-                                         dat$metab_desc
-                                       ), 
-                                       covariates = dat$covariates, 
-                                       outcome = NULL, 
-                                       dat_llodq = ifelse(
-                                         rq == "rq2", 
-                                         NULL, 
-                                         dat$lods
-                                       ), 
-                                       dic_steps = steps_exposures, 
-                                       id_var = params_dat$variables$identifier, 
-                                       by_var = "cohort")
-  dat$exposures <- tidylog::select(dat$exposures, 
-                                   -dplyr::any_of("cohort"))
-  dat$metab_desc <- tidylog::select(dat$metab_desc, 
-                                    -dplyr::any_of("cohort"))
+  dat$exposures <- myphd::preproc_data(
+    dat = myphd::extract_cohort(
+      dat = dat$exposures, 
+      id_var = params_dat$variables$identifier
+    ), 
+    dat_desc = myphd::extract_cohort(
+      dat = dat$metab_desc, 
+      id_var = params_dat$variables$identifier
+    ), 
+    covariates = dat$covariates, 
+    outcome = NULL, 
+    dat_llodq = dat$lods, 
+    dic_steps = steps_exposures, 
+    id_var = params_dat$variables$identifier, 
+    by_var = "cohort"
+  ) |>
+    dplyr::select(-cohort)
   
   # Process outcome
-  dat$outcome <- myphd::extract_cohort(dat = dat$outcome, 
-                                       id_var = params_dat$variables$identifier)
-  dat$outcome <- myphd::preproc_data(dat = dat$outcome, 
-                                     dat_desc = ifelse(
-                                       rq == "rq3", 
-                                       NULL, 
-                                       dat$metab_desc
-                                     ), 
-                                     covariates = dat$covariates, 
-                                     outcome = outcome, 
-                                     dat_llodq = ifelse(
-                                       rq == "rq3", 
-                                       NULL, 
-                                       dat$lods
-                                     ), 
-                                     dic_steps = steps_outcome, 
-                                     id_var = params_dat$variables$identifier, 
-                                     by_var = "cohort")
-  dat$outcome <- tidylog::select(dat$outcome, 
-                                 -dplyr::any_of("cohort"))
+  dat$outcome <- myphd::preproc_data(
+    dat = myphd::extract_cohort(
+      dat = dat$outcome, 
+      id_var = params_dat$variables$identifier
+    ), 
+    dat_desc = myphd::extract_cohort(
+      dat = dat$metab_desc, 
+      id_var = params_dat$variables$identifier
+    ), 
+    covariates = dat$covariates, 
+    outcome = outcome, 
+    dat_llodq = dat$lods, 
+    dic_steps = steps_outcome, 
+    id_var = params_dat$variables$identifier, 
+    by_var = "cohort"
+  ) |>
+    dplyr::select(-cohort)
   
   return(dat)
 } # End function rq_prepare_data
@@ -427,7 +420,7 @@ rq_estimate_weights <- function(dat, save_results, parallel, workers) {
                       gridExtra::marrangeGrob(grobs = balance[[x]]$graph,
                                               nrow = 1,
                                               ncol = 1),
-                      dpi = 480)
+                      dpi = 360)
       
       ### bal.tab
       .path <- paste0(
@@ -487,7 +480,7 @@ rq_estimate_weights <- function(dat, save_results, parallel, workers) {
                     gridExtra::marrangeGrob(grobs = lapply(balance, `[[`, "love"),
                                             nrow = 1,
                                             ncol = 1),
-                    dpi = 480, height = 6)
+                    dpi = 360, height = 6)
   } # End save_results
   
   return(list(
@@ -511,6 +504,15 @@ rq_fit_model_weighted <- function(dat, outcome,
   rq <- Sys.getenv("TAR_PROJECT")
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   params_ana <- params_analyses()[[rq]]
+  
+  # Check whether outcome is still available after pre-processing
+  if (!outcome %in% colnames(dat$outcome)) {
+    warning(
+      glue::glue("The outcome {outcome} was not found."), 
+      call. = TRUE
+    )
+    return()
+  }
   
   # Process outcome
   dat$outcome <- dat$outcome |>
