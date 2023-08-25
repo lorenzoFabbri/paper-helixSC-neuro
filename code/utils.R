@@ -735,7 +735,7 @@ rq_estimate_marginal_effects <- function(fits, parallel, workers) {
         dat = dat, 
         var = exposure, 
         percentiles = params_ana$type_avg_comparison, 
-        grouping_var = "cohort"
+        by_var = "cohort"
       )
       
       avg_comp <- eval(
