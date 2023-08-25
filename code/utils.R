@@ -5,7 +5,7 @@
 #' @param outcome A string defining the outcome of interest. A string.
 #' @param params_dag A list of parameters for `dagitty`. A list.
 #'
-#' @return A named list with DAG and adjustment sets. A list.
+#' @returns A named list with DAG and adjustment sets.
 #'
 #' @export
 load_dag <- function(dags, exposure, outcome, params_dag) {
@@ -47,13 +47,15 @@ load_dag <- function(dags, exposure, outcome, params_dag) {
 
 #' Various ways to select an adjustment set out of many
 #'
-#' @param dat A named list of tibbles containing the variables of interest. A list.
+#' @param dat A named list of dataframes containing the
+#' variables of interest. A list.
+#' @param meta A dataframe of metadata for `dat`. A dataframe.
 #' @param res_dag Result of the call to [load_dag()]. A named list.
 #' @param strategy Strategy to adopt to select the adjustment set.
 #' The currently available strategies are: `first`, `smallest`, `largest`, `random`,
 #' and `minimize_missings`. A string.
 #'
-#' @return An adjustment set. A vector.
+#' @returns An adjustment set.
 #'
 #' @export
 select_adjustment_set <- function(dat, meta, res_dag, strategy) {
@@ -80,10 +82,9 @@ select_adjustment_set <- function(dat, meta, res_dag, strategy) {
 
 #' Load data necessary for down-streams analyses
 #'
-#' @param ids_other_covars IDs for additional covariate data. A vector.
 #' @param res_dag Result of the call to [load_dag()]. A list.
 #'
-#' @return A named list of exposures, covariates, and outcomes. A list.
+#' @returns A named list of exposures, covariates, and outcomes.
 #'
 #' @export
 rq_load_data <- function(res_dag) {
@@ -206,10 +207,11 @@ rq_load_data <- function(res_dag) {
 
 #' Pre-process data for research questions
 #'
-#' @param dat A named list of tibbles containing the variables of interest. A list.
+#' @param dat A named list of dataframes containing the
+#' variables of interest. A list.
 #'
-#' @return A named list of pre-processed tibbles containing the variables of interest.
-#' A list.
+#' @returns A named list of pre-processed dataframes
+#' containing the variables of interest.
 #'
 #' @export
 rq_prepare_data <- function(dat) {
@@ -278,13 +280,18 @@ rq_prepare_data <- function(dat) {
 
 #' Estimate weights and explore covariates balance
 #'
-#' @param dat A named list of tibbles containing the variables of interest. A list.
+#' @param dat A named list of dataframes containing
+#' the variables of interest. A list.
+#' @param save_results Whether to save figures and tables to file. A logical.
+#' @param parallel Whether to perform steps in parallel. A logical.
+#' @param workers Optional number of workers to use. An integer.
 #'
-#' @return A named list containing estimated weights and results of
-#' balance exploration. A list.
+#' @returns A named list containing estimated weights and results of
+#' balance exploration.
 #'
 #' @export
-rq_estimate_weights <- function(dat, save_results, parallel, workers) {
+rq_estimate_weights <- function(dat, save_results, 
+                                parallel, workers = NULL) {
   rq <- Sys.getenv("TAR_PROJECT")
   rq <- switch(rq, 
                "rq01" = "rq1", 
@@ -490,17 +497,22 @@ rq_estimate_weights <- function(dat, save_results, parallel, workers) {
 } # End function rq_estimate_weights
 ################################################################################
 
-#' Title
+#' Fit models with balancing weights
 #'
-#' @param dat
-#' @param weights
+#' @param dat A named list of dataframes containing
+#' the variables of interest. A list.
+#' @param outcome Name of the outcome of interest. A string.
+#' @param weights Estimated weights resulting from a call to
+#' [rq_estimate_weights()]. A list.
+#' @param parallel Whether to perform steps in parallel. A logical.
+#' @param workers Optional number of workers to use. An integer.
 #'
-#' @return
+#' @returns A named list containing the fitted models.
 #'
 #' @export
 rq_fit_model_weighted <- function(dat, outcome, 
                                   weights, 
-                                  parallel, workers) {
+                                  parallel, workers = NULL) {
   rq <- Sys.getenv("TAR_PROJECT")
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   params_ana <- params_analyses()[[rq]]
@@ -604,14 +616,19 @@ rq_fit_model_weighted <- function(dat, outcome,
 } # End function rq_fit_model_weighted
 ################################################################################
 
-#' Title
+#' Estimate marginal effects
 #'
-#' @param fits 
+#' @param fits A list of fitted models. Results from a call to
+#' [rq_fit_model_weighted()]. A list.
+#' @param parallel Whether to perform steps in parallel. A logical.
+#' @param workers Optional number of workers to use. An integer.
 #'
-#' @return
+#' @returns A list of estimated marginal effects. Specifically, the
+#' average dose-response function, the average marginal effect function,
+#' and the results of average comparisons.
 #'
 #' @export
-rq_estimate_marginal_effects <- function(fits, parallel, workers) {
+rq_estimate_marginal_effects <- function(fits, parallel, workers = NULL) {
   rq <- Sys.getenv("TAR_PROJECT")
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   params_ana <- params_analyses()[[rq]]
@@ -788,7 +805,7 @@ rq_estimate_marginal_effects <- function(fits, parallel, workers) {
 #' @param dat A named list of tibbles containing the variables of interest. A list.
 #' @param shift_exposure Whether to shift the exposure variables or not. A logical. 
 #'
-#' @return A named list containing the results of the call to `lmtp`, for each exposure.
+#' @returns A named list containing the results of the call to `lmtp`, for each exposure.
 #'
 #' @export
 run_mtp <- function(dat, shift_exposure) {

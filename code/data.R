@@ -1,6 +1,8 @@
 #' Load the steroid metabolomics data
 #'
-#' @return
+#' @returns A named list with the metabolomics data,
+#' the dataframe containing the description of the values for
+#' each variable, the LOD values for each variable.
 #'
 #' @export
 load_steroids <- function() {
@@ -185,7 +187,7 @@ load_steroids <- function() {
 
 #' Load and clean the dataset corresponding to the HELIX data request
 #'
-#' @return A named list of data and metadata. A list.
+#' @returns A named list of data and metadata.
 #'
 #' @export
 load_dat_request <- function() {

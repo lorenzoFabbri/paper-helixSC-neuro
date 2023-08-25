@@ -1,12 +1,12 @@
-#' Title
+#' Visualize overlap of a variable based on a grouping factor
 #'
-#' @param dat 
-#' @param id_var 
-#' @param group_var 
-#' @param lower_percentile 
-#' @param upper_percentile 
+#' @param dat
+#' @param id_var
+#' @param group_var
+#' @param lower_percentile
+#' @param upper_percentile
 #'
-#' @return
+#' @returns
 #' @export
 viz_overlap_quantiles <- function(dat, id_var, group_var, 
                                   lower_percentile, upper_percentile) {
@@ -50,9 +50,9 @@ viz_overlap_quantiles <- function(dat, id_var, group_var,
   return(ret)
 } # End function viz_overlap_quantiles
 
-#' Title
+#' Visualize the clinical outcome across age and by sex
 #'
-#' @return
+#' @returns
 #' @export
 viz_clinical_outcome <- function() {
   # Load data
@@ -101,13 +101,14 @@ viz_clinical_outcome <- function() {
   return(ret)
 } # End function viz_clinical_outcome
 
-#' Title
+#' Visualize the types of the variables of interest by cohort
 #'
-#' @param dat 
-#' @param vars 
-#' @param fct_levels 
+#' @param dat
+#' @param vars
+#' @param fct_levels
+#' @param is_chem
 #'
-#' @return
+#' @returns
 #' @export
 viz_desc_vars <- function(dat, vars, fct_levels, is_chem) {
   # Select only cohort and variables of interest (e.g., chemicals w/ `cdesc`)
