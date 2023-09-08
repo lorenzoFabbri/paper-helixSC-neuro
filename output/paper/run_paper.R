@@ -1,4 +1,4 @@
-Sys.setenv(is_hpc = TRUE)
+Sys.setenv(is_hpc = FALSE)
 store <- ifelse(
   Sys.getenv("is_hpc"), 
   "/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/_targets/_targets_paper", 

@@ -1,5 +1,5 @@
 ---
-title: "Paper 3 - Tables"
+title: "Tables"
 
 format:
   docx:
@@ -17,19 +17,20 @@ editor_options:
   chunk_output_type: console
 ---
 
-<!-- ####################################################################### -->
+- Begin each table on a new page after the list of references.
+- Tables may not contain parts.
+- List footnotes after the general one, one per line and indicated with a lowercase italicized letter.
+
 # Study populations
-<!-- ####################################################################### -->
 ```{r}
 
 ```
 
-<!-- ####################################################################### -->
 # Exposures
-<!-- ####################################################################### -->
 ```{r}
 #| label: tbl-chem-info
 #| tbl-cap: Information about the non-persistent EDCs.
+
 edcs_info <- myphd::edcs_information() |>
   tidylog::select(-c(chem_id, smiles))
 gt::gt(edcs_info, groupname_col = "class") |>

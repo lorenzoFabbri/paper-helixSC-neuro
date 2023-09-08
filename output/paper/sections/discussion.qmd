@@ -1,3 +1,20 @@
-List of possible limitations:
+## Key results {#sec-disc-res-key}
 
-* The percentiles of the exposures might differ considerably by cohort. When using `avg_comparisons`, we do not consider this. This might cause cohort-dependent positivity issues (?).
+- Summarise key results with reference to study objectives.
+- Provide a review of the relevant literature to put the study findings into context.
+  - It should be complete and balanced, including inconsistent results.
+  - It should include, for each source, sufficient details: study design, sample size, population, specific exposures and outcomes.
+
+## Limitations {#sec-limitations}
+
+- Discuss limitations of the study, taking into account sources of potential bias or imprecision.
+- Discuss both direction and magnitude of any potential bias.
+
+## Interpretation {#sec-interpretation}
+
+- End with a summary of the key findings and their implications for the study hypotheses, future research, and policy.
+- Give a cautious overall interpretation of results considering objectives, limitations, multiplicity of analyses, results from similar studies, and other relevant evidence.
+
+## Generalisability {#sec-general}
+
+- Discuss the generalisability (external validity) of the study results.

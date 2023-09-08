@@ -1,0 +1,30 @@
+## Participants {#sec-res-participants}
+
+- Report number of individuals at each stage of study: numbers potentially eligible, examined for eligibility, confirmed eligible, included in the study, completing follow-up, and analysed.
+- Give reasons for non-participation at each stage.
+- Consider use of a flow diagram.
+
+## Descriptive data {#sec-res-pop-desc}
+
+- Give characteristics of study participants (demographic, clinical, social) and information on exposures and potential confounders.
+  - Include all covariates included in primary or secondary analyses.
+  - Provide detailed information about exposures' distributions: minimum and maximum, percentiles, and number of observations above/below the assay's LOD and LOQ.
+- Indicate number of participants with missing data for each variable of interest.
+- Cohort study: summarise follow-up time (average and total amount).
+
+## Outcome data {#sec-res-out-desc}
+
+- Cohort study: report numbers of outcome events or summary measures over time.
+- Cross-sectional study: report numbers of outcome events or summary measures.
+
+## Main results {#sec-res-main}
+
+- All results on which study conclusions or inferences are based, including null findings and results of secondary or sensitivity analyses, must be reported. Use of sub-headings that describe the nature of the results (but no declarative statements).
+  - Provide a clear and concise description of all findings without extrapolating beyond the study results.
+  - Do not limit results to those *statistically significant* or that support the study hypotheses. Avoid using statistical significance testing as the sole or primary criterion for interpreting the obtained results. If significance testing or *p*-values are used, report numeric *p*-values, rounded to 1-2 digits, for all results.
+- Give unadjusted and confounder-adjusted estimates and their precision (e.g., $95\%$ confidence interval). Make clear which confounders were adjusted for and why they were included. Include the number of observations for each analysis after accounting for missing data. Include numeric data within figures (e.g., forest plots), or provide tables with corresponding numeric data for all figures.
+- Report category boundaries when continuous variables were categorized.
+
+## Other analyses {#sec-res-other}
+
+- Report other analyses done (e.g., analyses of subgroups and interactions, and sensitivity analyses).

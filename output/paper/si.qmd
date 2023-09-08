@@ -1,9 +1,12 @@
 ---
-title: "Paper 3 - Supplementary Information"
+title: "Supplementary Material"
 
 format:
   docx:
     reference-doc: reference_document.docx
+
+bibliography: bibliography.bib
+csl: ama11.csl
 
 link-citations: true
 linkcolor: blue
@@ -16,3 +19,15 @@ execute:
 editor_options: 
   chunk_output_type: console
 ---
+
+- Should be limited to results of secondary analyses and background details needed to ensure transparency:
+  - Questionnaires.
+  - Tables and figures with results of sensitivity analyses.
+  - Tables with numeric data corresponding to results shown in the main text figures.
+  - DAGs used to select model covariates.
+- Text description of study methods should NOT go in the SM.
+- Order the content: text, supplemental tables, and supplemental figures.
+- Provide the title for each figure below the figure on the same manuscript page as the figure itself.
+- Provide the title for each table above the table and the notes below the table.
+- Number supplemental tables and figures separately according to the order in which they are first mentioned in the main text, using an "S" prefix.
+- Conclude the SM with a list of references, even if they are also cited in the main paper.

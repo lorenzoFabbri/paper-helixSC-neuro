@@ -1,5 +1,5 @@
 ---
-title: "Paper 3 - Figures"
+title: "Figures"
 
 format:
   pdf:
@@ -23,14 +23,20 @@ editor_options:
   chunk_output_type: console
 ---
 
-<!-- ####################################################################### -->
+- Number figures according to the order in which they are first mentioned in the main text.
+- Clearly label all axes, giving both the measure and the unit of measurement.
+- Not larger than 7.5 inches in width.
+- Save and submit each main text figure as an individual file (PDF with fonts embedded). Include the figure number in the file name of each figure.
+- Provide main text figure captions on a new page of the main text after the tables.
+- Include a title for the entire figure and descriptors for each panel.
+
 # CTD Results
-<!-- ####################################################################### -->
 ```{r}
 #| label: fig-ctd-res
 #| fig.cap: Barplot CTD.
 #| fig.height: 10
 #| fig.width: 10
+
 path <- "results/files/CTD_chem_diseases_1680702221550_05042023.csv"
 ctd <- myphd::load_ctd(path = path, 
                        filter_evidence = TRUE)

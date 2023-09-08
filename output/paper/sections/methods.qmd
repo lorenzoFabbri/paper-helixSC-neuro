@@ -1,11 +1,55 @@
-## Study population {#sec-study-population}
+## Study design {#sec-design}
 
-## Exposure assessment {#sec-exp-assessment}
+- Present key elements of study design
 
-## Metabolomics {#sec-metabolomics}
+## Setting {#sec-setting}
 
-## Neurodevelopment {#sec-neurodevelopment}
+- Describe the setting, locations, and relevant dates, including periods of recruitment, exposure, follow-up, and data collection.
 
-## Covariates {#sec-covars}
+## Participants {#sec-participants}
 
-## Statistical analysis {#sec-stat-analysis}
+- Cohort study: eligibility criteria, and the sources and methods of selection of participants. Describe methods of follow-up.
+- Cross-sectional study: give eligibility criteria, and the sources and methods of selection of participants.
+- Describe informed consent protocols.
+- Report how and by whom *race* or *ethnicity* was defined, and why this information was included in the study design. Disaggregate race and ethnicity data to the fullest extent possible.
+
+## Variables {#sec-vars}
+
+- Clearly define all outcomes, exposures, predictors, potential confounders, and effect modifiers.
+- Explain the rationale for treating race as an exposure, confounder, effect modifier, or other type of variable in analyses.
+
+### Confounders {#sec-confounders}
+
+### Endocrine disrupting chemicals {#sec-edcs}
+
+### Corticosteroids {#sec-steroids}
+
+### Neurodevelopment {#sec-neurodevelopment}
+
+## Data sources and measurement {#sec-dat-sources}
+
+- For each variable of interest, give sources of data and details of methods of assessment (measurement).
+
+## Bias {#sec-bias}
+
+- Describe any efforts to address potential sources of bias.
+
+## Study size {#sec-size}
+
+- Explain how the study size was arrived at.
+
+## Quantitative variables {#sec-quant-vars}
+
+- Explain how quantitative variables were handled in the analyses. If applicable, describe which groupings were chosen and why.
+
+## Statistical methods {#sec-stat-methods}
+
+- Methods for selecting potential confounders (provide DAGs).
+- Describe all statistical methods with assumptions, including those used to control for confounding.
+- Describe any methods used to examine subgroups and interactions.
+- Explain how missing data were addressed.
+- Cohort study: explain how loss to follow-up was addressed.
+- Cross-sectional study: describe analytical methods taking account of sampling strategy.
+- Describe any sensitivity analyses.
+- When referring to previous publications for methods' details, include a brief description of the approach, key assumptions and limitations, and any deviation.
+- Names and version numbers for the used software packages, including non-data arguments if deviating from the default ones.

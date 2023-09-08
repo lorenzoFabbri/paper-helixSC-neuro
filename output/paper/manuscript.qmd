@@ -3,6 +3,8 @@ metadata-files:
   - ../../../../all_phd/authors.yml
 
 format:
+  docx:
+    reference-doc: reference_document.docx
   pdf:
     pdf-engine: lualatex
     number-sections: true
@@ -12,27 +14,7 @@ format:
         \usepackage{rotating}
         \usepackage{float}
         \usepackage{typearea}
-
-bibliography: ../../../../PhD.bib
-link-citations: true
-linkcolor: blue
-
-execute:
-  echo: false
-  warning: false
-  error: false
-  message: false
-editor_options: 
-  chunk_output_type: console
-
-filters:
-  - ../../../../all_phd/_extensions/acronyms/parse-acronyms.lua
-  - ../../../../all_phd/_extensions/authors-block/authors-block.lua
-acronyms:
-  fromfile: ../../../../all_phd/acronyms.yml
-  insert_links: false
-  insert_loa: false
-  sorting: alphabetical
+        \usepackage{lineno}
 
 abstract: |
  **Background**
@@ -44,6 +26,33 @@ abstract: |
  **Results**
  
  **Discussion**
+
+bibliography: bibliography.bib
+csl: ama11.csl
+
+link-citations: true
+linkcolor: blue
+
+editor_options: 
+  chunk_output_type: console
+
+filters:
+  - ../../../../all_phd/_extensions/acronyms/parse-acronyms.lua
+  - ../../../../all_phd/_extensions/authors-block/authors-block.lua
+  - ../../../../all_phd/_extensions/wordcount/citeproc.lua
+  - ../../../../all_phd/_extensions/wordcount/wordcount.lua
+
+acronyms:
+  fromfile: ../../../../all_phd/acronyms.yml
+  insert_links: false
+  insert_loa: false
+  sorting: alphabetical
+
+execute:
+  echo: false
+  warning: false
+  error: false
+  message: false
 ---
 
 ```{=latex}
@@ -52,42 +61,44 @@ abstract: |
 ```
 
 ---
-title: "Some Title"
+title: "Some Fancy Title"
 ---
 
-<!-- ####################################################################### -->
+- The title should be less or equal than 300 characters. It should indicate the study design, the subject of the paper, information regarding exposures and outcomes assessed, and whether the study was observational or experimental.
+- The suggested length of the abstract is less or equal than 300 words.
+- The suggested length is <7,000 words, excluding abstract, references, tables, figure captions, acknowledgments, and Supplementary Material.
+  - Concise sub-headings should be less or equal than 8 words, and they should be used to organize information rather than summarize the results.
+  - In-text citations with superscript numbers: outside periods and commas, but inside colons and semicolons.
+
 # Introduction {#sec-intro}
 ```{r}
 #| child: output/paper/sections/introduction.qmd
 ```
-<!-- ####################################################################### -->
 
-<!-- ####################################################################### -->
 # Methods {#sec-methods}
 ```{r}
 #| child: output/paper/sections/methods.qmd
 ```
-<!-- ####################################################################### -->
 
-<!-- ####################################################################### -->
 # Results {#sec-res}
 ```{r}
 #| child: output/paper/sections/results.qmd
 ```
-<!-- ####################################################################### -->
 
-<!-- ####################################################################### -->
 # Discussion {#sec-discussion}
 ```{r}
 #| child: output/paper/sections/discussion.qmd
 ```
-<!-- ####################################################################### -->
 
 \newpage
 
-<!-- ####################################################################### -->
+# Funding
+
+- Give the source of funding and the role of the funders for the present study and, if applicable, for the original study on which the present article is based.
+
+\newpage
+
 # References {.unnumbered}
-<!-- ####################################################################### -->
 
 ::: {#refs}
 :::
