@@ -4,23 +4,29 @@ title: "Figures"
 format:
   pdf:
     pdf-engine: lualatex
+    number-sections: true
     toc: false
     include-in-header:
       text: |
+        \usepackage{lineno}
         \usepackage{rotating}
         \usepackage{float}
         \usepackage{typearea}
+    include-before-body:
+      text: |
+        \linenumbers
 
 link-citations: true
 linkcolor: blue
+
+editor_options: 
+  chunk_output_type: console
 
 execute:
   echo: false
   warning: false
   error: false
   message: false
-editor_options: 
-  chunk_output_type: console
 ---
 
 - Number figures according to the order in which they are first mentioned in the main text.
@@ -28,17 +34,13 @@ editor_options:
 - Not larger than 7.5 inches in width.
 - Save and submit each main text figure as an individual file (PDF with fonts embedded). Include the figure number in the file name of each figure.
 - Provide main text figure captions on a new page of the main text after the tables.
+- Provide the title for each figure below the figure on the same manuscript page as the figure itself.
 - Include a title for the entire figure and descriptors for each panel.
 
-# CTD Results
-```{r}
-#| label: fig-ctd-res
-#| fig.cap: Barplot CTD.
-#| fig.height: 10
-#| fig.width: 10
+# Participants
 
-path <- "results/files/CTD_chem_diseases_1680702221550_05042023.csv"
-ctd <- myphd::load_ctd(path = path, 
-                       filter_evidence = TRUE)
-myphd::plot_ctd(ctd)
-```
+- Flow diagram: number of individuals at each stage of study. Report numbers potentially eligible, examined for eligibility, confirmed eligible, included in the study, completing follow-up, and analysed.
+
+# Main results
+
+- Forest plot for RQ2 (group by chemical class, and for each chemical group bars for metabolites) and RQ3.

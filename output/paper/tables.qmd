@@ -5,52 +5,78 @@ format:
   docx:
     reference-doc: reference_document.docx
 
+tbl-cap-location: top
 link-citations: true
 linkcolor: blue
+
+editor_options: 
+  chunk_output_type: console
 
 execute:
   echo: false
   warning: false
   error: false
   message: false
-editor_options: 
-  chunk_output_type: console
 ---
 
 - Begin each table on a new page after the list of references.
 - Tables may not contain parts.
+- Provide the title for each table above the table and the notes below the table.
 - List footnotes after the general one, one per line and indicated with a lowercase italicized letter.
 
-# Study populations
-```{r}
+# Descriptive data
 
-```
+## Study populations
 
-# Exposures
+- Basic characteristics of study participants (demographic, clinical, social), by cohort and overall.
+  - Include all covariates included in primary or secondary analyses.
+  - Indicate number of participants with missing data for each variable of interest.
+  - Report numbers of outcome events or summary measures.
+
+## Endocrine disruptors
+
+- Levels of unprocessed biomarkers (chemicals), with IDs.
+- Report: minimum and maximum, percentiles, and number of observations above/below the assay's LOD and LOQ.
+
 ```{r}
 #| label: tbl-chem-info
-#| tbl-cap: Information about the non-persistent EDCs.
+#| tbl-cap: "Information about the non-persistent EDCs."
 
 edcs_info <- myphd::edcs_information() |>
   tidylog::select(-c(chem_id, smiles))
-gt::gt(edcs_info, groupname_col = "class") |>
+gt::gt(edcs_info,
+       groupname_col = "class") |>
+  gt::tab_header(
+    title = "Information about the non-persistent EDCs."
+  ) |>
   gt::cols_label(
-    full_name = "Compound", 
-    short_name = "Symbol", 
-    pubchem_cid = "PubChem CID", 
-    ctd_id = "CTD ID", 
-    exposome_explorer_id = "Exposome Explore ID", 
+    full_name = "Compound",
+    short_name = "Symbol",
+    pubchem_cid = "PubChem CID",
+    ctd_id = "CTD ID",
+    exposome_explorer_id = "Exposome Explore ID",
     parental_compound = "Parental compound"
   ) |>
   gt::tab_style(
-    locations = gt::cells_column_labels(columns = everything()), 
+    locations = gt::cells_column_labels(columns = everything()),
     style = list(
-      gt::cell_borders(sides = "bottom", weight = gt::px(3)), 
+      gt::cell_borders(sides = "bottom", weight = gt::px(3)),
       gt::cell_text(weight = "bold")
     )
   ) |>
   gt::tab_style(
-    locations = gt::cells_row_groups(group = dplyr::everything()), 
+    locations = gt::cells_row_groups(group = dplyr::everything()),
     style = list(gt::cell_text(weight = "bold"))
   )
 ```
+
+## Corticosteroids
+
+- Levels of unprocessed biomarkers (metabolites), with IDs.
+
+# Main results
+
+- RQ2: group chemicals by class, and for each chemical report results with metabolites (`avg_comparisons` with estimate, SE, s-value, CI).
+- RQ3: report results with outcome (`avg_comparisons` with estimate, SE, s-value, CI).
+
+# Other analyses

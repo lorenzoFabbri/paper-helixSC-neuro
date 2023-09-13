@@ -46,6 +46,9 @@
 
 - Methods for selecting potential confounders (provide DAGs).
 - Describe all statistical methods with assumptions, including those used to control for confounding.
+  - Description of outcome model, weighting method, estimand, and balance assessment.
+  - Description of method used to estimate effects (e.g., g-computation).
+  - Description of method used for SE and CI.
 - Describe any methods used to examine subgroups and interactions.
 - Explain how missing data were addressed.
 - Cohort study: explain how loss to follow-up was addressed.

@@ -1,4 +1,6 @@
 ---
+title: "Some Fancy Title"
+
 metadata-files:
   - ../../../../all_phd/authors.yml
 
@@ -9,23 +11,16 @@ format:
     pdf-engine: lualatex
     number-sections: true
     toc: false
+    keep-tex: true
     include-in-header:
       text: |
+        \usepackage{lineno}
         \usepackage{rotating}
         \usepackage{float}
         \usepackage{typearea}
-        \usepackage{lineno}
-
-abstract: |
- **Background**
- 
- **Objectives**
- 
- **Methods**
- 
- **Results**
- 
- **Discussion**
+    include-before-body:
+      text: |
+        \linenumbers
 
 bibliography: bibliography.bib
 csl: ama11.csl
@@ -33,12 +28,9 @@ csl: ama11.csl
 link-citations: true
 linkcolor: blue
 
-editor_options: 
-  chunk_output_type: console
-
 filters:
+  - authors-block
   - ../../../../all_phd/_extensions/acronyms/parse-acronyms.lua
-  - ../../../../all_phd/_extensions/authors-block/authors-block.lua
   - ../../../../all_phd/_extensions/wordcount/citeproc.lua
   - ../../../../all_phd/_extensions/wordcount/wordcount.lua
 
@@ -48,6 +40,9 @@ acronyms:
   insert_loa: false
   sorting: alphabetical
 
+editor_options: 
+  chunk_output_type: console
+
 execute:
   echo: false
   warning: false
@@ -55,14 +50,18 @@ execute:
   message: false
 ---
 
-```{=latex}
-\setcounter{tocdepth}{4}
-\tableofcontents
-```
+# Abstract {.unnumbered}
+**Background**
+ 
+**Objectives**
+ 
+**Methods**
+ 
+**Results**
+ 
+**Discussion**
 
----
-title: "Some Fancy Title"
----
+\newpage
 
 - The title should be less or equal than 300 characters. It should indicate the study design, the subject of the paper, information regarding exposures and outcomes assessed, and whether the study was observational or experimental.
 - The suggested length of the abstract is less or equal than 300 words.

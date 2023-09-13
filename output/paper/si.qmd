@@ -11,13 +11,14 @@ csl: ama11.csl
 link-citations: true
 linkcolor: blue
 
+editor_options: 
+  chunk_output_type: console
+
 execute:
   echo: false
   warning: false
   error: false
   message: false
-editor_options: 
-  chunk_output_type: console
 ---
 
 - Should be limited to results of secondary analyses and background details needed to ensure transparency:
@@ -26,8 +27,30 @@ editor_options:
   - Tables with numeric data corresponding to results shown in the main text figures.
   - DAGs used to select model covariates.
 - Text description of study methods should NOT go in the SM.
-- Order the content: text, supplemental tables, and supplemental figures.
-- Provide the title for each figure below the figure on the same manuscript page as the figure itself.
-- Provide the title for each table above the table and the notes below the table.
 - Number supplemental tables and figures separately according to the order in which they are first mentioned in the main text, using an "S" prefix.
-- Conclude the SM with a list of references, even if they are also cited in the main paper.
+
+# Supplementary information
+
+# Supplementary tables
+
+- Provide the title for each table above the table and the notes below the table.
+
+## Descriptive data
+
+### Study populations
+
+- Detailed characteristics of study participants (demographic, clinical, social), by cohort and overall.
+
+# Supplementary figures
+
+- Provide the title for each figure below the figure on the same manuscript page as the figure itself.
+
+## Main results
+
+- ADRF and AMEF for RQ2 and RQ3.
+- Whole distribution (i.e., density) of e.g., risk differences (instead of marginalized estimates), with lines for mean and median.
+
+# References {.unnumbered}
+
+::: {#refs}
+:::
