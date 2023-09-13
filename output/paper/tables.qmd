@@ -5,7 +5,6 @@ format:
   docx:
     reference-doc: reference_document.docx
 
-tbl-cap-location: top
 link-citations: true
 linkcolor: blue
 
