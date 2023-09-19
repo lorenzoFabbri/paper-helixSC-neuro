@@ -10,6 +10,14 @@
 - Discuss limitations of the study, taking into account sources of potential bias or imprecision.
 - Discuss both direction and magnitude of any potential bias.
 
+Some limitations:
+
+- Change of estimand when trimming weights.
+- Model misspecification.
+- Mixtures effect.
+- Residual confounding.
+- Multiple comparisons.
+
 ## Interpretation {#sec-interpretation}
 
 - End with a summary of the key findings and their implications for the study hypotheses, future research, and policy.
