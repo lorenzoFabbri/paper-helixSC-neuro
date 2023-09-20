@@ -248,11 +248,13 @@ params_analyses <- function() {
     ############################################################################
     # WeightIt, Cobalt, marginaleffects
     method_weightit = "energy",
+    stabilize = TRUE,
+    by = NULL,
     weights_trim = 0.9,
-    use_kernel = TRUE,
-    sl_discrete = FALSE,
     sl_lib = c("SL.glm",
                "SL.gam", "SL.glmnet"),
+    sl_discrete = FALSE,
+    use_kernel = TRUE,
     method_marginal = "glm",
     family_marginal = gaussian(link = "identity"),
     add_inter_exposure = FALSE,
