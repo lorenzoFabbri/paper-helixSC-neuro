@@ -65,7 +65,7 @@ vars_of_interest <- function(append_to_chem = NULL) {
     "Etio"
   )
   outcomes <- c("hs_hitrtse")
-  
+
   return(list(
     chemicals = chemicals,
     metabolites = metabolites,
@@ -83,24 +83,30 @@ params <- function(is_hpc) {
     common_path <-
       "~/mounts/rstudioserver/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF"
   }
-  
-  paths <- list(path_dat_request = "data/data_paper3/requests/AP136/HELIX_AP_136_request_updated12jun.2023.csv",
-                path_all_steroids = "data/data_paper3/requests/AP136/steroids/")
+
+  paths <- list(
+    path_dat_request = "data/data_paper3/requests/AP136/HELIX_AP_136_request_updated12jun.2023.csv",
+    path_all_steroids = "data/data_paper3/requests/AP136/steroids/"
+  )
   paths <- lapply(paths, function(x) {
     paste0(common_path, x)
   })
   ##############################################################################
-  
+
   chemicals <- vars_of_interest(append_to_chem = "c")$chemicals
   metabolites <- vars_of_interest()$metabolites
   clinical_outcomes <- vars_of_interest()$outcomes
   creatinine_covariates_names <- list(
-    numerical = c("hs_age_years", "hs_c_weight", "hs_c_height",
-                  "FAS_score"),
-    categorical = c("e3_sex", "h_ethnicity_spiro",
-                    "cohort")
+    numerical = c(
+      "hs_age_years", "hs_c_weight", "hs_c_height",
+      "FAS_score"
+    ),
+    categorical = c(
+      "e3_sex", "h_ethnicity_spiro",
+      "cohort"
+    )
   )
-  
+
   variables <- list(
     identifier = "HelixID",
     strategy_select_adj_set = "smallest",
@@ -124,7 +130,7 @@ params <- function(is_hpc) {
     ) # End options RQ3
   )
   ##############################################################################
-  
+
   steps <- list(
     rq2 = list(
       preproc_exposures = list(
@@ -221,7 +227,7 @@ params <- function(is_hpc) {
     ############################################################################
   ) # End list of steps
   ##############################################################################
-  
+
   return(list(
     paths = paths,
     variables = variables,
@@ -251,8 +257,10 @@ params_analyses <- function() {
     stabilize = TRUE,
     by = NULL,
     weights_trim = 0.9,
-    sl_lib = c("SL.glm",
-               "SL.gam", "SL.glmnet"),
+    sl_lib = c(
+      "SL.glm",
+      "SL.gam", "SL.glmnet"
+    ),
     sl_discrete = FALSE,
     use_kernel = TRUE,
     method_marginal = "glm",
@@ -266,10 +274,12 @@ params_analyses <- function() {
   ) # End dictionary parameters RQ1
   rq2 <- rq1
   rq3 <- rq1
-  
-  ret <- list(rq1 = rq1,
-              rq2 = rq2,
-              rq3 = rq3)
-  
+
+  ret <- list(
+    rq1 = rq1,
+    rq2 = rq2,
+    rq3 = rq3
+  )
+
   return(ret)
 } # End function params_analyses
