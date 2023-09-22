@@ -302,6 +302,27 @@ rq_prepare_data <- function(dat) {
 } # End function rq_prepare_data
 ################################################################################
 
+#' Function to estimate confidence intervals using Bootstrapping
+#'
+#' @param dat
+#' @param i
+#'
+#' @return
+#'
+#' @export
+rq_boot_pipeline <- function(dat, i) {
+  rq <- Sys.getenv("TAR_PROJECT")
+  rq <- switch(rq,
+               "rq01" = "rq1",
+               "rq02" = "rq2",
+               "rq03" = "rq3",
+               rq
+  )
+  params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
+  params_ana <- params_analyses()[[rq]]
+} # End function rq_boot_pipeline
+################################################################################
+
 #' Estimate weights and explore covariates balance
 #'
 #' @param dat A named list of dataframes containing
