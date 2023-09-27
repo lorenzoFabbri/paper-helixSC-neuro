@@ -137,8 +137,10 @@ params <- function(is_hpc) {
         missings = list(
           threshold_within = 40,
           threshold_overall = 40,
-          selected_covariates = c(),
-          method_imputation = "univariate"
+          use_additional_covariates = FALSE,
+          selected_covariates = NULL,
+          method_imputation = "vim.knn",
+          k = 5
         ),
         creatinine = list(
           method = "cas",
@@ -160,14 +162,19 @@ params <- function(is_hpc) {
         missings = list(
           threshold_within = 40,
           threshold_overall = 40,
-          selected_covariates = c(),
-          method_imputation = "univariate"
+          use_additional_covariates = FALSE,
+          selected_covariates = NULL,
+          method_imputation = "vim.knn",
+          k = 5
         ),
         creatinine = list(
           method = "cas",
           method_fit_args = list(family = gaussian(link = "identity")),
           creatinine_covariates_names = creatinine_covariates_names,
           creatinine_name = "hs_creatinine_cg"
+        ),
+        transform = list(
+          transformation_fun = log
         )
       ),
       # End preproc_outcome
@@ -175,8 +182,10 @@ params <- function(is_hpc) {
         missings = list(
           threshold_within = 40,
           threshold_overall = 40,
-          selected_covariates = c(),
-          method_imputation = "univariate"
+          use_additional_covariates = FALSE,
+          selected_covariates = NULL,
+          method_imputation = "vim.knn",
+          k = 5
         )
       ) # End preproc_covars
     ),
@@ -195,8 +204,10 @@ params <- function(is_hpc) {
         missings = list(
           threshold_within = 40,
           threshold_overall = 40,
-          selected_covariates = c(),
-          method_imputation = "univariate"
+          use_additional_covariates = FALSE,
+          selected_covariates = NULL,
+          method_imputation = "vim.knn",
+          k = 5
         ),
         creatinine = list(
           method = "cas",
@@ -210,8 +221,13 @@ params <- function(is_hpc) {
         missings = list(
           threshold_within = 40,
           threshold_overall = 40,
-          selected_covariates = c(),
-          method_imputation = "univariate"
+          use_additional_covariates = FALSE,
+          selected_covariates = NULL,
+          method_imputation = "vim.knn",
+          k = 5
+        ),
+        transform = list(
+          transformation_fun = log
         )
       ),
       # End preproc_outcome
@@ -219,8 +235,10 @@ params <- function(is_hpc) {
         missings = list(
           threshold_within = 40,
           threshold_overall = 40,
-          selected_covariates = c(),
-          method_imputation = "univariate"
+          use_additional_covariates = FALSE,
+          selected_covariates = NULL,
+          method_imputation = "vim.knn",
+          k = 5
         )
       ) # End preproc_covars
     ) # End steps RQ3
@@ -266,6 +284,7 @@ params_analyses <- function() {
     method_marginal = "glm",
     family_marginal = gaussian(link = "identity"),
     add_inter_exposure = FALSE,
+    add_inter_exposure_specific = c(),
     add_splines_exposure = TRUE,
     df_splines = 3,
     threshold_smooth = 10,
