@@ -146,7 +146,8 @@ params <- function(is_hpc) {
           method = "cas",
           method_fit_args = list(family = gaussian(link = "identity")),
           creatinine_covariates_names = creatinine_covariates_names,
-          creatinine_name = "hs_creatinine_cg"
+          creatinine_name = "hs_creatinine_cg",
+          path_save_res = "results/figures/rq2/model_check_creatinine_exp.png"
         )
       ),
       # End preproc_exposures
@@ -171,7 +172,8 @@ params <- function(is_hpc) {
           method = "cas",
           method_fit_args = list(family = gaussian(link = "identity")),
           creatinine_covariates_names = creatinine_covariates_names,
-          creatinine_name = "hs_creatinine_cg"
+          creatinine_name = "hs_creatinine_cg",
+          path_save_res = "results/figures/rq2/model_check_creatinine_out.png"
         ),
         transform = list(
           transformation_fun = log
@@ -213,7 +215,8 @@ params <- function(is_hpc) {
           method = "cas",
           method_fit_args = list(family = gaussian(link = "identity")),
           creatinine_covariates_names = creatinine_covariates_names,
-          creatinine_name = "hs_creatinine_cg"
+          creatinine_name = "hs_creatinine_cg",
+          path_save_res = "results/figures/rq3/model_check_creatinine_exp.png"
         )
       ),
       # End preproc_exposures

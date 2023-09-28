@@ -249,6 +249,16 @@ rq_prepare_data <- function(dat) {
   steps_covars <- params_dat$steps[[rq]]$preproc_covars
   steps_exposures <- params_dat$steps[[rq]]$preproc_exposures
   steps_outcome <- params_dat$steps[[rq]]$preproc_outcome
+  
+  # Create folders to store results
+  invisible(lapply(c("figures", "tables"), function(x) {
+    path_save_res <- paste0(
+      "results/", x, "/", rq
+    )
+    if (!dir.exists(path_save_res)) {
+      dir.create(path_save_res)
+    }
+  }))
 
   # Process covariates
   dat$covariates <- myphd::preproc_data(
@@ -450,17 +460,6 @@ rq_estimate_weights <- function(dat, save_results,
 
   ## Save results
   if (save_results) {
-    ### Create folders
-    invisible(lapply(c("figures", "tables"), function(x) {
-      path_save_res <- paste0(
-        "results/", x, "/",
-        Sys.getenv("TAR_PROJECT")
-      )
-      if (!dir.exists(path_save_res)) {
-        dir.create(path_save_res)
-      }
-    }))
-    
     # if (parallel == TRUE) {
     #   future::plan(future::multisession,
     #     workers = workers
@@ -672,11 +671,17 @@ rq_fit_model_weighted <- function(dat, outcome,
             threshold_k = params_ana$threshold_k
           )
         ) # End fit current exposure
+        check_mod_out <- myphd::check_model(
+          model = fit$fit,
+          path_save_res = glue::glue(
+            "results/figures/{rq}/model_check_out_{outcome}.png"
+          )
+        )
 
         return(list(
-          fit = fit$fit,
-          dat = dat_tmp,
-          weights = weights[[exposure]]$weights
+          fit = fit$fit
+          #dat = dat_tmp,
+          #weights = weights[[exposure]]$weights
         ))
       },
       .options = furrr::furrr_options(seed = TRUE),
