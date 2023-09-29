@@ -1,3 +1,32 @@
+#' Compute "steroid scores"
+#'
+#' @param dat Dataset containing original variables. A dataframe.
+#'
+#' @return A dataset with additional variables. A dataframe.
+#' 
+#' @export
+create_steroid_scores <- function(dat) {
+  dat_ret <- dat |>
+    dplyr::mutate(
+      cortisol_production = rowSums(dplyr::across(c(
+        `F`, X20aDHF, X20bDHF, X5bDHF, X5aTHF, X5bTHF,
+        X6OHF, X5a20acortol, X5a20bcortol,
+        X5b20acortol, X5b20bcortol
+      ))), 
+      cortisol_metabolism = rowSums(dplyr::across(c(
+        X20aDHF, X20bDHF, X5bDHF, X5aTHF, X5bTHF,
+        X6OHF, X5a20acortol, X5a20bcortol, X5b20acortol, X5b20bcortol
+      ))) / `F`,
+      cortisone_production = rowSums(dplyr::across(c(
+        E, X20aDHE, X20bDHE, X5aTHE, X5bTHE, X6OHE,
+        X5b20acortolone, X5b20bcortolone
+      ))),
+      X11bHSD = cortisone_production / cortisol_production
+    )
+  
+  return(dat_ret)
+}
+
 #' Load the steroid metabolomics data
 #'
 #' @returns A named list with the metabolomics data,

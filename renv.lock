@@ -1062,14 +1062,14 @@
     },
     "evaluate": {
       "Package": "evaluate",
-      "Version": "0.21",
+      "Version": "0.22",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R",
         "methods"
       ],
-      "Hash": "d59f3b464e8da1aef82dc04b588b8dfb"
+      "Hash": "66f39c7a21e03c4dcb2c2d21d738d603"
     },
     "extrafont": {
       "Package": "extrafont",
@@ -2485,7 +2485,7 @@
       "RemoteRepo": "myphd",
       "RemoteUsername": "isglobal-cep",
       "RemoteRef": "HEAD",
-      "RemoteSha": "4bb959ff0b53d6bdf9930d1b7a5ca189f2aac4fb",
+      "RemoteSha": "80931e4c637b0aa8bcf82fa69e7065a1fc656eeb",
       "Requirements": [
         "WeightIt",
         "assertthat",
@@ -2519,7 +2519,7 @@
         "tmvtnorm",
         "visdat"
       ],
-      "Hash": "eaf64758786ebd4c3e1bb17d5e03e10c"
+      "Hash": "3761c30fd533ef3a69e5d3e9d8e01a46"
     },
     "naniar": {
       "Package": "naniar",
@@ -2683,14 +2683,14 @@
     },
     "papaja": {
       "Package": "papaja",
-      "Version": "0.1.1.9001",
+      "Version": "0.1.2",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteHost": "api.github.com",
       "RemoteUsername": "crsh",
       "RemoteRepo": "papaja",
       "RemoteRef": "main",
-      "RemoteSha": "1c488f73598ae088a4f0201e767aaa87f28387d3",
+      "RemoteSha": "27d33491355261ecb3629e00e9e751a78fd42521",
+      "RemoteHost": "api.github.com",
       "Requirements": [
         "R",
         "bookdown",
@@ -2705,7 +2705,7 @@
         "yaml",
         "zip"
       ],
-      "Hash": "5d003cf61a47ec7737ca02100383db34"
+      "Hash": "f3dbec1a6d0906a6989f219eddc3f4f0"
     },
     "parallelly": {
       "Package": "parallelly",
@@ -2866,13 +2866,13 @@
     },
     "polyclip": {
       "Package": "polyclip",
-      "Version": "1.10-4",
+      "Version": "1.10-6",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
-      "Hash": "66bbfa06f78108ee967220643596c91e"
+      "Hash": "436542aadb70675e361cf359285af7c7"
     },
     "praise": {
       "Package": "praise",

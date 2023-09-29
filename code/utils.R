@@ -679,9 +679,9 @@ rq_fit_model_weighted <- function(dat, outcome,
         )
 
         return(list(
-          fit = fit$fit
-          #dat = dat_tmp,
-          #weights = weights[[exposure]]$weights
+          fit = fit$fit,
+          dat = dat_tmp,
+          weights = weights[[exposure]]$weights
         ))
       },
       .options = furrr::furrr_options(seed = TRUE),
