@@ -188,6 +188,18 @@ rq_load_data <- function(res_dag) {
       params_dat$variables[[rq]]$outcome
     )
 
+  ## Description of metabolites
+  if (rq == "rq2") {
+    mets_to_select <- params_dat$variables[[rq]]$outcome
+  } else if (rq == "rq3") {
+    mets_to_select <- params_dat$variables[[rq]]$exposures
+  }
+  dat$metab_desc <- dat$metab_desc |>
+    tidylog::select(
+      params_dat$variables$identifier,
+      dplyr::all_of(mets_to_select)
+    )
+
   ## Covariates
   if (length(res_dag$adjustment_sets) > 1) {
     adj_set <- select_adjustment_set(
@@ -249,7 +261,7 @@ rq_prepare_data <- function(dat) {
   steps_covars <- params_dat$steps[[rq]]$preproc_covars
   steps_exposures <- params_dat$steps[[rq]]$preproc_exposures
   steps_outcome <- params_dat$steps[[rq]]$preproc_outcome
-  
+
   # Create folders to store results
   invisible(lapply(c("figures", "tables"), function(x) {
     path_save_res <- paste0(
@@ -288,6 +300,15 @@ rq_prepare_data <- function(dat) {
     by_var = "cohort"
   ) |>
     dplyr::select(-cohort)
+  ## Eventually add scores and pre-process them
+  if (rq == "rq3") {
+    cols_to_remove <- setdiff(
+      colnames(dat$exposures),
+      params_dat$variables$identifier
+    )
+    dat$exposures <- create_steroid_scores(dat = dat$exposures) |>
+      dplyr::select(-dplyr::all_of(cols_to_remove))
+  }
 
   # Process outcome
   dat$outcome <- myphd::preproc_data(
@@ -307,6 +328,15 @@ rq_prepare_data <- function(dat) {
     by_var = "cohort"
   ) |>
     dplyr::select(-cohort)
+  ## Eventually add scores and pre-process them
+  if (rq == "rq2") {
+    cols_to_remove <- setdiff(
+      colnames(dat$outcome),
+      params_dat$variables$identifier
+    )
+    dat$outcome <- create_steroid_scores(dat = dat$outcome) |>
+      dplyr::select(-dplyr::all_of(cols_to_remove))
+  }
 
   return(dat)
 } # End function rq_prepare_data
@@ -323,10 +353,10 @@ rq_prepare_data <- function(dat) {
 rq_boot_pipeline <- function(dat, i) {
   rq <- Sys.getenv("TAR_PROJECT")
   rq <- switch(rq,
-               "rq01" = "rq1",
-               "rq02" = "rq2",
-               "rq03" = "rq3",
-               rq
+    "rq01" = "rq1",
+    "rq02" = "rq2",
+    "rq03" = "rq3",
+    rq
   )
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   params_ana <- params_analyses()[[rq]]
@@ -490,7 +520,7 @@ rq_estimate_weights <- function(dat, save_results,
     #     ),
     #     dpi = 360
     #   )
-    # 
+    #
     #   ### bal.tab
     #   .path <- paste0(
     #     "results/tables/",
@@ -595,6 +625,14 @@ rq_fit_model_weighted <- function(dat, outcome,
     return()
   }
 
+  # Eventually remove covariates that should not be included in outcome models
+  if (rq == "rq3") {
+    dat$covariates <- dat$covariates |>
+      dplyr::select(-dplyr::any_of(c(
+        "hs_creatinine_cg", "hs_sample_c"
+      )))
+  }
+
   # Process outcome
   dat$outcome <- dat$outcome |>
     tidylog::select(dplyr::all_of(c(
@@ -665,6 +703,7 @@ rq_fit_model_weighted <- function(dat, outcome,
           method_args = list(
             family = params_ana$family_marginal,
             add_inter_exposure = params_ana$add_inter_exposure,
+            add_inter_exposure_specific = params_ana$add_inter_exposure_specific,
             add_splines_exposure = params_ana$add_splines_exposure,
             df_splines = params_ana$df_splines,
             threshold_smooth = params_ana$threshold_smooth,
@@ -674,7 +713,7 @@ rq_fit_model_weighted <- function(dat, outcome,
         check_mod_out <- myphd::check_model(
           model = fit$fit,
           path_save_res = glue::glue(
-            "results/figures/{rq}/model_check_out_{outcome}.png"
+            "results/figures/{rq}/model_check_out_{outcome}_{exposure}.png"
           )
         )
 
@@ -732,7 +771,7 @@ rq_estimate_marginal_effects <-
         dat <- fits[[exposure]]$dat
         weights <- fits[[exposure]]$weights
 
-        ############################################################################
+        ########################################################################
         # G-computation (ADRF)
         ## Values of exposure for counterfactual predictions, based on quantiles
         values <- with(dat, seq(
@@ -777,9 +816,9 @@ rq_estimate_marginal_effects <-
           )) +
           ggplot2::labs(x = exposure, y = "E[Y|A]") +
           ggplot2::theme_minimal()
-        ############################################################################
+        ########################################################################
 
-        ############################################################################
+        ########################################################################
         # Slopes (AMEF)
         weights_repeated <- rep(weights,
           times = length(values)
@@ -825,9 +864,9 @@ rq_estimate_marginal_effects <-
           )) +
           ggplot2::labs(x = exposure, y = "dE[Y|A]/dA") +
           ggplot2::theme_minimal()
-        ############################################################################
+        ########################################################################
 
-        ############################################################################
+        ########################################################################
         # Comparisons (marginal estimates)
         ## Create dataframe with `high` and `low` values for exposure
         df_comparisons <- myphd::create_df_marginal_comparisons(
@@ -837,6 +876,14 @@ rq_estimate_marginal_effects <-
           by_var = "cohort"
         )
 
+        if (is.null(params_ana$add_inter_exposure_specific)) {
+          by <- TRUE
+        } else {
+          by <- glue::double_quote(
+            params_ana$add_inter_exposure_specific
+          )
+        }
+
         avg_comp <- eval(parse(
           text = glue::glue(
             "marginaleffects::avg_comparisons(
@@ -844,6 +891,7 @@ rq_estimate_marginal_effects <-
             variables = list(
               {exposure} = df_comparisons
             ),
+            by = {by},
             wts = weights,
             vcov = {glue::double_quote(vcov)}
           )",
@@ -856,7 +904,7 @@ rq_estimate_marginal_effects <-
             variable = term,
             se = std.error
           )
-        ############################################################################
+        ########################################################################
 
         return(list(
           # gcomp = gcomp,

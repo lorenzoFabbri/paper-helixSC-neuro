@@ -103,7 +103,8 @@ params <- function(is_hpc) {
     ),
     categorical = c(
       "e3_sex", "h_ethnicity_spiro",
-      "cohort"
+      "cohort",
+      "hs_sample_c"
     )
   )
 
@@ -136,7 +137,7 @@ params <- function(is_hpc) {
       preproc_exposures = list(
         missings = list(
           threshold_within = 40,
-          threshold_overall = 40,
+          threshold_overall = 30,
           use_additional_covariates = FALSE,
           selected_covariates = NULL,
           method_imputation = "vim.knn",
@@ -162,7 +163,7 @@ params <- function(is_hpc) {
         ),
         missings = list(
           threshold_within = 40,
-          threshold_overall = 40,
+          threshold_overall = 30,
           use_additional_covariates = FALSE,
           selected_covariates = NULL,
           method_imputation = "vim.knn",
@@ -183,7 +184,7 @@ params <- function(is_hpc) {
       preproc_covars = list(
         missings = list(
           threshold_within = 40,
-          threshold_overall = 40,
+          threshold_overall = 30,
           use_additional_covariates = FALSE,
           selected_covariates = NULL,
           method_imputation = "vim.knn",
@@ -205,7 +206,7 @@ params <- function(is_hpc) {
         ),
         missings = list(
           threshold_within = 40,
-          threshold_overall = 40,
+          threshold_overall = 30,
           use_additional_covariates = FALSE,
           selected_covariates = NULL,
           method_imputation = "vim.knn",
@@ -223,7 +224,7 @@ params <- function(is_hpc) {
       preproc_outcome = list(
         missings = list(
           threshold_within = 40,
-          threshold_overall = 40,
+          threshold_overall = 30,
           use_additional_covariates = FALSE,
           selected_covariates = NULL,
           method_imputation = "vim.knn",
@@ -237,7 +238,7 @@ params <- function(is_hpc) {
       preproc_covars = list(
         missings = list(
           threshold_within = 40,
-          threshold_overall = 40,
+          threshold_overall = 30,
           use_additional_covariates = FALSE,
           selected_covariates = NULL,
           method_imputation = "vim.knn",

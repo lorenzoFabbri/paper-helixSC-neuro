@@ -2133,7 +2133,7 @@
     },
     "lattice": {
       "Package": "lattice",
-      "Version": "0.21-8",
+      "Version": "0.21-9",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -2144,7 +2144,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "0b8a6d63c8770f02a8b5635f3c431e6b"
+      "Hash": "5558c61e0136e247252f5f952cdaad6a"
     },
     "lazyeval": {
       "Package": "lazyeval",
@@ -2297,7 +2297,7 @@
     },
     "markdown": {
       "Package": "markdown",
-      "Version": "1.8",
+      "Version": "1.9",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -2306,7 +2306,7 @@
         "utils",
         "xfun"
       ],
-      "Hash": "93cecf1e5f828d0fc1605a00ad48e3a2"
+      "Hash": "4dea09e610da59f847c041d887b4dcfc"
     },
     "memoise": {
       "Package": "memoise",
@@ -2485,7 +2485,7 @@
       "RemoteRepo": "myphd",
       "RemoteUsername": "isglobal-cep",
       "RemoteRef": "HEAD",
-      "RemoteSha": "80931e4c637b0aa8bcf82fa69e7065a1fc656eeb",
+      "RemoteSha": "b07a0bb7ff41333208668243597107746bb19ee3",
       "Requirements": [
         "WeightIt",
         "assertthat",
@@ -2519,7 +2519,7 @@
         "tmvtnorm",
         "visdat"
       ],
-      "Hash": "3761c30fd533ef3a69e5d3e9d8e01a46"
+      "Hash": "fb051d18942f289115479e55e18da783"
     },
     "naniar": {
       "Package": "naniar",
@@ -2855,14 +2855,14 @@
     },
     "plyr": {
       "Package": "plyr",
-      "Version": "1.8.8",
+      "Version": "1.8.9",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R",
         "Rcpp"
       ],
-      "Hash": "d744387aef9047b0b48be2933d78e862"
+      "Hash": "6b8177fd19982f0020743fadbfdbd933"
     },
     "polyclip": {
       "Package": "polyclip",
@@ -3749,13 +3749,13 @@
     },
     "tinytex": {
       "Package": "tinytex",
-      "Version": "0.46",
+      "Version": "0.47",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "xfun"
       ],
-      "Hash": "0c41a73214d982f539c56a7773c7afa5"
+      "Hash": "8d4ccb733843e513c1c1cdd66a759f0d"
     },
     "tmvtnorm": {
       "Package": "tmvtnorm",

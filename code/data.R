@@ -18,7 +18,7 @@ create_steroid_scores <- function(dat) {
         X6OHF, X5a20acortol, X5a20bcortol, X5b20acortol, X5b20bcortol
       ))) / `F`,
       cortisone_production = rowSums(dplyr::across(c(
-        E, X20aDHE, X20bDHE, X5aTHE, X5bTHE, X6OHE,
+        CortisoneE, X20aDHE, X20bDHE, X5aTHE, X5bTHE, X6OHE,
         X5b20acortolone, X5b20bcortolone
       ))),
       X11bHSD = cortisone_production / cortisol_production

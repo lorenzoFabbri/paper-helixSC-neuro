@@ -21,11 +21,26 @@ outcome <- switch(rq,
                   "rq1" = "outcome", 
                   "rq2" = "biomarker", 
                   "rq3" = "outcome")
-tbl_outcomes <- tibble::tibble(
-  name = params(is_hpc = Sys.getenv("is_hpc"))$variables[[rq]]$outcome |>
-    stringr::str_to_lower(), 
-  outcome = params(is_hpc = Sys.getenv("is_hpc"))$variables[[rq]]$outcome
-)
+
+if (rq == "rq2") {
+  tbl_outcomes <- tibble::tibble(
+    name = c("cortisol_production",
+             "cortisol_metabolism",
+             "cortisone_production",
+             "X11bHSD") |>
+      stringr::str_to_lower(),
+    outcome = c("cortisol_production",
+                "cortisol_metabolism",
+                "cortisone_production",
+                "X11bHSD")
+  )
+} else if (rq == "rq3") {
+  tbl_outcomes <- tibble::tibble(
+    name = params(is_hpc = Sys.getenv("is_hpc"))$variables[[rq]]$outcome |>
+      stringr::str_to_lower(), 
+    outcome = params(is_hpc = Sys.getenv("is_hpc"))$variables[[rq]]$outcome
+  )
+}
 
 list(
   targets::tar_target(

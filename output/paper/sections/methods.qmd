@@ -49,7 +49,7 @@
   - Description of outcome model, weighting method, estimand, and balance assessment.
   - Description of method used to estimate effects (e.g., g-computation).
   - Description of method used for SE and CI.
-- Describe any methods used to examine subgroups and interactions.
+- Describe any methods used to examine subgroups and interactions (sub-group analysis or moderation analysis or analysis of effect-modification).
 - Explain how missing data were addressed.
 - Cohort study: explain how loss to follow-up was addressed.
 - Cross-sectional study: describe analytical methods taking account of sampling strategy.
