@@ -26,6 +26,3 @@ for (rq in c("2", "3")) {
   targets::tar_make(script = "_targets_rqX.R", 
                     store = store)
 }
-
-#targets::tar_destroy(destroy = "all", store = store)
-#targets::tar_load_everything(store = store)

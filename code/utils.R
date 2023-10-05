@@ -236,6 +236,9 @@ rq_load_data <- function(res_dag) {
       dplyr::any_of(cols_to_season),
       \(x) factor(x)
     ))
+  
+  ## Metadata
+  dat$meta <- dat_request$meta
 
   return(dat)
 } # End function rq_load_data
@@ -358,6 +361,9 @@ rq_prepare_data <- function(dat) {
     dat$outcome <- dat$outcome |>
       dplyr::select(-dplyr::all_of(cols_to_remove))
   }
+  
+  # Process metadata
+  dat$meta
 
   return(dat)
 } # End function rq_prepare_data
