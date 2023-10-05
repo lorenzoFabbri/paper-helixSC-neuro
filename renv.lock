@@ -884,13 +884,13 @@
     },
     "curl": {
       "Package": "curl",
-      "Version": "5.0.2",
+      "Version": "5.1.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
-      "Hash": "511bacbfa153a15251166b463b4da4f9"
+      "Hash": "9123f3ef96a2c1a93927d828b2fe7d4c"
     },
     "cvAUC": {
       "Package": "cvAUC",
@@ -1265,18 +1265,6 @@
         "utils"
       ],
       "Hash": "ba4be138fe47eac3e16a6deaa4da106e"
-    },
-    "future.callr": {
-      "Package": "future.callr",
-      "Version": "0.8.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "callr",
-        "future"
-      ],
-      "Hash": "0a5ad2f3fe4bf8a794bbf822d6c285bf"
     },
     "gclus": {
       "Package": "gclus",
@@ -2485,7 +2473,7 @@
       "RemoteRepo": "myphd",
       "RemoteUsername": "isglobal-cep",
       "RemoteRef": "HEAD",
-      "RemoteSha": "b07a0bb7ff41333208668243597107746bb19ee3",
+      "RemoteSha": "95c6213aea48e15c070032d9ba4c26a065b2b0b9",
       "Requirements": [
         "WeightIt",
         "assertthat",
@@ -2519,7 +2507,7 @@
         "tmvtnorm",
         "visdat"
       ],
-      "Hash": "fb051d18942f289115479e55e18da783"
+      "Hash": "d322ffaab55a5202c66f59de906b3dc9"
     },
     "naniar": {
       "Package": "naniar",
@@ -2683,13 +2671,13 @@
     },
     "papaja": {
       "Package": "papaja",
-      "Version": "0.1.2",
+      "Version": "0.1.2.9000",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteUsername": "crsh",
       "RemoteRepo": "papaja",
       "RemoteRef": "main",
-      "RemoteSha": "27d33491355261ecb3629e00e9e751a78fd42521",
+      "RemoteSha": "27715f1b25bad28ae2249f82078ff93c58e36490",
       "RemoteHost": "api.github.com",
       "Requirements": [
         "R",
@@ -2705,7 +2693,7 @@
         "yaml",
         "zip"
       ],
-      "Hash": "f3dbec1a6d0906a6989f219eddc3f4f0"
+      "Hash": "5720a020589b9be0a245413095b0f064"
     },
     "parallelly": {
       "Package": "parallelly",
@@ -3554,7 +3542,7 @@
     },
     "tarchetypes": {
       "Package": "tarchetypes",
-      "Version": "0.7.8",
+      "Version": "0.7.9",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -3562,9 +3550,7 @@
         "digest",
         "dplyr",
         "fs",
-        "furrr",
-        "future",
-        "future.callr",
+        "parallel",
         "rlang",
         "targets",
         "tibble",
@@ -3573,7 +3559,7 @@
         "vctrs",
         "withr"
       ],
-      "Hash": "af10967be2e4d9531338272c0329378a"
+      "Hash": "aa959b3dcfe7033fafae5ac899d8bac0"
     },
     "targets": {
       "Package": "targets",
@@ -3939,7 +3925,7 @@
     },
     "vroom": {
       "Package": "vroom",
-      "Version": "1.6.3",
+      "Version": "1.6.4",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -3961,7 +3947,7 @@
         "vctrs",
         "withr"
       ],
-      "Hash": "8318e64ffb3a70e652494017ec455561"
+      "Hash": "9db52c1656cf19c124f93124ea57f0fd"
     },
     "waldo": {
       "Package": "waldo",

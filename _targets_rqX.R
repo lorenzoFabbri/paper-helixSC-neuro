@@ -1,7 +1,6 @@
 source("DAGs/dag_v2.R")
 source("code/dictionaries.R")
 source("code/data.R")
-source("code/mtps.R")
 source("code/utils.R")
 
 targets::tar_option_set(

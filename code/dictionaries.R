@@ -104,13 +104,14 @@ params <- function(is_hpc) {
     categorical = c(
       "e3_sex", "h_ethnicity_spiro",
       "cohort",
-      "hs_sample_c"
+      "hs_sample_c",
+      "hs_tob"
     )
   )
 
   variables <- list(
     identifier = "HelixID",
-    strategy_select_adj_set = "smallest",
+    strategy_select_adj_set = "minimize_missings",
     ############################################################################
     rq1 = list(
       outcome = clinical_outcomes,
@@ -142,14 +143,14 @@ params <- function(is_hpc) {
           selected_covariates = NULL,
           method_imputation = "vim.knn",
           k = 5
-        ),
-        creatinine = list(
-          method = "cas",
-          method_fit_args = list(family = gaussian(link = "identity")),
-          creatinine_covariates_names = creatinine_covariates_names,
-          creatinine_name = "hs_creatinine_cg",
-          path_save_res = "results/figures/rq2/model_check_creatinine_exp.png"
         )
+        # creatinine = list(
+        #   method = "cas",
+        #   method_fit_args = list(family = gaussian(link = "identity")),
+        #   creatinine_covariates_names = creatinine_covariates_names,
+        #   creatinine_name = "hs_creatinine_cg",
+        #   path_save_res = "results/figures/rq2/model_check_creatinine_exp.png"
+        # )
       ),
       # End preproc_exposures
       preproc_outcome = list(
@@ -168,17 +169,14 @@ params <- function(is_hpc) {
           selected_covariates = NULL,
           method_imputation = "vim.knn",
           k = 5
-        ),
-        creatinine = list(
-          method = "cas",
-          method_fit_args = list(family = gaussian(link = "identity")),
-          creatinine_covariates_names = creatinine_covariates_names,
-          creatinine_name = "hs_creatinine_cg",
-          path_save_res = "results/figures/rq2/model_check_creatinine_out.png"
-        ),
-        transform = list(
-          transformation_fun = log
         )
+        # creatinine = list(
+        #   method = "cas",
+        #   method_fit_args = list(family = gaussian(link = "identity")),
+        #   creatinine_covariates_names = creatinine_covariates_names,
+        #   creatinine_name = "hs_creatinine_cg",
+        #   path_save_res = "results/figures/rq2/model_check_creatinine_out.png"
+        # )
       ),
       # End preproc_outcome
       preproc_covars = list(
@@ -211,14 +209,14 @@ params <- function(is_hpc) {
           selected_covariates = NULL,
           method_imputation = "vim.knn",
           k = 5
-        ),
-        creatinine = list(
-          method = "cas",
-          method_fit_args = list(family = gaussian(link = "identity")),
-          creatinine_covariates_names = creatinine_covariates_names,
-          creatinine_name = "hs_creatinine_cg",
-          path_save_res = "results/figures/rq3/model_check_creatinine_exp.png"
         )
+        # creatinine = list(
+        #   method = "cas",
+        #   method_fit_args = list(family = gaussian(link = "identity")),
+        #   creatinine_covariates_names = creatinine_covariates_names,
+        #   creatinine_name = "hs_creatinine_cg",
+        #   path_save_res = "results/figures/rq3/model_check_creatinine_exp.png"
+        # )
       ),
       # End preproc_exposures
       preproc_outcome = list(

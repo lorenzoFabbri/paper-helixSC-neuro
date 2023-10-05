@@ -12,6 +12,7 @@
 
 Some limitations:
 
+- Cross-sectional study.
 - Change of estimand when trimming weights.
 - Model misspecification.
 - Mixtures effect.

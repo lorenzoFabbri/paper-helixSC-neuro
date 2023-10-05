@@ -83,7 +83,8 @@ select_adjustment_set <- function(dat, meta, res_dag, strategy) {
     "minimize_missings" = all_as[[myphd::minimize_missings(
       dat = dat,
       meta = meta,
-      adjustment_sets = all_as
+      adjustment_sets = all_as,
+      by_var = "cohort"
     )]]
   )
 
@@ -308,6 +309,14 @@ rq_prepare_data <- function(dat) {
     )
     dat$exposures <- create_steroid_scores(dat = dat$exposures) |>
       dplyr::select(-dplyr::all_of(cols_to_remove))
+    
+    # Pre-process scores
+    dat$exposures <- myphd::handle_transformation(
+      dat = dat$exposures,
+      id_var = params_dat$variables$identifier,
+      by_var = "cohort",
+      transformation_fun = log
+    )
   }
 
   # Process outcome
@@ -332,9 +341,21 @@ rq_prepare_data <- function(dat) {
   if (rq == "rq2") {
     cols_to_remove <- setdiff(
       colnames(dat$outcome),
-      params_dat$variables$identifier
+      c(params_dat$variables$identifier,
+        "F", "cortisol_production")
     )
-    dat$outcome <- create_steroid_scores(dat = dat$outcome) |>
+    dat$outcome <- create_steroid_scores(dat = dat$outcome)
+    
+    # Pre-process scores
+    dat$outcome <- myphd::handle_transformation(
+      dat = dat$outcome,
+      id_var = params_dat$variables$identifier,
+      by_var = "cohort",
+      transformation_fun = log
+    )
+    
+    # Remove single metabolites
+    dat$outcome <- dat$outcome |>
       dplyr::select(-dplyr::all_of(cols_to_remove))
   }
 
@@ -624,13 +645,23 @@ rq_fit_model_weighted <- function(dat, outcome,
     )
     return()
   }
-
-  # Eventually remove covariates that should not be included in outcome models
-  if (rq == "rq3") {
+  
+  # Eventually add control for denominator of outcome
+  if (rq == "rq2") {
+    den <- switch (outcome,
+      "cortisol_metabolism" = "F",
+      "X11bHSD" = "cortisol_production",
+      NULL
+    )
     dat$covariates <- dat$covariates |>
-      dplyr::select(-dplyr::any_of(c(
-        "hs_creatinine_cg", "hs_sample_c"
-      )))
+      dplyr::full_join(
+        dat$outcome |>
+          dplyr::select(
+            HelixID,
+            dplyr::all_of(den)
+          ),
+        by = params_dat$variables$identifier
+      )
   }
 
   # Process outcome

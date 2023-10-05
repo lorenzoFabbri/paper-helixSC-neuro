@@ -72,6 +72,7 @@ gt::gt(edcs_info,
 ## Corticosteroids
 
 - Levels of unprocessed biomarkers (metabolites), with IDs.
+- Table comparing subjects with and without measurement of steroids.
 
 # Main results
 
