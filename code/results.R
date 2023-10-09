@@ -21,6 +21,18 @@ for (rq in c("2", "3")) {
 }
 ################################################################################
 
+sensitivity_analyses <- function(which_sens, fits, rq) {
+  # Select type of sensitivity analysis
+  if (which_sens == "sensemakr") {
+    
+  }
+  
+  return(list(
+    
+  ))
+}
+################################################################################
+
 tidy_res_weighted_fits <- function(res_list, rq) {
   names_ <- gsub("weighted_fits_", "", names(res_list))
   

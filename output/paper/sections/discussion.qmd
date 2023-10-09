@@ -13,10 +13,13 @@
 Some limitations:
 
 - Cross-sectional study.
+- Chemicals measured in night and morning samples, whereas metabolites (the outcome) were measured only in night samples.
+- Cortisol measured at night, when should be lowest.
 - Change of estimand when trimming weights.
 - Model misspecification.
 - Mixtures effect.
 - Residual confounding.
+- Some confounders were not used since large percentage of missing values.
 - Multiple comparisons.
 
 ## Interpretation {#sec-interpretation}

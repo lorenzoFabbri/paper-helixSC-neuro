@@ -675,7 +675,7 @@
     },
     "chk": {
       "Package": "chk",
-      "Version": "0.9.0",
+      "Version": "0.9.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -685,7 +685,7 @@
         "rlang",
         "tools"
       ],
-      "Hash": "bccdb88efae005f6b9785a5fdfaaeb16"
+      "Hash": "426a04600c755952486b5242e55e3baf"
     },
     "cli": {
       "Package": "cli",
@@ -973,6 +973,26 @@
       ],
       "Hash": "b18a9cf3c003977b0cc49d5e76ebe48d"
     },
+    "distributional": {
+      "Package": "distributional",
+      "Version": "0.3.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "digest",
+        "farver",
+        "generics",
+        "ggplot2",
+        "lifecycle",
+        "numDeriv",
+        "rlang",
+        "scales",
+        "stats",
+        "utils",
+        "vctrs"
+      ],
+      "Hash": "0a94c3c917918a1c90f4609171ff41b6"
+    },
     "dlookr": {
       "Package": "dlookr",
       "Version": "0.6.2",
@@ -1097,7 +1117,7 @@
     },
     "fansi": {
       "Package": "fansi",
-      "Version": "1.0.4",
+      "Version": "1.0.5",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1105,7 +1125,7 @@
         "grDevices",
         "utils"
       ],
-      "Hash": "1d9e7ad3c8312a192dea7d3db0274fde"
+      "Hash": "3e8583a60163b4bc1a80016e63b9959e"
     },
     "farver": {
       "Package": "farver",
@@ -1384,6 +1404,30 @@
       ],
       "Hash": "07e9bed17027af3a3dfe3a1faecce837"
     },
+    "ggdist": {
+      "Package": "ggdist",
+      "Version": "3.3.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "cli",
+        "distributional",
+        "dplyr",
+        "ggplot2",
+        "glue",
+        "grid",
+        "numDeriv",
+        "quadprog",
+        "rlang",
+        "scales",
+        "tibble",
+        "tidyselect",
+        "vctrs",
+        "withr"
+      ],
+      "Hash": "d988f7c103c4354489f42e42e4889f9c"
+    },
     "ggforce": {
       "Package": "ggforce",
       "Version": "0.4.1",
@@ -1642,7 +1686,7 @@
     },
     "gt": {
       "Package": "gt",
-      "Version": "0.9.0",
+      "Version": "0.10.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1668,7 +1712,7 @@
         "tidyselect",
         "xml2"
       ],
-      "Hash": "d55233a737e43e44987724e57dfec302"
+      "Hash": "21737c74811cccac01b5097bcb0f8b4c"
     },
     "gtable": {
       "Package": "gtable",
@@ -1801,7 +1845,7 @@
     },
     "htmltools": {
       "Package": "htmltools",
-      "Version": "0.5.6",
+      "Version": "0.5.6.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1814,7 +1858,7 @@
         "rlang",
         "utils"
       ],
-      "Hash": "a2326a66919a3311f7fbb1e3bf568283"
+      "Hash": "1e12fe667316a76508898839ecfb2d00"
     },
     "htmlwidgets": {
       "Package": "htmlwidgets",
@@ -2677,7 +2721,7 @@
       "RemoteUsername": "crsh",
       "RemoteRepo": "papaja",
       "RemoteRef": "main",
-      "RemoteSha": "27715f1b25bad28ae2249f82078ff93c58e36490",
+      "RemoteSha": "f17599fe19e74762d9d2d661063e9d443d7fe96b",
       "RemoteHost": "api.github.com",
       "Requirements": [
         "R",
@@ -2693,7 +2737,7 @@
         "yaml",
         "zip"
       ],
-      "Hash": "5720a020589b9be0a245413095b0f064"
+      "Hash": "232e5bfb0a1924f8bec05bc60072f099"
     },
     "parallelly": {
       "Package": "parallelly",
@@ -2983,6 +3027,16 @@
       "Repository": "CRAN",
       "Hash": "21c4fc168ebf32add2db6a358ce4714c"
     },
+    "quadprog": {
+      "Package": "quadprog",
+      "Version": "1.5-8",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "5f919ae5e7f83a6f91dcf2288943370d"
+    },
     "quantreg": {
       "Package": "quantreg",
       "Version": "5.97",
@@ -3135,12 +3189,10 @@
     "renv": {
       "Package": "renv",
       "Version": "1.0.3",
-      "Source": "Repository",
+      "OS_type": null,
+      "NeedsCompilation": "no",
       "Repository": "CRAN",
-      "Requirements": [
-        "utils"
-      ],
-      "Hash": "41b847654f567341725473431dd0d5ab"
+      "Source": "Repository"
     },
     "reshape2": {
       "Package": "reshape2",
@@ -3590,7 +3642,7 @@
     },
     "testthat": {
       "Package": "testthat",
-      "Version": "3.1.10",
+      "Version": "3.2.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -3616,7 +3668,7 @@
         "waldo",
         "withr"
       ],
-      "Hash": "6f403dc49295610a3a67ea1a9ca64346"
+      "Hash": "877508719fcb8c9525eccdadf07a5102"
     },
     "tibble": {
       "Package": "tibble",
