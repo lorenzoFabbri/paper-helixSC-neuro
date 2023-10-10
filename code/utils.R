@@ -432,13 +432,12 @@ rq_estimate_weights <- function(dat, save_results,
     dat$exposures,
     by = params_dat$variables$identifier
   )
+  
   ## Loop over exposures
   if (parallel == TRUE) {
     future::plan(future::multisession,
       workers = workers
     )
-  } else {
-    future::plan(future::sequential())
   }
   progressr::with_progress({
     p <- progressr::progressor(steps = length(list_exposures))
@@ -490,18 +489,10 @@ rq_estimate_weights <- function(dat, save_results,
       p = p
       ) # End loop over exposures to estimate weights
   }) # End progress bar
-  future::plan(future::sequential)
   names(estimated_weights) <- list_exposures
   ##############################################################################
 
   # Step 2: explore balance
-  if (parallel == TRUE) {
-    future::plan(future::multisession,
-      workers = workers
-    )
-  } else {
-    future::plan(future::sequential())
-  }
   balance <-
     furrr::future_map(names(estimated_weights), function(x) {
       myphd::explore_balance(
@@ -512,95 +503,14 @@ rq_estimate_weights <- function(dat, save_results,
         covariates = estimated_weights[[x]]$covs |>
           colnames(),
         weights = estimated_weights[[x]]
-      )
+      )[c("exposure", "tab", "love")]
     },
     .options = furrr::furrr_options(seed = TRUE)
     ) # End loop explore balance
-  future::plan(future::sequential)
   names(balance) <- names(estimated_weights)
 
   ## Save results
   if (save_results) {
-    # if (parallel == TRUE) {
-    #   future::plan(future::multisession,
-    #     workers = workers
-    #   )
-    # } else {
-    #   future::plan(future::sequential())
-    # }
-
-    # furrr::future_map(names(balance), function(x) {
-    #   ### bal.plot
-    #   .path <- paste0(
-    #     "results/figures/",
-    #     Sys.getenv("TAR_PROJECT"),
-    #     "/balplot_",
-    #     params_ana$method_weightit,
-    #     "_",
-    #     ifelse(rq %in% c("rq1", "rq2"),
-    #       strsplit(x, split = "_")[[1]][2],
-    #       x
-    #     ),
-    #     ".pdf"
-    #   )
-    #   ggplot2::ggsave(.path,
-    #     gridExtra::marrangeGrob(
-    #       grobs = balance[[x]]$graph,
-    #       nrow = 1,
-    #       ncol = 1
-    #     ),
-    #     dpi = 360
-    #   )
-    #
-    #   ### bal.tab
-    #   .path <- paste0(
-    #     "results/tables/",
-    #     Sys.getenv("TAR_PROJECT"),
-    #     "/baltab_",
-    #     params_ana$method_weightit,
-    #     "_",
-    #     ifelse(rq %in% c("rq1", "rq2"),
-    #       strsplit(x, split = "_")[[1]][2],
-    #       x
-    #     ),
-    #     ".docx"
-    #   )
-    #   tab <- balance[[x]]$tab$Balance |>
-    #     as.data.frame() |>
-    #     tibble::rownames_to_column(var = "variable") |>
-    #     tidylog::rename(
-    #       variable = variable,
-    #       type = Type,
-    #       `unadj. correlation` = `Corr.Un`,
-    #       `adj. correlation` = `Corr.Adj`,
-    #       threshold = `R.Threshold`
-    #     )
-    #   tab <- tab |>
-    #     dplyr::arrange(
-    #       dplyr::desc(`adj. correlation`),
-    #       variable
-    #     ) |>
-    #     tidylog::mutate(type = dplyr::recode(type,
-    #       "Contin." = "continuous",
-    #       "Binary" = "binary"
-    #     )) |>
-    #     gt::gt(groupname_col = "type") |>
-    #     gt::tab_options(row_group.as_column = TRUE) |>
-    #     gt::fmt_number(decimals = 3) |>
-    #     gt::tab_header(paste0(
-    #       "Balance statistics: ",
-    #       ifelse(
-    #         rq %in% c("rq1", "rq2"),
-    #         strsplit(x, split = "_")[[1]][2],
-    #         x
-    #       )
-    #     ))
-    #   gt::gtsave(tab, filename = .path)
-    # },
-    # .options = furrr::furrr_options(seed = TRUE)
-    # )
-    # future::plan(future::sequential)
-
     ### love.plot
     .path <- paste0(
       "results/figures/",
@@ -620,7 +530,10 @@ rq_estimate_weights <- function(dat, save_results,
       height = 6
     )
   } # End save_results
-
+  
+  balance <- lapply(balance, function(x) {
+    x$love <- NULL
+  })
   return(list(
     estimated_weights = estimated_weights,
     balance = balance
