@@ -21,7 +21,13 @@ outcome <- switch(rq,
                   "rq2" = "biomarker", 
                   "rq3" = "outcome")
 
-if (rq == "rq2") {
+if (rq == "rq1") {
+  tbl_outcomes <- tibble::tibble(
+    name = params(is_hpc = Sys.getenv("is_hpc"))$variables[[rq]]$outcome |>
+      stringr::str_to_lower(), 
+    outcome = params(is_hpc = Sys.getenv("is_hpc"))$variables[[rq]]$outcome
+  )
+} else if (rq == "rq2") {
   tbl_outcomes <- tibble::tibble(
     name = c("cortisol_production",
              "cortisol_metabolism",
@@ -80,7 +86,7 @@ list(
       name = marginal, 
       command = rq_estimate_marginal_effects(fits = weighted_fits$fits, 
                                              parallel = TRUE, 
-                                             workers = 6)
+                                             workers = 3)
     ) # End marginal target
   ) # End loop over outcomes
   ##############################################################################

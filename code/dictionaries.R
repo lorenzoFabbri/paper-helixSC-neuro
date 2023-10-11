@@ -134,6 +134,51 @@ params <- function(is_hpc) {
   ##############################################################################
 
   steps <- list(
+    rq1 = list(
+      preproc_exposures = list(
+        missings = list(
+          threshold_within = 40,
+          threshold_overall = 30,
+          use_additional_covariates = FALSE,
+          selected_covariates = NULL,
+          method_imputation = "vim.knn",
+          k = 5
+        )
+        # creatinine = list(
+        #   method = "cas",
+        #   method_fit_args = list(family = gaussian(link = "identity")),
+        #   creatinine_covariates_names = creatinine_covariates_names,
+        #   creatinine_name = "hs_creatinine_cg",
+        #   path_save_res = "results/figures/rq2/model_check_creatinine_exp.png"
+        # )
+      ),
+      # End preproc_exposures
+      preproc_outcome = list(
+        missings = list(
+          threshold_within = 40,
+          threshold_overall = 30,
+          use_additional_covariates = FALSE,
+          selected_covariates = NULL,
+          method_imputation = "vim.knn",
+          k = 5
+        ),
+        transform = list(
+          transformation_fun = log
+        )
+      ),
+      # End preproc_outcome
+      preproc_covars = list(
+        missings = list(
+          threshold_within = 40,
+          threshold_overall = 30,
+          use_additional_covariates = FALSE,
+          selected_covariates = NULL,
+          method_imputation = "vim.knn",
+          k = 5
+        )
+      ) # End preproc_covars
+    ), # End steps RQ1
+    ############################################################################
     rq2 = list(
       preproc_exposures = list(
         missings = list(

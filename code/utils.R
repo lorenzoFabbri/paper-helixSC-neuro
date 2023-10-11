@@ -156,7 +156,8 @@ rq_load_data <- function(res_dag) {
       ),
       msg = "Mismatch order rows description metabolites and data request."
     )
-  }
+  } # End check if need to load metabolites
+  
   # Create one dataset for covariates, one for exposures, and one for outcomes
   miss_exps <- setdiff(
     params_dat$variables[[rq]]$exposures,
@@ -195,11 +196,15 @@ rq_load_data <- function(res_dag) {
   } else if (rq == "rq3") {
     mets_to_select <- params_dat$variables[[rq]]$exposures
   }
-  dat$metab_desc <- dat$metab_desc |>
-    tidylog::select(
-      params_dat$variables$identifier,
-      dplyr::all_of(mets_to_select)
-    )
+  if (rq %in% c("rq2", "rq3")) {
+    dat$metab_desc <- dat$metab_desc |>
+      tidylog::select(
+        params_dat$variables$identifier,
+        dplyr::all_of(mets_to_select)
+      )
+  } else {
+    dat$metab_desc <- NULL
+  }
 
   ## Covariates
   if (length(res_dag$adjustment_sets) > 1) {
@@ -571,7 +576,7 @@ rq_fit_model_weighted <- function(dat, outcome,
   
   # Eventually add control for denominator of outcome
   if (rq == "rq2") {
-    den <- switch (outcome,
+    den <- switch(outcome,
       "cortisol_metabolism" = "F",
       "X11bHSD" = "cortisol_production",
       NULL

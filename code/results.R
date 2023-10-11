@@ -195,7 +195,7 @@ tidy_res_marginaleffects <- function(rq) {
       outcome = gsub("_", " ", outcome)
     )
   
-  if (rq == "2") {
+  if (rq %in% c("1", "2")) {
     info_edcs <- myphd::edcs_information() |>
       tibble::as_tibble()
     df <- all_res |>

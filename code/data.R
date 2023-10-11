@@ -7,7 +7,7 @@
 #' @export
 create_steroid_scores <- function(dat) {
   dat_ret <- dat |>
-    dplyr::mutate(
+    tidylog::mutate(
       cortisol_production = rowSums(dplyr::across(c(
         `F`, X20aDHF, X20bDHF, X5bDHF, X5aTHF, X5bTHF,
         X6OHF, X5a20acortol, X5a20bcortol,
