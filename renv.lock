@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.3.0",
+    "Version": "4.3.1",
     "Repositories": [
       {
         "Name": "BioCsoft",
@@ -252,20 +252,16 @@
     },
     "SuperLearner": {
       "Package": "SuperLearner",
-      "Version": "2.0-29-9000",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "SuperLearner",
-      "RemoteUsername": "ecpolley",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "801aa6039460648d4dfd87c1fad77e5f29391cb7",
+      "Version": "2.0-28.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
       "Requirements": [
         "R",
         "cvAUC",
+        "gam",
         "nnls"
       ],
-      "Hash": "ff51746de15e35ac00dcbefb00f62a90"
+      "Hash": "1779fb40d0e1189fb1a1cb3bd3ce906e"
     },
     "TSP": {
       "Package": "TSP",
@@ -1286,6 +1282,20 @@
       ],
       "Hash": "ba4be138fe47eac3e16a6deaa4da106e"
     },
+    "gam": {
+      "Package": "gam",
+      "Version": "1.22-2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "foreach",
+        "methods",
+        "splines",
+        "stats"
+      ],
+      "Hash": "fed7831c88d8eb0fad64437c6d8febaf"
+    },
     "gclus": {
       "Package": "gclus",
       "Version": "1.3.2",
@@ -1471,7 +1481,7 @@
     },
     "ggplot2": {
       "Package": "ggplot2",
-      "Version": "3.4.3",
+      "Version": "3.4.4",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1492,7 +1502,7 @@
         "vctrs",
         "withr"
       ],
-      "Hash": "85846544c596e71f8f46483ab165da33"
+      "Hash": "313d31eff2274ecf4c1d3581db7241f9"
     },
     "ggraph": {
       "Package": "ggraph",
@@ -1527,7 +1537,7 @@
     },
     "ggrepel": {
       "Package": "ggrepel",
-      "Version": "0.9.3",
+      "Version": "0.9.4",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1539,7 +1549,7 @@
         "scales",
         "withr"
       ],
-      "Hash": "92edfac53774706b4d6099f3ee6f6306"
+      "Hash": "e9839af82cc43fda486a638b68b439b2"
     },
     "ggridges": {
       "Package": "ggridges",
@@ -1936,7 +1946,7 @@
     },
     "insight": {
       "Package": "insight",
-      "Version": "0.19.5",
+      "Version": "0.19.6",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1945,7 +1955,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "96a7b5c69fd0bce9f1049b779458c2ff"
+      "Hash": "cc21c0957774c1602ec3324a5a47d798"
     },
     "introdataviz": {
       "Package": "introdataviz",
@@ -2718,11 +2728,11 @@
       "Version": "0.1.2.9000",
       "Source": "GitHub",
       "RemoteType": "github",
+      "RemoteHost": "api.github.com",
       "RemoteUsername": "crsh",
       "RemoteRepo": "papaja",
       "RemoteRef": "main",
       "RemoteSha": "2a979a25da14754ee0c48c35f4ca18f0a1bd134e",
-      "RemoteHost": "api.github.com",
       "Requirements": [
         "R",
         "bookdown",
@@ -3080,13 +3090,13 @@
     },
     "reactR": {
       "Package": "reactR",
-      "Version": "0.4.4",
+      "Version": "0.5.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "htmltools"
       ],
-      "Hash": "75389c8091eb14ee21c6bc87a88b3809"
+      "Hash": "c9014fd1a435b2d790dd506589cb24e5"
     },
     "reactable": {
       "Package": "reactable",
@@ -3321,14 +3331,9 @@
     },
     "sass": {
       "Package": "sass",
-      "Version": "0.4.7.9000",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "sass",
-      "RemoteUsername": "rstudio",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "4f42680340264e1655745a99cbd7e0c0481b6a01",
+      "Version": "0.4.7",
+      "Source": "Repository",
+      "Repository": "CRAN",
       "Requirements": [
         "R6",
         "fs",
@@ -3336,7 +3341,7 @@
         "rappdirs",
         "rlang"
       ],
-      "Hash": "de3db073534d5be979c8804296dfe1ac"
+      "Hash": "6bd4d33b50ff927191ec9acbf52fd056"
     },
     "scales": {
       "Package": "scales",
@@ -3559,7 +3564,7 @@
     },
     "svglite": {
       "Package": "svglite",
-      "Version": "2.1.1",
+      "Version": "2.1.2",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -3567,7 +3572,7 @@
         "cpp11",
         "systemfonts"
       ],
-      "Hash": "29442899581643411facb66f4add846a"
+      "Hash": "be5318f6b48c136ecd6b8b5de24cc0ae"
     },
     "sys": {
       "Package": "sys",
@@ -3617,7 +3622,7 @@
     },
     "targets": {
       "Package": "targets",
-      "Version": "1.3.0",
+      "Version": "1.3.2",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -3640,7 +3645,7 @@
         "vctrs",
         "yaml"
       ],
-      "Hash": "da40edff48c5c900c369d16564b51af1"
+      "Hash": "eea57f5c8154c12cf13467c6ffb919de"
     },
     "testthat": {
       "Package": "testthat",
@@ -3789,13 +3794,13 @@
     },
     "tinytex": {
       "Package": "tinytex",
-      "Version": "0.47",
+      "Version": "0.48",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "xfun"
       ],
-      "Hash": "8d4ccb733843e513c1c1cdd66a759f0d"
+      "Hash": "8f96d229b7311beb32b94cf413b13f84"
     },
     "tmvtnorm": {
       "Package": "tmvtnorm",
@@ -3905,7 +3910,7 @@
     },
     "vctrs": {
       "Package": "vctrs",
-      "Version": "0.6.3",
+      "Version": "0.6.4",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -3915,7 +3920,7 @@
         "lifecycle",
         "rlang"
       ],
-      "Hash": "d0ef2856b83dc33ea6e255caf6229ee2"
+      "Hash": "266c1ca411266ba8f365fcc726444b87"
     },
     "vegan": {
       "Package": "vegan",
