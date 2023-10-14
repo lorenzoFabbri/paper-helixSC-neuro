@@ -1,5 +1,5 @@
 ---
-title: "Some Fancy Title"
+title: "Some Title"
 
 metadata-files:
   - ../../../../all_phd/authors.yml

@@ -77,39 +77,12 @@
 \makeatletter
 \def\fps@figure{htbp}
 \makeatother
-\newlength{\cslhangindent}
-\setlength{\cslhangindent}{1.5em}
-\newlength{\csllabelwidth}
-\setlength{\csllabelwidth}{3em}
-\newlength{\cslentryspacingunit} % times entry-spacing
-\setlength{\cslentryspacingunit}{\parskip}
-\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
- {% don't indent paragraphs
-  \setlength{\parindent}{0pt}
-  % turn on hanging indent if param 1 is 1
-  \ifodd #1
-  \let\oldpar\par
-  \def\par{\hangindent=\cslhangindent\oldpar}
-  \fi
-  % set entry spacing
-  \setlength{\parskip}{#2\cslentryspacingunit}
- }%
- {}
-\usepackage{calc}
-\newcommand{\CSLBlock}[1]{#1\hfill\break}
-\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
-\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
-\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 
 \usepackage{lineno}
 \usepackage{rotating}
 \usepackage{float}
 \usepackage{typearea}
 \KOMAoption{captions}{tableheading}
-\makeatletter
-\makeatother
-\makeatletter
-\makeatother
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -146,18 +119,10 @@
 \newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
 \makeatother
 \makeatletter
+\makeatother
+\makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
-\makeatother
-\makeatletter
-\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
-\makeatother
-\makeatletter
-\@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
-\makeatother
-\makeatletter
-\makeatother
-\makeatletter
 \makeatother
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
@@ -166,7 +131,7 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
-  pdftitle={Some Fancy Title},
+  pdftitle={Some Title},
   pdfauthor={, and },
   colorlinks=true,
   linkcolor={blue},
@@ -175,7 +140,7 @@
   urlcolor={Blue},
   pdfcreator={LaTeX via pandoc}}
 
-\title{Some Fancy Title}
+\title{Some Title}
 \author{Lorenzo Fabbri\textsuperscript{1,2,*} \and Martine
 Vrijheid\textsuperscript{1,2}}
 \date{}
@@ -183,8 +148,6 @@ Vrijheid\textsuperscript{1,2}}
 \begin{document}
 \maketitle
 \linenumbers
-
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, borderline west={3pt}{0pt}{shadecolor}, interior hidden, sharp corners, boxrule=0pt, breakable, enhanced]}{\end{tcolorbox}}\fi
 
 \textsuperscript{1} Barcelona Institute for Global Health (ISGlobal),
 Barcelona, Spain\\
@@ -194,8 +157,7 @@ Barcelona, Spain\\
 \href{mailto:lorenzo.fabbri@isglobal.org}{Lorenzo Fabbri
 \textless{}lorenzo.fabbri@isglobal.org\textgreater{}}
 
-\hypertarget{abstract}{%
-\section*{Abstract}\label{abstract}}
+\section*{Abstract}\label{abstract}
 \addcontentsline{toc}{section}{Abstract}
 
 \textbf{Background}
@@ -236,11 +198,9 @@ Barcelona, Spain\\
   \end{itemize}
 \end{itemize}
 
-\hypertarget{sec-intro}{%
-\section{Introduction}\label{sec-intro}}
+\section{Introduction}\label{sec-intro}
 
-\hypertarget{sec-background}{%
-\subsection{Background and rationale}\label{sec-background}}
+\subsection{Background and rationale}\label{sec-background}
 
 \begin{itemize}
 \tightlist
@@ -270,8 +230,7 @@ Barcelona, Spain\\
   outcomes, and why they are relevant to environmental health.
 \end{itemize}
 
-\hypertarget{sec-objectives}{%
-\subsection{Objectives}\label{sec-objectives}}
+\subsection{Objectives}\label{sec-objectives}
 
 \begin{itemize}
 \tightlist
@@ -280,11 +239,9 @@ Barcelona, Spain\\
   and eventually an overview of the approach used to address them.
 \end{itemize}
 
-\hypertarget{sec-methods}{%
-\section{Methods}\label{sec-methods}}
+\section{Methods}\label{sec-methods}
 
-\hypertarget{sec-design}{%
-\subsection{Study design}\label{sec-design}}
+\subsection{Study design}\label{sec-design}
 
 \begin{itemize}
 \tightlist
@@ -292,8 +249,7 @@ Barcelona, Spain\\
   Present key elements of study design
 \end{itemize}
 
-\hypertarget{sec-setting}{%
-\subsection{Setting}\label{sec-setting}}
+\subsection{Setting}\label{sec-setting}
 
 \begin{itemize}
 \tightlist
@@ -302,8 +258,7 @@ Barcelona, Spain\\
   of recruitment, exposure, follow-up, and data collection.
 \end{itemize}
 
-\hypertarget{sec-participants}{%
-\subsection{Participants}\label{sec-participants}}
+\subsection{Participants}\label{sec-participants}
 
 \begin{itemize}
 \tightlist
@@ -321,8 +276,7 @@ Barcelona, Spain\\
   Disaggregate race and ethnicity data to the fullest extent possible.
 \end{itemize}
 
-\hypertarget{sec-vars}{%
-\subsection{Variables}\label{sec-vars}}
+\subsection{Variables}\label{sec-vars}
 
 \begin{itemize}
 \tightlist
@@ -334,20 +288,15 @@ Barcelona, Spain\\
   effect modifier, or other type of variable in analyses.
 \end{itemize}
 
-\hypertarget{sec-confounders}{%
-\subsubsection{Confounders}\label{sec-confounders}}
+\subsubsection{Confounders}\label{sec-confounders}
 
-\hypertarget{sec-edcs}{%
-\subsubsection{Endocrine disrupting chemicals}\label{sec-edcs}}
+\subsubsection{Endocrine disrupting chemicals}\label{sec-edcs}
 
-\hypertarget{sec-steroids}{%
-\subsubsection{Corticosteroids}\label{sec-steroids}}
+\subsubsection{Corticosteroids}\label{sec-steroids}
 
-\hypertarget{sec-neurodevelopment}{%
-\subsubsection{Neurodevelopment}\label{sec-neurodevelopment}}
+\subsubsection{Neurodevelopment}\label{sec-neurodevelopment}
 
-\hypertarget{sec-dat-sources}{%
-\subsection{Data sources and measurement}\label{sec-dat-sources}}
+\subsection{Data sources and measurement}\label{sec-dat-sources}
 
 \begin{itemize}
 \tightlist
@@ -356,8 +305,7 @@ Barcelona, Spain\\
   methods of assessment (measurement).
 \end{itemize}
 
-\hypertarget{sec-bias}{%
-\subsection{Bias}\label{sec-bias}}
+\subsection{Bias}\label{sec-bias}
 
 \begin{itemize}
 \tightlist
@@ -365,8 +313,7 @@ Barcelona, Spain\\
   Describe any efforts to address potential sources of bias.
 \end{itemize}
 
-\hypertarget{sec-size}{%
-\subsection{Study size}\label{sec-size}}
+\subsection{Study size}\label{sec-size}
 
 \begin{itemize}
 \tightlist
@@ -374,8 +321,7 @@ Barcelona, Spain\\
   Explain how the study size was arrived at.
 \end{itemize}
 
-\hypertarget{sec-quant-vars}{%
-\subsection{Quantitative variables}\label{sec-quant-vars}}
+\subsection{Quantitative variables}\label{sec-quant-vars}
 
 \begin{itemize}
 \tightlist
@@ -384,8 +330,7 @@ Barcelona, Spain\\
   applicable, describe which groupings were chosen and why.
 \end{itemize}
 
-\hypertarget{sec-stat-methods}{%
-\subsection{Statistical methods}\label{sec-stat-methods}}
+\subsection{Statistical methods}\label{sec-stat-methods}
 
 \begin{itemize}
 \tightlist
@@ -407,7 +352,9 @@ Barcelona, Spain\\
     Description of method used for SE and CI.
   \end{itemize}
 \item
-  Describe any methods used to examine subgroups and interactions.
+  Describe any methods used to examine subgroups and interactions
+  (sub-group analysis or moderation analysis or analysis of
+  effect-modification).
 \item
   Explain how missing data were addressed.
 \item
@@ -426,11 +373,9 @@ Barcelona, Spain\\
   non-data arguments if deviating from the default ones.
 \end{itemize}
 
-\hypertarget{sec-res}{%
-\section{Results}\label{sec-res}}
+\section{Results}\label{sec-res}
 
-\hypertarget{sec-res-participants}{%
-\subsection{Participants}\label{sec-res-participants}}
+\subsection{Participants}\label{sec-res-participants}
 
 \begin{itemize}
 \tightlist
@@ -438,14 +383,11 @@ Barcelona, Spain\\
   Give reasons for non-participation at each stage.
 \end{itemize}
 
-\hypertarget{sec-res-pop-desc}{%
-\subsection{Descriptive data}\label{sec-res-pop-desc}}
+\subsection{Descriptive data}\label{sec-res-pop-desc}
 
-\hypertarget{sec-res-out-desc}{%
-\subsection{Outcome data}\label{sec-res-out-desc}}
+\subsection{Outcome data}\label{sec-res-out-desc}
 
-\hypertarget{sec-res-main}{%
-\subsection{Main results}\label{sec-res-main}}
+\subsection{Main results}\label{sec-res-main}
 
 \begin{itemize}
 \tightlist
@@ -486,8 +428,7 @@ Barcelona, Spain\\
   Report category boundaries when continuous variables were categorized.
 \end{itemize}
 
-\hypertarget{sec-res-other}{%
-\subsection{Other analyses}\label{sec-res-other}}
+\subsection{Other analyses}\label{sec-res-other}
 
 \begin{itemize}
 \tightlist
@@ -498,11 +439,9 @@ Barcelona, Spain\\
 
 \textbf{?@tbl-chem-info}
 
-\hypertarget{sec-discussion}{%
-\section{Discussion}\label{sec-discussion}}
+\section{Discussion}\label{sec-discussion}
 
-\hypertarget{sec-disc-res-key}{%
-\subsection{Key results}\label{sec-disc-res-key}}
+\subsection{Key results}\label{sec-disc-res-key}
 
 \begin{itemize}
 \tightlist
@@ -522,8 +461,7 @@ Barcelona, Spain\\
   \end{itemize}
 \end{itemize}
 
-\hypertarget{sec-limitations}{%
-\subsection{Limitations}\label{sec-limitations}}
+\subsection{Limitations}\label{sec-limitations}
 
 \begin{itemize}
 \tightlist
@@ -534,8 +472,33 @@ Barcelona, Spain\\
   Discuss both direction and magnitude of any potential bias.
 \end{itemize}
 
-\hypertarget{sec-interpretation}{%
-\subsection{Interpretation}\label{sec-interpretation}}
+Some limitations:
+
+\begin{itemize}
+\tightlist
+\item
+  Cross-sectional study.
+\item
+  Chemicals measured in night and morning samples, whereas metabolites
+  (the outcome) were measured only in night samples.
+\item
+  Cortisol measured at night, when should be lowest.
+\item
+  Change of estimand when trimming weights.
+\item
+  Model misspecification.
+\item
+  Mixtures effect.
+\item
+  Residual confounding.
+\item
+  Some confounders were not used since large percentage of missing
+  values.
+\item
+  Multiple comparisons.
+\end{itemize}
+
+\subsection{Interpretation}\label{sec-interpretation}
 
 \begin{itemize}
 \tightlist
@@ -548,8 +511,7 @@ Barcelona, Spain\\
   similar studies, and other relevant evidence.
 \end{itemize}
 
-\hypertarget{sec-general}{%
-\subsection{Generalisability}\label{sec-general}}
+\subsection{Generalisability}\label{sec-general}
 
 \begin{itemize}
 \tightlist
@@ -559,8 +521,7 @@ Barcelona, Spain\\
 
 \newpage
 
-\hypertarget{funding}{%
-\section{Funding}\label{funding}}
+\section{Funding}\label{funding}
 
 \begin{itemize}
 \tightlist
@@ -572,13 +533,8 @@ Barcelona, Spain\\
 
 \newpage
 
-\hypertarget{references}{%
-\section*{References}\label{references}}
+\section*{References}\label{references}
 \addcontentsline{toc}{section}{References}
-
-\hypertarget{refs}{}
-\begin{CSLReferences}{0}{0}
-\end{CSLReferences}
 
 
 
