@@ -117,7 +117,7 @@ list(
         rq_estimate_marginal_effects(
           fits = fits$fits,
           parallel = TRUE,
-          workers = 6
+          workers = 3
         ),
         env = list(fits = as.symbol(paste0(rq, "_weighted_fits")))
       )

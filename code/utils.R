@@ -866,10 +866,10 @@ rq_estimate_marginal_effects <-
         ########################################################################
 
         return(list(
-          # gcomp = gcomp,
-          adrf = adrf,
-          # slopes = slopes,
-          amef = amef,
+          gcomp = gcomp,
+          #adrf = adrf,
+          slopes = slopes,
+          #amef = amef,
           comparisons = avg_comp
         ))
       },
