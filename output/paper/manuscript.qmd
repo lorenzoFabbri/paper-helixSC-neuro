@@ -84,8 +84,6 @@ execute:
 #| child: output/paper/sections/results.qmd
 ```
 
-@tbl-chem-info
-
 # Discussion {#sec-discussion}
 ```{r}
 #| child: output/paper/sections/discussion.qmd

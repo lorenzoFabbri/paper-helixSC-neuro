@@ -45,9 +45,6 @@ edcs_info <- myphd::edcs_information() |>
   tidylog::select(-c(chem_id, smiles))
 gt::gt(edcs_info,
        groupname_col = "class") |>
-  gt::tab_header(
-    title = "Information about the non-persistent EDCs."
-  ) |>
   gt::cols_label(
     full_name = "Compound",
     short_name = "Symbol",
@@ -68,8 +65,6 @@ gt::gt(edcs_info,
     style = list(gt::cell_text(weight = "bold"))
   )
 ```
-
-@tbl-chem-info
 
 ## Corticosteroids
 
