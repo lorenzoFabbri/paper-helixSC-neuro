@@ -70,24 +70,20 @@ execute:
   - In-text citations with superscript numbers: outside periods and commas, but inside colons and semicolons.
 
 # Introduction {#sec-intro}
-```{r}
-#| child: output/paper/sections/introduction.qmd
-```
+
+{{< include sections/introduction.qmd >}}
 
 # Methods {#sec-methods}
-```{r}
-#| child: output/paper/sections/methods.qmd
-```
+
+{{< include sections/methods.qmd >}}
 
 # Results {#sec-res}
-```{r}
-#| child: output/paper/sections/results.qmd
-```
+
+{{< include sections/results.qmd >}}
 
 # Discussion {#sec-discussion}
-```{r}
-#| child: output/paper/sections/discussion.qmd
-```
+
+{{< include sections/discussion.qmd >}}
 
 \newpage
 
@@ -101,3 +97,5 @@ execute:
 
 ::: {#refs}
 :::
+
+{{< embed tables.qmd >}}

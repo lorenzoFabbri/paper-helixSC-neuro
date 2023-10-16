@@ -4,6 +4,8 @@
 
 ## Descriptive data {#sec-res-pop-desc}
 
+@tbl-chem-info
+
 ## Outcome data {#sec-res-out-desc}
 
 ## Main results {#sec-res-main}
