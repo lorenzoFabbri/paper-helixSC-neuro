@@ -8,7 +8,7 @@ format:
 link-citations: true
 linkcolor: blue
 
-editor_options: 
+editor_options:
   chunk_output_type: console
 
 execute:
@@ -68,6 +68,8 @@ gt::gt(edcs_info,
     style = list(gt::cell_text(weight = "bold"))
   )
 ```
+
+@tbl-chem-info
 
 ## Corticosteroids
 
