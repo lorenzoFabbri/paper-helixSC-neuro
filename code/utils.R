@@ -99,7 +99,7 @@ select_adjustment_set <- function(dat, meta, res_dag, strategy) {
 #' @returns A named list of exposures, covariates, and outcomes.
 #'
 #' @export
-rq_load_data <- function(res_dag) {
+rq_load_data <- function(res_dag, remove_kanc) {
   rq <- Sys.getenv("TAR_PROJECT")
   rq <- switch(rq,
     "rq01" = "rq1",
@@ -111,10 +111,30 @@ rq_load_data <- function(res_dag) {
   # Load data request
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   dat_request <- load_dat_request()
+  
+  # If outcome is hs_dcolors3, remove KANC
+  if (remove_kanc == TRUE) {
+    dat_request$dat <- dat_request$dat |>
+      tidylog::filter(cohort != "KANC")
+    dat_request$dat$cohort <- droplevels(dat_request$dat$cohort)
+  }
+  
   dat <- list()
   ## Eventually load also steroid data
   if (Sys.getenv("TAR_PROJECT") %in% c("rq02", "rq03", "rq2", "rq3")) {
     metabolites <- load_steroids()
+    
+    # If outcome is hs_dcolors3, remove KANC
+    if (remove_kanc == TRUE) {
+      metabolites$metabolome <- metabolites$metabolome |>
+        tidylog::filter(
+          !stringr::str_detect(HelixID, "^KAN")
+        )
+      metabolites$desc <- metabolites$desc |>
+        tidylog::filter(
+          !stringr::str_detect(HelixID, "^KAN")
+        )
+    }
 
     # Subjects with metabolites available but not in HELIX data
     ids_metabs <- setdiff(
@@ -612,6 +632,7 @@ rq_fit_model_weighted <- function(dat, outcome,
     tidylog::full_join,
     by = params_dat$variables$identifier
   )
+  
   idxs_missing_outcome <- which(is.na(dat_analysis[[outcome]]))
   ids_missing_outcome <- dat_analysis[idxs_missing_outcome, ][[params_dat$variables$identifier]]
 

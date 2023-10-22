@@ -57,7 +57,8 @@ list(
   ), # End dag target
   targets::tar_target(
     name = load_dat, 
-    command = rq_load_data(res_dag = dag)
+    command = rq_load_data(res_dag = dag,
+                           remove_kanc = TRUE)
   ), # End load_dat target
   ##############################################################################
   targets::tar_target(

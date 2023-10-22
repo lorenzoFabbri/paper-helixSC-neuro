@@ -39,81 +39,46 @@ load_steroids <- function() {
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   paths <- params_dat$paths
   steroids <- paths$path_all_steroids
-  datasets <- c("urine_bib", "urine_inma_rhea_eden_kanc", "urine_moba")
-  datasets <- paste0(datasets, ".xlsx")
-
-  problematic_ids <- c("KAN1292", "KAN147", "KAN315", "KAN918") |>
-    paste(collapse = "|")
+  # This is the "clean" dataset provided by Oliver
+  datasets <- c("corticosteroids_unprocessed.csv")
 
   # Loop over datasets
   tbls <- lapply(datasets, function(x) {
     cat(paste0("Loading dataset: ", x, "...\n"))
 
     # Metabolites
-    dd <- readxl::read_xlsx(paste0(steroids, x),
-      sheet = 1,
-      col_names = TRUE, trim_ws = TRUE
+    dd <- readr::read_csv(
+      file = paste0(steroids, x),
+      col_names = TRUE,
+      trim_ws = TRUE,
+      col_types = readr::cols()
     ) |>
       tibble::as_tibble()
     dd <- janitor::clean_names(dd, case = "none")
     colnames(dd)[[1]] <- params_dat$variables$identifier
 
-    # Problematic IDs
-    dd <- dd |>
-      tidylog::filter(!grepl(problematic_ids, HelixID))
-    if (x == "urine_inma_rhea_eden_kanc.xlsx") {
-      kan <- readxl::read_xlsx(
-        paste0(
-          steroids,
-          "data_anomalies_kan.xlsx"
-        ),
-        sheet = 1,
-        col_names = TRUE, trim_ws = TRUE
-      ) |>
-        tibble::as_tibble()
-      kan <- janitor::clean_names(kan, case = "none")
-      colnames(kan)[[1]] <- params_dat$variables$identifier
-
-      dd <- data.table::rbindlist(list(dd, kan),
-        use.names = TRUE
-      ) |>
-        tibble::as_tibble()
-    }
-
     # Tidy names
     dd <- dd |>
       tidylog::mutate(HelixID = stringr::str_trim(HelixID, side = "both")) |>
-      dplyr::rowwise() |>
-      tidylog::mutate(HelixID = dplyr::case_when(
-        grepl("KAN|EDP", HelixID) ~ stringr::str_split(HelixID, "_|-")[[1]][1],
-        grepl("SAB", HelixID) ~ paste0(
-          stringr::str_split(HelixID, " ")[[1]][1],
-          stringr::str_split(HelixID, " ")[[1]][2] |>
-            stringr::str_remove("^0+")
-        ),
-        grepl("^[[:digit:]]+", HelixID) ~ paste0("RHE", HelixID),
-        # Remove leading zeros to match HELIX dataset
-        grepl("MOB", HelixID) ~ paste0(
-          "MOB",
-          stringr::str_split(HelixID, "MOB")[[1]][2] |>
-            stringr::str_remove("^0+")
-        ),
-        TRUE ~ HelixID
-      )) |>
-      tidylog::mutate(HelixID = stringr::str_replace(HelixID, "EDP", "EDE")) |>
-      tidylog::mutate(HelixID = ifelse(HelixID == "SAB5501",
-        "SAB550", HelixID
-      ))
+      tidylog::mutate(HelixID = stringr::str_replace(HelixID, "EDP", "EDE"))
     colnames(dd) <- gsub(
       pattern = "_",
       replacement = "",
       x = colnames(dd)
     )
+    
+    # Remove samples w/o data
+    dd <- dd |>
+      tidylog::filter(
+        ! HelixID %in% c("RHE232094", "MOB154")
+      )
 
-    # LOQ information
-    loq <- readxl::read_xlsx(paste0(steroids, x),
-      sheet = 2,
-      col_names = TRUE, trim_ws = TRUE
+    # LOD information
+    loq <- readr::read_csv(
+      file = paste0(steroids, "lod.csv"),
+      col_names = FALSE,
+      trim_ws = TRUE,
+      col_types = readr::cols()
     ) |>
       tibble::as_tibble()
     colnames(loq) <- c("metabolite", "loq")
@@ -138,7 +103,7 @@ load_steroids <- function() {
         dplyr::all_of(cols),
         \(x) dplyr::case_when(
           # Value below the limit of quantification
-          x %in% c("<LOQ", "<LLOQ") ~ 2,
+          x %in% c("<LLOQ") ~ 2,
           # Interference or out of range
           stringr::str_detect(x, "\\*") ~ 3,
           # Value not detected
@@ -161,7 +126,7 @@ load_steroids <- function() {
         dplyr::across(
           dplyr::all_of(setdiff(cols, unwanted_cols)),
           \(x) dplyr::case_when(
-            x %in% c("<LOQ", "<LLOQ") ~ NA,
+            x %in% c("<LLOQ") ~ NA,
             stringr::str_detect(x, "\\*") ~ NA,
             x == "n.d." ~ NA,
             TRUE ~ x
@@ -180,6 +145,13 @@ load_steroids <- function() {
       ))
     loq <- loq |>
       tidylog::filter(!metabolite %in% unwanted_cols)
+    
+    ## Convert units of creatinine. Note: ng/mL = mcrg/L (metabolites).
+    dd <- dd |>
+      dplyr::mutate(
+        # Creatinine to g/L as in HELIX, instead of mcrM/mL.
+        Creatinine = Creatinine * 1e-6 * 113.12,
+      )
     ############################################################################
 
     return(list(
@@ -320,6 +292,20 @@ load_dat_request <- function() {
       dplyr::across(
         dplyr::contains("_ethnicity"),
         \(x) factor(x)
+      ),
+      # Correct variable for ethnicity of the children
+      h_ethnicity_c = factor(
+        h_ethnicity_c,
+        levels = c(
+          "African",
+          "Asian",
+          "Caucasian",
+          "Native American",
+          "Other",
+          "Pakistani",
+          "White non-European"
+        ),
+        labels = c(1, 2, 3, 4, 5, 6, 7)
       ),
       e3_edum = factor(e3_edum,
         levels = c(

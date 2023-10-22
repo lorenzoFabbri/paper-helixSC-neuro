@@ -63,7 +63,8 @@ list(
   targets::tar_target_raw(
     name = paste0(rq, "_load_dat"),
     command = substitute(
-      rq_load_data(res_dag = dag),
+      rq_load_data(res_dag = dag,
+                   remove_kanc = TRUE),
       env = list(dag = as.symbol(paste0(rq, "_dag")))
     )
   ),

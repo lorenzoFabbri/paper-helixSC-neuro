@@ -64,7 +64,10 @@ vars_of_interest <- function(append_to_chem = NULL) {
     "Andros",
     "Etio"
   )
-  outcomes <- c("hs_hitrtse")
+  outcomes <- c(
+    "hs_hitrtse",
+    "hs_dcolors3"
+  )
 
   return(list(
     chemicals = chemicals,
@@ -133,12 +136,16 @@ params <- function(is_hpc) {
   )
   ##############################################################################
 
+  threshold_within_lod <- 40
+  threshold_overall_lod <- 30
+  threshold_within_nan <- 40
+  threshold_overall_nan <- 30
   steps <- list(
     rq1 = list(
       preproc_exposures = list(
         missings = list(
-          threshold_within = 40,
-          threshold_overall = 30,
+          threshold_within = threshold_within_nan,
+          threshold_overall = threshold_overall_nan,
           use_additional_covariates = FALSE,
           selected_covariates = NULL,
           method_imputation = "vim.knn",
@@ -155,8 +162,8 @@ params <- function(is_hpc) {
       # End preproc_exposures
       preproc_outcome = list(
         missings = list(
-          threshold_within = 40,
-          threshold_overall = 30,
+          threshold_within = threshold_within_nan,
+          threshold_overall = threshold_overall_nan,
           use_additional_covariates = FALSE,
           selected_covariates = NULL,
           method_imputation = "vim.knn",
@@ -169,8 +176,8 @@ params <- function(is_hpc) {
       # End preproc_outcome
       preproc_covars = list(
         missings = list(
-          threshold_within = 40,
-          threshold_overall = 30,
+          threshold_within = threshold_within_nan,
+          threshold_overall = threshold_overall_nan,
           use_additional_covariates = FALSE,
           selected_covariates = NULL,
           method_imputation = "vim.knn",
@@ -182,8 +189,8 @@ params <- function(is_hpc) {
     rq2 = list(
       preproc_exposures = list(
         missings = list(
-          threshold_within = 40,
-          threshold_overall = 30,
+          threshold_within = threshold_within_nan,
+          threshold_overall = threshold_overall_nan,
           use_additional_covariates = FALSE,
           selected_covariates = NULL,
           method_imputation = "vim.knn",
@@ -203,13 +210,13 @@ params <- function(is_hpc) {
           id_val = 2,
           method = "replace",
           creatinine_threshold = NULL,
-          threshold_within = 10,
-          threshold_overall = 10,
+          threshold_within = threshold_within_lod,
+          threshold_overall = threshold_overall_lod,
           tune_sigma = NULL
         ),
         missings = list(
-          threshold_within = 40,
-          threshold_overall = 30,
+          threshold_within = threshold_within_nan,
+          threshold_overall = threshold_overall_nan,
           use_additional_covariates = FALSE,
           selected_covariates = NULL,
           method_imputation = "vim.knn",
@@ -226,8 +233,8 @@ params <- function(is_hpc) {
       # End preproc_outcome
       preproc_covars = list(
         missings = list(
-          threshold_within = 40,
-          threshold_overall = 30,
+          threshold_within = threshold_within_nan,
+          threshold_overall = threshold_overall_nan,
           use_additional_covariates = FALSE,
           selected_covariates = NULL,
           method_imputation = "vim.knn",
@@ -243,13 +250,13 @@ params <- function(is_hpc) {
           id_val = 2,
           method = "replace",
           creatinine_threshold = NULL,
-          threshold_within = 10,
-          threshold_overall = 10,
+          threshold_within = threshold_within_lod,
+          threshold_overall = threshold_overall_lod,
           tune_sigma = NULL
         ),
         missings = list(
-          threshold_within = 40,
-          threshold_overall = 30,
+          threshold_within = threshold_within_nan,
+          threshold_overall = threshold_overall_nan,
           use_additional_covariates = FALSE,
           selected_covariates = NULL,
           method_imputation = "vim.knn",
@@ -266,8 +273,8 @@ params <- function(is_hpc) {
       # End preproc_exposures
       preproc_outcome = list(
         missings = list(
-          threshold_within = 40,
-          threshold_overall = 30,
+          threshold_within = threshold_within_nan,
+          threshold_overall = threshold_overall_nan,
           use_additional_covariates = FALSE,
           selected_covariates = NULL,
           method_imputation = "vim.knn",
@@ -280,8 +287,8 @@ params <- function(is_hpc) {
       # End preproc_outcome
       preproc_covars = list(
         missings = list(
-          threshold_within = 40,
-          threshold_overall = 30,
+          threshold_within = threshold_within_nan,
+          threshold_overall = threshold_overall_nan,
           use_additional_covariates = FALSE,
           selected_covariates = NULL,
           method_imputation = "vim.knn",
