@@ -89,6 +89,10 @@ load_steroids <- function() {
       tidylog::mutate(metabolite = stringr::str_replace_all(
         metabolite, "_", ""
       ))
+    assertthat::assert_that(
+      nrow(loq) == ncol(dd) - 2,
+      msg = "Mismatch in the number of metabolites."
+    )
     ############################################################################
 
     # Cleaning
@@ -103,11 +107,11 @@ load_steroids <- function() {
         dplyr::all_of(cols),
         \(x) dplyr::case_when(
           # Value below the limit of quantification
-          x %in% c("<LLOQ") ~ 2,
+          stringr::str_detect(x, "LOQ") ~ 2,
           # Interference or out of range
           stringr::str_detect(x, "\\*") ~ 3,
           # Value not detected
-          x == "n.d." ~ 4,
+          stringr::str_detect(x, "n.d.") ~ 4,
           # Quantifiable
           TRUE ~ 1
         )
@@ -126,9 +130,9 @@ load_steroids <- function() {
         dplyr::across(
           dplyr::all_of(setdiff(cols, unwanted_cols)),
           \(x) dplyr::case_when(
-            x %in% c("<LLOQ") ~ NA,
+            stringr::str_detect(x, "LOQ") ~ NA,
             stringr::str_detect(x, "\\*") ~ NA,
-            x == "n.d." ~ NA,
+            stringr::str_detect(x, "n.d.") ~ NA,
             TRUE ~ x
           )
         ),
@@ -154,6 +158,15 @@ load_steroids <- function() {
       )
     ############################################################################
 
+    tbl_vals <- dd_cdesc
+    tbl_vals$HelixID <- NULL
+    tbl_vals <- tbl_vals |> c() |> unlist() |> unname() |>
+      table()
+    assertthat::assert_that(
+      sum(is.na(dd)) == sum(tbl_vals[2:4]),
+      msg = "Number of missing values in metabolomics does not match description."
+    )
+    
     return(list(
       met = dd,
       loq = loq,

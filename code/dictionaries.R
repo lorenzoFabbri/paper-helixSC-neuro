@@ -84,7 +84,7 @@ params <- function(is_hpc) {
     common_path <- "../../../../"
   } else {
     common_path <-
-      "~/mounts/rstudioserver/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF"
+      "~/mounts/rstudioserver/"
   }
 
   paths <- list(
@@ -136,8 +136,8 @@ params <- function(is_hpc) {
   )
   ##############################################################################
 
-  threshold_within_lod <- 40
-  threshold_overall_lod <- 30
+  threshold_within_lod <- 20
+  threshold_overall_lod <- 10
   threshold_within_nan <- 40
   threshold_overall_nan <- 30
   steps <- list(

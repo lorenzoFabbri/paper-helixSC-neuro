@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.3.0",
+    "Version": "4.3.1",
     "Repositories": [
       {
         "Name": "BioCsoft",
@@ -252,20 +252,16 @@
     },
     "SuperLearner": {
       "Package": "SuperLearner",
-      "Version": "2.0-29-9000",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "SuperLearner",
-      "RemoteUsername": "ecpolley",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "801aa6039460648d4dfd87c1fad77e5f29391cb7",
+      "Version": "2.0-28.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
       "Requirements": [
         "R",
         "cvAUC",
+        "gam",
         "nnls"
       ],
-      "Hash": "ff51746de15e35ac00dcbefb00f62a90"
+      "Hash": "1779fb40d0e1189fb1a1cb3bd3ce906e"
     },
     "TSP": {
       "Package": "TSP",
@@ -1285,6 +1281,20 @@
         "utils"
       ],
       "Hash": "ba4be138fe47eac3e16a6deaa4da106e"
+    },
+    "gam": {
+      "Package": "gam",
+      "Version": "1.22-2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "foreach",
+        "methods",
+        "splines",
+        "stats"
+      ],
+      "Hash": "fed7831c88d8eb0fad64437c6d8febaf"
     },
     "gclus": {
       "Package": "gclus",
@@ -2429,7 +2439,7 @@
     },
     "missRanger": {
       "Package": "missRanger",
-      "Version": "2.2.1",
+      "Version": "2.3.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -2439,7 +2449,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "1c7e09f7a80fab6db8d6e8a437f771c9"
+      "Hash": "942c38209c5c791389dd65bfaa6ec2e4"
     },
     "mitml": {
       "Package": "mitml",
@@ -2513,11 +2523,11 @@
       "Version": "0.0.1",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "myphd",
       "RemoteUsername": "isglobal-cep",
+      "RemoteRepo": "myphd",
       "RemoteRef": "HEAD",
-      "RemoteSha": "5cc404eb22db9d9a275e04e37e8d2ee106cdf90f",
+      "RemoteSha": "faf1ea1a7188fbb404320dbad80b344cdea90b1e",
+      "RemoteHost": "api.github.com",
       "Requirements": [
         "WeightIt",
         "assertthat",
@@ -2551,7 +2561,7 @@
         "tmvtnorm",
         "visdat"
       ],
-      "Hash": "1863bcb2b5544c815f76ebc5c1806cc8"
+      "Hash": "ae6a9cfd90fce88401307083f65c9e86"
     },
     "naniar": {
       "Package": "naniar",
@@ -2718,11 +2728,11 @@
       "Version": "0.1.2.9000",
       "Source": "GitHub",
       "RemoteType": "github",
+      "RemoteHost": "api.github.com",
       "RemoteUsername": "crsh",
       "RemoteRepo": "papaja",
       "RemoteRef": "main",
       "RemoteSha": "2a979a25da14754ee0c48c35f4ca18f0a1bd134e",
-      "RemoteHost": "api.github.com",
       "Requirements": [
         "R",
         "bookdown",
@@ -3306,14 +3316,9 @@
     },
     "sass": {
       "Package": "sass",
-      "Version": "0.4.7.9000",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "sass",
-      "RemoteUsername": "rstudio",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "4f42680340264e1655745a99cbd7e0c0481b6a01",
+      "Version": "0.4.7",
+      "Source": "Repository",
+      "Repository": "CRAN",
       "Requirements": [
         "R6",
         "fs",
@@ -3321,7 +3326,7 @@
         "rappdirs",
         "rlang"
       ],
-      "Hash": "de3db073534d5be979c8804296dfe1ac"
+      "Hash": "6bd4d33b50ff927191ec9acbf52fd056"
     },
     "scales": {
       "Package": "scales",
