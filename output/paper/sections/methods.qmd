@@ -20,6 +20,8 @@
 
 ### Confounders {#sec-confounders}
 
+- For RQ1 I used creatinine values from HELIX. For RQ3 the ones from the steroids dataset. For RQ2, I included in the model both variables.
+
 ### Endocrine disrupting chemicals {#sec-edcs}
 
 ### Corticosteroids {#sec-steroids}
@@ -43,6 +45,8 @@
 - Explain how quantitative variables were handled in the analyses. If applicable, describe which groupings were chosen and why.
 
 ## Statistical methods {#sec-stat-methods}
+
+- In RQ2, I included the logarithm of the denominator in the RHS. In RQ3, I used the logarithm of the ratio in the RHS.
 
 - Methods for selecting potential confounders (provide DAGs).
 - Describe all statistical methods with assumptions, including those used to control for confounding.

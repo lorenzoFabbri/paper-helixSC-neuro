@@ -64,7 +64,7 @@ list(
     name = paste0(rq, "_load_dat"),
     command = substitute(
       rq_load_data(res_dag = dag,
-                   remove_kanc = TRUE),
+                   remove_kanc = FALSE),
       env = list(dag = as.symbol(paste0(rq, "_dag")))
     )
   ),
@@ -84,7 +84,7 @@ list(
     command = substitute(
       rq_estimate_weights(
         dat = dat,
-        save_results = FALSE,
+        save_results = TRUE,
         parallel = FALSE,
         workers = 10
       ),
@@ -116,11 +116,11 @@ list(
       name = paste0(rq, "_marginal"),
       command = substitute(
         rq_estimate_marginal_effects(
-          fits = fits$fits,
+          fits = all_fits$fits,
           parallel = TRUE,
           workers = 3
         ),
-        env = list(fits = as.symbol(paste0(rq, "_weighted_fits")))
+        env = list(all_fits = as.symbol(paste0(rq, "_weighted_fits")))
       )
     ) # End marginal target
   ) # End loop over outcomes

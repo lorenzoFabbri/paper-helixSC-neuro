@@ -8,7 +8,7 @@ num_digits_est <- 3
 num_digits_sig <- 3
 ################################################################################
 
-for (rq in c("2", "3")) {
+for (rq in c("1", "2", "3")) {
   # Exploratory
   targets::tar_load_everything(
     store = paste0(path_store, paste0("0", rq))
@@ -16,6 +16,16 @@ for (rq in c("2", "3")) {
   
   # Analyses
   targets::tar_load_everything(
+    store = paste0(path_store, rq)
+  )
+}
+
+for (rq in c("1", "2", "3")) {
+  # Marginal effects
+  targets::tar_load(
+    dplyr::contains(paste0(
+      "rq", rq, "_marginal_"
+    )),
     store = paste0(path_store, rq)
   )
 }
@@ -34,10 +44,14 @@ sensitivity_analyses <- function(which_sens, fits, rq) {
 ################################################################################
 
 tidy_res_weighted_fits <- function(res_list, rq) {
-  names_ <- gsub("weighted_fits_", "", names(res_list))
+  names_ <- gsub(paste0("rq", rq, "_weighted_fits_"),
+                 "",
+                 names(res_list))
   
   weights_ <- lapply(1:1, function(idx) {
-    outcome <- gsub("weighted_fits_", "", names_[idx])
+    outcome <- gsub(paste0("rq", rq, "_weighted_fits_"),
+                    "",
+                    names_[idx])
     tmp <- lapply(res_list[[idx]]$fits, "[[", "weights")
     tmp <- lapply(seq_along(tmp), function(idx2) {
       ret <- tibble::tibble(tmp[[idx2]])
@@ -77,7 +91,7 @@ tidy_res_weighted_fits <- function(res_list, rq) {
     ) |>
     dplyr::select(-name)
   
-  if (rq == "2") {
+  if (rq %in% c("1", "2")) {
     info_edcs <- myphd::edcs_information() |>
       tibble::as_tibble()
     weights_ <- weights_ |>
@@ -158,12 +172,10 @@ tidy_res_weighted_fits <- function(res_list, rq) {
 }
 ################################################################################
 
-tidy_res_marginaleffects <- function(rq) {
+tidy_res_meffects <- function(marginal_effects, rq) {
+  #marginal_effects <- mget(ls(pattern = "marginal_*"))
   names_ <- gsub("marginal_", "",
-                 ls(pattern = "marginal_*"))
-  marginal_effects <- mget(
-    ls(pattern = "marginal_*")
-  )
+                 marginal_effects)
   
   ret <- lapply(seq_along(marginal_effects), function(idx) {
     outcome <- gsub("marginal_", "",

@@ -65,8 +65,8 @@ vars_of_interest <- function(append_to_chem = NULL) {
     "Etio"
   )
   outcomes <- c(
-    "hs_hitrtse",
-    "hs_dcolors3"
+    "hs_hitrtse"
+    #"hs_dcolors3"
   )
 
   return(list(
@@ -207,7 +207,7 @@ params <- function(is_hpc) {
       # End preproc_exposures
       preproc_outcome = list(
         llodq = list(
-          id_val = 2,
+          id_val = c(2, 4),
           method = "replace",
           creatinine_threshold = NULL,
           threshold_within = threshold_within_lod,
@@ -247,7 +247,7 @@ params <- function(is_hpc) {
     rq3 = list(
       preproc_exposures = list(
         llodq = list(
-          id_val = 2,
+          id_val = c(2, 4),
           method = "replace",
           creatinine_threshold = NULL,
           threshold_within = threshold_within_lod,

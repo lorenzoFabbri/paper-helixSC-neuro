@@ -154,7 +154,7 @@ load_steroids <- function() {
     dd <- dd |>
       dplyr::mutate(
         # Creatinine to g/L as in HELIX, instead of mcrM/mL.
-        Creatinine = Creatinine * 1e-6 * 113.12,
+        creatinine_to_helix = Creatinine * 1e-6 * 113.12,
       )
     ############################################################################
 
@@ -204,7 +204,7 @@ load_steroids <- function() {
     msg = "Mismatched number of rows in metabolomics and description data."
   )
   assertthat::assert_that(
-    ncol(metabs) == ncol(cdescs),
+    ncol(metabs) == ncol(cdescs) + 1,
     msg = "Mismatched number of columns in metabolomics and description data."
   )
 
