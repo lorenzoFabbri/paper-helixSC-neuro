@@ -14,7 +14,7 @@ path_store_res <- ifelse(
 )
 Sys.setenv(path_store_res = path_store_res)
 
-for (rq in c("1", "2", "3")) {
+for (rq in c("1", "2", "3", "4")) {
   # Exploratory
   # Sys.setenv(TAR_PROJECT = paste0("rq0", rq))
   # store <- paste0(path_store, paste0("0", rq))

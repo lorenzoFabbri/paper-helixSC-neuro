@@ -17,7 +17,9 @@ load_dag <- function(dags, exposure, outcome, params_dag) {
     "rq02" = "chem_to_marker",
     "rq2" = "chem_to_marker",
     "rq03" = "marker_to_out",
-    "rq3" = "marker_to_out"
+    "rq3" = "marker_to_out",
+    "rq04" = "marker_to_chem",
+    "rq4" = "marker_to_chem"
   )
 
   dag <- dags[[which_dag]]
@@ -105,6 +107,7 @@ rq_load_data <- function(res_dag, remove_kanc) {
     "rq01" = "rq1",
     "rq02" = "rq2",
     "rq03" = "rq3",
+    "rq04" = "rq4",
     rq
   )
 
@@ -121,7 +124,9 @@ rq_load_data <- function(res_dag, remove_kanc) {
   
   dat <- list()
   ## Eventually load also steroid data
-  if (Sys.getenv("TAR_PROJECT") %in% c("rq02", "rq03", "rq2", "rq3")) {
+  if (Sys.getenv("TAR_PROJECT") %in% c(
+    "rq02", "rq03", "rq04", "rq2", "rq3", "rq4"
+  )) {
     metabolites <- load_steroids()
     
     # If outcome is hs_dcolors3, remove KANC
@@ -196,27 +201,25 @@ rq_load_data <- function(res_dag, remove_kanc) {
 
   ## Exposures
   dat$exposures <- dat_request$dat |>
-    tidylog::select(dplyr::any_of(
-      c(
-        params_dat$variables$identifier,
-        params_dat$variables[[rq]]$exposures
-      )
-    ))
+    tidylog::select(
+      params_dat$variables$identifier,
+      dplyr::any_of(params_dat$variables[[rq]]$exposures)
+    )
 
   ## Outcome
   dat$outcome <- dat_request$dat |>
     tidylog::select(
       params_dat$variables$identifier,
-      params_dat$variables[[rq]]$outcome
+      dplyr::any_of(params_dat$variables[[rq]]$outcome)
     )
 
   ## Description of metabolites
   if (rq == "rq2") {
     mets_to_select <- params_dat$variables[[rq]]$outcome
-  } else if (rq == "rq3") {
+  } else if (rq %in% c("rq3", "rq4")) {
     mets_to_select <- params_dat$variables[[rq]]$exposures
   }
-  if (rq %in% c("rq2", "rq3")) {
+  if (rq %in% c("rq2", "rq3", "rq4")) {
     dat$metab_desc <- dat$metab_desc |>
       tidylog::select(
         params_dat$variables$identifier,
@@ -288,6 +291,7 @@ rq_prepare_data <- function(dat) {
     "rq01" = "rq1",
     "rq02" = "rq2",
     "rq03" = "rq3",
+    "rq04" = "rq4",
     rq
   )
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
@@ -334,7 +338,7 @@ rq_prepare_data <- function(dat) {
   ) |>
     dplyr::select(-cohort)
   ## Eventually add scores and pre-process them
-  if (rq == "rq3") {
+  if (rq %in% c("rq3", "rq4")) {
     cols_to_remove <- setdiff(
       colnames(dat$exposures),
       params_dat$variables$identifier
@@ -412,6 +416,7 @@ rq_boot_pipeline <- function(dat, i) {
     "rq01" = "rq1",
     "rq02" = "rq2",
     "rq03" = "rq3",
+    "rq04" = "rq4",
     rq
   )
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
@@ -438,6 +443,7 @@ rq_estimate_weights <- function(dat, save_results,
     "rq01" = "rq1",
     "rq02" = "rq2",
     "rq03" = "rq3",
+    "rq04" = "rq4",
     rq
   )
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
@@ -496,9 +502,14 @@ rq_estimate_weights <- function(dat, save_results,
           )) # End estimation weights current exposure
         # Eventually trim weights
         if (!is.null(params_ana$weights_trim)) {
+          if (rq == "rq4") {
+            weights_trim <- 0.8
+          } else {
+            weights_trim <- params_ana$weights_trim
+          }
           ret <- suppressMessages(WeightIt::trim(
             tmp$weights,
-            at = params_ana$weights_trim,
+            at = weights_trim,
             lower = TRUE
           ))
         } else {

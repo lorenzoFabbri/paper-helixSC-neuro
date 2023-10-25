@@ -401,7 +401,9 @@ load_dat_request <- function() {
     "rq02" = "rq2",
     "rq2" = "rq2",
     "rq03" = "rq3",
-    "rq3" = "rq3"
+    "rq3" = "rq3",
+    "rq04" = "rq4",
+    "rq4" = "rq4"
   )
   meta <- readODS::read_ods("docs/data_request_all.ods",
     col_names = TRUE,

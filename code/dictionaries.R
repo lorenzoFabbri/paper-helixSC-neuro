@@ -120,19 +120,22 @@ params <- function(is_hpc) {
       outcome = clinical_outcomes,
       outcome_negative = "",
       exposures = chemicals
-    ),
-    # End options RQ1
+    ), # End options RQ1
     rq2 = list(
       outcome = metabolites,
       outcome_negative = "",
       exposures = chemicals
-    ),
-    # End options RQ2
+    ), # End options RQ2
     rq3 = list(
       outcome = clinical_outcomes,
       outcome_negative = "",
       exposures = metabolites
-    ) # End options RQ3
+    ), # End options RQ3
+    rq4 = list(
+      outcome = chemicals,
+      outcome_negative = "",
+      exposures = metabolites
+    ) # End options RQ4
   )
   ##############################################################################
 
@@ -158,8 +161,7 @@ params <- function(is_hpc) {
         #   creatinine_name = "hs_creatinine_cg",
         #   path_save_res = "results/figures/rq2/model_check_creatinine_exp.png"
         # )
-      ),
-      # End preproc_exposures
+      ), # End preproc_exposures
       preproc_outcome = list(
         missings = list(
           threshold_within = threshold_within_nan,
@@ -172,8 +174,7 @@ params <- function(is_hpc) {
         transform = list(
           transformation_fun = log
         )
-      ),
-      # End preproc_outcome
+      ), # End preproc_outcome
       preproc_covars = list(
         missings = list(
           threshold_within = threshold_within_nan,
@@ -203,8 +204,7 @@ params <- function(is_hpc) {
         #   creatinine_name = "hs_creatinine_cg",
         #   path_save_res = "results/figures/rq2/model_check_creatinine_exp.png"
         # )
-      ),
-      # End preproc_exposures
+      ), # End preproc_exposures
       preproc_outcome = list(
         llodq = list(
           id_val = c(2, 4),
@@ -229,8 +229,7 @@ params <- function(is_hpc) {
         #   creatinine_name = "hs_creatinine_cg",
         #   path_save_res = "results/figures/rq2/model_check_creatinine_out.png"
         # )
-      ),
-      # End preproc_outcome
+      ), # End preproc_outcome
       preproc_covars = list(
         missings = list(
           threshold_within = threshold_within_nan,
@@ -241,8 +240,7 @@ params <- function(is_hpc) {
           k = 5
         )
       ) # End preproc_covars
-    ),
-    # End steps RQ2
+    ), # End steps RQ2
     ############################################################################
     rq3 = list(
       preproc_exposures = list(
@@ -269,8 +267,7 @@ params <- function(is_hpc) {
         #   creatinine_name = "hs_creatinine_cg",
         #   path_save_res = "results/figures/rq3/model_check_creatinine_exp.png"
         # )
-      ),
-      # End preproc_exposures
+      ), # End preproc_exposures
       preproc_outcome = list(
         missings = list(
           threshold_within = threshold_within_nan,
@@ -283,8 +280,7 @@ params <- function(is_hpc) {
         transform = list(
           transformation_fun = log
         )
-      ),
-      # End preproc_outcome
+      ), # End preproc_outcome
       preproc_covars = list(
         missings = list(
           threshold_within = threshold_within_nan,
@@ -295,7 +291,65 @@ params <- function(is_hpc) {
           k = 5
         )
       ) # End preproc_covars
-    ) # End steps RQ3
+    ), # End steps RQ3
+    ############################################################################
+    rq4 = list(
+      preproc_exposures = list(
+        llodq = list(
+          id_val = c(2, 4),
+          method = "replace",
+          creatinine_threshold = NULL,
+          threshold_within = threshold_within_lod,
+          threshold_overall = threshold_overall_lod,
+          tune_sigma = NULL
+        ),
+        missings = list(
+          threshold_within = threshold_within_nan,
+          threshold_overall = threshold_overall_nan,
+          use_additional_covariates = FALSE,
+          selected_covariates = NULL,
+          method_imputation = "vim.knn",
+          k = 5
+        )
+        # creatinine = list(
+        #   method = "cas",
+        #   method_fit_args = list(family = gaussian(link = "identity")),
+        #   creatinine_covariates_names = creatinine_covariates_names,
+        #   creatinine_name = "hs_creatinine_cg",
+        #   path_save_res = "results/figures/rq3/model_check_creatinine_exp.png"
+        # )
+      ), # End preproc_exposures
+      preproc_outcome = list(
+        missings = list(
+          threshold_within = threshold_within_nan,
+          threshold_overall = threshold_overall_nan,
+          use_additional_covariates = FALSE,
+          selected_covariates = NULL,
+          method_imputation = "vim.knn",
+          k = 5
+        ),
+        # creatinine = list(
+        #   method = "cas",
+        #   method_fit_args = list(family = gaussian(link = "identity")),
+        #   creatinine_covariates_names = creatinine_covariates_names,
+        #   creatinine_name = "hs_creatinine_cg",
+        #   path_save_res = "results/figures/rq2/model_check_creatinine_exp.png"
+        # )
+        transform = list(
+          transformation_fun = log
+        )
+      ), # End preproc_outcome
+      preproc_covars = list(
+        missings = list(
+          threshold_within = threshold_within_nan,
+          threshold_overall = threshold_overall_nan,
+          use_additional_covariates = FALSE,
+          selected_covariates = NULL,
+          method_imputation = "vim.knn",
+          k = 5
+        )
+      ) # End preproc_covars
+    ) # End steps RQ4
     ############################################################################
   ) # End list of steps
   ##############################################################################
@@ -347,11 +401,13 @@ params_analyses <- function() {
   ) # End dictionary parameters RQ1
   rq2 <- rq1
   rq3 <- rq1
+  rq4 <- rq1
 
   ret <- list(
     rq1 = rq1,
     rq2 = rq2,
-    rq3 = rq3
+    rq3 = rq3,
+    rq4 = rq4
   )
 
   return(ret)

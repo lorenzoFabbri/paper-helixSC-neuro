@@ -174,8 +174,9 @@ tidy_res_weighted_fits <- function(res_list, rq) {
 
 tidy_res_meffects <- function(marginal_effects, rq) {
   #marginal_effects <- mget(ls(pattern = "marginal_*"))
-  names_ <- gsub("marginal_", "",
-                 marginal_effects)
+  names_ <- gsub(paste0("rq", rq, "_marginal_"),
+                 "",
+                 names(marginal_effects))
   
   ret <- lapply(seq_along(marginal_effects), function(idx) {
     outcome <- gsub("marginal_", "",
@@ -183,6 +184,9 @@ tidy_res_meffects <- function(marginal_effects, rq) {
     
     # Table for one outcome and all exposures
     x <- marginal_effects[[idx]]
+    
+    if (length(x$marginal_effects) == 0) return(NULL)
+    
     df <- lapply(x$marginal_effects, "[[", "comparisons") |>
       dplyr::bind_rows() |>
       dplyr::mutate(
@@ -271,7 +275,7 @@ tidy_res_meffects <- function(marginal_effects, rq) {
     ) +
     ggplot2::facet_wrap(
       ggplot2::vars(outcome),
-      ncol = length(ret),
+      ncol = 5,
       scales = "free"
     ) +
     ggplot2::labs(

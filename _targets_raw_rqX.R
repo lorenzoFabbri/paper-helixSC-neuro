@@ -15,19 +15,15 @@ rq <- Sys.getenv("TAR_PROJECT")
 exposure <- switch(rq, 
                    "rq1" = "chemical", 
                    "rq2" = "chemical", 
-                   "rq3" = "biomarker")
+                   "rq3" = "biomarker",
+                   "rq4" = "biomarker")
 outcome <- switch(rq, 
                   "rq1" = "outcome", 
                   "rq2" = "biomarker", 
-                  "rq3" = "outcome")
+                  "rq3" = "outcome",
+                  "rq4" = "chemical")
 
-if (rq == "rq1") {
-  tbl_outcomes <- tibble::tibble(
-    name = params(is_hpc = Sys.getenv("is_hpc"))$variables[[rq]]$outcome |>
-      stringr::str_to_lower(), 
-    outcome = params(is_hpc = Sys.getenv("is_hpc"))$variables[[rq]]$outcome
-  )
-} else if (rq == "rq2") {
+if (rq == "rq2") {
   tbl_outcomes <- tibble::tibble(
     name = c("cortisol_production",
              "cortisol_metabolism",
@@ -39,7 +35,7 @@ if (rq == "rq1") {
                 "cortisone_production",
                 "X11bHSD")
   )
-} else if (rq == "rq3") {
+} else {
   tbl_outcomes <- tibble::tibble(
     name = params(is_hpc = Sys.getenv("is_hpc"))$variables[[rq]]$outcome |>
       stringr::str_to_lower(), 
