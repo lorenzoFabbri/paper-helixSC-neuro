@@ -1,6 +1,5 @@
 ---
 title: "Figures"
-
 format:
   pdf:
     pdf-engine: lualatex
@@ -15,13 +14,10 @@ format:
     include-before-body:
       text: |
         \linenumbers
-
 link-citations: true
 linkcolor: blue
-
 editor_options: 
   chunk_output_type: console
-
 execute:
   echo: false
   warning: false
@@ -31,11 +27,13 @@ execute:
 
 - Number figures according to the order in which they are first mentioned in the main text.
 - Clearly label all axes, giving both the measure and the unit of measurement.
-- Not larger than 7.5 inches in width.
-- Save and submit each main text figure as an individual file (PDF with fonts embedded). Include the figure number in the file name of each figure.
-- Provide main text figure captions on a new page of the main text after the tables.
-- Provide the title for each figure below the figure on the same manuscript page as the figure itself.
-- Include a title for the entire figure and descriptors for each panel.
+- Smallest type size: 8pt.
+- Maximum width: 7 inches in portrait, 9 inches in landscape mode.
+- Multi-panel figures: capital letters followed by closing parenthesis, completely above and to the left of the panel.
+- Use log-scale when plotting relative measures of effects.
+- Figure titles and legends should be submitted as single paragraph.
+- The text of figure legends typed after the reference list.
+- Save and submit each main text figure as an individual file (PDF with fonts embedded).
 
 # Participants
 

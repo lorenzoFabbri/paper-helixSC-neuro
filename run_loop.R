@@ -16,10 +16,13 @@ Sys.setenv(path_store_res = path_store_res)
 
 for (rq in c("1", "2", "3", "4")) {
   # Exploratory
-  # Sys.setenv(TAR_PROJECT = paste0("rq0", rq))
-  # store <- paste0(path_store, paste0("0", rq))
-  # targets::tar_make(script = "_targets_rq0X.R", 
-  #                   store = store)
+  if (rq != "4") {
+    Sys.setenv(TAR_PROJECT = paste0("rq0", rq))
+    store <- paste0(path_store, paste0("0", rq))
+    targets::tar_make(script = "_targets_rq0X.R",
+                      store = store)
+  }
+  
   # Analyses
   Sys.setenv(TAR_PROJECT = paste0("rq", rq))
   store <- paste0(path_store, rq)
