@@ -18,10 +18,11 @@ execute:
   message: false
 ---
 
-- Begin each table on a new page after the list of references.
+- Begin each table on a new page after the list of references, numbered with Arabic numerals.
+- Leave blank spaces for no entry.
 - Tables may not contain parts.
 - Provide the title for each table above the table and the notes below the table.
-- List footnotes after the general one, one per line and indicated with a lowercase italicized letter.
+- Order footnotes: abbreviations listed alphabetically and separated by semicolons; others preceded by superscript lowercase letter.
 
 # Descriptive data
 

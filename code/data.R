@@ -152,7 +152,7 @@ load_steroids <- function() {
     
     ## Convert units of creatinine. Note: ng/mL = mcrg/L (metabolites).
     dd <- dd |>
-      dplyr::mutate(
+      tidylog::mutate(
         # Creatinine to g/L as in HELIX, instead of mcrM/mL.
         creatinine_to_helix = Creatinine * 1e-6 * 113.12,
       )
@@ -307,19 +307,19 @@ load_dat_request <- function() {
         \(x) factor(x)
       ),
       # Correct variable for ethnicity of the children
-      h_ethnicity_c = factor(
-        h_ethnicity_c,
-        levels = c(
-          "African",
-          "Asian",
-          "Caucasian",
-          "Native American",
-          "Other",
-          "Pakistani",
-          "White non-European"
-        ),
-        labels = c(1, 2, 3, 4, 5, 6, 7)
-      ),
+      # h_ethnicity_c = factor(
+      #   h_ethnicity_c,
+      #   levels = c(
+      #     "African",
+      #     "Asian",
+      #     "Caucasian",
+      #     "Native American",
+      #     "Other",
+      #     "Pakistani",
+      #     "White non-European"
+      #   ),
+      #   labels = c(1, 2, 3, 4, 5, 6, 7)
+      # ),
       e3_edum = factor(e3_edum,
         levels = c(
           "primary school",

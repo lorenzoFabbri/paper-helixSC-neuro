@@ -336,7 +336,7 @@ rq_prepare_data <- function(dat) {
     id_var = params_dat$variables$identifier,
     by_var = "cohort"
   ) |>
-    dplyr::select(-cohort)
+    tidylog::select(-cohort)
   ## Eventually add scores and pre-process them
   if (rq %in% c("rq3", "rq4")) {
     cols_to_remove <- setdiff(
@@ -344,7 +344,7 @@ rq_prepare_data <- function(dat) {
       params_dat$variables$identifier
     )
     dat$exposures <- create_steroid_scores(dat = dat$exposures) |>
-      dplyr::select(-dplyr::all_of(cols_to_remove))
+      tidylog::select(-dplyr::all_of(cols_to_remove))
     
     # Pre-process scores
     dat$exposures <- myphd::handle_transformation(
@@ -372,7 +372,7 @@ rq_prepare_data <- function(dat) {
     id_var = params_dat$variables$identifier,
     by_var = "cohort"
   ) |>
-    dplyr::select(-cohort)
+    tidylog::select(-cohort)
   ## Eventually add scores and pre-process them
   if (rq == "rq2") {
     cols_to_remove <- setdiff(
@@ -392,7 +392,7 @@ rq_prepare_data <- function(dat) {
     
     # Remove single metabolites
     dat$outcome <- dat$outcome |>
-      dplyr::select(-dplyr::all_of(cols_to_remove))
+      tidylog::select(-dplyr::all_of(cols_to_remove))
   }
   
   # Process metadata
@@ -613,9 +613,9 @@ rq_fit_model_weighted <- function(dat, outcome,
       NULL
     )
     dat$covariates <- dat$covariates |>
-      dplyr::full_join(
+      tidylog::full_join(
         dat$outcome |>
-          dplyr::select(
+          tidylog::select(
             HelixID,
             dplyr::all_of(den)
           ),

@@ -22,7 +22,7 @@ tidy_res_weighted_fits <- function(res_list, rq) {
     }) |>
       dplyr::bind_cols()
     tmp <- tmp |>
-      dplyr::mutate(
+      tidylog::mutate(
         outcome = names_[[idx]]
       ) |>
       dplyr::relocate(outcome)
@@ -32,13 +32,13 @@ tidy_res_weighted_fits <- function(res_list, rq) {
   
   # Tidy data
   weights_ <- weights_ |>
-    dplyr::mutate(
+    tidylog::mutate(
       outcome = gsub("_", " ", outcome)
     ) |>
     tidyr::pivot_longer(
       cols = -c(outcome)
     ) |>
-    dplyr::mutate(
+    tidylog::mutate(
       variable = name,
       outcome = replace(
         outcome, outcome == "x11bhsd", "11bhsd"
@@ -51,20 +51,20 @@ tidy_res_weighted_fits <- function(res_list, rq) {
       variable = gsub("_", " ", variable),
       outcome = gsub("_", " ", outcome)
     ) |>
-    dplyr::select(-name)
+    tidylog::select(-name)
   
   if (rq %in% c("1", "2")) {
     info_edcs <- myphd::edcs_information() |>
       tibble::as_tibble()
     weights_ <- weights_ |>
-      dplyr::left_join(
+      tidylog::left_join(
         info_edcs |>
-          dplyr::select(chem_id, class),
+          tidylog::select(chem_id, class),
         by = c("variable" = "chem_id")
       )
   } else {
     weights_ <- weights_ |>
-      dplyr::mutate(
+      tidylog::mutate(
         class = c("TMP")
       )
   }
@@ -111,7 +111,7 @@ tidy_res_weighted_fits <- function(res_list, rq) {
     "hs_|_c", "", colnames(weights_wide)
   )
   weights_wide <- weights_wide |>
-    dplyr::select(-outcome)
+    tidylog::select(-outcome)
   tbl <- c("{median} ({p25}, {p75})", "{min}, {max}") |>
     purrr::map(
       ~ weights_wide |>
@@ -172,12 +172,12 @@ tidy_res_meffects <- function(marginal_effects, rq) {
     if (length(x$marginal_effects) == 0) return(NULL)
     df <- lapply(x$marginal_effects, "[[", "comparisons") |>
       dplyr::bind_rows() |>
-      dplyr::mutate(
+      tidylog::mutate(
         outcome = outcome,
         variable = gsub("hs_", "", variable),
         variable = gsub("_c", "", variable)
       ) |>
-      dplyr::select(-dplyr::all_of(
+      tidylog::select(-dplyr::all_of(
         c("contrast", "statistic")
       ))
     
@@ -187,7 +187,7 @@ tidy_res_meffects <- function(marginal_effects, rq) {
   
   # Tidy
   all_res <- purrr::reduce(ret, dplyr::bind_rows) |>
-    dplyr::mutate(
+    tidylog::mutate(
       variable = gsub("hs_", "", variable),
       variable = gsub("_c", "", variable),
       variable = gsub("_", " ", variable),
@@ -198,19 +198,19 @@ tidy_res_meffects <- function(marginal_effects, rq) {
     info_edcs <- myphd::edcs_information() |>
       tibble::as_tibble()
     df <- all_res |>
-      dplyr::left_join(
+      tidylog::left_join(
         info_edcs |>
-          dplyr::select(chem_id, class),
+          tidylog::select(chem_id, class),
         by = c("variable" = "chem_id")
       ) |>
-      dplyr::mutate(
+      tidylog::mutate(
         outcome = replace(
           outcome, outcome == "x11bhsd", "11bhsd"
         )
       )
   } else {
     df <- all_res |>
-      dplyr::mutate(
+      tidylog::mutate(
         class = c("TMP"),
         variable = replace(
           variable, variable == "x11bhsd", "11bhsd"
@@ -219,7 +219,7 @@ tidy_res_meffects <- function(marginal_effects, rq) {
   }
   names_ <- unique(df$outcome)
   df <- df |>
-    dplyr::mutate(
+    tidylog::mutate(
       dplyr::across(
         c("class", "variable"),
         \(x) {
@@ -277,7 +277,7 @@ tidy_res_meffects <- function(marginal_effects, rq) {
     dplyr::arrange(
       outcome, class, dplyr::desc(variable)
     ) |>
-    dplyr::mutate(
+    tidylog::mutate(
       dplyr::across(
         c("estimate", "conf.low", "conf.high"),
         \(x) round(x, digits = num_digits_est)
@@ -297,7 +297,7 @@ tidy_res_meffects <- function(marginal_effects, rq) {
         )}"
       )
     ) |>
-    dplyr::select(
+    tidylog::select(
       class, variable, outcome,
       val
     ) |>
@@ -425,8 +425,9 @@ viz_clinical_outcome <- function() {
   )
 
   # Create summary
-  ret <- dat_sel |>
-    ggplot2::ggplot(ggplot2::aes(
+  ret <- ggplot2::ggplot(
+    dat_sel,
+    ggplot2::aes(
       x = age,
       y = hrt,
       fill = sex
@@ -477,7 +478,10 @@ viz_desc_vars <- function(dat, vars, fct_levels, is_chem) {
   # Pivot to long format and count values
   df_long <- df |>
     tidylog::pivot_longer(cols = -cohort) |>
-    tidylog::count(cohort, name, value)
+    tidylog::count(cohort, name, value) |>
+    tidylog::mutate(
+      name = gsub("^X", "", name)
+    )
   df_long$value <- factor(df_long$value,
     levels = fct_levels
   )
@@ -489,7 +493,10 @@ viz_desc_vars <- function(dat, vars, fct_levels, is_chem) {
     tidylog::group_by(cohort, name) |>
     tidylog::mutate(f = n / sum(n) * 100) |>
     tidylog::select(-n) |>
-    tidylog::ungroup()
+    tidylog::ungroup() |>
+    tidylog::mutate(
+      name = gsub("^X", "", name)
+    )
 
   # Join counts and frequencies
   df_plot <- tidylog::full_join(df_long, freqs,
@@ -511,9 +518,9 @@ viz_desc_vars <- function(dat, vars, fct_levels, is_chem) {
     ) |>
     ggplot2::ggplot(ggplot2::aes(variable, description)) +
     ggplot2::geom_tile(ggplot2::aes(fill = frequency)) +
-    ggplot2::geom_text(ggplot2::aes(label = round(frequency, 1)),
+    ggplot2::geom_text(ggplot2::aes(label = round(frequency, 0)),
       color = "black",
-      size = 3
+      size = 2.5
     ) +
     ggplot2::scale_fill_distiller(palette = "Blues", direction = 1) +
     ggplot2::coord_fixed() +

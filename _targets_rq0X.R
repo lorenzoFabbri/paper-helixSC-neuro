@@ -64,7 +64,16 @@ list(
       viz_desc_vars(
         dat = myphd::extract_cohort(load_steroids()$desc,
           id_var = id_var
-        ),
+        ) |>
+          tidylog::mutate(
+            cohort = dplyr::case_when(
+              cohort == "EDE" ~ "EDEN",
+              cohort == "KAN" ~ "KANC",
+              cohort == "MOB" ~ "MOBA",
+              cohort == "RHE" ~ "RHEA",
+              .default = cohort
+            )
+          ),
         vars = vars_of_interest()$metabolites |>
           paste0("_cdesc"),
         fct_levels = c(1, 2, 3, 4),
@@ -155,7 +164,19 @@ list(
       myphd::describe_data(
         dat = myphd::extract_cohort(dat$exposures,
           id_var = id_var
-        ),
+        ) |>
+          tidylog::mutate(
+            cohort = dplyr::case_when(
+              cohort == "EDE" ~ "EDEN",
+              cohort == "KAN" ~ "KANC",
+              cohort == "MOB" ~ "MOBA",
+              cohort == "RHE" ~ "RHEA",
+              .default = cohort
+            )
+          ) |>
+          tidylog::rename_with(
+            .fn = \(x) gsub("hs_|_c", "", x)
+          ),
         id_var = id_var,
         by_var = by_var
       ),
@@ -170,7 +191,19 @@ list(
       myphd::describe_data(
         dat = myphd::extract_cohort(dat$outcome,
           id_var = id_var
-        ),
+        ) |>
+          tidylog::mutate(
+            cohort = dplyr::case_when(
+              cohort == "EDE" ~ "EDEN",
+              cohort == "KAN" ~ "KANC",
+              cohort == "MOB" ~ "MOBA",
+              cohort == "RHE" ~ "RHEA",
+              .default = cohort
+            )
+          ) |>
+          tidylog::rename_with(
+            .fn = \(x) gsub("^X", "", x)
+          ),
         id_var = id_var,
         by_var = by_var
       ),

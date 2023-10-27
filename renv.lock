@@ -663,7 +663,7 @@
     },
     "checkmate": {
       "Package": "checkmate",
-      "Version": "2.2.0",
+      "Version": "2.3.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -671,7 +671,7 @@
         "backports",
         "utils"
       ],
-      "Hash": "ca9c113196136f4a9ca9ce6079c2c99e"
+      "Hash": "ed4275b13c6ab74b89a31def0b6bf835"
     },
     "chk": {
       "Package": "chk",
@@ -2513,11 +2513,11 @@
       "Version": "0.0.1",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteUsername": "isglobal-cep",
-      "RemoteRepo": "myphd",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "faf1ea1a7188fbb404320dbad80b344cdea90b1e",
       "RemoteHost": "api.github.com",
+      "RemoteRepo": "myphd",
+      "RemoteUsername": "isglobal-cep",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "68ef3033fa62568c56079b7362f8efad2f85c7c8",
       "Requirements": [
         "WeightIt",
         "assertthat",
@@ -2551,7 +2551,7 @@
         "tmvtnorm",
         "visdat"
       ],
-      "Hash": "ae6a9cfd90fce88401307083f65c9e86"
+      "Hash": "c4730780108391f348c4d64893ea388f"
     },
     "naniar": {
       "Package": "naniar",
