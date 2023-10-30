@@ -99,7 +99,7 @@ tidy_res_weighted_fits <- function(res_list, rq) {
         size = 12
       )
     )
-  if (unique(weights_$class) == "TMP") {
+  if (length(unique(weights_$class)) == 1) {
     plot <- plot +
       ggplot2::theme(
         legend.position = "null"

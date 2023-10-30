@@ -2,10 +2,11 @@ source("DAGs/dag_v2.R")
 source("code/dictionaries.R")
 source("code/data.R")
 source("code/plot.R")
+source("code/qba.R")
 
-is_hpc = TRUE
+Sys.setenv(is_hpc = TRUE)
 path_store <- ifelse(
-  is_hpc, 
+  Sys.getenv("is_hpc"), 
   "/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/_targets/_targetsRQ", 
   "~/mounts/rstudioserver/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/_targets/_targetsRQ"
 )
@@ -43,13 +44,15 @@ tbl_desc_pop <- function(path_store) {
   mapped_adj_sets <- list()
   for (rq in c("1", "2", "3")) {
     targets::tar_load(
-      paste0("rq", rq, "_load_dat"),
+      paste0("rq", rq, "_preproc_dat"),
       store = paste0(path_store, rq)
     )
+    
+    # Only actually used covariates
     mapped_adj_sets[[paste0("rq",
-                            rq)]] <- get(
-                              paste0("rq", rq, "_load_dat")
-                            )$mapping_covariates
+                            rq)]] <- colnames(get(
+                              paste0("rq", rq, "_preproc_dat")
+                            )$covariates)
   }
   
   # Select confounders and clinical outcome in data request
@@ -66,7 +69,7 @@ tbl_desc_pop <- function(path_store) {
   ## Must add creatinine from IMIM and remove chemicals
   df <- df |>
     tidylog::left_join(
-      rq2_load_dat$covariates |>
+      rq2_preproc_dat$covariates |>
         tidylog::select(HelixID, creatinine_to_helix),
       by = "HelixID"
     ) |>
@@ -87,6 +90,10 @@ tbl_desc_pop <- function(path_store) {
   desc_covars <- df_meta |>
     gtsummary::tbl_summary(
       by = "cohort",
+      type = list(
+        hs_fastfood ~ "continuous",
+        hs_org_food ~ "continuous"
+      ),
       statistic = list(
         gtsummary::all_continuous() ~ c(
           "{median} ({p25}, {p75})"
@@ -281,4 +288,92 @@ invisible(
     close(file_conn)
   })
 ) # End invisible loop DAGs
+################################################################################
+
+## Adjustment sets by RQ w/ mapped covariates
+for (rq in c("1", "2", "3")) {
+  ## Load objects
+  targets::tar_load(
+    paste0("rq", rq, "_preproc_dat"),
+    store = paste0(path_store, rq)
+  )
+  
+  ## Extract adjustments set used and mapped covariates
+  adj_set <- get(paste0("rq", rq, "_preproc_dat"))$adjustment_set
+  mapped_covars <- get(paste0("rq", rq, "_preproc_dat"))$mapping_covariates
+  actual_covars <- get(paste0("rq", rq, "_preproc_dat"))$covariates |>
+    colnames()
+  meta <- get(paste0("rq", rq, "_preproc_dat"))$meta |>
+    tidylog::filter(
+      dag %in% adj_set &
+        variable %in% mapped_covars
+    ) |>
+    tidylog::select(dag, variable, type, description, code, label,
+                    remark, comments)
+  meta <- meta |>
+    dplyr::rowwise() |>
+    tidylog::mutate(
+      included = ifelse(
+        variable %in% actual_covars,
+        TRUE, FALSE
+      )
+    )
+  perc_included <- round(sum(meta$included == TRUE) / nrow(meta) * 100, 2)
+  
+  ## Create tidy table
+  ret <- meta |>
+    tidylog::mutate(
+      dplyr::across(
+        dplyr::everything(),
+        as.character
+      )
+    ) |>
+    tidylog::group_by(dag) |>
+    dplyr::arrange(dag, variable) |>
+    tidylog::ungroup() |>
+    tidylog::rename(
+      coding = "code",
+      labels = "label",
+      remarks = "remark"
+    ) |>
+    tidylog::mutate(
+      dplyr::across(
+        c("coding", "labels", "remarks", "comments"),
+        \(x) ifelse(
+          x == "NA",
+          "", x
+        )
+      )
+    ) |>
+    gt::gt(
+      rowname_col = "variable",
+      groupname_col = "dag"
+    ) |>
+    gt::tab_style(
+      style = gt::cell_text(
+        weight = "bold"
+      ),
+      locations = gt::cells_row_groups()
+    ) |>
+    gt::sub_missing(
+      missing_text = ""
+    ) |>
+    gt::tab_footnote(
+      footnote = glue::glue(
+        "Percentage of confounders included in the models: {perc_included}%."
+      ),
+      locations = gt::cells_column_labels(columns = included)
+    )
+  
+  ## Save results (table)
+  name <- paste0("rq", rq, "_codebook", ".docx")
+  gt::gtsave(
+    data = ret,
+    filename = paste0(path_sm, name)
+  )
+  
+  ## Remove objects to save space
+  rm(ret)
+  rm(list = ls(pattern = paste0("rq", rq, "_load_dat")))
+} # End loop over RQs for tables adjustment sets
 ################################################################################

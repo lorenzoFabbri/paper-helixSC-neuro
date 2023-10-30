@@ -1,0 +1,142 @@
+dag {
+age_child
+biomarker [exposure]
+breastfeeding
+bw
+characteristics_child
+chemical [outcome]
+child_diet
+child_smoking
+cohort
+creatinine
+envFactors_visit
+ethnicity_child
+ethnicity_mother
+familySEP
+gestational_age
+maternalAlcohol_preg
+maternalDiet_preg
+maternalSEP_preg
+maternalSmoking_preg
+neuropsychologicalDiagnosis_child
+outcome
+paternalSEP_preg
+qualityTesting_child
+season_visit
+sex_child
+time_lastMeal
+type_sample
+age_child -> biomarker
+age_child -> characteristics_child
+age_child -> creatinine
+age_child -> outcome
+age_child -> type_sample
+biomarker -> chemical
+biomarker -> outcome
+breastfeeding -> neuropsychologicalDiagnosis_child
+breastfeeding -> outcome
+bw -> characteristics_child
+bw -> neuropsychologicalDiagnosis_child
+characteristics_child -> biomarker
+characteristics_child -> chemical
+characteristics_child -> creatinine
+characteristics_child -> outcome
+chemical -> outcome
+child_diet -> biomarker
+child_diet -> characteristics_child
+child_diet -> chemical
+child_diet -> outcome
+child_smoking -> biomarker
+child_smoking -> characteristics_child
+child_smoking -> creatinine
+child_smoking -> outcome
+cohort -> biomarker
+cohort -> bw
+cohort -> characteristics_child
+cohort -> chemical
+cohort -> child_diet
+cohort -> creatinine
+cohort -> outcome
+creatinine -> biomarker
+creatinine -> chemical
+creatinine -> outcome
+envFactors_visit -> outcome
+envFactors_visit -> qualityTesting_child
+ethnicity_child -> biomarker
+ethnicity_child -> bw
+ethnicity_child -> characteristics_child
+ethnicity_child -> chemical
+ethnicity_child -> child_diet
+ethnicity_child -> child_smoking
+ethnicity_child -> creatinine
+ethnicity_child -> neuropsychologicalDiagnosis_child
+ethnicity_child -> outcome
+ethnicity_mother -> biomarker
+ethnicity_mother -> breastfeeding
+ethnicity_mother -> bw
+ethnicity_mother -> characteristics_child
+ethnicity_mother -> child_diet
+ethnicity_mother -> familySEP
+ethnicity_mother -> maternalAlcohol_preg
+ethnicity_mother -> maternalDiet_preg
+ethnicity_mother -> maternalSEP_preg
+ethnicity_mother -> maternalSmoking_preg
+ethnicity_mother -> neuropsychologicalDiagnosis_child
+ethnicity_mother -> outcome
+familySEP -> biomarker
+familySEP -> characteristics_child
+familySEP -> chemical
+familySEP -> child_diet
+familySEP -> child_smoking
+familySEP -> creatinine
+familySEP -> outcome
+gestational_age -> bw
+gestational_age -> characteristics_child
+gestational_age -> neuropsychologicalDiagnosis_child
+maternalAlcohol_preg -> bw
+maternalAlcohol_preg -> characteristics_child
+maternalAlcohol_preg -> neuropsychologicalDiagnosis_child
+maternalAlcohol_preg -> outcome
+maternalDiet_preg -> characteristics_child
+maternalDiet_preg -> neuropsychologicalDiagnosis_child
+maternalDiet_preg -> outcome
+maternalSEP_preg -> breastfeeding
+maternalSEP_preg -> bw
+maternalSEP_preg -> characteristics_child
+maternalSEP_preg -> familySEP
+maternalSEP_preg -> maternalAlcohol_preg
+maternalSEP_preg -> maternalDiet_preg
+maternalSEP_preg -> maternalSmoking_preg
+maternalSEP_preg -> neuropsychologicalDiagnosis_child
+maternalSEP_preg -> outcome
+maternalSmoking_preg -> bw
+maternalSmoking_preg -> characteristics_child
+maternalSmoking_preg -> neuropsychologicalDiagnosis_child
+maternalSmoking_preg -> outcome
+neuropsychologicalDiagnosis_child -> outcome
+paternalSEP_preg -> breastfeeding
+paternalSEP_preg -> bw
+paternalSEP_preg -> characteristics_child
+paternalSEP_preg -> familySEP
+paternalSEP_preg -> maternalAlcohol_preg
+paternalSEP_preg -> maternalDiet_preg
+paternalSEP_preg -> maternalSmoking_preg
+paternalSEP_preg -> neuropsychologicalDiagnosis_child
+paternalSEP_preg -> outcome
+season_visit -> biomarker
+season_visit -> chemical
+sex_child -> biomarker
+sex_child -> characteristics_child
+sex_child -> chemical
+sex_child -> child_diet
+sex_child -> child_smoking
+sex_child -> creatinine
+sex_child -> neuropsychologicalDiagnosis_child
+sex_child -> outcome
+sex_child -> type_sample
+time_lastMeal -> biomarker
+time_lastMeal -> chemical
+type_sample -> chemical
+type_sample -> creatinine
+}
+

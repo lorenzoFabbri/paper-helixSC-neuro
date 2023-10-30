@@ -418,8 +418,11 @@ load_dat_request <- function() {
       group = stringr::str_to_lower(group),
       tab = stringr::str_to_lower(tab),
       period = stringr::str_to_lower(period),
-    ) |>
-    tidylog::filter(.data[[which_meta]] == TRUE)
+    )
+  if (!is.null(which_meta)) {
+    meta <- meta |>
+      tidylog::filter(.data[[which_meta]] == TRUE)
+  }
   cols_to_change_type <- c(
     "dag", "variable",
     "description", "code", "label",

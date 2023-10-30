@@ -341,7 +341,8 @@ rq_prepare_data <- function(dat) {
   if (rq %in% c("rq3", "rq4")) {
     cols_to_remove <- setdiff(
       colnames(dat$exposures),
-      params_dat$variables$identifier
+      c(params_dat$variables$identifier,
+        "F", "cortisol_production")
     )
     dat$exposures <- create_steroid_scores(dat = dat$exposures) |>
       tidylog::select(-dplyr::all_of(cols_to_remove))
@@ -450,7 +451,14 @@ rq_estimate_weights <- function(dat, save_results,
   params_ana <- params_analyses()[[rq]]
 
   # Step 1: estimate weights for covariate balance
-  list_exposures <- names(dat$exposures)
+  if (rq %in% c("rq3", "rq4")) {
+    list_exposures <- c("cortisol_production",
+                        "cortisol_metabolism",
+                        "cortisone_production",
+                        "X11bHSD")
+  } else {
+    list_exposures <- names(dat$exposures)
+  }
   list_exposures <- setdiff(
     list_exposures,
     params_dat$variables$identifier
@@ -476,6 +484,20 @@ rq_estimate_weights <- function(dat, save_results,
     estimated_weights <-
       furrr::future_map(list_exposures, function(x, p) {
         p()
+        
+        # Eventually add control for denominator of "outcome"
+        if (rq %in% c("rq3", "rq4")) {
+          den <- switch(x,
+                        "cortisol_metabolism" = "F",
+                        "X11bHSD" = "cortisol_production",
+                        NULL
+          )
+          list_covariates <- c(
+            list_covariates,
+            den
+          )
+        }
+        
         tmp <-
           suppressWarnings(suppressMessages(
             myphd::estimate_weights(
@@ -884,10 +906,10 @@ rq_estimate_marginal_effects <-
             ),
             by = {by},
             wts = weights,
-            vcov = {glue::double_quote(vcov)}
+            vcov = {vcov}
           )",
             exposure = exposure,
-            vcov = "HC3"
+            vcov = "~ cohort"
           )
         )) |> # End marginal estimates (avg_comparisons)
           marginaleffects::tidy() |>
