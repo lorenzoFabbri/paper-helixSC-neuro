@@ -6,13 +6,6 @@ path_store <- ifelse(
   "~/mounts/rstudioserver/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/_targets/_targetsRQ"
 )
 Sys.setenv(path_store = path_store)
-# Path to store results
-path_store_res <- ifelse(
-  Sys.getenv("is_hpc"), 
-  "/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/results/", 
-  "~/mounts/rstudioserver/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/results/"
-)
-Sys.setenv(path_store_res = path_store_res)
 
 for (rq in c("1", "2", "3", "4")) {
   # Exploratory
@@ -28,4 +21,12 @@ for (rq in c("1", "2", "3", "4")) {
   store <- paste0(path_store, rq)
   targets::tar_make(script = "_targets_raw_rqX.R", 
                     store = store)
+  
+  # Sensitivity analyses
+  if (rq != "4") {
+    Sys.setenv(TAR_PROJECT = paste0("rq", rq))
+    store <- paste0(path_store, rq, "SA")
+    targets::tar_make(script = "_targets_sa_raw_rqX.R", 
+                      store = store)
+  }
 }

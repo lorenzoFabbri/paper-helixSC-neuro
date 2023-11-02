@@ -271,6 +271,29 @@ rq_load_data <- function(res_dag, remove_kanc) {
     call. = TRUE
   )
   dat$meta <- dat_request$meta
+  
+  # Checks
+  if (!is.null(dat$metab_desc)) {
+    count_values <- dat$metab_desc |>
+      tidylog::select(-HelixID) |>
+      tidyr::pivot_longer(cols = dplyr::everything()) |>
+      dplyr::count(name, value) |>
+      tidylog::filter(value %in% c(2, 4))
+    count_not_values <- dat$metab_desc |>
+      tidylog::select(-HelixID) |>
+      tidyr::pivot_longer(cols = dplyr::everything()) |>
+      dplyr::count(name, value) |>
+      tidylog::filter(value %in% c(3))
+    if (rq %in% c("rq3", "rq4")) {
+      sum_na <- sum(is.na(dat$exposures))
+    } else if (rq %in% c("rq2")) {
+      sum_na <- sum(is.na(dat$outcome))
+    }
+    assertthat::assert_that(
+      sum(count_values$n) + sum(count_not_values$n) == sum_na,
+      msg = "Mismatch in the number of missing values for the metabolome."
+    )
+  } # End check number of missings in metabolome
 
   return(dat)
 } # End function rq_load_data
@@ -403,32 +426,11 @@ rq_prepare_data <- function(dat) {
 } # End function rq_prepare_data
 ################################################################################
 
-#' Function to estimate confidence intervals using Bootstrapping
-#'
-#' @param dat
-#' @param i
-#'
-#' @return
-#'
-#' @export
-rq_boot_pipeline <- function(dat, i) {
-  rq <- Sys.getenv("TAR_PROJECT")
-  rq <- switch(rq,
-    "rq01" = "rq1",
-    "rq02" = "rq2",
-    "rq03" = "rq3",
-    "rq04" = "rq4",
-    rq
-  )
-  params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
-  params_ana <- params_analyses()[[rq]]
-} # End function rq_boot_pipeline
-################################################################################
-
 #' Estimate weights and explore covariates balance
 #'
 #' @param dat A named list of dataframes containing
 #' the variables of interest. A list.
+#' @param by
 #' @param save_results Whether to save figures and tables to file. A logical.
 #' @param parallel Whether to perform steps in parallel. A logical.
 #' @param workers Optional number of workers to use. An integer.
@@ -437,7 +439,7 @@ rq_boot_pipeline <- function(dat, i) {
 #' balance exploration.
 #'
 #' @export
-rq_estimate_weights <- function(dat, save_results,
+rq_estimate_weights <- function(dat, by = NULL, save_results,
                                 parallel, workers = NULL) {
   rq <- Sys.getenv("TAR_PROJECT")
   rq <- switch(rq,
@@ -486,17 +488,17 @@ rq_estimate_weights <- function(dat, save_results,
         p()
         
         # Eventually add control for denominator of "outcome"
-        if (rq %in% c("rq3", "rq4")) {
-          den <- switch(x,
-                        "cortisol_metabolism" = "F",
-                        "X11bHSD" = "cortisol_production",
-                        NULL
-          )
-          list_covariates <- c(
-            list_covariates,
-            den
-          )
-        }
+        # if (rq %in% c("rq3", "rq4")) {
+        #   den <- switch(x,
+        #                 "cortisol_metabolism" = "F",
+        #                 "X11bHSD" = "cortisol_production",
+        #                 NULL
+        #   )
+        #   list_covariates <- c(
+        #     list_covariates,
+        #     den
+        #   )
+        # }
         
         tmp <-
           suppressWarnings(suppressMessages(
@@ -515,7 +517,7 @@ rq_estimate_weights <- function(dat, save_results,
               method = params_ana$method_weightit,
               method_args = list(
                 stabilize = params_ana$stabilize,
-                by = params_ana$by,
+                by = by,
                 sl_lib = params_ana$sl_lib,
                 sl_discrete = params_ana$sl_discrete,
                 use_kernel = params_ana$use_kernel
@@ -574,6 +576,10 @@ rq_estimate_weights <- function(dat, save_results,
       "results/figures/",
       Sys.getenv("TAR_PROJECT"),
       "/loveplot_",
+      ifelse(
+        !is.null(by),
+        paste0(by, "_"), ""
+      ),
       params_ana$method_weightit,
       ".pdf"
     )
@@ -604,6 +610,7 @@ rq_estimate_weights <- function(dat, save_results,
 #' @param dat A named list of dataframes containing
 #' the variables of interest. A list.
 #' @param outcome Name of the outcome of interest. A string.
+#' @param by
 #' @param weights Estimated weights resulting from a call to
 #' [rq_estimate_weights()]. A list.
 #' @param parallel Whether to perform steps in parallel. A logical.
@@ -612,7 +619,7 @@ rq_estimate_weights <- function(dat, save_results,
 #' @returns A named list containing the fitted models.
 #'
 #' @export
-rq_fit_model_weighted <- function(dat, outcome,
+rq_fit_model_weighted <- function(dat, outcome, by = c(),
                                   weights,
                                   parallel, workers = NULL) {
   rq <- Sys.getenv("TAR_PROJECT")
@@ -651,7 +658,14 @@ rq_fit_model_weighted <- function(dat, outcome,
       params_dat$variables$identifier,
       outcome
     )))
-  list_exposures <- names(dat$exposures)
+  if (rq %in% c("rq3", "rq4")) {
+    list_exposures <- c("cortisol_production",
+                        "cortisol_metabolism",
+                        "cortisone_production",
+                        "X11bHSD")
+  } else {
+    list_exposures <- names(dat$exposures)
+  }
   list_exposures <- setdiff(
     list_exposures,
     params_dat$variables$identifier
@@ -716,18 +730,24 @@ rq_fit_model_weighted <- function(dat, outcome,
           method_args = list(
             family = params_ana$family_marginal,
             add_inter_exposure = params_ana$add_inter_exposure,
-            add_inter_exposure_specific = params_ana$add_inter_exposure_specific,
+            add_inter_exposure_specific = by,
             add_splines_exposure = params_ana$add_splines_exposure,
             df_splines = params_ana$df_splines,
             threshold_smooth = params_ana$threshold_smooth,
             threshold_k = params_ana$threshold_k
           )
         ) # End fit current exposure
+        path_save_res <- glue::glue(
+          "results/figures/{rq}/model_check_out_{outcome}_{exposure}"
+        )
+        path_save_res <- ifelse(
+          is_empty(by),
+          paste0(path_save_res, ".png"),
+          paste0(path_save_res, "_by", ".png")
+        )
         check_mod_out <- myphd::check_model(
           model = fit$fit,
-          path_save_res = glue::glue(
-            "results/figures/{rq}/model_check_out_{outcome}_{exposure}.png"
-          )
+          path_save_res = path_save_res
         )
 
         return(list(
@@ -751,6 +771,7 @@ rq_fit_model_weighted <- function(dat, outcome,
 #'
 #' @param fits A list of fitted models. Results from a call to
 #' [rq_fit_model_weighted()]. A list.
+#' @param by
 #' @param parallel Whether to perform steps in parallel. A logical.
 #' @param workers Optional number of workers to use. An integer.
 #'
@@ -760,41 +781,37 @@ rq_fit_model_weighted <- function(dat, outcome,
 #'
 #' @export
 rq_estimate_marginal_effects <-
-  function(fits, parallel, workers = NULL) {
+  function(fits, by = NULL, parallel, workers = NULL) {
     rq <- Sys.getenv("TAR_PROJECT")
     params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
     params_ana <- params_analyses()[[rq]]
-
+    
     # Loop over the fitted models to estimate marginal effects
     if (parallel == TRUE) {
       future::plan(future::multisession,
-        workers = workers
+                   workers = workers
       )
     } else {
       future::plan(future::sequential())
     }
-    progressr::with_progress({
-      p <- progressr::progressor(steps = length(fits))
-
-      ret <- furrr::future_map(seq_along(fits), function(idx, p) {
-        p()
-
-        exposure <- names(fits)[[idx]]
-        mod <- fits[[exposure]]$fit
-        dat <- fits[[exposure]]$dat
-        weights <- fits[[exposure]]$weights
-
-        ########################################################################
-        # G-computation (ADRF)
-        ## Values of exposure for counterfactual predictions, based on quantiles
-        values <- with(dat, seq(
-          quantile(get(exposure), params_ana$type_avg_comparison[1]),
-          quantile(get(exposure), params_ana$type_avg_comparison[2]),
-          length.out = 50
-        ))
-        gcomp <- eval(parse(
-          text = glue::glue(
-            "marginaleffects::avg_predictions(
+    
+    ret <- furrr::future_map(seq_along(fits), function(idx) {
+      exposure <- names(fits)[[idx]]
+      mod <- fits[[exposure]]$fit
+      dat <- fits[[exposure]]$dat
+      weights <- fits[[exposure]]$weights
+      
+      ########################################################################
+      # G-computation (ADRF)
+      ## Values of exposure for counterfactual predictions, based on quantiles
+      values <- with(dat, seq(
+        quantile(get(exposure), params_ana$type_avg_comparison[1]),
+        quantile(get(exposure), params_ana$type_avg_comparison[2]),
+        length.out = 50
+      ))
+      gcomp <- eval(parse(
+        text = glue::glue(
+          "marginaleffects::avg_predictions(
             model = mod,
             variables = list(
               {exposure} = values
@@ -802,104 +819,102 @@ rq_estimate_marginal_effects <-
             wts = weights,
             vcov = {glue::double_quote(vcov)}
           )",
-            exposure = exposure,
-            vcov = "HC3"
-          )
-        )) # End G-computation (avg_predictions)
-
-        # Plot ADRF
-        adrf <- gcomp |>
-          ggplot2::ggplot(ggplot2::aes(x = .data[[exposure]])) +
-          ggplot2::geom_point(ggplot2::aes(y = estimate)) +
-          ggplot2::geom_line(ggplot2::aes(y = estimate),
-            linewidth = 0.2
-          ) +
-          ggplot2::geom_ribbon(ggplot2::aes(
-            ymin = conf.low,
-            ymax = conf.high
-          ), alpha = 0.2) +
-          ggplot2::geom_rug(
-            mapping = ggplot2::aes(x = .data[[exposure]]),
-            data = dat,
-            inherit.aes = FALSE
-          ) +
-          ggplot2::scale_x_continuous(limits = c(
-            values[1],
-            values[length(values)]
-          )) +
-          ggplot2::labs(x = exposure, y = "E[Y|A]") +
-          ggplot2::theme_minimal()
-        ########################################################################
-
-        ########################################################################
-        # Slopes (AMEF)
-        weights_repeated <- rep(weights,
-          times = length(values)
+          exposure = exposure,
+          vcov = "HC3"
         )
-        slopes <- eval(parse(
-          text = glue::glue(
-            "marginaleffects::avg_slopes(
-            model = mod,
-            variables = {glue::double_quote(exposure)},
-            newdata = marginaleffects::datagridcf({exposure} = values),
-            by = {glue::double_quote(exposure)},
-            wts = weights_repeated,
-            vcov = {glue::double_quote(vcov)}
-          )",
-            exposure = exposure,
-            vcov = "HC3"
-          )
-        )) # End slopes (avg_slopes)
-
-        # Plot AMEF
-        amef <- slopes |>
-          ggplot2::ggplot(ggplot2::aes(x = .data[[exposure]])) +
-          ggplot2::geom_point(ggplot2::aes(y = estimate)) +
-          ggplot2::geom_line(ggplot2::aes(y = estimate),
-            linewidth = 0.2
-          ) +
-          ggplot2::geom_ribbon(ggplot2::aes(
-            ymin = conf.low,
-            ymax = conf.high
-          ), alpha = 0.2) +
-          ggplot2::geom_hline(
-            yintercept = 0,
-            linetype = "dashed"
-          ) +
-          ggplot2::geom_rug(
-            mapping = ggplot2::aes(x = .data[[exposure]]),
-            data = dat,
-            inherit.aes = FALSE
-          ) +
-          ggplot2::scale_x_continuous(limits = c(
-            values[1],
-            values[length(values)]
-          )) +
-          ggplot2::labs(x = exposure, y = "dE[Y|A]/dA") +
-          ggplot2::theme_minimal()
-        ########################################################################
-
-        ########################################################################
-        # Comparisons (marginal estimates)
-        ## Create dataframe with `high` and `low` values for exposure
-        df_comparisons <- myphd::create_df_marginal_comparisons(
-          dat = dat,
-          var = exposure,
-          percentiles = params_ana$type_avg_comparison,
-          by_var = "cohort"
-        )
-
-        if (is.null(params_ana$add_inter_exposure_specific)) {
-          by <- TRUE
-        } else {
-          by <- glue::double_quote(
-            params_ana$add_inter_exposure_specific
-          )
-        }
-
-        avg_comp <- eval(parse(
-          text = glue::glue(
-            "marginaleffects::avg_comparisons(
+      )) # End G-computation (avg_predictions)
+      
+      # Plot ADRF
+      # adrf <- gcomp |>
+      #   ggplot2::ggplot(ggplot2::aes(x = .data[[exposure]])) +
+      #   ggplot2::geom_point(ggplot2::aes(y = estimate)) +
+      #   ggplot2::geom_line(ggplot2::aes(y = estimate),
+      #     linewidth = 0.2
+      #   ) +
+      #   ggplot2::geom_ribbon(ggplot2::aes(
+      #     ymin = conf.low,
+      #     ymax = conf.high
+      #   ), alpha = 0.2) +
+      #   ggplot2::geom_rug(
+      #     mapping = ggplot2::aes(x = .data[[exposure]]),
+      #     data = dat,
+      #     inherit.aes = FALSE
+      #   ) +
+      #   ggplot2::scale_x_continuous(limits = c(
+      #     values[1],
+      #     values[length(values)]
+      #   )) +
+      #   ggplot2::labs(x = exposure, y = "E[Y|A]") +
+      #   ggplot2::theme_minimal()
+      ########################################################################
+      
+      ########################################################################
+      # Slopes (AMEF)
+      # weights_repeated <- rep(weights,
+      #                         times = length(values)
+      # )
+      # slopes <- eval(parse(
+      #   text = glue::glue(
+      #     "marginaleffects::avg_slopes(
+      #       model = mod,
+      #       variables = {glue::double_quote(exposure)},
+      #       newdata = marginaleffects::datagridcf({exposure} = values),
+      #       by = {glue::double_quote(exposure)},
+      #       wts = weights_repeated,
+      #       vcov = {glue::double_quote(vcov)}
+      #     )",
+      #     exposure = exposure,
+      #     vcov = "HC3"
+      #   )
+      # )) # End slopes (avg_slopes)
+      
+      # Plot AMEF
+      # amef <- slopes |>
+      #   ggplot2::ggplot(ggplot2::aes(x = .data[[exposure]])) +
+      #   ggplot2::geom_point(ggplot2::aes(y = estimate)) +
+      #   ggplot2::geom_line(ggplot2::aes(y = estimate),
+      #     linewidth = 0.2
+      #   ) +
+      #   ggplot2::geom_ribbon(ggplot2::aes(
+      #     ymin = conf.low,
+      #     ymax = conf.high
+      #   ), alpha = 0.2) +
+      #   ggplot2::geom_hline(
+      #     yintercept = 0,
+      #     linetype = "dashed"
+      #   ) +
+      #   ggplot2::geom_rug(
+      #     mapping = ggplot2::aes(x = .data[[exposure]]),
+      #     data = dat,
+      #     inherit.aes = FALSE
+      #   ) +
+      #   ggplot2::scale_x_continuous(limits = c(
+      #     values[1],
+      #     values[length(values)]
+      #   )) +
+      #   ggplot2::labs(x = exposure, y = "dE[Y|A]/dA") +
+      #   ggplot2::theme_minimal()
+      ########################################################################
+      
+      ########################################################################
+      # Comparisons (marginal estimates)
+      ## Create dataframe with `high` and `low` values for exposure
+      df_comparisons <- myphd::create_df_marginal_comparisons(
+        dat = dat,
+        var = exposure,
+        percentiles = params_ana$type_avg_comparison,
+        by_var = "cohort"
+      )
+      
+      if (is.null(by)) {
+        by <- TRUE
+      } else {
+        by <- glue::double_quote(by)
+      }
+      
+      avg_comp <- eval(parse(
+        text = glue::glue(
+          "marginaleffects::avg_comparisons(
             model = mod,
             variables = list(
               {exposure} = df_comparisons
@@ -908,32 +923,30 @@ rq_estimate_marginal_effects <-
             wts = weights,
             vcov = {vcov}
           )",
-            exposure = exposure,
-            vcov = "~ cohort"
-          )
-        )) |> # End marginal estimates (avg_comparisons)
-          marginaleffects::tidy() |>
-          tidylog::rename(
-            variable = term,
-            se = std.error
-          )
-        ########################################################################
-
-        return(list(
-          gcomp = gcomp,
-          #adrf = adrf,
-          slopes = slopes,
-          #amef = amef,
-          comparisons = avg_comp
-        ))
-      },
-      .options = furrr::furrr_options(seed = TRUE),
-      p = p
-      ) # End loop over fitted models
-    }) # End progress bar
+          exposure = exposure,
+          vcov = "~ cohort"
+        )
+      )) |> # End marginal estimates (avg_comparisons)
+        marginaleffects::tidy() |>
+        tidylog::rename(
+          variable = term,
+          se = std.error
+        )
+      ########################################################################
+      
+      return(list(
+        gcomp = gcomp,
+        #adrf = adrf,
+        #slopes = slopes,
+        #amef = amef,
+        comparisons = avg_comp
+      ))
+    },
+    .options = furrr::furrr_options(seed = TRUE)
+    ) # End loop over fitted models
     future::plan(future::sequential)
     names(ret) <- names(fits)
-
+    
     return(list(marginal_effects = ret))
   } # End function rq_estimate_marginal_effects
 ################################################################################

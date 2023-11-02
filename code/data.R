@@ -153,8 +153,8 @@ load_steroids <- function() {
     ## Convert units of creatinine. Note: ng/mL = mcrg/L (metabolites).
     dd <- dd |>
       tidylog::mutate(
-        # Creatinine to g/L as in HELIX, instead of mcrM/mL.
-        creatinine_to_helix = Creatinine * 1e-6 * 113.12,
+        # Creatinine to g/L as in HELIX, instead of mcrmol/L.
+        creatinine_to_helix = Creatinine * 1.1312 * 1e-4,
       )
     ############################################################################
 

@@ -209,6 +209,7 @@ params <- function(is_hpc) {
         llodq = list(
           id_val = c(2, 4),
           method = "replace",
+          divide_by = 2,
           creatinine_threshold = NULL,
           threshold_within = threshold_within_lod,
           threshold_overall = threshold_overall_lod,
@@ -247,6 +248,7 @@ params <- function(is_hpc) {
         llodq = list(
           id_val = c(2, 4),
           method = "replace",
+          divide_by = 2,
           creatinine_threshold = NULL,
           threshold_within = threshold_within_lod,
           threshold_overall = threshold_overall_lod,
@@ -298,6 +300,7 @@ params <- function(is_hpc) {
         llodq = list(
           id_val = c(2, 4),
           method = "replace",
+          divide_by = 2,
           creatinine_threshold = NULL,
           threshold_within = threshold_within_lod,
           threshold_overall = threshold_overall_lod,
@@ -381,7 +384,6 @@ params_analyses <- function() {
     # WeightIt, Cobalt, marginaleffects
     method_weightit = "energy",
     stabilize = TRUE,
-    by = NULL,
     weights_trim = 0.9,
     sl_lib = c(
       "SL.glm",
@@ -392,7 +394,6 @@ params_analyses <- function() {
     method_marginal = "glm",
     family_marginal = gaussian(link = "identity"),
     add_inter_exposure = FALSE,
-    add_inter_exposure_specific = c(),
     add_splines_exposure = TRUE,
     df_splines = 3,
     threshold_smooth = 10,
