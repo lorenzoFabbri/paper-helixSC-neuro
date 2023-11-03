@@ -906,6 +906,7 @@ rq_estimate_marginal_effects <-
         by_var = "cohort"
       )
       
+      old_by <- by
       if (is.null(by)) {
         by <- TRUE
       } else {
@@ -932,6 +933,32 @@ rq_estimate_marginal_effects <-
           variable = term,
           se = std.error
         )
+      
+      avg_comp_hyp <- NULL
+      if (!is.null(old_by)) {
+        avg_comp_hyp <- eval(parse(
+          text = glue::glue(
+            "marginaleffects::avg_comparisons(
+            model = mod,
+            variables = list(
+              {exposure} = df_comparisons
+            ),
+            by = {by},
+            hypothesis = {hypothesis},
+            wts = weights,
+            vcov = {vcov}
+          )",
+            exposure = exposure,
+            hypothesis = glue::double_quote("pairwise"),
+            vcov = "~ cohort"
+          )
+        )) |> # End marginal estimates (avg_comparisons)
+          marginaleffects::tidy() |>
+          tidylog::rename(
+            variable = term,
+            se = std.error
+          )
+      }
       ########################################################################
       
       return(list(
@@ -939,7 +966,8 @@ rq_estimate_marginal_effects <-
         #adrf = adrf,
         #slopes = slopes,
         #amef = amef,
-        comparisons = avg_comp
+        comparisons = avg_comp,
+        hypothesis = avg_comp_hyp
       ))
     },
     .options = furrr::furrr_options(seed = TRUE)

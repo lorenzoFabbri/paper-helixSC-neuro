@@ -214,17 +214,16 @@
     },
     "RcppEigen": {
       "Package": "RcppEigen",
-      "Version": "0.3.3.9.3",
+      "Version": "0.3.3.9.4",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
-        "Matrix",
         "R",
         "Rcpp",
         "stats",
         "utils"
       ],
-      "Hash": "1e035db628cefb315c571202d70202fe"
+      "Hash": "acb0a5bf38490f26ab8661b467f4f53a"
     },
     "Rttf2pt1": {
       "Package": "Rttf2pt1",
@@ -1555,6 +1554,26 @@
       ],
       "Hash": "c76ee8fe60939384b9726128e38caea0"
     },
+    "ggstance": {
+      "Package": "ggstance",
+      "Version": "0.3.6.9000",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "ggstance",
+      "RemoteUsername": "lionel-",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "7e303d755624d3764d4543a18c9abdbd410e2767",
+      "Requirements": [
+        "R",
+        "cli",
+        "ggplot2",
+        "plyr",
+        "rlang",
+        "withr"
+      ],
+      "Hash": "146d44faed9097887bdea28000a943aa"
+    },
     "glmnet": {
       "Package": "glmnet",
       "Version": "4.1-8",
@@ -2225,7 +2244,7 @@
     },
     "lme4": {
       "Package": "lme4",
-      "Version": "1.1-34",
+      "Version": "1.1-35",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -2247,7 +2266,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "73ed88b282d27d4cf3d89b744aa21217"
+      "Hash": "d87e075484c058fc42da2bf65a494720"
     },
     "lmerTest": {
       "Package": "lmerTest",
@@ -2517,7 +2536,7 @@
       "RemoteRepo": "myphd",
       "RemoteUsername": "isglobal-cep",
       "RemoteRef": "HEAD",
-      "RemoteSha": "b727b1dbb243f436571886c0b5a5ab90a9396764",
+      "RemoteSha": "a9ed9cfe261c61f56b80533bf21254816eefedab",
       "Requirements": [
         "WeightIt",
         "assertthat",
@@ -2551,7 +2570,7 @@
         "tmvtnorm",
         "visdat"
       ],
-      "Hash": "54f8a221620764f98385a9c53a5ad61e"
+      "Hash": "c613dc4910d258eb79c19425edc3b59c"
     },
     "naniar": {
       "Package": "naniar",

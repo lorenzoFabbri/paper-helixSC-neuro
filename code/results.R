@@ -12,6 +12,7 @@ path_store <- ifelse(
 )
 num_digits_est <- 3
 num_digits_sig <- 2
+sa_var <- "e3_sex"
 ################################################################################
 
 # Table 1 (description population and outcome)
@@ -154,12 +155,12 @@ tbl_desc_vars(path_store = path_store)
 ################################################################################
 
 # Visualize weighs and marginal effects
-for (rq in c("1", "2", "3", "4")) {
+for (rq in c("1", "2", "3", "1SA", "2SA", "3SA")) {
   # Weighted fits
   ## Load objects
   targets::tar_load(
     dplyr::contains(paste0(
-      "rq", rq, "_weighted_fits_"
+      "rq", substr(rq, 1, 1), "_weighted_fits_"
     )),
     store = paste0(path_store, rq)
   )
@@ -167,9 +168,10 @@ for (rq in c("1", "2", "3", "4")) {
   ## Tidy results
   ret <- tidy_res_weighted_fits(
     res_list = mget(ls(
-      pattern = paste0("rq", rq, "_weighted_fits_*")
+      pattern = paste0("rq", substr(rq, 1, 1), "_weighted_fits_*")
     )),
-    rq = rq
+    rq = substr(rq, 1, 1),
+    sa_var = if (grepl("SA$", rq)) sa_var else NULL
   )
   
   ## Save results (plot and table)
@@ -181,7 +183,7 @@ for (rq in c("1", "2", "3", "4")) {
     width = 7,
     dpi = 300
   )
-  path <- "results/tables/marginal_effects/"
+  path <- "results/tables/weighted_fits/"
   name <- paste0("rq", rq, ".docx")
   gt::gtsave(
     data = ret$table,
@@ -190,24 +192,26 @@ for (rq in c("1", "2", "3", "4")) {
   
   ## Remove objects to save space
   rm(ret)
-  rm(list = ls(pattern = paste0("rq", rq, "_weighted_fits_*")))
+  rm(list = ls(pattern = paste0("rq", substr(rq, 1, 1), "_weighted_fits_*")))
   ##############################################################################
   
   # Marginal effects
   ## Load objects
   targets::tar_load(
     dplyr::contains(paste0(
-      "rq", rq, "_marginal_"
+      "rq", substr(rq, 1, 1), "_marginal_"
     )),
     store = paste0(path_store, rq)
   )
   
-  ## Tidy results
+  ## Tidy results (comparisons)
   ret <- tidy_res_meffects(
     marginal_effects = mget(ls(
-      pattern = paste0("rq", rq, "_marginal_*")
+      pattern = paste0("rq", substr(rq, 1, 1), "_marginal_*")
     )),
-    rq = rq
+    rq = substr(rq, 1, 1),
+    sa_var = if (grepl("SA$", rq)) sa_var else NULL,
+    which_res = "comparisons"
   )
   
   ## Save results (plot and table)
@@ -227,9 +231,38 @@ for (rq in c("1", "2", "3", "4")) {
     filename = paste0(path, name)
   )
   
+  ## Tidy results (hypothesis)
+  if (grepl("SA$", rq)) {
+    ret <- tidy_res_meffects(
+      marginal_effects = mget(ls(
+        pattern = paste0("rq", substr(rq, 1, 1), "_marginal_*")
+      )),
+      rq = substr(rq, 1, 1),
+      sa_var = sa_var,
+      which_res = "hypothesis"
+    )
+    
+    ## Save results (plot and table)
+    path <- "results/figures/marginal_effects/"
+    name <- paste0("rq", rq, "_hypothesis.pdf")
+    ggplot2::ggsave(
+      filename = paste0(path, name),
+      plot = ret$plot,
+      dpi = 300,
+      width = 9,
+      height = 8
+    )
+    path <- "results/tables/marginal_effects/"
+    name <- paste0("rq", rq, "_hypothesis.docx")
+    gt::gtsave(
+      data = ret$table,
+      filename = paste0(path, name)
+    )
+  }
+  
   ## Remove objects to save space
   rm(ret)
-  rm(list = ls(pattern = paste0("rq", rq, "_marginal_*")))
+  rm(list = ls(pattern = paste0("rq", substr(rq, 1, 1), "_marginal_*")))
 } # End loop tidy results
 ################################################################################
 

@@ -5,7 +5,7 @@
 #'
 #' @return
 #' @export
-tidy_res_weighted_fits <- function(res_list, rq) {
+tidy_res_weighted_fits <- function(res_list, rq, sa_var = NULL) {
   names_ <- gsub(paste0("rq", rq, "_weighted_fits_"),
                  "",
                  names(res_list))
@@ -21,6 +21,16 @@ tidy_res_weighted_fits <- function(res_list, rq) {
       return(ret)
     }) |>
       dplyr::bind_cols()
+    
+    # Check whether is SA and eventually add effect modifier
+    if (!is.null(sa_var)) {
+      tmp <- tmp |>
+        tidylog::mutate(
+          modifier = res_list[[1]]$fits[[1]]$dat[[sa_var]]
+        ) |>
+        dplyr::relocate(modifier)
+    }
+    
     tmp <- tmp |>
       tidylog::mutate(
         outcome = names_[[idx]]
@@ -28,6 +38,18 @@ tidy_res_weighted_fits <- function(res_list, rq) {
       dplyr::relocate(outcome)
   }) |> # End loop extract balancing weights
     dplyr::bind_rows()
+  if (!is.null(sa_var)) {
+    if (sa_var == "e3_sex") {
+      weights_ <- weights_ |>
+        tidylog::mutate(
+          modifier = dplyr::case_when(
+            modifier == 0 ~ "males",
+            modifier == 1 ~ "females",
+            .default = modifier
+          )
+        )
+    } # End if for e3_sex
+  }
   weights_wide <- weights_
   
   # Tidy data
@@ -36,7 +58,7 @@ tidy_res_weighted_fits <- function(res_list, rq) {
       outcome = gsub("_", " ", outcome)
     ) |>
     tidyr::pivot_longer(
-      cols = -c(outcome)
+      cols = -dplyr::any_of(c("outcome", "modifier"))
     ) |>
     tidylog::mutate(
       variable = name,
@@ -87,22 +109,27 @@ tidy_res_weighted_fits <- function(res_list, rq) {
     ggdist::stat_halfeye(alpha = 0.6) +
     ggplot2::geom_vline(
       xintercept = 1.0
-    ) +
-    ggplot2::facet_wrap(
-      ggplot2::vars(outcome),
-      ncol = length(names_),
-      scales = "free"
-    ) +
-    ggplot2::theme(
-      strip.text.x = ggplot2::element_blank(),
-      text = ggplot2::element_text(
-        size = 12
-      )
     )
   if (length(unique(weights_$class)) == 1) {
     plot <- plot +
       ggplot2::theme(
         legend.position = "null"
+      )
+  }
+  if (!is.null(sa_var)) {
+    plot <- plot +
+      ggplot2::facet_wrap(
+        ggplot2::vars(modifier),
+        ncol = length(unique(weights_$modifier)),
+        scales = "free"
+      )
+  } else {
+    plot <- plot +
+      ggplot2::theme(
+        strip.text.x = ggplot2::element_blank(),
+        text = ggplot2::element_text(
+          size = 12
+        )
       )
   }
   
@@ -112,10 +139,12 @@ tidy_res_weighted_fits <- function(res_list, rq) {
   )
   weights_wide <- weights_wide |>
     tidylog::select(-outcome)
+  by <- if (is.null(sa_var)) {NULL} else {"modifier"}
   tbl <- c("{median} ({p25}, {p75})", "{min}, {max}") |>
     purrr::map(
       ~ weights_wide |>
         gtsummary::tbl_summary(
+          by = by,
           statistic = gtsummary::all_continuous() ~ .x,
           missing = "ifany"
         )
@@ -126,13 +155,27 @@ tidy_res_weighted_fits <- function(res_list, rq) {
     ) |>
     gtsummary::modify_footnote(
       gtsummary::everything() ~ NA
-    ) |>
-    gtsummary::modify_header(
-      list(
-        stat_0_1 ~ "Median (IQR)",
-        stat_0_2 ~ "Range"
+    )
+  
+  if (is.null(sa_var)) {
+    tbl <- tbl |>
+      gtsummary::modify_spanning_header(
+        list(
+          stat_0_1 ~ "Median (IQR)",
+          stat_0_2 ~ "Range"
+        )
       )
-    ) |>
+  } else {
+    tbl <- tbl |>
+      gtsummary::modify_spanning_header(
+        list(
+          c(stat_1_1, stat_2_1) ~ "Median (IQR)",
+          c(stat_1_2, stat_2_2) ~ "Range"
+        )
+      )
+  }
+  
+  tbl <- tbl |>
     gtsummary::as_gt() |>
     gt::tab_footnote(
       footnote = "Truncated weights.",
@@ -152,7 +195,8 @@ tidy_res_weighted_fits <- function(res_list, rq) {
 #'
 #' @return
 #' @export
-tidy_res_meffects <- function(marginal_effects, rq) {
+tidy_res_meffects <- function(marginal_effects, rq, sa_var = NULL,
+                              which_res) {
   names_ <- gsub(paste0("rq", rq, "_marginal_"),
                  "",
                  names(marginal_effects))
@@ -170,16 +214,20 @@ tidy_res_meffects <- function(marginal_effects, rq) {
     # Table for one outcome and all exposures
     x <- marginal_effects[[idx]]
     if (length(x$marginal_effects) == 0) return(NULL)
-    df <- lapply(x$marginal_effects, "[[", "comparisons") |>
+    df <- lapply(x$marginal_effects, "[[", which_res) |>
       dplyr::bind_rows() |>
       tidylog::mutate(
         outcome = outcome,
         variable = gsub("hs_", "", variable),
         variable = gsub("_c", "", variable)
       ) |>
-      tidylog::select(-dplyr::all_of(
+      tidylog::select(-dplyr::any_of(
         c("contrast", "statistic")
       ))
+    
+    if (which_res == "hypothesis") {
+      df$variable <- names(x$marginal_effects)
+    }
     
     return(df)
   }) # End loop over results of marginal effects
@@ -193,6 +241,12 @@ tidy_res_meffects <- function(marginal_effects, rq) {
       variable = gsub("_", " ", variable),
       outcome = gsub("_", " ", outcome)
     )
+  if (!is.null(sa_var) & which_res != "hypothesis") {
+    all_res <- all_res |>
+      tidylog::rename(
+        modifier = sa_var
+      )
+  }
   
   if (rq %in% c("1", "2")) {
     info_edcs <- myphd::edcs_information() |>
@@ -217,7 +271,6 @@ tidy_res_meffects <- function(marginal_effects, rq) {
         )
       )
   }
-  names_ <- unique(df$outcome)
   df <- df |>
     tidylog::mutate(
       dplyr::across(
@@ -227,29 +280,68 @@ tidy_res_meffects <- function(marginal_effects, rq) {
             x, levels = sort(unique(x))
           )
         }
+      ),
+      dplyr::across(
+        dplyr::where(is.character),
+        \(x) stringr::str_trim(x, side = "both")
       )
     )
+  names_ <- unique(df$outcome)
+  if (!is.null(sa_var) & which_res != "hypothesis") {
+    if (sa_var == "e3_sex") {
+      df <- df |>
+        tidylog::mutate(
+          modifier = dplyr::case_when(
+            modifier == 0 ~ "males",
+            modifier == 1 ~ "females",
+            .default = modifier
+          )
+        )
+    } # End if for e3_sex
+  }
   
   # Forest plots side-by-side
-  plot <- df |>
-    ggplot2::ggplot(
-      mapping = ggplot2::aes(x = estimate,
-                             y = forcats::fct_reorder2(
-                               variable, estimate, class
-                             ),
-                             color = class)
-    ) +
+  if (is.null(sa_var) | which_res == "hypothesis") {
+    plot <- df |>
+      ggplot2::ggplot(
+        mapping = ggplot2::aes(x = estimate,
+                               y = forcats::fct_reorder2(
+                                 variable, estimate, class
+                               ),
+                               color = class)
+      )
+  } else {
+    plot <- df |>
+      ggplot2::ggplot(
+        mapping = ggplot2::aes(x = estimate,
+                               y = forcats::fct_reorder2(
+                                 variable, estimate, class
+                               ),
+                               color = class,
+                               shape = modifier)
+      )
+  }
+  position <- if (is.null(sa_var)) {"identity"} else {
+    ggstance::position_dodgev(height = 0.5)
+  }
+  plot <- plot +
+    ggplot2::scale_y_discrete() +
     ggplot2::geom_point(
       mapping = ggplot2::aes(
         size = .data[["s.value"]]
       ),
-      show.legend = FALSE
+      position = position,
+      show.legend = TRUE
+    ) +
+    ggplot2::guides(
+      size = "none"
     ) +
     ggplot2::geom_errorbar(
       mapping = ggplot2::aes(
         xmin = conf.low,
         xmax = conf.high
       ),
+      position = position,
       width = 0.0,
       linewidth = 0.3
     ) +
@@ -273,6 +365,9 @@ tidy_res_meffects <- function(marginal_effects, rq) {
     )
   
   # Pretty tables w/ numerical results
+  names_ <- if (is.null(sa_var) | which_res == "hypothesis") {names_} else {
+    paste0(names_, "_", c(unique(df$modifier)))
+  }
   df_gt <- df |>
     dplyr::arrange(
       outcome, class, dplyr::desc(variable)
@@ -298,11 +393,14 @@ tidy_res_meffects <- function(marginal_effects, rq) {
       )
     ) |>
     tidylog::select(
-      class, variable, outcome,
-      val
+      dplyr::any_of(c(
+        "class", "variable", "outcome",
+        "modifier",
+        "val"
+      ))
     ) |>
     tidyr::pivot_wider(
-      names_from = c("outcome"),
+      names_from = dplyr::any_of(c("outcome", "modifier")),
       values_from = c("val")
     ) |>
     gt::gt(
