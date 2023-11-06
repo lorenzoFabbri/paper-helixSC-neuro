@@ -1,7 +1,250 @@
 #' Title
 #'
-#' @param res_list 
 #' @param rq 
+#'
+#' @return
+#' @export
+tidy_codebooks <- function(rq) {
+  path_store <- Sys.getenv("path_store")
+  
+  ## Load objects
+  targets::tar_load(
+    paste0("rq", rq, "_preproc_dat"),
+    store = paste0(path_store, rq)
+  )
+  
+  ## Extract adjustments set used and mapped covariates
+  adj_set <- get(paste0("rq", rq, "_preproc_dat"))$adjustment_set
+  mapped_covars <- get(paste0("rq", rq, "_preproc_dat"))$mapping_covariates
+  actual_covars <- get(paste0("rq", rq, "_preproc_dat"))$covariates |>
+    colnames()
+  meta <- get(paste0("rq", rq, "_preproc_dat"))$meta |>
+    tidylog::filter(
+      dag %in% adj_set &
+        variable %in% mapped_covars
+    ) |>
+    tidylog::select(dag, variable, type, description, code, label,
+                    remark, comments)
+  meta <- meta |>
+    dplyr::rowwise() |>
+    tidylog::mutate(
+      included = ifelse(
+        variable %in% actual_covars,
+        TRUE, FALSE
+      )
+    )
+  perc_included <- round(sum(meta$included == TRUE) / nrow(meta) * 100, 2)
+  
+  ## Create tidy table
+  ret <- meta |>
+    tidylog::mutate(
+      dplyr::across(
+        dplyr::everything(),
+        as.character
+      )
+    ) |>
+    tidylog::group_by(dag) |>
+    dplyr::arrange(dag, variable) |>
+    tidylog::ungroup() |>
+    tidylog::rename(
+      coding = "code",
+      labels = "label",
+      remarks = "remark"
+    ) |>
+    tidylog::mutate(
+      dplyr::across(
+        c("coding", "labels", "remarks", "comments"),
+        \(x) ifelse(
+          x == "NA",
+          "", x
+        )
+      )
+    ) |>
+    gt::gt(
+      rowname_col = "variable",
+      groupname_col = "dag"
+    ) |>
+    gt::tab_style(
+      style = gt::cell_text(
+        weight = "bold"
+      ),
+      locations = gt::cells_row_groups()
+    ) |>
+    gt::sub_missing(
+      missing_text = ""
+    ) |>
+    gt::tab_footnote(
+      footnote = glue::glue(
+        "Percentage of confounders included in the models: {perc_included}%."
+      ),
+      locations = gt::cells_column_labels(columns = included)
+    )
+  
+  return(ret)
+} # End function tidy_codebooks
+################################################################################
+
+#' Title
+#'
+#' @param num_digits_est 
+#' @param num_digits_sig 
+#'
+#' @return
+#' @export
+tbl_desc_pop <- function(num_digits_est, num_digits_sig) {
+  path_store <- Sys.getenv("path_store")
+  
+  # Load data request (all variables)
+  params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
+  dat_request <- load_dat_request()
+  dat_request$dat <- dat_request$dat |>
+    tidylog::mutate(
+      cohort = dplyr::case_when(
+        cohort == "EDE" ~ "EDEN",
+        cohort == "KAN" ~ "KANC",
+        cohort == "MOB" ~ "MOBA",
+        cohort == "RHE" ~ "RHEA",
+        .default = cohort
+      )
+    )
+  ## Handle time variables
+  cols_to_season <- c("hs_date_neu", "e3_cbirth")
+  dat_request$dat <- myphd::convert_time_season(
+    dat = dat_request$dat,
+    cols = cols_to_season
+  ) |>
+    tidylog::mutate(dplyr::across(
+      dplyr::any_of(cols_to_season),
+      \(x) factor(x)
+    ))
+  
+  # Extract confounders by RQ
+  mapped_adj_sets <- list()
+  for (rq in c("1", "2", "3")) {
+    targets::tar_load(
+      paste0("rq", rq, "_preproc_dat"),
+      store = paste0(path_store, rq)
+    )
+    
+    # Only actually used covariates
+    mapped_adj_sets[[paste0("rq",
+                            rq)]] <- colnames(get(
+                              paste0("rq", rq, "_preproc_dat")
+                            )$covariates)
+  }
+  
+  # Select confounders and clinical outcome in data request
+  all_confounders <- mapped_adj_sets |>
+    unlist() |>
+    unname() |>
+    unique()
+  df <- dat_request$dat |>
+    tidylog::select(
+      HelixID,
+      params_dat$variables$rq1$outcome,
+      dplyr::any_of(all_confounders)
+    )
+  ## Must add creatinine from IMIM and remove chemicals
+  df <- df |>
+    tidylog::left_join(
+      rq2_preproc_dat$covariates |>
+        tidylog::select(HelixID, creatinine_to_helix),
+      by = "HelixID"
+    ) |>
+    tidylog::select(
+      -HelixID,
+      -dplyr::matches("^hs_.*_c|_cadj$")
+    )
+  
+  # Add metadata for better labels
+  df_meta <- myphd::add_metadata(
+    dat = df,
+    metadat = dat_request$meta,
+    categorical_types = c("categorical", "character", "integer"),
+    cols_to_exclude = c("cohort")
+  )
+  
+  # Generate "Table 1"
+  desc_covars <- df_meta |>
+    gtsummary::tbl_summary(
+      by = "cohort",
+      type = list(
+        hs_fastfood ~ "continuous",
+        hs_org_food ~ "continuous"
+      ),
+      statistic = list(
+        gtsummary::all_continuous() ~ c(
+          "{median} ({p25}, {p75})"
+        ),
+        gtsummary::all_categorical() ~ "{n} ({p}%)"
+      )
+    ) |>
+    gtsummary::add_overall()
+  
+  # Save table
+  path <- "results/tables/"
+  name <- "tbl_desc_pop.docx"
+  # gt::gtsave(
+  #   data = desc_covars |>
+  #     gtsummary::as_gt(),
+  #   filename = paste0(path, name)
+  # )
+  
+  return(gtsummary::as_gt(desc_covars))
+} # End function tbl_desc_pop
+################################################################################
+
+#' Title
+#'
+#' @return
+#' @export
+tbl_desc_vars <- function() {
+  path_store <- Sys.getenv("path_store")
+  
+  ## Load objects
+  rq <- "02"
+  targets::tar_load(
+    "rq02_desc_data_exp",
+    store = paste0(path_store, rq)
+  )
+  
+  ## Save table
+  path <- "results/tables/"
+  name <- "tbl_desc_chemicals.docx"
+  # gt::gtsave(
+  #   data = rq02_desc_data_exp$step3 |>
+  #     gtsummary::as_gt(),
+  #   filename = paste0(path, name)
+  # )
+  ##############################################################################
+  
+  ## Load objects
+  targets::tar_load(
+    "rq02_desc_data_out",
+    store = paste0(path_store, rq)
+  )
+  
+  ## Save table
+  path <- "results/tables/"
+  name <- "tbl_desc_metabolites.docx"
+  # gt::gtsave(
+  #   data = rq02_desc_data_out$step3 |>
+  #     gtsummary::as_gt(),
+  #   filename = paste0(path, name)
+  # )
+  
+  return(list(
+    desc_chems = gtsummary::as_gt(rq02_desc_data_exp$step3),
+    desc_mets = gtsummary::as_gt(rq02_desc_data_out$step3)
+  ))
+} # End function tbl_desc_vars
+################################################################################
+
+#' Title
+#'
+#' @param res_list
+#' @param rq
+#' @param sa_var
 #'
 #' @return
 #' @export
@@ -187,16 +430,22 @@ tidy_res_weighted_fits <- function(res_list, rq, sa_var = NULL) {
     plot = plot
   ))
 } # End function tidy_res_weighted_fits
+################################################################################
 
 #' Title
 #'
 #' @param marginal_effects 
 #' @param rq 
+#' @param sa_var
+#' @param which_res
+#' @param num_digits_est
+#' @param num_digits_sig
 #'
 #' @return
 #' @export
 tidy_res_meffects <- function(marginal_effects, rq, sa_var = NULL,
-                              which_res) {
+                              which_res,
+                              num_digits_est, num_digits_sig) {
   names_ <- gsub(paste0("rq", rq, "_marginal_"),
                  "",
                  names(marginal_effects))
@@ -243,8 +492,8 @@ tidy_res_meffects <- function(marginal_effects, rq, sa_var = NULL,
     )
   if (!is.null(sa_var) & which_res != "hypothesis") {
     all_res <- all_res |>
-      tidylog::rename(
-        modifier = sa_var
+      tidylog::rename_with(
+        ~ c("modifier"), dplyr::all_of(c(sa_var))
       )
   }
   
@@ -434,6 +683,7 @@ tidy_res_meffects <- function(marginal_effects, rq, sa_var = NULL,
     plot = plot
   ))
 } # End function tidy_res_meffects
+################################################################################
 
 #' Visualize overlap of a variable based on a grouping factor
 #'
@@ -454,7 +704,7 @@ viz_overlap_quantiles <- function(dat,
   dat_proc <- dat |>
     tidylog::select(-dplyr::any_of(id_var))
   vars <- setdiff(colnames(dat_proc), group_var)
-
+  
   # Plot
   ret <- lapply(vars, function(x) {
     dat_proc |>
@@ -492,9 +742,10 @@ viz_overlap_quantiles <- function(dat,
         )
       )
   }) # End loop over variables to plot
-
+  
   return(ret)
 } # End function viz_overlap_quantiles
+################################################################################
 
 #' Visualize the clinical outcome across age and by sex
 #'
@@ -518,10 +769,10 @@ viz_clinical_outcome <- function() {
       hrt = {{ outcome }}
     )
   dat_sel$sex <- factor(dat_sel$sex,
-    levels = c(0, 1),
-    labels = c("male", "female")
+                        levels = c(0, 1),
+                        labels = c("male", "female")
   )
-
+  
   # Create summary
   ret <- ggplot2::ggplot(
     dat_sel,
@@ -553,9 +804,10 @@ viz_clinical_outcome <- function() {
       name = "Sex"
     ) +
     ggplot2::theme_minimal()
-
+  
   return(ret)
 } # End function viz_clinical_outcome
+################################################################################
 
 #' Visualize the types of the variables of interest by cohort
 #'
@@ -581,7 +833,7 @@ viz_desc_vars <- function(dat, vars, fct_levels, is_chem) {
       name = gsub("^X", "", name)
     )
   df_long$value <- factor(df_long$value,
-    levels = fct_levels
+                          levels = fct_levels
   )
   # Pivot to long and compute frequencies
   freqs <- df |>
@@ -595,12 +847,12 @@ viz_desc_vars <- function(dat, vars, fct_levels, is_chem) {
     tidylog::mutate(
       name = gsub("^X", "", name)
     )
-
+  
   # Join counts and frequencies
   df_plot <- tidylog::full_join(df_long, freqs,
-    by = c("cohort", "name", "value")
+                                by = c("cohort", "name", "value")
   )
-
+  
   # Heatmap
   plt <- df_plot |>
     dplyr::rowwise() |>
@@ -617,8 +869,8 @@ viz_desc_vars <- function(dat, vars, fct_levels, is_chem) {
     ggplot2::ggplot(ggplot2::aes(variable, description)) +
     ggplot2::geom_tile(ggplot2::aes(fill = frequency)) +
     ggplot2::geom_text(ggplot2::aes(label = round(frequency, 0)),
-      color = "black",
-      size = 2.5
+                       color = "black",
+                       size = 2.5
     ) +
     ggplot2::scale_fill_distiller(palette = "Blues", direction = 1) +
     ggplot2::coord_fixed() +
@@ -636,14 +888,14 @@ viz_desc_vars <- function(dat, vars, fct_levels, is_chem) {
         hjust = 1
       )
     )
-
+  
   df_plot <- df_plot |>
     dplyr::arrange(
       dplyr::desc(value),
       name,
       dplyr::desc(f)
     )
-
+  
   return(list(
     dat = df_plot,
     plot = plt

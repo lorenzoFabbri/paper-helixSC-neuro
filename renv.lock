@@ -1678,7 +1678,7 @@
     },
     "graphlayouts": {
       "Package": "graphlayouts",
-      "Version": "1.0.1",
+      "Version": "1.0.2",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1687,7 +1687,7 @@
         "RcppArmadillo",
         "igraph"
       ],
-      "Hash": "5da48b0c093d8ac824e41255fb9ba197"
+      "Hash": "468c98df6feea8aacf159eee906e7ee8"
     },
     "gridExtra": {
       "Package": "gridExtra",
@@ -1864,7 +1864,7 @@
     },
     "htmltools": {
       "Package": "htmltools",
-      "Version": "0.5.6.1",
+      "Version": "0.5.7",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1877,7 +1877,7 @@
         "rlang",
         "utils"
       ],
-      "Hash": "1e12fe667316a76508898839ecfb2d00"
+      "Hash": "2d7b3857980e0e0d0a1fd6f11928ab0f"
     },
     "htmlwidgets": {
       "Package": "htmlwidgets",
@@ -2244,7 +2244,7 @@
     },
     "lme4": {
       "Package": "lme4",
-      "Version": "1.1-35",
+      "Version": "1.1-35.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -2266,7 +2266,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "d87e075484c058fc42da2bf65a494720"
+      "Hash": "07fb0c5b727b15b0ce40feb641498e4e"
     },
     "lmerTest": {
       "Package": "lmerTest",
@@ -3215,14 +3215,14 @@
     },
     "rlang": {
       "Package": "rlang",
-      "Version": "1.1.1",
+      "Version": "1.1.2",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R",
         "utils"
       ],
-      "Hash": "a85c767b55f0bf9b7ad16c6d7baee5bb"
+      "Hash": "50a6dbdc522936ca35afc5e2082ea91b"
     },
     "rmarkdown": {
       "Package": "rmarkdown",
@@ -3275,13 +3275,13 @@
     },
     "rprojroot": {
       "Package": "rprojroot",
-      "Version": "2.0.3",
+      "Version": "2.0.4",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
-      "Hash": "1de7ab598047a87bba48434ba35d497d"
+      "Hash": "4c8415e0ec1e29f3f4f6fc108bef0144"
     },
     "rstudioapi": {
       "Package": "rstudioapi",

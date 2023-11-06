@@ -2,8 +2,14 @@ Sys.setenv(is_hpc = TRUE)
 # Custom path to _targets for different research questions
 path_store <- ifelse(
   Sys.getenv("is_hpc"), 
-  "/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/_targets/_targetsRQ", 
-  "~/mounts/rstudioserver/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF/data/data_paper3/_targets/_targetsRQ"
+  paste0(
+    "/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF/",
+    "data/data_paper3/_targets/_targetsRQ"
+  ), 
+  paste0(
+    "~/mounts/rstudioserver/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/",
+    "lorenzoF/data/data_paper3/_targets/_targetsRQ"
+  )
 )
 Sys.setenv(path_store = path_store)
 
@@ -30,3 +36,12 @@ for (rq in c("1", "2", "3", "4")) {
                       store = store)
   }
 }
+
+# Process results for paper
+targets::tar_make(
+  script = "_targets_res.R",
+  store = paste0(
+    "/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF/",
+    "data/data_paper3/_targets/_targets_res"
+  )
+)

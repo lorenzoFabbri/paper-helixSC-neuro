@@ -367,16 +367,20 @@ rq_prepare_data <- function(dat) {
       c(params_dat$variables$identifier,
         "F", "cortisol_production")
     )
-    dat$exposures <- create_steroid_scores(dat = dat$exposures) |>
-      tidylog::select(-dplyr::all_of(cols_to_remove))
+    dat$exposures <- create_steroid_scores(dat = dat$exposures)
     
     # Pre-process scores
     dat$exposures <- myphd::handle_transformation(
-      dat = dat$exposures,
+      dat = myphd::extract_cohort(
+        dat$exposures,
+        id_var = "HelixID"
+      ),
       id_var = params_dat$variables$identifier,
       by_var = "cohort",
       transformation_fun = log
-    )
+    ) |>
+      tidylog::select(-cohort) |>
+      tidylog::select(-dplyr::all_of(cols_to_remove))
   }
 
   # Process outcome
@@ -408,14 +412,15 @@ rq_prepare_data <- function(dat) {
     
     # Pre-process scores
     dat$outcome <- myphd::handle_transformation(
-      dat = dat$outcome,
+      dat = myphd::extract_cohort(
+        dat$outcome,
+        id_var = "HelixID"
+      ),
       id_var = params_dat$variables$identifier,
       by_var = "cohort",
       transformation_fun = log
-    )
-    
-    # Remove single metabolites
-    dat$outcome <- dat$outcome |>
+    ) |>
+      tidylog::select(-cohort) |>
       tidylog::select(-dplyr::all_of(cols_to_remove))
   }
   
