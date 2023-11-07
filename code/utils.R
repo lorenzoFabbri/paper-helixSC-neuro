@@ -323,7 +323,7 @@ rq_prepare_data <- function(dat) {
   steps_outcome <- params_dat$steps[[rq]]$preproc_outcome
 
   # Create folders to store results
-  invisible(lapply(c("figures", "tables"), function(x) {
+  invisible(lapply(c("figures"), function(x) {
     path_save_res <- paste0(
       "results/", x, "/", rq
     )

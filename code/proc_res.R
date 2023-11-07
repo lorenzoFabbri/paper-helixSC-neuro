@@ -242,100 +242,15 @@ tbl_desc_vars <- function() {
 
 #' Title
 #'
-#' @param res_list
-#' @param rq
+#' @param dat_tbl
+#' @param dat_plt
 #' @param sa_var
 #'
 #' @return
 #' @export
-tidy_res_weighted_fits <- function(res_list, rq, sa_var = NULL) {
-  names_ <- gsub(paste0("rq", rq, "_weighted_fits_"),
-                 "",
-                 names(res_list))
-  
-  weights_ <- lapply(1:1, function(idx) {
-    outcome <- gsub(paste0("rq", rq, "_weighted_fits_"),
-                    "",
-                    names_[idx])
-    tmp <- lapply(res_list[[idx]]$fits, "[[", "weights")
-    tmp <- lapply(seq_along(tmp), function(idx2) {
-      ret <- tibble::tibble(tmp[[idx2]])
-      colnames(ret) <- names(tmp)[idx2]
-      return(ret)
-    }) |>
-      dplyr::bind_cols()
-    
-    # Check whether is SA and eventually add effect modifier
-    if (!is.null(sa_var)) {
-      tmp <- tmp |>
-        tidylog::mutate(
-          modifier = res_list[[1]]$fits[[1]]$dat[[sa_var]]
-        ) |>
-        dplyr::relocate(modifier)
-    }
-    
-    tmp <- tmp |>
-      tidylog::mutate(
-        outcome = names_[[idx]]
-      ) |>
-      dplyr::relocate(outcome)
-  }) |> # End loop extract balancing weights
-    dplyr::bind_rows()
-  if (!is.null(sa_var)) {
-    if (sa_var == "e3_sex") {
-      weights_ <- weights_ |>
-        tidylog::mutate(
-          modifier = dplyr::case_when(
-            modifier == 0 ~ "males",
-            modifier == 1 ~ "females",
-            .default = modifier
-          )
-        )
-    } # End if for e3_sex
-  }
-  weights_wide <- weights_
-  
-  # Tidy data
-  weights_ <- weights_ |>
-    tidylog::mutate(
-      outcome = gsub("_", " ", outcome)
-    ) |>
-    tidyr::pivot_longer(
-      cols = -dplyr::any_of(c("outcome", "modifier"))
-    ) |>
-    tidylog::mutate(
-      variable = name,
-      outcome = replace(
-        outcome, outcome == "x11bhsd", "11bhsd"
-      ),
-      variable = replace(
-        variable, variable == "x11bhsd", "11bhsd"
-      ),
-      variable = gsub("hs_", "", variable),
-      variable = gsub("_c", "", variable),
-      variable = gsub("_", " ", variable),
-      outcome = gsub("_", " ", outcome)
-    ) |>
-    tidylog::select(-name)
-  
-  if (rq %in% c("1", "2")) {
-    info_edcs <- myphd::edcs_information() |>
-      tibble::as_tibble()
-    weights_ <- weights_ |>
-      tidylog::left_join(
-        info_edcs |>
-          tidylog::select(chem_id, class),
-        by = c("variable" = "chem_id")
-      )
-  } else {
-    weights_ <- weights_ |>
-      tidylog::mutate(
-        class = c("TMP")
-      )
-  }
-  
+tidy_res_weighted_fits <- function(dat_tbl, dat_plt, sa_var = NULL) {
   # Plot distribution of weights
-  plot <- weights_ |>
+  plot <- dat_plt |>
     ggplot2::ggplot(
       ggplot2::aes(
         x = value,
@@ -353,7 +268,7 @@ tidy_res_weighted_fits <- function(res_list, rq, sa_var = NULL) {
     ggplot2::geom_vline(
       xintercept = 1.0
     )
-  if (length(unique(weights_$class)) == 1) {
+  if (length(unique(dat_plt$class)) == 1) {
     plot <- plot +
       ggplot2::theme(
         legend.position = "null"
@@ -363,7 +278,7 @@ tidy_res_weighted_fits <- function(res_list, rq, sa_var = NULL) {
     plot <- plot +
       ggplot2::facet_wrap(
         ggplot2::vars(modifier),
-        ncol = length(unique(weights_$modifier)),
+        ncol = length(unique(dat_plt$modifier)),
         scales = "free"
       )
   } else {
@@ -377,15 +292,15 @@ tidy_res_weighted_fits <- function(res_list, rq, sa_var = NULL) {
   }
   
   # Tidy table with numerical values
-  colnames(weights_wide) <- gsub(
-    "hs_|_c", "", colnames(weights_wide)
+  colnames(dat_tbl) <- gsub(
+    "hs_|_c", "", colnames(dat_tbl)
   )
-  weights_wide <- weights_wide |>
+  dat_tbl <- dat_tbl |>
     tidylog::select(-outcome)
   by <- if (is.null(sa_var)) {NULL} else {"modifier"}
   tbl <- c("{median} ({p25}, {p75})", "{min}, {max}") |>
     purrr::map(
-      ~ weights_wide |>
+      ~ dat_tbl |>
         gtsummary::tbl_summary(
           by = by,
           statistic = gtsummary::all_continuous() ~ .x,
@@ -434,8 +349,7 @@ tidy_res_weighted_fits <- function(res_list, rq, sa_var = NULL) {
 
 #' Title
 #'
-#' @param marginal_effects 
-#' @param rq 
+#' @param df
 #' @param sa_var
 #' @param which_res
 #' @param num_digits_est
@@ -443,112 +357,9 @@ tidy_res_weighted_fits <- function(res_list, rq, sa_var = NULL) {
 #'
 #' @return
 #' @export
-tidy_res_meffects <- function(marginal_effects, rq, sa_var = NULL,
+tidy_res_meffects <- function(df, sa_var = NULL,
                               which_res,
                               num_digits_est, num_digits_sig) {
-  names_ <- gsub(paste0("rq", rq, "_marginal_"),
-                 "",
-                 names(marginal_effects))
-  
-  ret <- lapply(seq_along(marginal_effects), function(idx) {
-    outcome <- gsub(paste0("rq", rq, "_marginal_"),
-                    "",
-                    names(marginal_effects[idx]))
-    if (outcome != "x11bhsd") {
-      outcome <- gsub("hs", "", outcome)
-    } else {
-      outcome <- "11bhsd"
-    }
-    
-    # Table for one outcome and all exposures
-    x <- marginal_effects[[idx]]
-    if (length(x$marginal_effects) == 0) return(NULL)
-    df <- lapply(x$marginal_effects, "[[", which_res) |>
-      dplyr::bind_rows() |>
-      tidylog::mutate(
-        outcome = outcome,
-        variable = gsub("hs_", "", variable),
-        variable = gsub("_c", "", variable)
-      ) |>
-      tidylog::select(-dplyr::any_of(
-        c("contrast", "statistic")
-      ))
-    
-    if (which_res == "hypothesis") {
-      df$variable <- names(x$marginal_effects)
-    }
-    
-    return(df)
-  }) # End loop over results of marginal effects
-  names(ret) <- names_
-  
-  # Tidy
-  all_res <- purrr::reduce(ret, dplyr::bind_rows) |>
-    tidylog::mutate(
-      variable = gsub("hs_", "", variable),
-      variable = gsub("_c", "", variable),
-      variable = gsub("_", " ", variable),
-      outcome = gsub("_", " ", outcome)
-    )
-  if (!is.null(sa_var) & which_res != "hypothesis") {
-    all_res <- all_res |>
-      tidylog::rename_with(
-        ~ c("modifier"), dplyr::all_of(c(sa_var))
-      )
-  }
-  
-  if (rq %in% c("1", "2")) {
-    info_edcs <- myphd::edcs_information() |>
-      tibble::as_tibble()
-    df <- all_res |>
-      tidylog::left_join(
-        info_edcs |>
-          tidylog::select(chem_id, class),
-        by = c("variable" = "chem_id")
-      ) |>
-      tidylog::mutate(
-        outcome = replace(
-          outcome, outcome == "x11bhsd", "11bhsd"
-        )
-      )
-  } else {
-    df <- all_res |>
-      tidylog::mutate(
-        class = c("TMP"),
-        variable = replace(
-          variable, variable == "x11bhsd", "11bhsd"
-        )
-      )
-  }
-  df <- df |>
-    tidylog::mutate(
-      dplyr::across(
-        c("class", "variable"),
-        \(x) {
-          x = factor(
-            x, levels = sort(unique(x))
-          )
-        }
-      ),
-      dplyr::across(
-        dplyr::where(is.character),
-        \(x) stringr::str_trim(x, side = "both")
-      )
-    )
-  names_ <- unique(df$outcome)
-  if (!is.null(sa_var) & which_res != "hypothesis") {
-    if (sa_var == "e3_sex") {
-      df <- df |>
-        tidylog::mutate(
-          modifier = dplyr::case_when(
-            modifier == 0 ~ "males",
-            modifier == 1 ~ "females",
-            .default = modifier
-          )
-        )
-    } # End if for e3_sex
-  }
-  
   # Forest plots side-by-side
   if (is.null(sa_var) | which_res == "hypothesis") {
     plot <- df |>
@@ -614,6 +425,7 @@ tidy_res_meffects <- function(marginal_effects, rq, sa_var = NULL,
     )
   
   # Pretty tables w/ numerical results
+  names_ <- unique(df$outcome)
   names_ <- if (is.null(sa_var) | which_res == "hypothesis") {names_} else {
     paste0(names_, "_", c(unique(df$modifier)))
   }

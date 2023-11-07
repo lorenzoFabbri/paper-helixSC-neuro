@@ -97,5 +97,3 @@ execute:
 
 ::: {#refs}
 :::
-
-{{< embed tables.qmd >}}

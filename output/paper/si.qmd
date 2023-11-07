@@ -5,6 +5,10 @@ format:
   docx:
     reference-doc: reference_document.docx
 
+crossref:
+  fig-title: Supplementary Figure
+  tbl-title: Supplementary Table
+
 bibliography: bibliography.bib
 csl: ama11.csl
 
@@ -21,6 +25,24 @@ execute:
   message: false
 ---
 
+```{r}
+source("code/proc_res.R")
+```
+
+```{r vars}
+store <- ifelse(
+  Sys.getenv("is_hpc"), 
+  paste0(
+    "/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/",
+    "lorenzoF/data/data_paper3/_targets/_targets_res"
+  ), 
+  "~/mounts/rstudioserver/data/data_paper3/_targets/_targets_res"
+)
+
+num_digits_est = 3
+num_digits_sig = 2
+```
+
 - Should be limited to results of secondary analyses and background details needed to ensure transparency:
   - Questionnaires.
   - Tables and figures with results of sensitivity analyses.
@@ -30,6 +52,21 @@ execute:
 - Number supplemental tables and figures separately according to the order in which they are first mentioned in the main text, using an "S" prefix.
 
 # Supplementary information
+
+## Directed Acyclic Graphs
+
+```{r dag-1}
+targets::tar_load("all_dags", store = store)
+cat(all_dags$chem_to_out)
+```
+
+```{r dag-2}
+cat(all_dags$chem_to_marker)
+```
+
+```{r dag-3}
+cat(all_dags$marker_to_out)
+```
 
 # Supplementary tables
 
@@ -41,6 +78,75 @@ execute:
 
 - Detailed characteristics of study participants (demographic, clinical, social), by cohort and overall.
 
+```{r codebook-1}
+#| label: tbl-codebook-1
+#| tbl-cap: Codebook for covariates used in RQ1
+
+targets::tar_load(
+  dplyr::contains("codebook_"),
+  store = store
+)
+codebook_1
+```
+
+```{r codebook-2}
+#| label: tbl-codebook-2
+#| tbl-cap: Codebook for covariates used in RQ2
+
+codebook_2
+```
+
+```{r codebook-3}
+#| label: tbl-codebook-3
+#| tbl-cap: Codebook for covariates used in RQ3
+
+codebook_3
+```
+
+## Other results
+
+### Balancing weights for effect modification
+
+```{r}
+targets::tar_load(
+  dplyr::matches("weights_(\\d)SA$"),
+  store = store
+)
+```
+
+```{r weights-1sa}
+#| label: tbl-weights-1sa
+#| tbl-cap: Weights
+
+tidy_res_weighted_fits(
+  dat_tbl = weights_1SA$dat_tbl,
+  dat_plt = weights_1SA$dat_plt,
+  sa_var = "e3_sex"
+)$table
+```
+
+```{r weights-2sa}
+#| label: tbl-weights-2sa
+#| tbl-cap: Weights
+
+tidy_res_weighted_fits(
+  dat_tbl = weights_2SA$dat_tbl,
+  dat_plt = weights_2SA$dat_plt,
+  sa_var = "e3_sex"
+)$table
+```
+
+```{r weights-3sa}
+#| label: tbl-weights-3sa
+#| tbl-cap: Weights
+
+tidy_res_weighted_fits(
+  dat_tbl = weights_3SA$dat_tbl,
+  dat_plt = weights_3SA$dat_plt,
+  sa_var = "e3_sex"
+)$table
+```
+
 # Supplementary figures
 
 - Provide the title for each figure below the figure on the same manuscript page as the figure itself.
@@ -49,6 +155,62 @@ execute:
 
 - ADRF and AMEF for RQ2 and RQ3.
 - Whole distribution (i.e., density) of e.g., risk differences (instead of marginalized estimates), with lines for mean and median.
+
+## Other results
+
+### Marginal comparisons for effect modification
+
+```{r}
+targets::tar_load(
+  dplyr::matches("marginal_comparisons_(\\d)SA$"),
+  store = store
+)
+```
+
+```{r marginal-1sa}
+#| label: fig-marginal-1sa
+#| fig-cap: Average comparisons for effect modification
+#| fig-width: 6
+#| fig-height: 7
+
+tidy_res_meffects(
+  df = marginal_comparisons_1SA,
+  sa_var = "e3_sex",
+  which_res = "comparisons",
+  num_digits_est = num_digits_est,
+  num_digits_sig = num_digits_sig
+)$plot
+```
+
+```{r marginal-2sa}
+#| label: fig-marginal-2sa
+#| fig-cap: Average comparisons for effect modification
+#| fig-width: 10
+#| fig-height: 10
+
+tidy_res_meffects(
+  df = marginal_comparisons_2SA,
+  sa_var = "e3_sex",
+  which_res = "comparisons",
+  num_digits_est = num_digits_est,
+  num_digits_sig = num_digits_sig
+)$plot
+```
+
+```{r marginal-3sa}
+#| label: fig-marginal-3sa
+#| fig-cap: Average comparisons for effect modification
+#| fig-width: 5
+#| fig-height: 5
+
+tidy_res_meffects(
+  df = marginal_comparisons_3SA,
+  sa_var = "e3_sex",
+  which_res = "comparisons",
+  num_digits_est = num_digits_est,
+  num_digits_sig = num_digits_sig
+)$plot
+```
 
 # References {.unnumbered}
 

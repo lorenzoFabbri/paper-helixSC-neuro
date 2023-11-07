@@ -18,6 +18,24 @@ execute:
   message: false
 ---
 
+```{r}
+source("code/proc_res.R")
+```
+
+```{r vars}
+store <- ifelse(
+  Sys.getenv("is_hpc"), 
+  paste0(
+    "/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/",
+    "lorenzoF/data/data_paper3/_targets/_targets_res"
+  ), 
+  "~/mounts/rstudioserver/data/data_paper3/_targets/_targets_res"
+)
+
+num_digits_est = 3
+num_digits_sig = 2
+```
+
 - Begin each table on a new page after the list of references, numbered with Arabic numerals.
 - Leave blank spaces for no entry.
 - Tables may not contain parts.
@@ -33,38 +51,25 @@ execute:
   - Indicate number of participants with missing data for each variable of interest.
   - Report numbers of outcome events or summary measures.
 
+```{r pop-desc}
+#| label: tbl-pop-desc
+#| tbl-cap: Population description
+
+targets::tar_load("table1", store = store)
+table1
+```
+
 ## Endocrine disruptors
 
 - Levels of unprocessed biomarkers (chemicals), with IDs.
 - Report: minimum and maximum, percentiles, and number of observations above/below the assay's LOD and LOQ.
 
-```{r}
-#| label: tbl-chem-info
-#| tbl-cap: "Information about the non-persistent EDCs."
+```{r edc-desc}
+#| label: tbl-edc-desc
+#| tbl-cap: Levels of unprocessed chemicals
 
-edcs_info <- myphd::edcs_information() |>
-  tidylog::select(-c(chem_id, smiles))
-gt::gt(edcs_info,
-       groupname_col = "class") |>
-  gt::cols_label(
-    full_name = "Compound",
-    short_name = "Symbol",
-    pubchem_cid = "PubChem CID",
-    ctd_id = "CTD ID",
-    exposome_explorer_id = "Exposome Explore ID",
-    parental_compound = "Parental compound"
-  ) |>
-  gt::tab_style(
-    locations = gt::cells_column_labels(columns = everything()),
-    style = list(
-      gt::cell_borders(sides = "bottom", weight = gt::px(3)),
-      gt::cell_text(weight = "bold")
-    )
-  ) |>
-  gt::tab_style(
-    locations = gt::cells_row_groups(group = dplyr::everything()),
-    style = list(gt::cell_text(weight = "bold"))
-  )
+targets::tar_load("desc_chems_mets", store = store)
+desc_chems_mets$desc_chems
 ```
 
 ## Corticosteroids
@@ -72,9 +77,151 @@ gt::gt(edcs_info,
 - Levels of unprocessed biomarkers (metabolites), with IDs.
 - Table comparing subjects with and without measurement of steroids.
 
+```{r met-desc}
+#| label: tbl-met-desc
+#| tbl-cap: Levels of unprocessed corticosteroids
+
+desc_chems_mets$desc_mets
+```
+
 # Main results
 
-- RQ2: group chemicals by class, and for each chemical report results with metabolites (`avg_comparisons` with estimate, SE, s-value, CI).
-- RQ3: report results with outcome (`avg_comparisons` with estimate, SE, s-value, CI).
+## Balancing weights
+
+```{r}
+targets::tar_load(
+  dplyr::matches("weights_(\\d)$"),
+  store = store
+)
+```
+
+```{r weights-1}
+#| label: tbl-weights-1
+#| tbl-cap: Weights
+
+tidy_res_weighted_fits(
+  dat_tbl = weights_1$dat_tbl,
+  dat_plt = weights_1$dat_plt,
+  sa_var = NULL
+)$table
+```
+
+```{r weights-2}
+#| label: tbl-weights-2
+#| tbl-cap: Weights
+
+tidy_res_weighted_fits(
+  dat_tbl = weights_2$dat_tbl,
+  dat_plt = weights_2$dat_plt,
+  sa_var = NULL
+)$table
+```
+
+```{r weights-3}
+#| label: tbl-weights-3
+#| tbl-cap: Weights
+
+tidy_res_weighted_fits(
+  dat_tbl = weights_3$dat_tbl,
+  dat_plt = weights_3$dat_plt,
+  sa_var = NULL
+)$table
+```
+
+## Marginal comparisons
+
+```{r}
+targets::tar_load(
+  dplyr::matches("marginal_comparisons_(\\d)$"),
+  store = store
+)
+```
+
+```{r marginal-1}
+#| label: tbl-marginal-1
+#| tbl-cap: Average comparisons
+
+tidy_res_meffects(
+  df = marginal_comparisons_1,
+  sa_var = NULL,
+  which_res = "comparisons",
+  num_digits_est = num_digits_est,
+  num_digits_sig = num_digits_sig
+)$table
+```
+
+```{r marginal-2}
+#| label: tbl-marginal-2
+#| tbl-cap: Average comparisons
+
+tidy_res_meffects(
+  df = marginal_comparisons_2,
+  sa_var = NULL,
+  which_res = "comparisons",
+  num_digits_est = num_digits_est,
+  num_digits_sig = num_digits_sig
+)$table
+```
+
+```{r marginal-3}
+#| label: tbl-marginal-3
+#| tbl-cap: Average comparisons
+
+tidy_res_meffects(
+  df = marginal_comparisons_3,
+  sa_var = NULL,
+  which_res = "comparisons",
+  num_digits_est = num_digits_est,
+  num_digits_sig = num_digits_sig
+)$table
+```
 
 # Other analyses
+
+## Marginal hypothesis
+
+```{r}
+targets::tar_load(
+  dplyr::matches("marginal_hypothesis_(\\d)SA$"),
+  store = store
+)
+```
+
+```{r hypothesis-1}
+#| label: tbl-hypothesis-1
+#| tbl-cap: Hypothesis testing for effect modification
+
+tidy_res_meffects(
+  df = marginal_hypothesis_1SA,
+  sa_var = "e3sex",
+  which_res = "hypothesis",
+  num_digits_est = num_digits_est,
+  num_digits_sig = num_digits_sig
+)$table
+```
+
+```{r hypothesis-2}
+#| label: tbl-hypothesis-2
+#| tbl-cap: Hypothesis testing for effect modification
+
+tidy_res_meffects(
+  df = marginal_hypothesis_2SA,
+  sa_var = "e3sex",
+  which_res = "hypothesis",
+  num_digits_est = num_digits_est,
+  num_digits_sig = num_digits_sig
+)$table
+```
+
+```{r hypothesis-3}
+#| label: tbl-hypothesis-3
+#| tbl-cap: Hypothesis testing for effect modification
+
+tidy_res_meffects(
+  df = marginal_hypothesis_3SA,
+  sa_var = "e3sex",
+  which_res = "hypothesis",
+  num_digits_est = num_digits_est,
+  num_digits_sig = num_digits_sig
+)$table
+```

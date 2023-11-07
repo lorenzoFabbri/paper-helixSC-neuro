@@ -290,6 +290,13 @@ Barcelona, Spain\\
 
 \subsubsection{Confounders}\label{sec-confounders}
 
+\begin{itemize}
+\tightlist
+\item
+  For RQ1 I used creatinine values from HELIX. For RQ3 the ones from the
+  steroids dataset. For RQ2, I included in the model both variables.
+\end{itemize}
+
 \subsubsection{Endocrine disrupting chemicals}\label{sec-edcs}
 
 \subsubsection{Corticosteroids}\label{sec-steroids}
@@ -333,7 +340,9 @@ Barcelona, Spain\\
 \subsection{Statistical methods}\label{sec-stat-methods}
 
 \begin{itemize}
-\tightlist
+\item
+  In RQ2, I included the logarithm of the denominator in the RHS. In
+  RQ3, I used the logarithm of the ratio in the RHS.
 \item
   Methods for selecting potential confounders (provide DAGs).
 \item
@@ -384,8 +393,6 @@ Barcelona, Spain\\
 \end{itemize}
 
 \subsection{Descriptive data}\label{sec-res-pop-desc}
-
-Table~\ref{tbl-chem-info}
 
 \subsection{Outcome data}\label{sec-res-out-desc}
 
@@ -535,133 +542,6 @@ Some limitations:
 
 \section*{References}\label{references}
 \addcontentsline{toc}{section}{References}
-
-\section{Tables}\label{tables}
-
-\begin{itemize}
-\tightlist
-\item
-  Begin each table on a new page after the list of references.
-\item
-  Tables may not contain parts.
-\item
-  Provide the title for each table above the table and the notes below
-  the table.
-\item
-  List footnotes after the general one, one per line and indicated with
-  a lowercase italicized letter.
-\end{itemize}
-
-\section{Descriptive data}\label{descriptive-data}
-
-\subsection{Study populations}\label{study-populations}
-
-\begin{itemize}
-\tightlist
-\item
-  Basic characteristics of study participants (demographic, clinical,
-  social), by cohort and overall.
-
-  \begin{itemize}
-  \tightlist
-  \item
-    Include all covariates included in primary or secondary analyses.
-  \item
-    Indicate number of participants with missing data for each variable
-    of interest.
-  \item
-    Report numbers of outcome events or summary measures.
-  \end{itemize}
-\end{itemize}
-
-\subsection{Endocrine disruptors}\label{endocrine-disruptors}
-
-\begin{itemize}
-\tightlist
-\item
-  Levels of unprocessed biomarkers (chemicals), with IDs.
-\item
-  Report: minimum and maximum, percentiles, and number of observations
-  above/below the assay's LOD and LOQ.
-\end{itemize}
-
-\begin{table}
-
-\caption{\label{tbl-chem-info}Information about the non-persistent
-EDCs.}
-
-\centering{
-
-\begin{longtable}[]{@{}llllll@{}}
-\toprule\noalign{}
-Compound & Symbol & PubChem CID & CTD ID & Exposome Explore ID &
-Parental compound \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-OP pesticide metabolites & & & & & \\
-diethyl dithiophosphate & DEDTP & 9274 & C000654497 & NA & NA \\
-diethyl phosphate & DEP & 654 & C034789 & NA & NA \\
-diethyl thiophosphate & DETP & 3683036 & C035638 & NA & NA \\
-dimethyl dithiophosphate & DMDTP & NA & Unsure & NA & NA \\
-dimethyl phosphate & DMP & 13134 & C007477 & NA & NA \\
-dimethyl thiophosphate & DMTP & 168140 & C040340 & NA & NA \\
-Phenols & & & & & \\
-bisphenol A & BPA & 6623 & C006780 & 1418 & NA \\
-ethyl-paraben & ETPA & 8434 & C012313 & 1422 & NA \\
-methyl-paraben & MEPA & 7456 & C015358 & 1421 & NA \\
-n‑butyl‑paraben & BUPA & 7184 & C038091 & 1424 & NA \\
-oxybenzone & OXBE & 4632 & C005290 & 1419 & NA \\
-propyl-paraben & PRPA & 7175 & C006068 & 1423 & NA \\
-triclosan & TRCS & 5564 & D014260 & 1420 & NA \\
-Phthalate metabolites & & & & & \\
-mono benzyl phthalate & MBzP & 31736 & C103325 & 1397 & BzBP \\
-mono‑2‑ethyl 5‑carboxypentyl phthalate & MECPP & 148386 & C051450 & 1403
-& DEHP \\
-mono‑2‑ethyl‑5‑hydroxyhexyl phthalate & MEHHP & 170295 & C479069 & 1402
-& DEHP \\
-mono‑2‑ethyl‑5‑oxohexyl phthalate & MEOHP & 119096 & C080276 & 1401 &
-DEHP \\
-mono‑2‑ethylhexyl phthalate & MEHP & 21924291 & C016599 & Unsure &
-DEHP \\
-mono‑4‑methyl‑7‑hydroxyoctyl phthalate & oh-MiNP & 102401880 & NA & 1451
-& NA \\
-mono‑4‑methyl‑7‑oxooctyl phthalate & oxo-MiNP & 102401881 & NA & 1492 &
-NA \\
-mono‑iso‑butyl phthalate & MiBP & 92272 & C575690 & 1399 & DiBP \\
-mono‑n‑butyl phthalate & MnBP & 8575 & C028577 & 1398 & NA \\
-monoethyl phthalate & MEP & 75318 & C581825 & 1396 & DEP \\
-\end{longtable}
-
-}
-
-\end{table}%
-
-\subsection{Corticosteroids}\label{corticosteroids}
-
-\begin{itemize}
-\tightlist
-\item
-  Levels of unprocessed biomarkers (metabolites), with IDs.
-\item
-  Table comparing subjects with and without measurement of steroids.
-\end{itemize}
-
-\section{Main results}\label{main-results}
-
-\begin{itemize}
-\tightlist
-\item
-  RQ2: group chemicals by class, and for each chemical report results
-  with metabolites (\texttt{avg\_comparisons} with estimate, SE,
-  s-value, CI).
-\item
-  RQ3: report results with outcome (\texttt{avg\_comparisons} with
-  estimate, SE, s-value, CI).
-\end{itemize}
-
-\section{Other analyses}\label{other-analyses}
 
 
 
