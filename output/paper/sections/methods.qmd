@@ -49,6 +49,7 @@
 - In RQ2, I included the logarithm of the denominator in the RHS. In RQ3, I used the logarithm of the ratio in the RHS.
 
 - Methods for selecting potential confounders (provide DAGs).
+- Whenever possible, mathematical equations should be written on a single line. For multiplication, use a times sign.
 - Describe all statistical methods with assumptions, including those used to control for confounding.
   - Description of outcome model, weighting method, estimand, and balance assessment.
   - Description of method used to estimate effects (e.g., g-computation).

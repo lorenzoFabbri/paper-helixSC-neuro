@@ -10,7 +10,7 @@
 
 - All results on which study conclusions or inferences are based, including null findings and results of secondary or sensitivity analyses, must be reported. Use of sub-headings that describe the nature of the results (but no declarative statements).
   - Provide a clear and concise description of all findings without extrapolating beyond the study results.
-  - Do not limit results to those *statistically significant* or that support the study hypotheses. Avoid using statistical significance testing as the sole or primary criterion for interpreting the obtained results. If significance testing or *p*-values are used, report numeric *p*-values, rounded to 1-2 digits, for all results.
+  - Do not limit results to those *statistically significant* or that support the study hypotheses. Avoid using statistical significance testing as the sole or primary criterion for interpreting the obtained results. If significance testing or *p*-values are used, report numeric *p*-values, rounded to 1-2 digits, for all results. Use an uppercase italic letter "P", and the values should not be bolded. Indicate whether are 1- or 2-sided.
 - Give unadjusted and confounder-adjusted estimates and their precision (e.g., $95\%$ confidence interval). Make clear which confounders were adjusted for and why they were included. Include the number of observations for each analysis after accounting for missing data. Include numeric data within figures (e.g., forest plots), or provide tables with corresponding numeric data for all figures.
   - [`marginaleffects` tables](https://vincentarelbundock.github.io/marginaleffects/articles/tables.html).
 - Report category boundaries when continuous variables were categorized.

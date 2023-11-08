@@ -43,23 +43,10 @@ num_digits_est = 3
 num_digits_sig = 2
 ```
 
-- Number figures according to the order in which they are first mentioned in the main text.
-- Clearly label all axes, giving both the measure and the unit of measurement.
-- Smallest type size: 8pt.
-- Maximum width: 7 inches in portrait, 9 inches in landscape mode.
-- Multi-panel figures: capital letters followed by closing parenthesis, completely above and to the left of the panel.
 - Use log-scale when plotting relative measures of effects.
 - Figure titles and legends should be submitted as single paragraph.
-- The text of figure legends typed after the reference list.
-- Save and submit each main text figure as an individual file (PDF with fonts embedded).
-
-# Participants
-
-- Flow diagram: number of individuals at each stage of study. Report numbers potentially eligible, examined for eligibility, confirmed eligible, included in the study, completing follow-up, and analysed.
 
 # Main results
-
-- Forest plot for RQ2 (group by chemical class, and for each chemical group bars for metabolites) and RQ3.
 
 ## Marginal comparisons
 
@@ -88,7 +75,7 @@ tidy_res_meffects(
 ```{r marginal-2}
 #| label: fig-marginal-2
 #| fig-cap: Average comparisons
-#| fig-width: 10
+#| fig-width: 9
 #| fig-height: 10
 
 tidy_res_meffects(

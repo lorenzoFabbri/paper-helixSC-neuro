@@ -26,6 +26,8 @@ execute:
 ---
 
 ```{r}
+source("code/dictionary.R")
+source("code/data.R")
 source("code/proc_res.R")
 ```
 
@@ -39,17 +41,12 @@ store <- ifelse(
   "~/mounts/rstudioserver/data/data_paper3/_targets/_targets_res"
 )
 
+id_var <- "HelixID"
 num_digits_est = 3
 num_digits_sig = 2
 ```
 
-- Should be limited to results of secondary analyses and background details needed to ensure transparency:
-  - Questionnaires.
-  - Tables and figures with results of sensitivity analyses.
-  - Tables with numeric data corresponding to results shown in the main text figures.
-  - DAGs used to select model covariates.
-- Text description of study methods should NOT go in the SM.
-- Number supplemental tables and figures separately according to the order in which they are first mentioned in the main text, using an "S" prefix.
+- Files for supplementary data must be accompanied by a summary of the file names and types.
 
 # Supplementary information
 
@@ -70,13 +67,9 @@ cat(all_dags$marker_to_out)
 
 # Supplementary tables
 
-- Provide the title for each table above the table and the notes below the table.
-
 ## Descriptive data
 
 ### Study populations
-
-- Detailed characteristics of study participants (demographic, clinical, social), by cohort and overall.
 
 ```{r codebook-1}
 #| label: tbl-codebook-1
@@ -101,6 +94,82 @@ codebook_2
 #| tbl-cap: Codebook for covariates used in RQ3
 
 codebook_3
+```
+
+### Description of chemicals
+
+```{r info-chems}
+#| label: tbl-info-chems
+#| tbl-cap: Information about non-persistent EDCs
+
+edcs_info <- myphd::edcs_information() |>
+  tidylog::select(-c(chem_id, smiles, ctd_id, exposome_explorer_id)) |>
+  tidylog::mutate(
+    var = janitor::make_clean_names(
+      edcs_info$short_name,
+      replace = c(`-` = ""),
+      case = "none"
+    ) |>
+      tolower()
+  ) |>
+  tidylog::relocate(var, .after = short_name)
+gt::gt(edcs_info,
+       groupname_col = "class") |>
+  gt::sub_values(
+    values = c("NA"),
+    replacement = ""
+  ) |>
+  gt::cols_label(
+    full_name = "Compound",
+    short_name = "Symbol",
+    var = "Variable name",
+    pubchem_cid = "PubChem CID",
+    parental_compound = "Parental compound"
+  ) |>
+  gt::tab_style(
+    locations = gt::cells_row_groups(group = dplyr::everything()),
+    style = list(gt::cell_text(weight = "bold"))
+  )
+```
+
+### Description of metabolites
+
+```{r info-mets}
+#| label: tbl-info-mets
+#| tbl-cap: Information about metabolites
+
+mets_info <- readODS::read_ods(
+  path = "docs/steroids.ods"
+) |>
+  tidylog::select(analyte, acronym, type, hmdb_id, cas_number)
+gt::gt(mets_info,
+       groupname_col = "type") |>
+  gt::sub_values(
+    values = c("NA"),
+    replacement = ""
+  ) |>
+  gt::cols_label(
+    analyte = "Metabolite",
+    acronym = "Symbol",
+    hmdb_id = "HMDB ID",
+    cas_number = "CAS number"
+  ) |>
+  gt::tab_style(
+    locations = gt::cells_row_groups(group = dplyr::everything()),
+    style = list(gt::cell_text(weight = "bold"))
+  ) |>
+  gt::tab_footnote(
+    footnote = "Human Metabolome Database",
+    locations = gt::cells_column_labels(
+      columns = hmdb_id
+    )
+  ) |>
+  gt::tab_footnote(
+    footnote = "Chemical Abstracts Service",
+    locations = gt::cells_column_labels(
+      columns = cas_number
+    )
+  )
 ```
 
 ## Other results
@@ -149,12 +218,52 @@ tidy_res_weighted_fits(
 
 # Supplementary figures
 
-- Provide the title for each figure below the figure on the same manuscript page as the figure itself.
+## Descriptive data
+
+### Description of chemicals
+
+```{r desc-chems-lod}
+#| label: fig-desc-chems
+#| fig-cap: Description of chemicals
+#| fig-width: 6
+#| fig-height: 7
+
+viz_desc_vars(
+  dat = load_dat_request()$dat,
+  vars = vars_of_interest(append_to_chem = "cdesc")$chemicals,
+  fct_levels = c(1, 2, 3, 4),
+  is_chem = TRUE
+)
+```
+
+### Description of metabolites
+
+```{r desc-mets-lod}
+#| label: fig-desc-mets
+#| fig-cap: Description of metabolites
+#| fig-width: 6
+#| fig-height: 7
+
+viz_desc_vars(
+  dat = myphd::extract_cohort(load_steroids()$desc,
+                              id_var = id_var) |>
+    tidylog::mutate(
+      cohort = dplyr::case_when(
+        cohort == "EDE" ~ "EDEN",
+        cohort == "KAN" ~ "KANC",
+        cohort == "MOB" ~ "MOBA",
+        cohort == "RHE" ~ "RHEA",
+        .default = cohort
+      )
+    ),
+  vars = vars_of_interest()$metabolites |>
+    paste0("_cdesc"),
+  fct_levels = c(1, 2, 3, 4),
+  is_chem = FALSE
+)
+```
 
 ## Main results
-
-- ADRF and AMEF for RQ2 and RQ3.
-- Whole distribution (i.e., density) of e.g., risk differences (instead of marginalized estimates), with lines for mean and median.
 
 ## Other results
 
@@ -185,7 +294,7 @@ tidy_res_meffects(
 ```{r marginal-2sa}
 #| label: fig-marginal-2sa
 #| fig-cap: Average comparisons for effect modification
-#| fig-width: 10
+#| fig-width: 9
 #| fig-height: 10
 
 tidy_res_meffects(

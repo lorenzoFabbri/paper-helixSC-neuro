@@ -36,20 +36,9 @@ num_digits_est = 3
 num_digits_sig = 2
 ```
 
-- Begin each table on a new page after the list of references, numbered with Arabic numerals.
-- Leave blank spaces for no entry.
-- Tables may not contain parts.
-- Provide the title for each table above the table and the notes below the table.
-- Order footnotes: abbreviations listed alphabetically and separated by semicolons; others preceded by superscript lowercase letter.
-
 # Descriptive data
 
 ## Study populations
-
-- Basic characteristics of study participants (demographic, clinical, social), by cohort and overall.
-  - Include all covariates included in primary or secondary analyses.
-  - Indicate number of participants with missing data for each variable of interest.
-  - Report numbers of outcome events or summary measures.
 
 ```{r pop-desc}
 #| label: tbl-pop-desc
@@ -61,9 +50,6 @@ table1
 
 ## Endocrine disruptors
 
-- Levels of unprocessed biomarkers (chemicals), with IDs.
-- Report: minimum and maximum, percentiles, and number of observations above/below the assay's LOD and LOQ.
-
 ```{r edc-desc}
 #| label: tbl-edc-desc
 #| tbl-cap: Levels of unprocessed chemicals
@@ -73,9 +59,6 @@ desc_chems_mets$desc_chems
 ```
 
 ## Corticosteroids
-
-- Levels of unprocessed biomarkers (metabolites), with IDs.
-- Table comparing subjects with and without measurement of steroids.
 
 ```{r met-desc}
 #| label: tbl-met-desc
