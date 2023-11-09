@@ -28,6 +28,17 @@ list(
   tarchetypes::tar_map(
     list(rq_ = c("1", "2", "3", "1SA", "2SA", "3SA")),
     targets::tar_target(
+      name = "balance",
+      command = {
+        if (!grepl("SA$", rq_)) {
+          load_tidy_res_weighting(
+            path_store = path_store,
+            rq = rq_
+          )
+        }
+      }#########################################################################
+    ), # End balance target
+    targets::tar_target(
       name = "weights",
       command = load_res_weighted_fits(
         path_store = path_store,
@@ -43,6 +54,19 @@ list(
         sa_var = if (grepl("SA$", rq_)) sa_var_ else NULL,
         which_res = "comparisons"
       )
+    ), # End marginal_comparisons target
+    targets::tar_target(
+      name = "marginal_gcomp",
+      command = {
+        if (!grepl("SA$", rq_)) {
+          load_res_meffects(
+            path_store = path_store,
+            rq = rq_,
+            sa_var = if (grepl("SA$", rq_)) sa_var_ else NULL,
+            which_res = "gcomp"
+          )
+        }
+      }#########################################################################
     ), # End marginal_comparisons target
     targets::tar_target(
       name = "marginal_hypothesis",

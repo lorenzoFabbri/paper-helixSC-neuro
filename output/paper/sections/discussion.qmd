@@ -5,6 +5,12 @@
   - It should be complete and balanced, including inconsistent results.
   - It should include, for each source, sufficient details: study design, sample size, population, specific exposures and outcomes.
 
+### What does the literature say?
+
+- EDCs and neurodevelopment (ANT).
+- EDCs and corticosteroids.
+- Corticosteroids and neurodevelopment (ANT).
+
 ## Limitations {#sec-limitations}
 
 - Discuss limitations of the study, taking into account sources of potential bias or imprecision.

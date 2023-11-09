@@ -73,6 +73,19 @@ desc_chems_mets$desc_mets
 
 ```{r}
 targets::tar_load(
+  dplyr::matches("balance_(\\d)$"),
+  store = store
+)
+```
+
+```{r balance-1}
+balance_1 |>
+  gt::gt() |>
+  gt::fmt_number()
+```
+
+```{r}
+targets::tar_load(
   dplyr::matches("weights_(\\d)$"),
   store = store
 )

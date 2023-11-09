@@ -18,6 +18,12 @@
 - Clearly define all outcomes, exposures, predictors, potential confounders, and effect modifiers.
 - Explain the rationale for treating race as an exposure, confounder, effect modifier, or other type of variable in analyses.
 
+- Units (in `log`):
+  - `hitrtse` in `ms`.
+  - EDCs in `microg/L`.
+  - Cortisol production and cortisone production in `ng/mL`.
+  - Cortisol metabolism and 11bHSD in `NA`.
+
 ### Confounders {#sec-confounders}
 
 - For RQ1 I used creatinine values from HELIX. For RQ3 the ones from the steroids dataset. For RQ2, I included in the model both variables.

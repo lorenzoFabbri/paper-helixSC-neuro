@@ -242,6 +242,45 @@ tbl_desc_vars <- function() {
 
 #' Title
 #'
+#' @param path_store
+#' @param rq
+#'
+#' @return
+#' @export
+load_tidy_res_weighting <- function(path_store, rq) {
+  # Load results weighting
+  targets::tar_load(
+    paste0("rq", substr(rq, 1, 1), "_weights"),
+    store = paste0(path_store, rq)
+  )
+  obj <- get(paste0("rq", substr(rq, 1, 1), "_weights"))$estimated_weights
+  
+  # Extract summary information for all exposures
+  info <- lapply(seq_along(obj), function(idx) {
+    x <- cobalt::bal.tab(obj[[idx]])
+    tmp <- x$Observations |>
+      as.data.frame() |>
+      tibble::rownames_to_column() |>
+      tibble::as_tibble()
+    colnames(tmp) <- c("type", "N")
+    tmp |>
+      tidyr::pivot_wider(
+        names_from = "type",
+        values_from = "N"
+      ) |>
+      tidylog::mutate(
+        exposure = names(obj)[[idx]]
+      ) |>
+      tidylog::relocate(exposure)
+  }) |>
+    dplyr::bind_rows()
+  
+  return(info)
+} # End function load_tidy_res_weighting
+################################################################################
+
+#' Title
+#'
 #' @param path_store 
 #' @param rq 
 #' @param sa_var 
@@ -249,7 +288,7 @@ tbl_desc_vars <- function() {
 #' @return
 #' @export
 load_res_weighted_fits <- function(path_store, rq, sa_var) {
-  # Load results weighting
+  # Load results weighted fits
   targets::tar_load(
     dplyr::contains(paste0("rq", substr(rq, 1, 1), "_weighted_fits_")),
     store = paste0(path_store, rq)
@@ -492,19 +531,37 @@ load_res_meffects <- function(path_store, rq, sa_var, which_res) {
     # Table for one outcome and all exposures
     x <- marginal_effects[[idx]]
     if (length(x$marginal_effects) == 0) return(NULL)
-    df <- lapply(x$marginal_effects, "[[", which_res) |>
-      dplyr::bind_rows() |>
+    
+    if (which_res == "gcomp") {
+      gcomp_res <- lapply(x$marginal_effects, "[[", which_res)
+      df <- lapply(gcomp_res, function(x) {
+        x <- setNames(
+          x,
+          c("exposure", "estimate",
+            "p.value", "s.value",
+            "conf.low", "conf.high")
+        )
+        x
+      }) |>
+        dplyr::bind_rows(.id = "variable")
+      # End check if gcomp
+    } else {
+      df <- lapply(x$marginal_effects, "[[", which_res) |>
+        dplyr::bind_rows() |>
+        tidylog::select(-dplyr::any_of(
+          c("contrast", "statistic")
+        ))
+      
+      if (which_res == "hypothesis") {
+        df$variable <- names(x$marginal_effects)
+      }
+    } # End check type of results
+    
+    df <- df |>
       tidylog::mutate(
-        outcome = outcome,
-        variable = gsub("hs_", "", variable),
-        variable = gsub("_c", "", variable)
-      ) |>
-      tidylog::select(-dplyr::any_of(
-        c("contrast", "statistic")
-      ))
-    if (which_res == "hypothesis") {
-      df$variable <- names(x$marginal_effects)
-    }
+        outcome = outcome
+      )
+    
     return(df)
   }) # End loop over results of marginal effects
   
@@ -523,8 +580,9 @@ load_res_meffects <- function(path_store, rq, sa_var, which_res) {
         ~ c("modifier"), dplyr::all_of(c(sa_var))
       )
   }
+  
   ## Eventually add information on EDCs (chemical classes)
-  if (rq %in% c("1", "2")) {
+  if (substr(rq, 1, 1) %in% c("1", "2")) {
     info_edcs <- myphd::edcs_information() |>
       tibble::as_tibble()
     df <- all_res |>
@@ -728,6 +786,47 @@ tidy_res_meffects <- function(df, sa_var = NULL,
     plot = plot
   ))
 } # End function tidy_res_meffects
+################################################################################
+
+#' Title
+#'
+#' @param df_preds
+#'
+#' @return
+#' @export
+plot_adrf <- function(df_preds) {
+  adrf <- df_preds |>
+    ggplot2::ggplot(ggplot2::aes(
+      x = exposure
+    )) +
+    ggplot2::geom_point(
+      ggplot2::aes(y = estimate)
+    ) +
+    ggplot2::geom_line(
+      ggplot2::aes(y = estimate),
+      linewidth = 0.2
+    ) +
+    ggplot2::geom_ribbon(
+      ggplot2::aes(
+        ymin = conf.low,
+        ymax = conf.high
+      ),
+      alpha = 0.2
+    ) +
+    ggplot2::scale_x_continuous(
+      limits = c(
+        min(df_preds[["exposure"]]),
+        max(df_preds[["exposure"]])
+      )
+    ) +
+    ggplot2::labs(
+      x = unique(df_preds[["variable"]]),
+      y = "E[Y|A]"
+    ) +
+    ggplot2::theme_minimal()
+  
+  return(adrf)
+} # End function plot_adrf
 ################################################################################
 
 #' Visualize overlap of a variable based on a grouping factor

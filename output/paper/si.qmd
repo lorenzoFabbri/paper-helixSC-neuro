@@ -26,7 +26,7 @@ execute:
 ---
 
 ```{r}
-source("code/dictionary.R")
+source("code/dictionaries.R")
 source("code/data.R")
 source("code/proc_res.R")
 ```
@@ -106,7 +106,7 @@ edcs_info <- myphd::edcs_information() |>
   tidylog::select(-c(chem_id, smiles, ctd_id, exposome_explorer_id)) |>
   tidylog::mutate(
     var = janitor::make_clean_names(
-      edcs_info$short_name,
+      short_name,
       replace = c(`-` = ""),
       case = "none"
     ) |>
@@ -233,7 +233,7 @@ viz_desc_vars(
   vars = vars_of_interest(append_to_chem = "cdesc")$chemicals,
   fct_levels = c(1, 2, 3, 4),
   is_chem = TRUE
-)
+)$plot
 ```
 
 ### Description of metabolites
@@ -260,10 +260,47 @@ viz_desc_vars(
     paste0("_cdesc"),
   fct_levels = c(1, 2, 3, 4),
   is_chem = FALSE
-)
+)$plot
 ```
 
 ## Main results
+
+### Average dose-response functions for significant results
+
+```{r}
+targets::tar_load(
+  dplyr::matches("marginal_gcomp_(\\d)$"),
+  store = store
+)
+```
+
+```{r adrfs-rq3}
+#| label: fig-adrfs-rq3
+#| fig-cap: Average dose-response functions for RQ3
+#| fig-subcap:
+#|   - "Cortisol production"
+#|   - "11bHSD"
+#| fig-width: 6
+#| fig-height: 7
+#| layout-ncol: 2
+
+exposures_of_interest <- c(
+  "cortisol production",
+  "X11bHSD"
+)
+ret_adrfs <- lapply(
+  exposures_of_interest, function(x) {
+    plot_adrf(
+      df_preds = marginal_gcomp_3 |>
+        tidylog::filter(
+          variable == x
+        )
+    )
+  }
+)
+ret_adrfs[[1]]
+ret_adrfs[[2]]
+```
 
 ## Other results
 

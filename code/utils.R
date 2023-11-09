@@ -791,6 +791,13 @@ rq_estimate_marginal_effects <-
     params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
     params_ana <- params_analyses()[[rq]]
     
+    old_by <- by
+    if (is.null(by)) {
+      by <- TRUE
+    } else {
+      by <- glue::double_quote(by)
+    }
+    
     # Loop over the fitted models to estimate marginal effects
     if (parallel == TRUE) {
       future::plan(future::multisession,
@@ -822,35 +829,13 @@ rq_estimate_marginal_effects <-
               {exposure} = values
             ),
             wts = weights,
-            vcov = {glue::double_quote(vcov)}
+            vcov = {vcov}
           )",
           exposure = exposure,
-          vcov = "HC3"
+          vcov = "~ cohort"
         )
-      )) # End G-computation (avg_predictions)
-      
-      # Plot ADRF
-      # adrf <- gcomp |>
-      #   ggplot2::ggplot(ggplot2::aes(x = .data[[exposure]])) +
-      #   ggplot2::geom_point(ggplot2::aes(y = estimate)) +
-      #   ggplot2::geom_line(ggplot2::aes(y = estimate),
-      #     linewidth = 0.2
-      #   ) +
-      #   ggplot2::geom_ribbon(ggplot2::aes(
-      #     ymin = conf.low,
-      #     ymax = conf.high
-      #   ), alpha = 0.2) +
-      #   ggplot2::geom_rug(
-      #     mapping = ggplot2::aes(x = .data[[exposure]]),
-      #     data = dat,
-      #     inherit.aes = FALSE
-      #   ) +
-      #   ggplot2::scale_x_continuous(limits = c(
-      #     values[1],
-      #     values[length(values)]
-      #   )) +
-      #   ggplot2::labs(x = exposure, y = "E[Y|A]") +
-      #   ggplot2::theme_minimal()
+      )) |> # End G-computation (avg_predictions)
+        marginaleffects::tidy()
       ########################################################################
       
       ########################################################################
@@ -872,33 +857,6 @@ rq_estimate_marginal_effects <-
       #     vcov = "HC3"
       #   )
       # )) # End slopes (avg_slopes)
-      
-      # Plot AMEF
-      # amef <- slopes |>
-      #   ggplot2::ggplot(ggplot2::aes(x = .data[[exposure]])) +
-      #   ggplot2::geom_point(ggplot2::aes(y = estimate)) +
-      #   ggplot2::geom_line(ggplot2::aes(y = estimate),
-      #     linewidth = 0.2
-      #   ) +
-      #   ggplot2::geom_ribbon(ggplot2::aes(
-      #     ymin = conf.low,
-      #     ymax = conf.high
-      #   ), alpha = 0.2) +
-      #   ggplot2::geom_hline(
-      #     yintercept = 0,
-      #     linetype = "dashed"
-      #   ) +
-      #   ggplot2::geom_rug(
-      #     mapping = ggplot2::aes(x = .data[[exposure]]),
-      #     data = dat,
-      #     inherit.aes = FALSE
-      #   ) +
-      #   ggplot2::scale_x_continuous(limits = c(
-      #     values[1],
-      #     values[length(values)]
-      #   )) +
-      #   ggplot2::labs(x = exposure, y = "dE[Y|A]/dA") +
-      #   ggplot2::theme_minimal()
       ########################################################################
       
       ########################################################################
@@ -910,13 +868,6 @@ rq_estimate_marginal_effects <-
         percentiles = params_ana$type_avg_comparison,
         by_var = "cohort"
       )
-      
-      old_by <- by
-      if (is.null(by)) {
-        by <- TRUE
-      } else {
-        by <- glue::double_quote(by)
-      }
       
       avg_comp <- eval(parse(
         text = glue::glue(
