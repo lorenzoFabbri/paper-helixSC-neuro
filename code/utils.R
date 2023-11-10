@@ -12,18 +12,18 @@ load_dag <- function(dags, exposure, outcome, params_dag) {
   ret <- list()
   rq <- Sys.getenv("TAR_PROJECT")
   which_dag <- switch(rq,
-    "rq01" = "chem_to_out",
-    "rq1" = "chem_to_out",
-    "rq02" = "chem_to_marker",
-    "rq2" = "chem_to_marker",
-    "rq03" = "marker_to_out",
-    "rq3" = "marker_to_out",
-    "rq04" = "marker_to_chem",
-    "rq4" = "marker_to_chem"
+                      "rq01" = "chem_to_out",
+                      "rq1" = "chem_to_out",
+                      "rq02" = "chem_to_marker",
+                      "rq2" = "chem_to_marker",
+                      "rq03" = "marker_to_out",
+                      "rq3" = "marker_to_out",
+                      "rq04" = "marker_to_chem",
+                      "rq4" = "marker_to_chem"
   )
-
+  
   dag <- dags[[which_dag]]
-
+  
   # Find the adjustment set(s) of interest
   adjustment_set <- dagitty::adjustmentSets(
     x = dag,
@@ -32,7 +32,7 @@ load_dag <- function(dags, exposure, outcome, params_dag) {
     type = params_dag$type,
     effect = params_dag$effect
   )
-
+  
   # Identify precision covariates to add to adjustment set
   prec_covars <- dagitty::parents(
     x = dag,
@@ -49,7 +49,7 @@ load_dag <- function(dags, exposure, outcome, params_dag) {
     ),
     parents_exposure
   )
-
+  
   return(list(
     dag = dag,
     adjustment_sets = adjustment_set,
@@ -76,20 +76,20 @@ select_adjustment_set <- function(dat, meta, res_dag, strategy) {
   lengths_as <- lapply(all_as, length) |>
     unname() |>
     unlist()
-
+  
   ret <- switch(strategy,
-    "first" = all_as[[1]],
-    "smallest" = all_as[[which.min(lengths_as)]],
-    "largest" = all_as[[which.max(lengths_as)]],
-    "random" = sample(all_as, size = 1),
-    "minimize_missings" = all_as[[myphd::minimize_missings(
-      dat = dat,
-      meta = meta,
-      adjustment_sets = all_as,
-      by_var = "cohort"
-    )]]
+                "first" = all_as[[1]],
+                "smallest" = all_as[[which.min(lengths_as)]],
+                "largest" = all_as[[which.max(lengths_as)]],
+                "random" = sample(all_as, size = 1),
+                "minimize_missings" = all_as[[myphd::minimize_missings(
+                  dat = dat,
+                  meta = meta,
+                  adjustment_sets = all_as,
+                  by_var = "cohort"
+                )]]
   )
-
+  
   return(ret)
 } # End function select_adjustment_set
 ################################################################################
@@ -104,13 +104,13 @@ select_adjustment_set <- function(dat, meta, res_dag, strategy) {
 rq_load_data <- function(res_dag, remove_kanc) {
   rq <- Sys.getenv("TAR_PROJECT")
   rq <- switch(rq,
-    "rq01" = "rq1",
-    "rq02" = "rq2",
-    "rq03" = "rq3",
-    "rq04" = "rq4",
-    rq
+               "rq01" = "rq1",
+               "rq02" = "rq2",
+               "rq03" = "rq3",
+               "rq04" = "rq4",
+               rq
   )
-
+  
   # Load data request
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   dat_request <- load_dat_request()
@@ -140,7 +140,7 @@ rq_load_data <- function(res_dag, remove_kanc) {
           !stringr::str_detect(HelixID, "^KAN")
         )
     }
-
+    
     # Subjects with metabolites available but not in HELIX data
     ids_metabs <- setdiff(
       metabolites$metabolome[[params_dat$variables$identifier]],
@@ -156,19 +156,19 @@ rq_load_data <- function(res_dag, remove_kanc) {
         call. = TRUE
       )
     }
-
+    
     dat$metab_desc <- metabolites[["desc"]]
     dat$metab_desc <- dat$metab_desc |>
       dplyr::rename_with(.fn = ~ gsub("_cdesc", "", .x, fixed = TRUE))
     dat$lods <- metabolites[["loq"]]
     colnames(dat$lods) <- c("var", "val")
     dat_request$dat <- tidylog::inner_join(dat_request$dat,
-      metabolites$metabolome,
-      by = params_dat$variables$identifier
+                                           metabolites$metabolome,
+                                           by = params_dat$variables$identifier
     )
     dat$metab_desc <- dat$metab_desc |>
       tidylog::filter(.data[[params_dat$variables$identifier]] %in%
-        dat_request$dat[[params_dat$variables$identifier]])
+                        dat_request$dat[[params_dat$variables$identifier]])
     dat$metab_desc <- dat$metab_desc[match(
       dat_request$dat[[params_dat$variables$identifier]],
       dat$metab_desc[[params_dat$variables$identifier]]
@@ -198,21 +198,21 @@ rq_load_data <- function(res_dag, remove_kanc) {
       call. = TRUE
     )
   }
-
+  
   ## Exposures
   dat$exposures <- dat_request$dat |>
     tidylog::select(
       params_dat$variables$identifier,
       dplyr::any_of(params_dat$variables[[rq]]$exposures)
     )
-
+  
   ## Outcome
   dat$outcome <- dat_request$dat |>
     tidylog::select(
       params_dat$variables$identifier,
       dplyr::any_of(params_dat$variables[[rq]]$outcome)
     )
-
+  
   ## Description of metabolites
   if (rq == "rq2") {
     mets_to_select <- params_dat$variables[[rq]]$outcome
@@ -228,7 +228,7 @@ rq_load_data <- function(res_dag, remove_kanc) {
   } else {
     dat$metab_desc <- NULL
   }
-
+  
   ## Covariates
   if (length(res_dag$adjustment_sets) > 1) {
     adj_set <- select_adjustment_set(
@@ -294,7 +294,7 @@ rq_load_data <- function(res_dag, remove_kanc) {
       msg = "Mismatch in the number of missing values for the metabolome."
     )
   } # End check number of missings in metabolome
-
+  
   return(dat)
 } # End function rq_load_data
 ################################################################################
@@ -311,17 +311,17 @@ rq_load_data <- function(res_dag, remove_kanc) {
 rq_prepare_data <- function(dat) {
   rq <- Sys.getenv("TAR_PROJECT")
   rq <- switch(rq,
-    "rq01" = "rq1",
-    "rq02" = "rq2",
-    "rq03" = "rq3",
-    "rq04" = "rq4",
-    rq
+               "rq01" = "rq1",
+               "rq02" = "rq2",
+               "rq03" = "rq3",
+               "rq04" = "rq4",
+               rq
   )
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   steps_covars <- params_dat$steps[[rq]]$preproc_covars
   steps_exposures <- params_dat$steps[[rq]]$preproc_exposures
   steps_outcome <- params_dat$steps[[rq]]$preproc_outcome
-
+  
   # Create folders to store results
   invisible(lapply(c("figures"), function(x) {
     path_save_res <- paste0(
@@ -331,7 +331,7 @@ rq_prepare_data <- function(dat) {
       dir.create(path_save_res)
     }
   }))
-
+  
   # Process covariates
   dat$covariates <- myphd::preproc_data(
     dat = dat$covariates,
@@ -341,7 +341,7 @@ rq_prepare_data <- function(dat) {
     id_var = params_dat$variables$identifier,
     by_var = "cohort"
   )
-
+  
   # Process exposures
   dat$exposures <- myphd::preproc_data(
     dat = myphd::extract_cohort(
@@ -382,7 +382,7 @@ rq_prepare_data <- function(dat) {
       tidylog::select(-cohort) |>
       tidylog::select(-dplyr::all_of(cols_to_remove))
   }
-
+  
   # Process outcome
   dat$outcome <- myphd::preproc_data(
     dat = myphd::extract_cohort(
@@ -426,7 +426,7 @@ rq_prepare_data <- function(dat) {
   
   # Process metadata
   dat$meta
-
+  
   return(dat)
 } # End function rq_prepare_data
 ################################################################################
@@ -448,15 +448,15 @@ rq_estimate_weights <- function(dat, by = NULL, save_results,
                                 parallel, workers = NULL) {
   rq <- Sys.getenv("TAR_PROJECT")
   rq <- switch(rq,
-    "rq01" = "rq1",
-    "rq02" = "rq2",
-    "rq03" = "rq3",
-    "rq04" = "rq4",
-    rq
+               "rq01" = "rq1",
+               "rq02" = "rq2",
+               "rq03" = "rq3",
+               "rq04" = "rq4",
+               rq
   )
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   params_ana <- params_analyses()[[rq]]
-
+  
   # Step 1: estimate weights for covariate balance
   if (rq %in% c("rq3", "rq4")) {
     list_exposures <- c("cortisol_production",
@@ -475,19 +475,19 @@ rq_estimate_weights <- function(dat, by = NULL, save_results,
     params_dat$variables$identifier
   )
   dat_analysis <- tidylog::full_join(dat$covariates,
-    dat$exposures,
-    by = params_dat$variables$identifier
+                                     dat$exposures,
+                                     by = params_dat$variables$identifier
   )
   
   ## Loop over exposures
   if (parallel == TRUE) {
     future::plan(future::multisession,
-      workers = workers
+                 workers = workers
     )
   }
   progressr::with_progress({
     p <- progressr::progressor(steps = length(list_exposures))
-
+    
     estimated_weights <-
       furrr::future_map(list_exposures, function(x, p) {
         p()
@@ -547,7 +547,7 @@ rq_estimate_weights <- function(dat, by = NULL, save_results,
         # Include IDs for safer merging during model fitting
         ret[[params_dat$variables$identifier]] <-
           dat_analysis[[params_dat$variables$identifier]]
-
+        
         return(ret)
       },
       .options = furrr::furrr_options(seed = TRUE),
@@ -556,14 +556,14 @@ rq_estimate_weights <- function(dat, by = NULL, save_results,
   }) # End progress bar
   names(estimated_weights) <- list_exposures
   ##############################################################################
-
+  
   # Step 2: explore balance
   balance <-
     furrr::future_map(names(estimated_weights), function(x) {
       myphd::explore_balance(
         exposure = ifelse(rq %in% c("rq1", "rq2"),
-          strsplit(x, split = "_")[[1]][2],
-          x
+                          strsplit(x, split = "_")[[1]][2],
+                          x
         ),
         covariates = estimated_weights[[x]]$covs |>
           colnames(),
@@ -573,7 +573,7 @@ rq_estimate_weights <- function(dat, by = NULL, save_results,
     .options = furrr::furrr_options(seed = TRUE)
     ) # End loop explore balance
   names(balance) <- names(estimated_weights)
-
+  
   ## Save results
   if (save_results) {
     ### love.plot
@@ -630,11 +630,11 @@ rq_fit_model_weighted <- function(dat, outcome, by = c(),
   rq <- Sys.getenv("TAR_PROJECT")
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   params_ana <- params_analyses()[[rq]]
-
+  
   # Check whether outcome is still available after pre-processing
   if (!outcome %in% colnames(dat$outcome)) {
     warning(glue::glue("The outcome {outcome} was not found."),
-      call. = TRUE
+            call. = TRUE
     )
     return()
   }
@@ -642,9 +642,9 @@ rq_fit_model_weighted <- function(dat, outcome, by = c(),
   # Eventually add control for denominator of outcome
   if (rq == "rq2") {
     den <- switch(outcome,
-      "cortisol_metabolism" = "F",
-      "X11bHSD" = "cortisol_production",
-      NULL
+                  "cortisol_metabolism" = "F",
+                  "X11bHSD" = "cortisol_production",
+                  NULL
     )
     dat$covariates <- dat$covariates |>
       tidylog::full_join(
@@ -656,7 +656,7 @@ rq_fit_model_weighted <- function(dat, outcome, by = c(),
         by = params_dat$variables$identifier
       )
   }
-
+  
   # Process outcome
   dat$outcome <- dat$outcome |>
     tidylog::select(dplyr::all_of(c(
@@ -687,23 +687,23 @@ rq_fit_model_weighted <- function(dat, outcome, by = c(),
   
   idxs_missing_outcome <- which(is.na(dat_analysis[[outcome]]))
   ids_missing_outcome <- dat_analysis[idxs_missing_outcome, ][[params_dat$variables$identifier]]
-
+  
   # Fit model(s) using estimated weights
   ## Loop over each exposure
   if (parallel == TRUE) {
     future::plan(future::multisession,
-      workers = workers
+                 workers = workers
     )
   } else {
     future::plan(future::sequential())
   }
   progressr::with_progress({
     p <- progressr::progressor(steps = length(list_exposures))
-
+    
     fits <-
       furrr::future_map(list_exposures, function(exposure, p) {
         p()
-
+        
         # Select columns of interest and make sure order rows same in
         # dataset and estimated weights
         dat_tmp <- dat_analysis |>
@@ -723,7 +723,7 @@ rq_fit_model_weighted <- function(dat, outcome, by = c(),
           msg = "The order of the rows changed between weights estimation
                 and outcome model fitting."
         )
-
+        
         fit <- myphd::fit_model_weighted(
           dat = dat_tmp,
           outcome = outcome,
@@ -754,7 +754,7 @@ rq_fit_model_weighted <- function(dat, outcome, by = c(),
           model = fit$fit,
           path_save_res = path_save_res
         )
-
+        
         return(list(
           fit = fit$fit,
           dat = dat_tmp,
@@ -767,7 +767,7 @@ rq_fit_model_weighted <- function(dat, outcome, by = c(),
   }) # End progress bar
   future::plan(future::sequential)
   names(fits) <- list_exposures
-
+  
   return(list(fits = fits))
 } # End function rq_fit_model_weighted
 ################################################################################
@@ -949,7 +949,7 @@ run_mtp <- function(dat, shift_exposure) {
   outcome <- params_dat$variables[[rq]]$outcome
   steps_outcome <- params_dat$steps[[rq]]$preproc_outcome
   params_ana <- params_analyses()[[rq]]
-
+  
   # Process outcome
   dat$outcome <- myphd::extract_cohort(
     dat = dat$outcome,
@@ -964,12 +964,12 @@ run_mtp <- function(dat, shift_exposure) {
   )
   dat$outcome <- dat$outcome |>
     tidylog::select(-cohort)
-
+  
   # Run lmtp
   if (shift_exposure == TRUE) {
     shift_func <- switch(params_ana$shift_type,
-      "mul" = mtp_mul,
-      "add" = mtp_add
+                         "mul" = mtp_mul,
+                         "add" = mtp_add
     )
   } else {
     shift_func <- NULL
@@ -980,13 +980,13 @@ run_mtp <- function(dat, shift_exposure) {
     params_dat$variables$identifier
   )
   dat_merged <- tidylog::full_join(dat$covariates, dat$outcome,
-    by = params_dat$variables$identifier
+                                   by = params_dat$variables$identifier
   ) |>
     tidylog::mutate(cens = as.integer(!is.na(.data[[outcome]])))
   baseline <- dat$covariates |>
     tidylog::select(-params_dat$variables$identifier) |>
     names()
-
+  
   # Loop over each exposure
   res <- lapply(list_exposures, function(exposure) {
     dat_analysis <- tidylog::full_join(
@@ -1003,7 +1003,7 @@ run_mtp <- function(dat, shift_exposure) {
       by = params_dat$variables$identifier
     ) |>
       tidylog::select(-params_dat$variables$identifier)
-
+    
     if (params_ana$estimator == "tmle") {
       warning("In lmtp_tmle, some arguments have to be defined.")
       lmtp::lmtp_tmle(
@@ -1056,7 +1056,7 @@ run_mtp <- function(dat, shift_exposure) {
     }
   })
   names(res) <- list_exposures
-
+  
   return(res)
 } # End function run_mtp
 ################################################################################

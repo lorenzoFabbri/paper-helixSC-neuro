@@ -95,6 +95,30 @@ list(
       name = "codebook",
       command = tidy_codebooks(rq = rq)
     ) # End codebook target
+  ), # End loop over RQs
+  ##############################################################################
+  tarchetypes::tar_map(
+    list(rq = c("1", "2", "3")),
+    targets::tar_target(
+      name = "overlap_quantiles",
+      command = {
+        targets::tar_load(
+          paste0("rq", rq, "_preproc_dat"),
+          store = paste0(path_store, rq)
+        )
+        viz_overlap_quantiles(
+          dat = myphd::extract_cohort(
+            dat = get(paste0("rq", rq, "_preproc_dat"))$exposures,
+            id_var = "HelixID"
+          ),
+          id_var = "HelixID",
+          group_var = "cohort",
+          lower_percentile = 0.1,
+          upper_percentile = 0.9,
+          rq = rq
+        )
+      }#########################################################################
+    ) # End overlap_quantiles target
   ) # End loop over RQs
   ##############################################################################
 )

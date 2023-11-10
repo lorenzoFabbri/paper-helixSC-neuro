@@ -269,11 +269,28 @@ load_tidy_res_weighting <- function(path_store, rq) {
         values_from = "N"
       ) |>
       tidylog::mutate(
-        exposure = names(obj)[[idx]]
+        exposure = names(obj)[[idx]],
+        exposure = gsub("hs_|_c", "", exposure),
+        exposure = gsub("_", " ", exposure),
+        exposure = replace(
+          exposure, tolower(exposure) == "x11bhsd", "11bhsd"
+        )
       ) |>
       tidylog::relocate(exposure)
   }) |>
     dplyr::bind_rows()
+  
+  ## Eventually add information on EDCs (chemical classes)
+  if (rq %in% c("1", "2")) {
+    info_edcs <- myphd::edcs_information() |>
+      tibble::as_tibble()
+    info <- info |>
+      tidylog::left_join(
+        info_edcs |>
+          tidylog::select(chem_id, class),
+        by = c("exposure" = "chem_id")
+      )
+  }
   
   return(info)
 } # End function load_tidy_res_weighting
@@ -843,10 +860,20 @@ viz_overlap_quantiles <- function(dat,
                                   id_var,
                                   group_var,
                                   lower_percentile,
-                                  upper_percentile) {
+                                  upper_percentile,
+                                  rq) {
   # Process data
   dat_proc <- dat |>
     tidylog::select(-dplyr::any_of(id_var))
+  colnames(dat_proc) <- colnames(dat_proc) |>
+    stringr::str_replace_all(
+      pattern = "hs_|_c",
+      replacement = ""
+    ) |>
+    stringr::str_replace_all(
+      pattern = "_",
+      replacement = " "
+    )
   vars <- setdiff(colnames(dat_proc), group_var)
   
   # Plot
@@ -878,16 +905,31 @@ viz_overlap_quantiles <- function(dat,
         name = "Tail probability",
         direction = -1
       ) +
+      ggplot2::xlim(
+        min(dat_proc[[x]]),
+        quantile(dat_proc[[x]], upper_percentile)
+      ) +
       ggplot2::labs(
         caption = glue::glue(
-          "Lower percentile: {lower}th. Upper percentile: {upper}th.",
+          "Red bars: {lower}th and {upper}th percentiles.
+          Figure truncated at the {upper}th percentile of the exposure.",
           lower = lower_percentile * 100,
           upper = upper_percentile * 100
         )
       )
   }) # End loop over variables to plot
   
-  return(ret)
+  # Save results (single file)
+  ggplot2::ggsave(
+    paste0("results/figures/overlap_exp_", rq, ".pdf"),
+    gridExtra::marrangeGrob(
+      grobs = ret,
+      nrow = 1,
+      ncol = 1
+    ),
+    dpi = 360,
+    height = 6
+  )
 } # End function viz_overlap_quantiles
 ################################################################################
 

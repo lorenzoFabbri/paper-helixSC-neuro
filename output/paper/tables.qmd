@@ -79,9 +79,67 @@ targets::tar_load(
 ```
 
 ```{r balance-1}
+#| label: tbl-balance-1
+#| tbl-cap: Effective number of observations
+
 balance_1 |>
+  tidylog::group_by(class) |>
+  dplyr::arrange(dplyr::desc(Adjusted)) |>
+  tidylog::ungroup() |>
+  gt::gt(groupname_col = "class") |>
+  gt::fmt_number(n_sigfig = 4) |>
+  gt::tab_footnote(
+    footnote = "N.",
+    locations = gt::cells_column_labels(
+      columns = c(Unadjusted, Adjusted)
+    )
+  ) |>
+  gt::tab_footnote(
+    footnote = "Truncated weights.",
+    locations = gt::cells_column_labels(columns = Adjusted)
+  )
+```
+
+```{r balance-2}
+#| label: tbl-balance-2
+#| tbl-cap: Effective number of observations
+
+balance_2 |>
+  tidylog::group_by(class) |>
+  dplyr::arrange(dplyr::desc(Adjusted)) |>
+  tidylog::ungroup() |>
+  gt::gt(groupname_col = "class") |>
+  gt::fmt_number(n_sigfig = 4) |>
+  gt::tab_footnote(
+    footnote = "N.",
+    locations = gt::cells_column_labels(
+      columns = c(Unadjusted, Adjusted)
+    )
+  ) |>
+  gt::tab_footnote(
+    footnote = "Truncated weights.",
+    locations = gt::cells_column_labels(columns = Adjusted)
+  )
+```
+
+```{r balance-3}
+#| label: tbl-balance-3
+#| tbl-cap: Effective number of observations
+
+balance_3 |>
+  dplyr::arrange(dplyr::desc(Adjusted)) |>
   gt::gt() |>
-  gt::fmt_number()
+  gt::fmt_number(n_sigfig = 4) |>
+  gt::tab_footnote(
+    footnote = "N.",
+    locations = gt::cells_column_labels(
+      columns = c(Unadjusted, Adjusted)
+    )
+  ) |>
+  gt::tab_footnote(
+    footnote = "Truncated weights.",
+    locations = gt::cells_column_labels(columns = Adjusted)
+  )
 ```
 
 ```{r}
