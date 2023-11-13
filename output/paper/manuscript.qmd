@@ -29,8 +29,8 @@ link-citations: true
 linkcolor: blue
 
 filters:
+  - acronyms
   - authors-block
-  - ../../../../all_phd/_extensions/acronyms/parse-acronyms.lua
   - ../../../../all_phd/_extensions/wordcount/citeproc.lua
   - ../../../../all_phd/_extensions/wordcount/wordcount.lua
 

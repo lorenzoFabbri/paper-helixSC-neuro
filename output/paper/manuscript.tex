@@ -77,6 +77,39 @@
 \makeatletter
 \def\fps@figure{htbp}
 \makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break#1\hfill\break}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 
 \usepackage{lineno}
 \usepackage{rotating}
@@ -252,22 +285,38 @@ Barcelona, Spain\\
 
 \section{Methods}\label{sec-methods}
 
-\subsection{Study design}\label{sec-design}
+\subsection{Study population and design}\label{sec-design}
 
-\begin{itemize}
-\tightlist
-\item
-  Present key elements of study design
-\end{itemize}
+The Human Early-Life Exposome (HELIX) is an ongoing project which aims
+to characterize early-life exposures and their potential association
+with endogenous biomarkers and health
+outcomes\textsuperscript{\citeproc{ref-VrijheidSlamaRobinson:2014}{1}}.
+It consists of six existing population-based birth cohort studies across
+Europe: BiB (Born in Bradford,
+UK)\textsuperscript{\citeproc{ref-WrightSmallRaynor:2013}{2}}, EDEN
+(Study of determinants of pre- and postnatal developmental,
+France)\textsuperscript{\citeproc{ref-HeudeForhanSlama:2016}{3}}, INMA
+(Environment and Childhood,
+Spain)\textsuperscript{\citeproc{ref-GuxensBallesterEspada:2012}{4}},
+KANC (Kaunas Cohort,
+Lithuania)\textsuperscript{\citeproc{ref-GrazulevicieneDanileviciuteNadisauskiene:2009}{5}},
+MoBa (The Norwegian Mother and Child Cohort Study,
+Norway)\textsuperscript{\citeproc{ref-MagnusIrgensHaug:2006}{6}}, and
+Rhea (Mother--Child Cohort in Crete,
+Greece)\textsuperscript{\citeproc{ref-ChatziPlanaDaraki:2009}{7}}, for a
+total of 32,000 mother-child pairs. A HELIX subcohort of 1,200
+mother-child pairs was fully characterized for the external and internal
+exposome, including exposure and omics biomarkers during childhood.
+Eligibility criteria for inclusion in the HELIX subcohort included: a)
+age 6-11 years, with a preference for 7-9 years; b) availability of
+sufficient stored pregnancy blood and urine samples; c) availability of
+complete address history from first to last follow-up; d) no serious
+health problems, which might affect the results of the clinical testing.
+Further information can be found
+in\textsuperscript{\citeproc{ref-MaitreBontCasas:2018}{8}}.
 
-\subsection{Setting}\label{sec-setting}
-
-\begin{itemize}
-\tightlist
-\item
-  Describe the setting, locations, and relevant dates, including periods
-  of recruitment, exposure, follow-up, and data collection.
-\end{itemize}
+Ethical permission was obtained from the relevant authorities in the
+corresponding country.
 
 \subsection{Participants}\label{sec-participants}
 
@@ -576,6 +625,130 @@ Some limitations:
 
 \section*{References}\label{references}
 \addcontentsline{toc}{section}{References}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{0}{1}
+\bibitem[\citeproctext]{ref-VrijheidSlamaRobinson:2014}
+\CSLLeftMargin{1. }%
+\CSLRightInline{Vrijheid M, Slama R, Robinson O, et al. The human
+early-life exposome ({HELIX}): Project rationale and design.
+\emph{Environ Health Perspect}. 2014;122(6):535-544.
+doi:\href{https://doi.org/10.1289/ehp.1307204}{10.1289/ehp.1307204}}
+
+\bibitem[\citeproctext]{ref-WrightSmallRaynor:2013}
+\CSLLeftMargin{2. }%
+\CSLRightInline{Wright J, Small N, Raynor P, et al. Cohort {Profile}:
+{The Born} in {Bradford} multi-ethnic family cohort study.
+\emph{International Journal of Epidemiology}. 2013;42(4):978-991.
+doi:\href{https://doi.org/10.1093/ije/dys112}{10.1093/ije/dys112}}
+
+\bibitem[\citeproctext]{ref-HeudeForhanSlama:2016}
+\CSLLeftMargin{3. }%
+\CSLRightInline{Heude B, Forhan A, Slama R, et al. Cohort {Profile}:
+{The EDEN} mother-child cohort on the prenatal and early postnatal
+determinants of child health and development. \emph{International
+Journal of Epidemiology}. 2016;45(2):353-363.
+doi:\href{https://doi.org/10.1093/ije/dyv151}{10.1093/ije/dyv151}}
+
+\bibitem[\citeproctext]{ref-GuxensBallesterEspada:2012}
+\CSLLeftMargin{4. }%
+\CSLRightInline{Guxens M, Ballester F, Espada M, et al. Cohort
+{Profile}: {The INMA}---{INfancia} y {Medio Ambiente}---({Environment}
+and {Childhood}) {Project}. \emph{International Journal of
+Epidemiology}. 2012;41(4):930-940.
+doi:\href{https://doi.org/10.1093/ije/dyr054}{10.1093/ije/dyr054}}
+
+\bibitem[\citeproctext]{ref-GrazulevicieneDanileviciuteNadisauskiene:2009}
+\CSLLeftMargin{5. }%
+\CSLRightInline{Grazuleviciene R, Danileviciute A, Nadisauskiene R,
+Vencloviene J. Maternal {Smoking},{GSTM1} and {GSTT1 Polymorphism} and
+{Susceptibility} to {Adverse Pregnancy Outcomes}. \emph{International
+Journal of Environmental Research and Public Health}. 2009;6(3,
+3):1282-1297.
+doi:\href{https://doi.org/10.3390/ijerph6031282}{10.3390/ijerph6031282}}
+
+\bibitem[\citeproctext]{ref-MagnusIrgensHaug:2006}
+\CSLLeftMargin{6. }%
+\CSLRightInline{Magnus P, Irgens LM, Haug K, et al. Cohort profile: {The
+Norwegian Mother} and {Child Cohort Study} ({MoBa}). \emph{International
+Journal of Epidemiology}. 2006;35(5):1146-1150.
+doi:\href{https://doi.org/10.1093/ije/dyl170}{10.1093/ije/dyl170}}
+
+\bibitem[\citeproctext]{ref-ChatziPlanaDaraki:2009}
+\CSLLeftMargin{7. }%
+\CSLRightInline{Chatzi L, Plana E, Daraki V, et al. Metabolic {Syndrome}
+in {Early Pregnancy} and {Risk} of {Preterm Birth}. \emph{American
+Journal of Epidemiology}. 2009;170(7):829-836.
+doi:\href{https://doi.org/10.1093/aje/kwp211}{10.1093/aje/kwp211}}
+
+\bibitem[\citeproctext]{ref-MaitreBontCasas:2018}
+\CSLLeftMargin{8. }%
+\CSLRightInline{Maitre L, Bont J de, Casas M, et al. Human {Early Life
+Exposome} ({HELIX}) study: A {European} population-based exposome
+cohort. \emph{BMJ Open}. 2018;8(9):e021311.
+doi:\href{https://doi.org/10.1136/bmjopen-2017-021311}{10.1136/bmjopen-2017-021311}}
+
+\bibitem[\citeproctext]{ref-VrijheidSlamaRobinson:2014}
+\CSLLeftMargin{1. }%
+\CSLRightInline{Vrijheid M, Slama R, Robinson O, et al. The human
+early-life exposome ({HELIX}): Project rationale and design.
+\emph{Environ Health Perspect}. 2014;122(6):535-544.
+doi:\href{https://doi.org/10.1289/ehp.1307204}{10.1289/ehp.1307204}}
+
+\bibitem[\citeproctext]{ref-WrightSmallRaynor:2013}
+\CSLLeftMargin{2. }%
+\CSLRightInline{Wright J, Small N, Raynor P, et al. Cohort {Profile}:
+{The Born} in {Bradford} multi-ethnic family cohort study.
+\emph{International Journal of Epidemiology}. 2013;42(4):978-991.
+doi:\href{https://doi.org/10.1093/ije/dys112}{10.1093/ije/dys112}}
+
+\bibitem[\citeproctext]{ref-HeudeForhanSlama:2016}
+\CSLLeftMargin{3. }%
+\CSLRightInline{Heude B, Forhan A, Slama R, et al. Cohort {Profile}:
+{The EDEN} mother-child cohort on the prenatal and early postnatal
+determinants of child health and development. \emph{International
+Journal of Epidemiology}. 2016;45(2):353-363.
+doi:\href{https://doi.org/10.1093/ije/dyv151}{10.1093/ije/dyv151}}
+
+\bibitem[\citeproctext]{ref-GuxensBallesterEspada:2012}
+\CSLLeftMargin{4. }%
+\CSLRightInline{Guxens M, Ballester F, Espada M, et al. Cohort
+{Profile}: {The INMA}---{INfancia} y {Medio Ambiente}---({Environment}
+and {Childhood}) {Project}. \emph{International Journal of
+Epidemiology}. 2012;41(4):930-940.
+doi:\href{https://doi.org/10.1093/ije/dyr054}{10.1093/ije/dyr054}}
+
+\bibitem[\citeproctext]{ref-GrazulevicieneDanileviciuteNadisauskiene:2009}
+\CSLLeftMargin{5. }%
+\CSLRightInline{Grazuleviciene R, Danileviciute A, Nadisauskiene R,
+Vencloviene J. Maternal {Smoking},{GSTM1} and {GSTT1 Polymorphism} and
+{Susceptibility} to {Adverse Pregnancy Outcomes}. \emph{International
+Journal of Environmental Research and Public Health}. 2009;6(3,
+3):1282-1297.
+doi:\href{https://doi.org/10.3390/ijerph6031282}{10.3390/ijerph6031282}}
+
+\bibitem[\citeproctext]{ref-MagnusIrgensHaug:2006}
+\CSLLeftMargin{6. }%
+\CSLRightInline{Magnus P, Irgens LM, Haug K, et al. Cohort profile: {The
+Norwegian Mother} and {Child Cohort Study} ({MoBa}). \emph{International
+Journal of Epidemiology}. 2006;35(5):1146-1150.
+doi:\href{https://doi.org/10.1093/ije/dyl170}{10.1093/ije/dyl170}}
+
+\bibitem[\citeproctext]{ref-ChatziPlanaDaraki:2009}
+\CSLLeftMargin{7. }%
+\CSLRightInline{Chatzi L, Plana E, Daraki V, et al. Metabolic {Syndrome}
+in {Early Pregnancy} and {Risk} of {Preterm Birth}. \emph{American
+Journal of Epidemiology}. 2009;170(7):829-836.
+doi:\href{https://doi.org/10.1093/aje/kwp211}{10.1093/aje/kwp211}}
+
+\bibitem[\citeproctext]{ref-MaitreBontCasas:2018}
+\CSLLeftMargin{8. }%
+\CSLRightInline{Maitre L, Bont J de, Casas M, et al. Human {Early Life
+Exposome} ({HELIX}) study: A {European} population-based exposome
+cohort. \emph{BMJ Open}. 2018;8(9):e021311.
+doi:\href{https://doi.org/10.1136/bmjopen-2017-021311}{10.1136/bmjopen-2017-021311}}
+
+\end{CSLReferences}
 
 
 

@@ -1,22 +1,10 @@
-## Study design {#sec-design}
+## Study population and design {#sec-design}
 
-- Present key elements of study design
+The \acr{helix} is an ongoing project which aims to characterize early-life exposures and their potential association with endogenous biomarkers and health outcomes [@VrijheidSlamaRobinson:2014]. It consists of six existing population-based birth cohort studies across Europe: BiB (Born in Bradford, UK) [@WrightSmallRaynor:2013], EDEN (Study of determinants of pre- and postnatal developmental, France) [@HeudeForhanSlama:2016], INMA (Environment and Childhood, Spain) [@GuxensBallesterEspada:2012], KANC (Kaunas Cohort, Lithuania) [@GrazulevicieneDanileviciuteNadisauskiene:2009], MoBa (The Norwegian Mother and Child Cohort Study, Norway) [@MagnusIrgensHaug:2006], and Rhea (Mother–Child Cohort in Crete, Greece) [@ChatziPlanaDaraki:2009], for a total of 32,000 mother-child pairs. A \acr{helix} subcohort of 1,200 mother-child pairs was fully characterized for the external and internal exposome, including exposure and omics biomarkers during childhood. Eligibility criteria for inclusion in the \acr{helix} subcohort included: a) age 6-11 years, with a preference for 7-9 years; b) availability of sufficient stored pregnancy blood and urine samples; c) availability of complete address history from first to last follow-up; d) no serious health problems, which might affect the results of the clinical testing. Further information can be found in @MaitreBontCasas:2018.
 
-## Setting {#sec-setting}
-
-- Describe the setting, locations, and relevant dates, including periods of recruitment, exposure, follow-up, and data collection.
-
-## Participants {#sec-participants}
-
-- Cohort study: eligibility criteria, and the sources and methods of selection of participants. Describe methods of follow-up.
-- Cross-sectional study: give eligibility criteria, and the sources and methods of selection of participants.
-- Describe informed consent protocols.
-- Report how and by whom *race* or *ethnicity* was defined, and why this information was included in the study design. Disaggregate race and ethnicity data to the fullest extent possible.
+Ethical permission was obtained from the relevant authorities in the corresponding country.
 
 ## Variables {#sec-vars}
-
-- Clearly define all outcomes, exposures, predictors, potential confounders, and effect modifiers.
-- Explain the rationale for treating race as an exposure, confounder, effect modifier, or other type of variable in analyses.
 
 - Units (in `log`):
   - `hitrtse` in `ms`.
@@ -26,37 +14,37 @@
 
 ### Confounders {#sec-confounders}
 
+For each research question, defined by a specific type of exposure and outcome, the minimal set of covariates for inclusion in the analyses was selected on the basis of a \acr{dag} built with DAGitty [@TextorvanderZanderGilthorpe:2016] and ggdag [@Barrett:2023]. The sets of covariates were selected to estimate the total effect of the exposure on the outcome. Further, each minimal adjustment set was *augmented* with precision covariates, defined as the set of parents variable of the outcome that are not parents of the exposure. The adjustment sets are provided in the Supplementary Material as text files compatible with DAGitty.
+
 - For RQ1 I used creatinine values from HELIX. For RQ3 the ones from the steroids dataset. For RQ2, I included in the model both variables.
 
 ### Endocrine disrupting chemicals {#sec-edcs}
 
+Children were assessed between December 2013 and February 2016, and included neurological testing and urine collection. Urine samples of the night before and the first morning void on the day of the visit were combined to provide a more reliable exposure assessment. Non-persistent \acr{edcs} assessed in urine samples from children included phthalate metabolites, phenols, and \acr{op} pesticide metabolites. A list of the environmental chemicals determined in urine samples and used for the present study is given in @tbl-info-chems. The laboratory protocols for the analysis are described elsewhere [@HaugSakhiCequier:2018].
+
 ### Corticosteroids {#sec-steroids}
+
+Urine samples of the night before the day of the visit were used to measure levels of the corticosteroids. These included glucocorticosteroids, glucocorticosteroid metabolites, glucocorticosteroid precursors, glucocorticosteroid precursor metabolites, androgens, and androgen metabolites. A list of the corticosteroids determined in urine samples and used for the present study is given in @tbl-info-mets.
+
+To assess the levels of corticosteroids and their metabolites, LC-MS/MS analysis was applied at the Applied Metabolomics Research Group, IMIM (Hospital del Mar Medical Research Institute). The laboratory protocols for the analysis are described elsewhere [@MarcosRenauCasals:2014; @Gomez-GomezPozo:2020]. Of the 1,004 urine samples, 980 children were matched to the \acr{helix} subcohort.
+
+Three additional markers, cortisol production, cortisol metabolism, cortisone production, and 11bHSD activity, were computed based on the following: cortisol production as the sum of cortisol and its metabolites (20aDHF, 20bDHF, 5bDHF, 5aTHF, 5bTHF, 6OHF, 5a20acortol, 5a20bcortol, 5b20acortol, 5b20bcortol), cortisol metabolism as the inverse of the ratio between cortisol and its metabolites, cortisone production as the sum of cortisone and its metabolites (20aDHE, 20bDHE, 5aTHE, 5bTHE, 6OHE, 5b20acortolone, b20bcortolone), and 11bHSD activity as the ratio between cortisone production and cortisol production. 11bHSD activity gives a measure of conversion of cortisone to cortisol.
 
 ### Neurodevelopment {#sec-neurodevelopment}
 
-## Data sources and measurement {#sec-dat-sources}
-
-- For each variable of interest, give sources of data and details of methods of assessment (measurement).
-
-## Bias {#sec-bias}
-
-- Describe any efforts to address potential sources of bias.
-
-## Study size {#sec-size}
-
-- Explain how the study size was arrived at.
-
-## Quantitative variables {#sec-quant-vars}
-
-- Explain how quantitative variables were handled in the analyses. If applicable, describe which groupings were chosen and why.
+Neurodevelopmental outcomes were assessed with standardized, non-linguistic, and culturally blind computer tests, including the \acr{ant} [@RuedaFanMcCandliss:2004]. Further information can be found in @MaitreBontCasas:2018. Briefly, it is a computerized test that provides a measure of efficiency in three different functions of attention: alerting, orienting, and executive attention. The outcome of interest for the present study is the \acr{ahitrtse} [@SunyerEsnaolaAlvarez-Pedrerol:2015], a measure of response speed consistency throughout the test. A high \acr{ahitrtse} indicates highly variable reactions, and is considered a measure of inattentiveness.
 
 ## Statistical methods {#sec-stat-methods}
 
+### Data pre-processing {#sec-dat-preproc}
+
+### Estimation of balancing weights {#sec-weights-est}
+
+### G-computation {#sec-gcomp}
+
 - In RQ2, I included the logarithm of the denominator in the RHS. In RQ3, I used the logarithm of the ratio in the RHS.
 
-- Methods for selecting potential confounders (provide DAGs).
-- Whenever possible, mathematical equations should be written on a single line. For multiplication, use a times sign.
-- Describe all statistical methods with assumptions, including those used to control for confounding.
+- Describe all statistical methods with assumptions.
   - Description of outcome model, weighting method, estimand, and balance assessment.
   - Description of method used to estimate effects (e.g., g-computation).
   - Description of method used for SE and CI.
