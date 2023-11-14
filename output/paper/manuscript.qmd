@@ -1,8 +1,8 @@
 ---
-title: "Some Title"
+title: "Estimating associations between childhood exposure to non-persistent endocrine disruptors, corticosteroids, and neurodevelopment: A study based on the parametric g-formula"
 
-metadata-files:
-  - ../../../../all_phd/authors.yml
+# metadata-files:
+#   - ../../../../all_phd/authors.yml
 
 format:
   docx:
@@ -30,7 +30,7 @@ linkcolor: blue
 
 filters:
   - acronyms
-  - authors-block
+  # - authors-block
   - ../../../../all_phd/_extensions/wordcount/citeproc.lua
   - ../../../../all_phd/_extensions/wordcount/wordcount.lua
 
@@ -51,15 +51,6 @@ execute:
 ---
 
 # Abstract {.unnumbered}
-**Background**
- 
-**Objectives**
- 
-**Methods**
- 
-**Results**
- 
-**Discussion**
 
 \newpage
 
@@ -67,13 +58,8 @@ execute:
 - The use of the word "effect(s)" as a proxy for "association(s)" is discouraged.
 - The length of the abstract must be less or equal than 200 words, and should be unstructured, stating the research questions, the methods used, and the results and conclusions of the research.
 - The length must be <4,000 words, excluding abstract, references, tables, figure captions, acknowledgments, and Supplementary Material.
-  - Use the AMA format.
   - In-text citations: full-sized Arabic numerals in parentheses within the sentence.
 - Submission: SER members receive a 10% discount on the fees per page. This should be requested in the cover letter. Also 20% discount for Open Access charges. If uploading a single file (document, tables, figures, SM), designate the file as "Main document - anonymous".
-
-# Introduction {#sec-intro}
-
-**Do not use "Introduction" as a heading**.
 
 {{< include sections/introduction.qmd >}}
 

@@ -1,12 +1,3 @@
-## Background and rationale {#sec-background}
 
-- Brief review of the literature to summarize current knowledge.
-  - Acknowledge inconsistencies.
-  - For each study, indicate whether it was observational or experimental, and note key characteristics of study populations or experimental models.
-- Explain the scientific background and rationale for the investigation being reported.
-  - Identify knowledge gaps addressed by the current study.
-- Provide context for the study: include information on exposures and outcomes, and why they are relevant to environmental health.
 
-## Objectives {#sec-objectives}
-
-- Provide a clear description of the study hypotheses/aims/objectives, and eventually an overview of the approach used to address them.
+In the present study, we estimated associations between 1) non-persistent \acr{edcs} and attention, 2) non-persistent \acr{edcs} and corticosteroids, and 3) corticosteroids and attention, using the parametric g-formula and average contrasts, in children of a large prospective birth cohort in Europe.

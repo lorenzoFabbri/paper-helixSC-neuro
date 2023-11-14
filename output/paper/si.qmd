@@ -172,6 +172,29 @@ gt::gt(mets_info,
   )
 ```
 
+```{r lloq-mets}
+#| label: tbl-lloq-mets
+#| tbl-cap: Lower limits of quantification for the corticosteroids
+
+lloq_mets <- load_steroids()$loq |>
+  tidylog::mutate(
+    metabolite = stringr::str_replace(
+      metabolite,
+      "^X", ""
+    )
+  ) |>
+  tidylog::rename(
+    lloq = "loq"
+  )
+gt::gt(lloq_mets |> dplyr::arrange(metabolite)) |>
+  gt::tab_footnote(
+    footnote = "Lower limit of quantification expressed in nanograms per millilitre.",
+    locations = gt::cells_column_labels(
+      columns = lloq
+    )
+  )
+```
+
 ## Other results
 
 ### Balancing weights for effect modification
