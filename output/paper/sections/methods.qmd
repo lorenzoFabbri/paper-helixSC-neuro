@@ -6,12 +6,6 @@ Ethical permission was obtained from the relevant authorities in the correspondi
 
 ## Variables {#sec-vars}
 
-- Units (in `log`):
-  - `hitrtse` in `ms`.
-  - EDCs in `microg/L`.
-  - Cortisol production and cortisone production in `ng/mL`.
-  - Cortisol metabolism and 11bHSD in `NA`.
-
 ### Confounders {#sec-confounders}
 
 For each research question, defined by a specific type of exposure and outcome, the minimal set of covariates for inclusion in the analyses was selected on the basis of a \acr{dag} built with DAGitty [@TextorvanderZanderGilthorpe:2016] and ggdag [@Barrett:2023]. The sets of covariates were selected to estimate the total effect of the exposure on the outcome. Further, each minimal adjustment set was *augmented* with precision covariates, defined as the set of parents variable of the outcome that are not parents of the exposure. The adjustment sets are provided in the Supplementary Material as text files compatible with DAGitty.
@@ -32,26 +26,45 @@ Three additional markers, cortisol production, cortisol metabolism, cortisone pr
 
 ### Neurodevelopment {#sec-neurodevelopment}
 
-Neurodevelopmental outcomes were assessed with standardized, non-linguistic, and culturally blind computer tests, including the \acr{ant} [@RuedaFanMcCandliss:2004]. Further information can be found in @MaitreBontCasas:2018. Briefly, it is a computerized test that provides a measure of efficiency in three different functions of attention: alerting, orienting, and executive attention. The outcome of interest for the present study is the \acr{ahitrtse} [@SunyerEsnaolaAlvarez-Pedrerol:2015], a measure of response speed consistency throughout the test. A high \acr{ahitrtse} indicates highly variable reactions, and is considered a measure of inattentiveness.
+Neurodevelopmental outcomes were assessed with standardized, non-linguistic, and culturally blind computer tests, including the \acr{ant} [@RuedaFanMcCandliss:2004]. Further information can be found in @MaitreBontCasas:2018. Briefly, it is a computerized test that provides a measure of efficiency in three different functions of attention: alerting, orienting, and executive attention. The outcome of interest for the present study is the \acr{hitrtse} [@SunyerEsnaolaAlvarez-Pedrerol:2015], a measure of response speed consistency throughout the test. A high \acr{hitrtse} indicates highly variable reactions, and is considered a measure of inattentiveness.
 
 ## Statistical methods {#sec-stat-methods}
 
+```{r params-preproc}
+threshold_within_lod <- 20
+threshold_overall_lod <- 10
+threshold_within_nan <- 40
+threshold_overall_nan <- 30
+knn_k <- 5
+```
+
 ### Data pre-processing {#sec-dat-preproc}
+
+Concentrations of the corticosteroids were classified as quantifiable, below the \acr{loq}, possible interference or out of range, and not detected. For each metabolite, we computed the fraction of values below the \acr{loq} and not detected, both within each cohort and overall. We proceeded to impute these values using half the value of the corresponding \acr{lloq}, for those metabolites that had less than `r threshold_within_lod`% of missings within each cohort and `r threshold_overall_lod`% of missings overall.
+The remaining missing values were imputed using kNN from the `VIM` R package [@KowarikTempl:2016], for those metabolites that had less than `r threshold_within_nan`% of remaining missings within each cohort and `r threshold_overall_nan`% of remaining missings overall. We used `r knn_k` nearest neighbors. We natural log-transformed them to improve model fit, assessed with posterior predictive checks. To do so, replicated data were simulated with the fitted models and compared to the observed data. We used the `check_predictions` function from the `performance` R package using the default arguments [@LudeckeBen-ShacharPatil:2021]. Values of cortisol production and cortisone production were expressed in nanograms per millilitre, whereas values of cortisol metabolism and 11bHSD activity were unitless.
+
+Concentrations of the non-persistent \acr{edcs} were classified as quantifiable, below the \acr{lod}, possible interference or out of range, and not analysed. Concentrations below the \acr{lod} were singly imputed using a quantile regression approach for the imputation of left-censored missing data, as implemented in the `impute.QRILC` function from the `imputeLCMD` R package [@lazar2015imputelcmd]. Chemicals with more than 70% of observations below the \acr{lod} were not considered in the present study. Remaining missing values were imputed similarly using kNN. Values of the chemicals were expressed in $\mu$grams per litre.
+
+Missing values in the clinical outcome were imputed similarly using kNN. Similarly, we natural log-transformed them to improve model fit, assessed with posterior predictive checks. Values of the clinical outcome were expressed in \acr{mss}.
+
+Missing values in the covariates were imputed similarly using kNN. Categorical covariates were imputed using the `maxCat` function, which chooses the level with the most occurrences. Creatinine values were expressed in grams per litre.
 
 ### Estimation of balancing weights {#sec-weights-est}
 
+Stabilized balancing weights were estimated using the energy method available in the `WeightIt` R package [@Greifer:2023]. This methods estimates weights by minimizing an energy statistic related to covariate balance [@HulingGreiferChen:2023], thus avoiding the need to specify a parametric model.
+Weights below the 0.1 and above the 0.9 quantiles were trimmed. Trimming might lead to decreased covariate balance and potentially change the estimand, but can also decrease the variability of the weights.
+Covariate balance was assessed using functionalities provided by the `cobalt` R package [@Greifer:2023a]. Specifically, we used *Love* plots to visualize covariate balance before and after adjusting.
+
 ### G-computation {#sec-gcomp}
 
-- In RQ2, I included the logarithm of the denominator in the RHS. In RQ3, I used the logarithm of the ratio in the RHS.
+We estimated average contrasts with the parametric g-formula, a method of standardization. The parametric g-formula involves the following steps: 1) fit a outcome model including both covariates and balancing weights; 2) create two new datasets identical to the original one but with the exposure shifted according to a user-specified intervention set by a deterministic function of the observed exposure levels; 3) use the outcome model to compute adjusted predictions in the two counterfactual datasets; 4) compute the difference between the means of the adjusted predictions in the counterfactual datasets. The causal parameter of interest $\phi$ was thus specified as the difference in the expected counterfactual outcomes under the shifted exposure levels $\left( \phi^\Delta = \mathbb{E} \left[ Y^{d_1} \right] - \mathbb{E} \left[ Y^{d_2} \right] \right)$. In order for this parameter to be identified, the usual causal identifiability conditions (no unmeasured confounding, positivity, and consistency) are required. Since these conditions are likely not satisfied, we focused on the estimation of a statistical estimand that is as close as possible to the causal parameter of interest.
 
-- Describe all statistical methods with assumptions.
-  - Description of outcome model, weighting method, estimand, and balance assessment.
-  - Description of method used to estimate effects (e.g., g-computation).
-  - Description of method used for SE and CI.
-- Describe any methods used to examine subgroups and interactions (sub-group analysis or moderation analysis or analysis of effect-modification).
-- Explain how missing data were addressed.
-- Cohort study: explain how loss to follow-up was addressed.
-- Cross-sectional study: describe analytical methods taking account of sampling strategy.
-- Describe any sensitivity analyses.
-- When referring to previous publications for methods' details, include a brief description of the approach, key assumptions and limitations, and any deviation.
-- Names and version numbers for the used software packages, including non-data arguments if deviating from the default ones.
+We fit the outcome model using the `glm` function and a Gaussian family with identity link from base R. The exposure variable was modeled using natural cubic splines with 3 degrees of freedom, to more flexibly capture the \acr{adrf}. When the outcome was a ratio, as was the case for cortisol metabolism and 11bHSD activity, we included the logarithm of its denominator, cortisol and cortisol production, respectively, as a control variable [@BartlettPartnoy:2020].
+
+To estimate the average contrasts, we used the `avg_comparisons` function from the `marginaleffects` R package [@Arel-Bundock:2023]. The two counterfactual datasets were obtained by setting the exposures levels to 90th percentile ($d_1$) and the 10th percentile ($d_2$), for each cohort separately. The average contrasts were computed using the estimated balancing weights above. Robust standard errors were computed with the `sandwich` R package, using cohort as variable indicating clustering of observations [@Zeileis:2004; @ZeileisKollGraham:2020].
+
+We further estimated the \acr{adrf} using the `avg_predictions` function from the `marginaleffects` R package, examining 50 exposure values from the 10th to the 90th percentiles of the exposure. As done for the average contrasts, we included the estimated balancing weights and used cohort as a clustering variable when computing robust standard errors.
+
+### Effect-modification analysis
+
+We tested for possible effect-modification by sex. To do so, balancing weights were estimated separately for each level of the sex variable, and an interaction term between the exposure and sex was included in the outcome model. Similarly, the average contrasts were aggregated separately for each level of sex. We further tested for significance of the difference between the average contrasts of males and females.
