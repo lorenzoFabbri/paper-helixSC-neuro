@@ -6,22 +6,34 @@
 #' 
 #' @export
 create_steroid_scores <- function(dat) {
+  warning(
+    "Computation of `androgens_production` is wrong since AED is missing.",
+    call. = TRUE
+  )
+  
   dat_ret <- dat |>
     tidylog::mutate(
-      cortisol_production = rowSums(dplyr::across(c(
-        `F`, X20aDHF, X20bDHF, X5bDHF, X5aTHF, X5bTHF,
-        X6OHF, X5a20acortol, X5a20bcortol,
-        X5b20acortol, X5b20bcortol
-      ))), 
-      cortisol_metabolism = rowSums(dplyr::across(c(
-        X20aDHF, X20bDHF, X5bDHF, X5aTHF, X5bTHF,
-        X6OHF, X5a20acortol, X5a20bcortol, X5b20acortol, X5b20bcortol
-      ))) / `F`,
-      cortisone_production = rowSums(dplyr::across(c(
-        CortisoneE, X20aDHE, X20bDHE, X5aTHE, X5bTHE, X6OHE,
-        X5b20acortolone, X5b20bcortolone
-      ))),
-      X11bHSD = cortisone_production / cortisol_production
+      # Cortisol
+      cortisol_production = rowSums(dplyr::across(c(`F`, X20aDHF, X20bDHF, X5bDHF, X5aTHF, X5bTHF, X6OHF, X5a20acortol, X5a20bcortol, X5b20acortol, X5b20bcortol))), 
+      cortisol_metabolism = rowSums(dplyr::across(c(X20aDHF, X20bDHF, X5bDHF, X5aTHF, X5bTHF, X6OHF, X5a20acortol, X5a20bcortol, X5b20acortol, X5b20bcortol))) / `F`,
+      # Cortisone
+      cortisone_production = rowSums(dplyr::across(c(CortisoneE, X20aDHE, X20bDHE, X5aTHE, X5bTHE, X6OHE, X5b20acortolone, X5b20bcortolone))),
+      cortisone_metabolism = rowSums(dplyr::across(c(X20aDHE, X20bDHE, X5aTHE, X5bTHE, X6OHE, X5b20acortolone, X5b20bcortolone))) / CortisoneE,
+      # 11beta
+      X11bHSD = cortisone_production / cortisol_production,
+      # Global reductases
+      #global_reductase_f = rowSums(dplyr::across(c(X5aTHF, X5bTHF))) / `F`,
+      #global_reductase_e = X5bTHE / CortisoneE,
+      # Others
+      cyp3a4 = X6OHF / `F`,
+      corticosterone_production = rowSums(dplyr::across(c(X5aTHB, X5bTHB, A, X17DOcortolone))),
+      #X11deoxycortisol_production = rowSums(dplyr::across(c(S, X5bDHS, X5bTHS))),
+      #X11hydroxylase = rowSums(dplyr::across(c(X5aTHF, X5bTHF, X5bTHE))) / X5bTHS,
+      #X17hydroxylase = rowSums(dplyr::across(c(X5aTHF, X5bTHF))) / rowSums(dplyr::across(c(X5aTHB, X5bTHB))),
+      androgens_production = rowSums(dplyr::across(c(`T`, Andros, Etio))),
+      #X5a_reductase = Andreos / Etio,
+      lyase = rowSums(dplyr::across(c(Andros, Etio))) / rowSums(dplyr::across(c(X17HP, PT))),
+      global_adrenal_function = rowSums(dplyr::across(c(X5aTHF, X5bTHF, X5bTHE))) / rowSums(dplyr::across(c(X17HP, PT)))
     )
   
   return(dat_ret)
@@ -41,11 +53,9 @@ load_steroids <- function() {
   steroids <- paths$path_all_steroids
   # This is the "clean" dataset provided by Oliver
   datasets <- c("corticosteroids_unprocessed.csv")
-
+  
   # Loop over datasets
   tbls <- lapply(datasets, function(x) {
-    cat(paste0("Loading dataset: ", x, "...\n"))
-
     # Metabolites
     dd <- readr::read_csv(
       file = paste0(steroids, x),
@@ -56,7 +66,7 @@ load_steroids <- function() {
       tibble::as_tibble()
     dd <- janitor::clean_names(dd, case = "none")
     colnames(dd)[[1]] <- params_dat$variables$identifier
-
+    
     # Tidy names
     dd <- dd |>
       tidylog::mutate(HelixID = stringr::str_trim(HelixID, side = "both")) |>
@@ -72,7 +82,7 @@ load_steroids <- function() {
       tidylog::filter(
         ! HelixID %in% c("RHE232094", "MOB154")
       )
-
+    
     # LOD information
     loq <- readr::read_csv(
       file = paste0(steroids, "lod.csv"),
@@ -83,7 +93,7 @@ load_steroids <- function() {
       tibble::as_tibble()
     colnames(loq) <- c("metabolite", "loq")
     loq$metabolite <- janitor::make_clean_names(loq$metabolite,
-      case = "none"
+                                                case = "none"
     )
     loq <- loq |>
       tidylog::mutate(metabolite = stringr::str_replace_all(
@@ -94,7 +104,7 @@ load_steroids <- function() {
       msg = "Mismatch in the number of metabolites."
     )
     ############################################################################
-
+    
     # Cleaning
     cols <- setdiff(
       colnames(dd),
@@ -121,9 +131,10 @@ load_steroids <- function() {
       ~ paste0(.x, "_cdesc", recycle0 = TRUE),
       !dplyr::starts_with(params_dat$variables$identifier)
     )
-
+    
     ## Remove unwanted columns and change to numeric
-    unwanted_cols <- c("AED")
+    #unwanted_cols <- c("AED")
+    unwanted_cols <- c()
     dd <- dd |>
       tidylog::select(-dplyr::all_of(unwanted_cols)) |>
       tidylog::mutate(
@@ -142,7 +153,7 @@ load_steroids <- function() {
         )
       )
     dd_cdesc <- dd_cdesc |>
-      tidylog::select(-dplyr::all_of(paste0(unwanted_cols, "_cdesc"))) |>
+      tidylog::select(-dplyr::any_of(paste0(unwanted_cols, "_cdesc"))) |>
       tidylog::mutate(dplyr::across(
         dplyr::where(is.numeric),
         as.factor
@@ -157,7 +168,7 @@ load_steroids <- function() {
         creatinine_to_helix = Creatinine * 1.1312 * 1e-4,
       )
     ############################################################################
-
+    
     tbl_vals <- dd_cdesc
     tbl_vals$HelixID <- NULL
     tbl_vals <- tbl_vals |> c() |> unlist() |> unname() |>
@@ -173,16 +184,16 @@ load_steroids <- function() {
       cdesc = dd_cdesc
     ))
   }) # End loop read data
-
+  
   # Merged data
   metabs <- purrr::reduce(lapply(tbls, "[[", "met"),
-    .f = dplyr::bind_rows
+                          .f = dplyr::bind_rows
   )
   cdescs <- purrr::reduce(lapply(tbls, "[[", "cdesc"),
-    .f = dplyr::bind_rows
+                          .f = dplyr::bind_rows
   )
   loqs <- tbls[[1]]$loq
-
+  
   # Some sanity checks
   assertthat::assert_that(
     nrow(metabs) == length(unique(metabs[[params_dat$variables$identifier]])),
@@ -207,7 +218,7 @@ load_steroids <- function() {
     ncol(metabs) == ncol(cdescs) + 1,
     msg = "Mismatched number of columns in metabolomics and description data."
   )
-
+  
   return(list(
     metabolome = metabs,
     desc = cdescs,
@@ -224,10 +235,10 @@ load_steroids <- function() {
 load_dat_request <- function() {
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   paths <- params_dat$paths
-
+  
   dat <- read.csv(paths$path_dat_request,
-    header = TRUE, stringsAsFactors = TRUE,
-    na.strings = c("NA", "null")
+                  header = TRUE, stringsAsFactors = TRUE,
+                  na.strings = c("NA", "null")
   ) |>
     tibble::as_tibble() |>
     tidylog::mutate(
@@ -255,15 +266,15 @@ load_dat_request <- function() {
         \(x) factor(x)
       ),
       h_bf = factor(h_bf,
-        levels = c("Never", "Ever"),
-        labels = c(0, 1)
+                    levels = c("Never", "Ever"),
+                    labels = c(0, 1)
       ),
       cohort = factor(cohort,
-        levels = c(
-          "BIB", "EDEN",
-          "KANC", "MOBA",
-          "RHEA", "SAB"
-        )
+                      levels = c(
+                        "BIB", "EDEN",
+                        "KANC", "MOBA",
+                        "RHEA", "SAB"
+                      )
       ),
       dplyr::across(
         dplyr::contains(c(
@@ -274,8 +285,8 @@ load_dat_request <- function() {
         \(x) factor(x)
       ),
       h_folic_t1 = factor(h_folic_t1,
-        levels = c("Yes", "No"),
-        labels = c(1, 2)
+                          levels = c("Yes", "No"),
+                          labels = c(1, 2)
       ),
       dplyr::across(
         dplyr::contains("_pass_smok"),
@@ -287,20 +298,20 @@ load_dat_request <- function() {
         )),
         function(x) {
           factor(x,
-            levels = c("yes", "no"),
-            labels = c(1, 2)
+                 levels = c("yes", "no"),
+                 labels = c(1, 2)
           )
         }
       ),
       hs_wtr_hm = factor(hs_wtr_hm,
-        levels = c(
-          "Bottled",
-          "Municipal (tap) filtered",
-          "Municipal (tap ) non-filtered",
-          "Other, specify in the next question",
-          "Don't know"
-        ),
-        labels = c(1, 2, 3, 4, 5)
+                         levels = c(
+                           "Bottled",
+                           "Municipal (tap) filtered",
+                           "Municipal (tap ) non-filtered",
+                           "Other, specify in the next question",
+                           "Don't know"
+                         ),
+                         labels = c(1, 2, 3, 4, 5)
       ),
       dplyr::across(
         dplyr::contains("_ethnicity"),
@@ -321,48 +332,48 @@ load_dat_request <- function() {
       #   labels = c(1, 2, 3, 4, 5, 6, 7)
       # ),
       e3_edum = factor(e3_edum,
-        levels = c(
-          "primary school",
-          "secondary school",
-          "university degree or higher"
-        ),
-        labels = c(0, 1, 2)
+                       levels = c(
+                         "primary school",
+                         "secondary school",
+                         "university degree or higher"
+                       ),
+                       labels = c(0, 1, 2)
       ),
       e3_eduf = factor(e3_eduf,
-        levels = c(
-          "primary school",
-          "secondary school",
-          "university degree or higher"
-        ),
-        labels = c(0, 1, 2)
+                       levels = c(
+                         "primary school",
+                         "secondary school",
+                         "university degree or higher"
+                       ),
+                       labels = c(0, 1, 2)
       ),
       e3_edumc = factor(e3_edumc,
-        levels = c("low", "middle", "high"),
-        labels = c(0, 1, 2)
+                        levels = c("low", "middle", "high"),
+                        labels = c(0, 1, 2)
       ),
       e3_edufc = factor(e3_edufc,
-        levels = c("low", "middle", "high"),
-        labels = c(0, 1, 2)
+                        levels = c("low", "middle", "high"),
+                        labels = c(0, 1, 2)
       ),
       e3_edupc = factor(e3_edupc,
-        levels = c("low", "middle", "high"),
-        labels = c(0, 1, 2)
+                        levels = c("low", "middle", "high"),
+                        labels = c(0, 1, 2)
       ),
       e3_ses = factor(e3_ses,
-        levels = c("low income", "medium income", "high income"),
-        labels = c(1, 2, 3)
+                      levels = c("low income", "medium income", "high income"),
+                      labels = c(1, 2, 3)
       ),
       e3_marital = factor(e3_marital,
-        levels = c(
-          "living alone",
-          "living with the father",
-          "other situation"
-        ),
-        labels = c(1, 0, 2)
+                          levels = c(
+                            "living alone",
+                            "living with the father",
+                            "other situation"
+                          ),
+                          labels = c(1, 0, 2)
       ),
       e3_sex = factor(e3_sex,
-        levels = c("female", "male"),
-        labels = c(1, 0)
+                      levels = c("female", "male"),
+                      labels = c(1, 0)
       )
     ) |>
     tidylog::rename(
@@ -371,7 +382,7 @@ load_dat_request <- function() {
       hs_dedtp_madj = hs_dedtp_mrawadj,
       hs_cotinine_cadj = hs_cotinine_crawadj
     )
-
+  
   # Manually modify some factors that have levels w/ few subjects
   dat <- dat |>
     tidylog::mutate(
@@ -394,20 +405,20 @@ load_dat_request <- function() {
     ) |>
     # Exclude subjects with not usable test
     tidylog::filter(hs_qual_test %in% c(1, 2))
-
+  
   which_meta <- switch(Sys.getenv("TAR_PROJECT"),
-    "rq01" = "rq1",
-    "rq1" = "rq1",
-    "rq02" = "rq2",
-    "rq2" = "rq2",
-    "rq03" = "rq3",
-    "rq3" = "rq3",
-    "rq04" = "rq4",
-    "rq4" = "rq4"
+                       "rq01" = "rq1",
+                       "rq1" = "rq1",
+                       "rq02" = "rq2",
+                       "rq2" = "rq2",
+                       "rq03" = "rq3",
+                       "rq3" = "rq3",
+                       "rq04" = "rq4",
+                       "rq4" = "rq4"
   )
-  meta <- readODS::read_ods("docs/data_request_all.ods",
-    col_names = TRUE,
-    strings_as_factors = TRUE
+  meta <- readODS::read_ods(here::here("docs", "data_request_all.ods"),
+                            col_names = TRUE,
+                            strings_as_factors = TRUE
   ) |>
     tibble::as_tibble() |>
     tidylog::mutate(variable = dplyr::case_when(
@@ -431,7 +442,7 @@ load_dat_request <- function() {
   meta[cols_to_change_type] <- sapply(
     meta[cols_to_change_type], as.character
   )
-
+  
   return(list(
     dat = dat,
     meta = meta

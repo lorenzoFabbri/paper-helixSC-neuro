@@ -1,3 +1,14 @@
+```{r vars}
+source(here::here("code/dictionaries.R"))
+
+params <- params(is_hpc = FALSE)
+threshold_within_lod <- params$steps$rq2$preproc_outcome$llodq$threshold_within
+threshold_overall_lod <- params$steps$rq2$preproc_outcome$llodq$threshold_overall
+threshold_within_nan <- params$steps$rq2$preproc_outcome$missings$threshold_within
+threshold_overall_nan <- params$steps$rq2$preproc_outcome$missings$threshold_overall
+knn_k <- params$steps$rq2$preproc_outcome$missings$k
+```
+
 ## Study population and design {#sec-design}
 
 The \acr{helix} is an ongoing project which aims to characterize early-life exposures and their potential association with endogenous biomarkers and health outcomes [@VrijheidSlamaRobinson:2014]. It consists of six existing population-based birth cohort studies across Europe: BiB (Born in Bradford, UK) [@WrightSmallRaynor:2013], EDEN (Study of determinants of pre- and postnatal developmental, France) [@HeudeForhanSlama:2016], INMA (Environment and Childhood, Spain) [@GuxensBallesterEspada:2012], KANC (Kaunas Cohort, Lithuania) [@GrazulevicieneDanileviciuteNadisauskiene:2009], MoBa (The Norwegian Mother and Child Cohort Study, Norway) [@MagnusIrgensHaug:2006], and Rhea (Mother–Child Cohort in Crete, Greece) [@ChatziPlanaDaraki:2009], for a total of 32,000 mother-child pairs. A \acr{helix} subcohort of 1,200 mother-child pairs was fully characterized for the external and internal exposome, including exposure and omics biomarkers during childhood. Eligibility criteria for inclusion in the \acr{helix} subcohort included: a) age 6-11 years, with a preference for 7-9 years; b) availability of sufficient stored pregnancy blood and urine samples; c) availability of complete address history from first to last follow-up; d) no serious health problems, which might affect the results of the clinical testing. Further information can be found in @MaitreBontCasas:2018.
@@ -29,14 +40,6 @@ Three additional markers, cortisol production, cortisol metabolism, cortisone pr
 Neurodevelopmental outcomes were assessed with standardized, non-linguistic, and culturally blind computer tests, including the \acr{ant} [@RuedaFanMcCandliss:2004]. Further information can be found in @MaitreBontCasas:2018. Briefly, it is a computerized test that provides a measure of efficiency in three different functions of attention: alerting, orienting, and executive attention. The outcome of interest for the present study is the \acr{hitrtse} [@SunyerEsnaolaAlvarez-Pedrerol:2015], a measure of response speed consistency throughout the test. A high \acr{hitrtse} indicates highly variable reactions, and is considered a measure of inattentiveness.
 
 ## Statistical methods {#sec-stat-methods}
-
-```{r params-preproc}
-threshold_within_lod <- 20
-threshold_overall_lod <- 10
-threshold_within_nan <- 40
-threshold_overall_nan <- 30
-knn_k <- 5
-```
 
 ### Data pre-processing {#sec-dat-preproc}
 

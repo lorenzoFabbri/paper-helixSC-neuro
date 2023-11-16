@@ -1061,7 +1061,6 @@ viz_desc_vars <- function(dat, vars, fct_levels, is_chem) {
     ggplot2::scale_fill_distiller(palette = "Blues", direction = 1) +
     ggplot2::coord_fixed() +
     ggplot2::facet_grid(cohort ~ .) +
-    ggplot2::labs(caption = "1: quantifiable, 2: <LOD, 3: interference or out of range, 4: no sample") +
     ggplot2::theme(
       axis.line = ggplot2::element_line(color = "black"),
       plot.background = ggplot2::element_blank(),
@@ -1074,6 +1073,14 @@ viz_desc_vars <- function(dat, vars, fct_levels, is_chem) {
         hjust = 1
       )
     )
+  
+  if (is_chem) {
+    plt <- plt +
+      ggplot2::labs(caption = "1: quantifiable, 2: <LOD, 3: interference or out of range, 4: not analysed")
+  } else {
+    plt <- plt +
+      ggplot2::labs(caption = "1: quantifiable, 2: <LOQ, 3: interference or out of range, 4: not detected")
+  }
   
   df_plot <- df_plot |>
     dplyr::arrange(

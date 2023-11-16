@@ -25,15 +25,9 @@ outcome <- switch(rq,
 
 if (rq == "rq2") {
   tbl_outcomes <- tibble::tibble(
-    name = c("cortisol_production",
-             "cortisol_metabolism",
-             "cortisone_production",
-             "X11bHSD") |>
+    name = vars_of_interest()$new_metabolites |>
       stringr::str_to_lower(),
-    outcome = c("cortisol_production",
-                "cortisol_metabolism",
-                "cortisone_production",
-                "X11bHSD")
+    outcome = vars_of_interest()$new_metabolites
   )
 } else {
   tbl_outcomes <- tibble::tibble(

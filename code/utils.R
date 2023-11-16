@@ -365,7 +365,9 @@ rq_prepare_data <- function(dat) {
     cols_to_remove <- setdiff(
       colnames(dat$exposures),
       c(params_dat$variables$identifier,
-        "F", "cortisol_production")
+        "F", "cortisol_production", "CortisoneE",
+        "X5bTHS", "X5aTHB", "X5bTHB",
+        "Etio", "X17HP", "PT")
     )
     dat$exposures <- create_steroid_scores(dat = dat$exposures)
     
@@ -406,7 +408,9 @@ rq_prepare_data <- function(dat) {
     cols_to_remove <- setdiff(
       colnames(dat$outcome),
       c(params_dat$variables$identifier,
-        "F", "cortisol_production")
+        "F", "cortisol_production", "CortisoneE",
+        "X5bTHS", "X5aTHB", "X5bTHB",
+        "Etio", "X17HP", "PT")
     )
     dat$outcome <- create_steroid_scores(dat = dat$outcome)
     
@@ -459,10 +463,7 @@ rq_estimate_weights <- function(dat, by = NULL, save_results,
   
   # Step 1: estimate weights for covariate balance
   if (rq %in% c("rq3", "rq4")) {
-    list_exposures <- c("cortisol_production",
-                        "cortisol_metabolism",
-                        "cortisone_production",
-                        "X11bHSD")
+    list_exposures <- vars_of_interest()$new_metabolites
   } else {
     list_exposures <- names(dat$exposures)
   }
@@ -643,7 +644,16 @@ rq_fit_model_weighted <- function(dat, outcome, by = c(),
   if (rq == "rq2") {
     den <- switch(outcome,
                   "cortisol_metabolism" = "F",
+                  "cortisone_metabolism" = "CortisoneE",
                   "X11bHSD" = "cortisol_production",
+                  "global_reductase_f" = "F",
+                  "global_reductase_e" = "CortisoneE",
+                  "cyp3a4" = "F",
+                  "X11hydroxylase" = "X5bTHS",
+                  "X17hydroxylase" = c("X5aTHB", "X5bTHB"),
+                  "X5a_reductase" = "Etio",
+                  "lyase" = c("X17HP", "PT"),
+                  "global_adrenal_function" = c("X17HP", "PT"),
                   NULL
     )
     dat$covariates <- dat$covariates |>
@@ -664,10 +674,7 @@ rq_fit_model_weighted <- function(dat, outcome, by = c(),
       outcome
     )))
   if (rq %in% c("rq3", "rq4")) {
-    list_exposures <- c("cortisol_production",
-                        "cortisol_metabolism",
-                        "cortisone_production",
-                        "X11bHSD")
+    list_exposures <- vars_of_interest()$new_metabolites
   } else {
     list_exposures <- names(dat$exposures)
   }

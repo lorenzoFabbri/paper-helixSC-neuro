@@ -62,16 +62,36 @@ vars_of_interest <- function(append_to_chem = NULL) {
     "PT",
     "T",
     "Andros",
-    "Etio"
+    "Etio",
+    "AED"
+  )
+  new_metabolites <- c(
+    "cortisol_production",
+    "cortisol_metabolism",
+    "cortisone_production",
+    "cortisone_metabolism",
+    "X11bHSD",
+    #"global_reductase_f",
+    #"global_reductase_e",
+    "cyp3a4",
+    "corticosterone_production",
+    #"X11deoxycortisol_production",
+    #"X11hydroxylase",
+    #"X17hydroxylase",
+    "androgens_production",
+    #"X5a_reductase",
+    "lyase",
+    "global_adrenal_function"
   )
   outcomes <- c(
     "hs_hitrtse"
     #"hs_dcolors3"
   )
-
+  
   return(list(
     chemicals = chemicals,
     metabolites = metabolites,
+    new_metabolites = new_metabolites,
     outcomes = outcomes
   ))
 } # End function vars_of_interest
@@ -86,7 +106,7 @@ params <- function(is_hpc) {
     common_path <-
       "~/mounts/rstudioserver/"
   }
-
+  
   paths <- list(
     path_dat_request = "data/data_paper3/requests/AP136/HELIX_AP_136_request_updated12jun.2023.csv",
     path_all_steroids = "data/data_paper3/requests/AP136/steroids/"
@@ -95,7 +115,7 @@ params <- function(is_hpc) {
     paste0(common_path, x)
   })
   ##############################################################################
-
+  
   chemicals <- vars_of_interest(append_to_chem = "c")$chemicals
   metabolites <- vars_of_interest()$metabolites
   clinical_outcomes <- vars_of_interest()$outcomes
@@ -111,7 +131,7 @@ params <- function(is_hpc) {
       "hs_tob"
     )
   )
-
+  
   variables <- list(
     identifier = "HelixID",
     strategy_select_adj_set = "minimize_missings",
@@ -138,9 +158,9 @@ params <- function(is_hpc) {
     ) # End options RQ4
   )
   ##############################################################################
-
-  threshold_within_lod <- 20
-  threshold_overall_lod <- 10
+  
+  threshold_within_lod <- 30
+  threshold_overall_lod <- 20
   threshold_within_nan <- 40
   threshold_overall_nan <- 30
   steps <- list(
@@ -356,7 +376,7 @@ params <- function(is_hpc) {
     ############################################################################
   ) # End list of steps
   ##############################################################################
-
+  
   return(list(
     paths = paths,
     variables = variables,
@@ -403,13 +423,13 @@ params_analyses <- function() {
   rq2 <- rq1
   rq3 <- rq1
   rq4 <- rq1
-
+  
   ret <- list(
     rq1 = rq1,
     rq2 = rq2,
     rq3 = rq3,
     rq4 = rq4
   )
-
+  
   return(ret)
 } # End function params_analyses

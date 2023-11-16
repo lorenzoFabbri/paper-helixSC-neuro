@@ -11,7 +11,7 @@ format:
     pdf-engine: lualatex
     number-sections: true
     toc: false
-    keep-tex: true
+    keep-tex: false
     include-in-header:
       text: |
         \usepackage{lineno}
@@ -50,6 +50,10 @@ execute:
   message: false
 ---
 
+```{r}
+here::i_am("output/paper/manuscript.qmd")
+```
+
 # Abstract {.unnumbered}
 
 \newpage
@@ -58,7 +62,7 @@ execute:
 - The use of the word "effect(s)" as a proxy for "association(s)" is discouraged.
 - The length of the abstract must be less or equal than 200 words, and should be unstructured, stating the research questions, the methods used, and the results and conclusions of the research.
 - The length must be <4,000 words, excluding abstract, references, tables, figure captions, acknowledgments, and Supplementary Material.
-  - In-text citations: full-sized Arabic numerals in parentheses within the sentence.
+- In-text citations: full-sized Arabic numerals in parentheses within the sentence.
 - Submission: SER members receive a 10% discount on the fees per page. This should be requested in the cover letter. Also 20% discount for Open Access charges. If uploading a single file (document, tables, figures, SM), designate the file as "Main document - anonymous".
 
 {{< include sections/introduction.qmd >}}
@@ -82,6 +86,3 @@ execute:
 \newpage
 
 # References {.unnumbered}
-
-::: {#refs}
-:::
