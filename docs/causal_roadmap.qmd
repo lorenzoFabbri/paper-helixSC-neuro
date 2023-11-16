@@ -10,8 +10,6 @@ keywords:
   - Endocrine Disrupting Chemicals
   - Neurodevelopment
   - Neurobehavior
-metadata-files:
-  - ../../../all_phd/authors.yml
 format:
   pdf:
     pdf-engine: pdflatex
@@ -38,7 +36,6 @@ editor_options:
   chunk_output_type: console
 filters:
   - ../../../all_phd/_extensions/acronyms/parse-acronyms.lua
-  - ../../../all_phd/_extensions/authors-block/authors-block.lua
 acronyms:
   fromfile: ../../../all_phd/acronyms.yml
   insert_links: false
@@ -122,12 +119,6 @@ The primary study **population** is based on the HELIX sub-cohort, consisting of
 - \acr{cbcl}, for assessing behavioural and emotional problems [@Tm:2001]. The recommended outcomes are: internalizing scales-emotional problems, externalizing scales-behavioral problems, and total problems.
 
 <!-- ####################################################################### -->
-## Descriptive analyses
-<!-- ####################################################################### -->
-
-{{< include ../../../all_phd/descriptive_stats.qmd >}}
-
-<!-- ####################################################################### -->
 # Define a realistic statistical model
 <!-- ####################################################################### -->
 
@@ -167,7 +158,7 @@ The corresponding causal graph (without indexes for ease of notation) is shown i
 #| fig.height: 3.0
 #| fig.width: 3.0
 causal_graph <- ggdag::dagify(A ~ W + U_A, Y ~ W + A + U_Y, W ~ U_W, 
-                              exposure = "A", outcome = "Y") %>%
+                              exposure = "A", outcome = "Y") |>
   ggdag::tidy_dagitty()
 ggdag::ggdag(causal_graph) + ggdag::theme_dag()
 ```
@@ -196,8 +187,8 @@ We will estimate the short-term effects of childhood exposure to non-persistent 
 #| fig.cap: Simplified DAG for research question 1.
 sdag1 <- ggdag::dagify(X_ti ~ W_t, 
                        Y ~ W_t + X_ti, 
-                       exposure = "X_ti", outcome = "Y") %>%
-  ggdag::tidy_dagitty() %>%
+                       exposure = "X_ti", outcome = "Y") |>
+  ggdag::tidy_dagitty() |>
   ggdag::ggdag(text_size = 2, node_size = 10) + ggdag::theme_dag() +
   ggplot2::ggtitle("RQ1")
 ```
@@ -339,8 +330,8 @@ ggdag::dagify(
   exposure = "metab", 
   outcome = "neuro", 
   coords = coords
-) %>%
-  ggdag::ggdag(., layout = "circle") +
+) |>
+  ggdag::ggdag(layout = "circle") +
   ggdag::geom_dag_point(col = "gray") +
   ggdag::geom_dag_edges() +
   ggdag::geom_dag_text(col = "black") +
@@ -361,27 +352,9 @@ ggdag::dagify(
 # Interpretation and sensitivity analyses to inform a substantive conclusion
 <!-- ####################################################################### -->
 
-## Reliable Causal Inference
-
-{{< include ../../../all_phd/app-rel-ci.qmd >}}
-
-## Reliable Statistical Inference
-
-{{< include ../../../all_phd/app-rel-si.qmd >}}
-
-## Replicability
-
-{{< include ../../../all_phd/app-replicability.qmd >}}
-
 <!-- ####################################################################### -->
 # Appendix
 <!-- ####################################################################### -->
-
-<!-- ####################################################################### -->
-## Data Checking
-<!-- ####################################################################### -->
-
-{{< include ../../../all_phd/app-data-checking.qmd >}}
 
 <!-- ####################################################################### -->
 ## Checklist A: Replicability
@@ -393,14 +366,10 @@ Table with random seed, names, version numbers, and description of the main soft
 |:---------|:------------|:----------------|
 | Random seed | NA | Will be set to $X$ |
 | `R` | `r I(paste0(R.version$major, ".", R.version$minor))` | Statistical programming environment |
-| `tlverse` | `r packageVersion("tlverse")` | Targeted Learning software ecosystem in R |
 | `lmtp` | `r packageVersion("lmtp")` | Non-parametric Causal Effects of Feasible Interventions Based on Modified Treatment Policies |
-| `sl3` | `r packageVersion("sl3")` | Super Learner ensemble machine learning |
 | `labelled` | `r packageVersion("labelled")` | Manipulate metadata |
 | `dlookr` | `r packageVersion("dlookr")` | Diagnose, explore, and transform data |
-| `Hmisc` | `r packageVersion("Hmisc")` | Harrell Miscellaneous |
 | `dagitty` | `r packageVersion("dagitty")` | Graphical Analysis of Structural Causal Models |
-| `qreport` | `r packageVersion("qreport")` | Facilitating the composition of Quarto reports |
 | ... | ... | ... |
 
 ## Checklist B1: `lmtp` package specifications
@@ -426,23 +395,6 @@ Table providing values for all non-data arguments, and brief rationale when depa
 | `.learners_trt_folds` | 10 | Y | The number of \acr{cv} folds for `learners_trt` |
 
 : Specifications for the `lmtp` R package. {#tbl-lmtp-specs}
-
-<!-- ####################################################################### -->
-## Gene-Environment Interactions
-<!-- ####################################################################### -->
-
-Genetic polymorphisms relevant for the **chemicals**:
-
-* \acr{opps}:
-  * The \acr{snps} of the *PON1* (paraoxonase 1) gene, known to influence the ability to metabolize and detoxify \acr{opps}: `rs854560` and `rs662`. [Reference](https://doi.org/10.1289/ehp.1408976).
-  * The \acr{snps} of the genes coding for \acr{opps}-metabolizing enzymes: `rs1803274`, `rs1799807`, `rs662`, `rs854560`, `rs705379`, `rs4244285`, `rs3892097`, and `rs2177180`. [Reference](https://doi.org/10.1016/j.chemosphere.2015.07.079).
-* Phenols:
-  * The \acr{snp} of the *UGT2B15* gene: `rs1902023`. [Reference](https://doi.org/10.1016/j.envint.2020.106172).
-* Phthalates:
-  *  The \acr{snps} of the cytochrome P450 (*CYPs*) and UDP-glucuronosyltransferase (*UGTs*) genes: `rs1057910`, `rs1799853`, `rs4244285`, `rs12248560`, `rs3892097`, `rs1902023`, and `rs11692021`. [Reference](https://doi.org/10.1016/j.envint.2021.107046).
-  * The \acr{snps} of the *PPAR*$\alpha$ gene: `rs75525202`, `rs4823902`, `rs4253690`, `rs12330015`, `rs5766698`, `rs115250492`, and `rs1800246`. [Reference](https://doi.org/10.3389/fgene.2022.855544). Not sure whether these \acr{snps} should be considered in the list below.
-
-Genetic polymorphisms relevant for the **outcomes**:
 
 <!-- ####################################################################### -->
 ## DAGs
