@@ -185,9 +185,11 @@ We tested for possible effect-modification by sex. To do so, balancing weights w
 
 ## Participants {#sec-res-participants}
 
+In total, 1,297 children were included in the dataset. Of these, 976 had information also about the corticosteroids. The sample consisted of 55% girls. The median \acr{hitrtse} was 300 ms (\acr{iqr}, 231-368), with lower median values for EDEN, MOBA, and SAB, corresponding to the cohorts with older children. At the time of visit, the median age of the children was 8.06 years. The children were mostly Caucasian (90%) or Pakistani (6.2%). @tbl-pop-desc provides descriptive statistics for the outcome and covariates, by cohort and overall. Codebooks for the used covariates, by research question, are provided in @supptbl-codebook-1, @supptbl-codebook-2, and @supptbl-codebook-3.
+
 ## Descriptive data {#sec-res-pop-desc}
 
-## Outcome data {#sec-res-out-desc}
+Levels of unprocessed non-persistent \acr{edcs} and corticosteroids are presented in @tbl-edc-desc and @tbl-met-desc, respectively.
 
 ## Main results {#sec-res-main}
 

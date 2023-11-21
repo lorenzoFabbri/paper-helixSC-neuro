@@ -26,7 +26,7 @@ here::i_am("output/paper/_tables.qmd")
 
 ```{r pop-desc}
 #| label: tbl-pop-desc
-#| tbl-cap: Population description
+#| tbl-cap: Characteristics of the children included in the analyses, by cohort and overall
 
 targets::tar_load("table1", store = store)
 table1
@@ -36,7 +36,7 @@ table1
 
 ```{r edc-desc}
 #| label: tbl-edc-desc
-#| tbl-cap: Levels of unprocessed chemicals
+#| tbl-cap: Levels of unprocessed chemicals, by cohort and overall
 
 targets::tar_load("desc_chems_mets", store = store)
 desc_chems_mets$desc_chems
@@ -46,7 +46,7 @@ desc_chems_mets$desc_chems
 
 ```{r met-desc}
 #| label: tbl-met-desc
-#| tbl-cap: Levels of unprocessed corticosteroids
+#| tbl-cap: Levels of unprocessed corticosteroids, by cohort and overall
 
 desc_chems_mets$desc_mets
 ```
