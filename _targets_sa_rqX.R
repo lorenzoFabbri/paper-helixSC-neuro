@@ -8,18 +8,18 @@ targets::tar_option_set(
 )
 
 params_dag <- list(
-  type = "minimal", 
+  type = "minimal",
   effect = "total"
 )
 rq <- Sys.getenv("TAR_PROJECT")
-exposure <- switch(rq, 
-                   "rq1" = "chemical", 
-                   "rq2" = "chemical", 
+exposure <- switch(rq,
+                   "rq1" = "chemical",
+                   "rq2" = "chemical",
                    "rq3" = "biomarker",
                    "rq4" = "biomarker")
-outcome <- switch(rq, 
-                  "rq1" = "outcome", 
-                  "rq2" = "biomarker", 
+outcome <- switch(rq,
+                  "rq1" = "outcome",
+                  "rq2" = "biomarker",
                   "rq3" = "outcome",
                   "rq4" = "chemical")
 

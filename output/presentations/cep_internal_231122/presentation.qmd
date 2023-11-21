@@ -1,0 +1,67 @@
+---
+author: Lorenzo Fabbri
+title: "Estimating associations between childhood exposure to non-persistent endocrine disruptors, corticosteroids, and neurodevelopment: A study based on the parametric g-formula"
+
+format:
+  revealjs:
+    embed-resources: true
+    slide-number: true
+    width: 1600
+    height: 900
+    theme: simple
+    center: true
+
+editor_options: 
+  chunk_output_type: console
+execute:
+  echo: false
+  warning: false
+  error: false
+  message: false
+---
+
+## Recap
+
+* We want to estimate the following *effects* (in children from HELIX):
+  * Non-persistent EDCs and neurodevelopment (using attention as *proxy*).
+  * Non-persistent EDCs and corticosteroids.
+  * Corticosteroids and neurodevelopment.
+* For attention we used the HIT-RT SE from the Attention Network Test.
+* We did not consider individual metabolites but sums and ratios.
+* We want to do so using the parametric g-formula and average contrasts.
+
+## The pipeline
+
+1. Estimation of balancing weights: `exposure ~ covariates`.
+1. G-computation:
+    1. Fit a **weighted outcome model**: `outcome ~ exposure + covariates`.
+    1. Create two copies of the original dataset, with the exposure **shifted**.
+    1. Predict the outcomes in the two **counterfactual** datasets.
+    1. Estimate the **estimand** $\phi^\Delta = \mathbb{E} [Y^{d_1}] - \mathbb{E} [Y^{d_2}]$.
+
+In this case:
+
+* Cohort-specific shifting of the exposure. $d_1$ is a deterministic function setting the exposure to its 90th percentile, $d_2$ to its 10th percentile.
+
+We also looked into **effect-modification** by sex (weights estimated separately, interaction in outcome model, estimation of marginal effects taking this into account).
+
+## Difficulties {.smaller}
+
+It looks simple, but lots of literature searches:
+
+* DAGs for three different research questions.
+* New data (corticosteroids), and still awaiting answers, and ratios difficult to interpret.
+* Estimation of balancing weights for **ratios** is (apparently) still an open question.
+* Usage of more **flexible modeling** approaches to estimate the ADRF (natural cubic splines).
+* Careful modeling of **ratios**; it's not that simple:
+    * `log (num / den) ~ exposure + log den + covariates`.
+    * `outcome ~ log (num / den)`.
+* Creatinine coming from different sources.
+* Proper modeling of creatinine to take into account dilution effects.
+* Careful consideration of positivity violations when shifting the exposures (cohort-specific and smaller percentiles).
+* Computation of **robust** standard errors for inference using `cohort` as clusters.
+* Careful usage of tools to improve **replicability** across the entire project (from data loading to paper writing).
+
+## Results
+
+See files...

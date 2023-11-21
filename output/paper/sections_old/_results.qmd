@@ -1,7 +1,5 @@
 ## Participants {#sec-res-participants}
 
-- Give reasons for non-participation at each stage.
-
 ## Descriptive data {#sec-res-pop-desc}
 
 ## Outcome data {#sec-res-out-desc}

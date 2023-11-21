@@ -7,20 +7,36 @@ title: "Estimating associations between childhood exposure to non-persistent end
 format:
   docx:
     reference-doc: reference_document.docx
-  pdf:
-    pdf-engine: lualatex
-    number-sections: true
-    toc: false
-    keep-tex: false
-    include-in-header:
-      text: |
-        \usepackage{lineno}
-        \usepackage{rotating}
-        \usepackage{float}
-        \usepackage{typearea}
-    include-before-body:
-      text: |
-        \linenumbers
+    citeproc: false
+  # pdf:
+  #   pdf-engine: lualatex
+  #   number-sections: true
+  #   toc: false
+  #   keep-tex: false
+  #   include-in-header:
+  #     text: |
+  #       \usepackage{lineno}
+  #       \usepackage{rotating}
+  #       \usepackage{float}
+  #       \usepackage{typearea}
+  #   include-before-body:
+  #     text: |
+  #       \linenumbers
+
+crossref:
+  custom: 
+    - kind: float
+      ref-type: supptbl
+      latex-env: supptbl
+      prefix: Table S
+      name: Table S
+      space-before-numbering: false
+    - kind: float
+      ref-type: suppfig
+      latex-env: suppfig
+      prefix: Figure S
+      name: Figure S
+      space-before-numbering: false
 
 bibliography: bibliography.bib
 csl: ama11.csl
@@ -54,9 +70,34 @@ execute:
 here::i_am("output/paper/manuscript.qmd")
 ```
 
+```{r vars-methods}
+source(here::here("code/dictionaries.R"))
+source(here::here("code/data.R"))
+source(here::here("code/proc_res.R"))
+
+is_hpc <- FALSE
+store <- ifelse(
+  is_hpc, 
+  paste0(
+    "/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/",
+    "lorenzoF/data/data_paper3/_targets/_targets_res"
+  ), 
+  "~/mounts/rstudioserver/data/data_paper3/_targets/_targets_res"
+)
+id_var <- "HelixID"
+num_digits_est = 3
+num_digits_sig = 2
+params_ <- params(is_hpc = is_hpc)
+threshold_within_lod <- params_$steps$rq2$preproc_outcome$llodq$threshold_within
+threshold_overall_lod <- params_$steps$rq2$preproc_outcome$llodq$threshold_overall
+threshold_within_nan <- params_$steps$rq2$preproc_outcome$missings$threshold_within
+threshold_overall_nan <- params_$steps$rq2$preproc_outcome$missings$threshold_overall
+knn_k <- params_$steps$rq2$preproc_outcome$missings$k
+```
+
 # Abstract {.unnumbered}
 
-\newpage
+{{< pagebreak >}}
 
 - Authorship must follow the ICMJE's criteria. Author names should be listed in ScholarOne and author contributions should be detailed in the cover letter ("Author A..."). Neither names nor contributions should appear in the blinded manuscript. Do not include conflicts of interest.
 - The use of the word "effect(s)" as a proxy for "association(s)" is discouraged.
@@ -65,24 +106,162 @@ here::i_am("output/paper/manuscript.qmd")
 - In-text citations: full-sized Arabic numerals in parentheses within the sentence.
 - Submission: SER members receive a 10% discount on the fees per page. This should be requested in the cover letter. Also 20% discount for Open Access charges. If uploading a single file (document, tables, figures, SM), designate the file as "Main document - anonymous".
 
-{{< include sections/introduction.qmd >}}
+The prevalence of several neurodevelopmental disorders has increased in the pediatric population [@GrandjeanLandrigan:2014], and multiple environmental pollutants play a role in the increased rates of these disorders [@RamirezGalvez-OntiverosGonzalez-Domenech:2022]. \acr{edcs}, chemicals that are capable of interfering with the endocrine system, have been shown to have a role in childhood neurodevelopment [@Braun:2017]. Although both pregnancy and early childhood are crucial stages of (neuro)development, most of the available literature is focused on the effects of prenatal exposure to \acr{edcs} on child neurodevelopment [@RamirezGalvez-OntiverosGonzalez-Domenech:2022]. Moreover, little is known about the biological mechanisms of action [@RamirezGalvez-OntiverosGonzalez-Domenech:2022].
+
+\acr{opps} might have a deleterious effect on neurodevelopment, although the few studies conducted on children and using a biological matrix for exposure assessment suffered from a series of limitations, including a small sample size and few \acr{opp} metabolites measured [@RamirezGalvez-OntiverosGonzalez-Domenech:2022]. Phthalates and their metabolites have been associated to several adverse effects on neurodevelopment [@RamirezGalvez-OntiverosGonzalez-Domenech:2022]. Similarly, these studies focused on few phthalates metabolites and were conducted in small populations. On the other hand, the effects of exposure to \acr{bpa} on cognitive functions are still unclear [@RamirezGalvez-OntiverosGonzalez-Domenech:2022].
+
+Another major limitation of these epidemiological studies, especially when non-persistent chemicals are analyzed, is the reliance on single-spot urine samples for exposure assessment, which might not be representative of long-term exposures.
+
+Something about corticosteroids...
+
+In the present study, we estimated associations between 1) non-persistent \acr{edcs} and attention, 2) non-persistent \acr{edcs} and corticosteroids, and 3) corticosteroids and attention, using the parametric g-formula and average contrasts, in children of a large prospective birth cohort in Europe.
 
 # Methods {#sec-methods}
 
-{{< include sections/methods.qmd >}}
+## Study population and design {#sec-design}
+
+The \acr{helix} is an ongoing project which aims to characterize early-life exposures and their potential association with endogenous biomarkers and health outcomes [@VrijheidSlamaRobinson:2014]. It consists of six existing population-based birth cohort studies across Europe: BiB (Born in Bradford, UK) [@WrightSmallRaynor:2013], EDEN (Study of determinants of pre- and postnatal developmental, France) [@HeudeForhanSlama:2016], INMA (Environment and Childhood, Spain) [@GuxensBallesterEspada:2012], KANC (Kaunas Cohort, Lithuania) [@GrazulevicieneDanileviciuteNadisauskiene:2009], MoBa (The Norwegian Mother and Child Cohort Study, Norway) [@MagnusIrgensHaug:2006], and Rhea (Mother–Child Cohort in Crete, Greece) [@ChatziPlanaDaraki:2009], for a total of 32,000 mother-child pairs. A \acr{helix} subcohort of 1,200 mother-child pairs was fully characterized for the external and internal exposome, including exposure and omics biomarkers during childhood. Eligibility criteria for inclusion in the \acr{helix} subcohort included: a) age 6-11 years, with a preference for 7-9 years; b) availability of sufficient stored pregnancy blood and urine samples; c) availability of complete address history from first to last follow-up; d) no serious health problems, which might affect the results of the clinical testing. Further information can be found in @MaitreBontCasas:2018.
+
+Ethical permission was obtained from the relevant authorities in the corresponding country.
+
+## Variables {#sec-vars}
+
+### Confounders {#sec-confounders}
+
+For each research question, defined by a specific type of exposure and outcome, the minimal set of covariates for inclusion in the analyses was selected on the basis of a \acr{dag} built with DAGitty [@TextorvanderZanderGilthorpe:2016] and ggdag [@Barrett:2023]. The sets of covariates were selected to estimate the total effect of the exposure on the outcome. Further, each minimal adjustment set was *augmented* with precision covariates, defined as the set of parents variable of the outcome that are not parents of the exposure. The adjustment sets are provided in the Supplementary Material as text files compatible with DAGitty.
+
+- For RQ1 I used creatinine values from HELIX. For RQ3 the ones from the steroids dataset. For RQ2, I included in the model both variables.
+
+### Endocrine disrupting chemicals {#sec-edcs}
+
+Children were assessed between December 2013 and February 2016, and included neurological testing and urine collection. Urine samples of the night before and the first morning void on the day of the visit were combined to provide a more reliable exposure assessment. Non-persistent \acr{edcs} assessed in urine samples from children included phthalate metabolites, phenols, and \acr{op} pesticide metabolites. A list of the environmental chemicals determined in urine samples and used for the present study is given in @supptbl-info-chems. The laboratory protocols for the analysis are described elsewhere [@HaugSakhiCequier:2018].
+
+### Corticosteroids {#sec-steroids}
+
+Urine samples of the night before the day of the visit were used to measure levels of the corticosteroids. These included glucocorticosteroids, glucocorticosteroid metabolites, glucocorticosteroid precursors, glucocorticosteroid precursor metabolites, androgens, and androgen metabolites. A list of the corticosteroids determined in urine samples and used for the present study is given in @supptbl-info-mets.
+
+To assess the levels of corticosteroids and their metabolites, LC-MS/MS analysis was applied at the Applied Metabolomics Research Group, IMIM (Hospital del Mar Medical Research Institute). The laboratory protocols for the analysis are described elsewhere [@MarcosRenauCasals:2014; @Gomez-GomezPozo:2020]. Of the 1,004 urine samples, 980 children were matched to the \acr{helix} subcohort.
+
+Three additional markers, cortisol production, cortisol metabolism, cortisone production, and 11bHSD activity, were computed based on the following: cortisol production as the sum of cortisol and its metabolites (20aDHF, 20bDHF, 5bDHF, 5aTHF, 5bTHF, 6OHF, 5a20acortol, 5a20bcortol, 5b20acortol, 5b20bcortol), cortisol metabolism as the inverse of the ratio between cortisol and its metabolites, cortisone production as the sum of cortisone and its metabolites (20aDHE, 20bDHE, 5aTHE, 5bTHE, 6OHE, 5b20acortolone, b20bcortolone), and 11bHSD activity as the ratio between cortisone production and cortisol production. 11bHSD activity gives a measure of conversion of cortisone to cortisol.
+
+### Neurodevelopment {#sec-neurodevelopment}
+
+Neurodevelopmental outcomes were assessed with standardized, non-linguistic, and culturally blind computer tests, including the \acr{ant} [@RuedaFanMcCandliss:2004]. Further information can be found in @MaitreBontCasas:2018. Briefly, it is a computerized test that provides a measure of efficiency in three different functions of attention: alerting, orienting, and executive attention. The outcome of interest for the present study is the \acr{hitrtse} [@SunyerEsnaolaAlvarez-Pedrerol:2015], a measure of response speed consistency throughout the test. A high \acr{hitrtse} indicates highly variable reactions, and is considered a measure of inattentiveness.
+
+## Statistical methods {#sec-stat-methods}
+
+### Data pre-processing {#sec-dat-preproc}
+
+Concentrations of the corticosteroids were classified as quantifiable, below the \acr{loq}, possible interference or out of range, and not detected. For each metabolite, we computed the fraction of values below the \acr{loq} and not detected, both within each cohort and overall. We proceeded to impute these values using half the value of the corresponding \acr{lloq}, for those metabolites that had less than `r threshold_within_lod`% of missings within each cohort and `r threshold_overall_lod`% of missings overall. Information about the \acr{lloq} for the corticosteroids is provided in @supptbl-lloq-mets. The remaining missing values were imputed using kNN from the `VIM` R package [@KowarikTempl:2016], for those metabolites that had less than `r threshold_within_nan`% of remaining missings within each cohort and `r threshold_overall_nan`% of remaining missings overall. We used `r knn_k` nearest neighbors. We natural log-transformed them to improve model fit, assessed with posterior predictive checks. To do so, replicated data were simulated with the fitted models and compared to the observed data. We used the `check_predictions` function from the `performance` R package using the default arguments [@LudeckeBen-ShacharPatil:2021]. Values of cortisol production and cortisone production were expressed in nanograms per millilitre, whereas values of cortisol metabolism and 11bHSD activity were unitless.
+
+Concentrations of the non-persistent \acr{edcs} were classified as quantifiable, below the \acr{lod}, possible interference or out of range, and not analysed. Concentrations below the \acr{lod} were singly imputed using a quantile regression approach for the imputation of left-censored missing data, as implemented in the `impute.QRILC` function from the `imputeLCMD` R package [@lazar2015imputelcmd]. Information about the lower limits of detection can be found in @HaugSakhiCequier:2018. Chemicals with more than 70% of observations below the \acr{lod} were not considered in the present study. Remaining missing values were imputed similarly using kNN. Values of the chemicals were expressed in $\mu$grams per litre.
+
+Missing values in the clinical outcome were imputed similarly using kNN. Similarly, we natural log-transformed them to improve model fit, assessed with posterior predictive checks. Values of the clinical outcome were expressed in \acr{mss}.
+
+Missing values in the covariates were imputed similarly using kNN. Categorical covariates were imputed using the `maxCat` function, which chooses the level with the most occurrences. Creatinine values were expressed in grams per litre.
+
+### Estimation of balancing weights {#sec-weights-est}
+
+Stabilized balancing weights were estimated using the energy method available in the `WeightIt` R package [@Greifer:2023]. This methods estimates weights by minimizing an energy statistic related to covariate balance [@HulingGreiferChen:2023], thus avoiding the need to specify a parametric model.
+Weights below the 0.1 and above the 0.9 quantiles were trimmed. Trimming might lead to decreased covariate balance and potentially change the estimand, but can also decrease the variability of the weights.
+Covariate balance was assessed using functionalities provided by the `cobalt` R package [@Greifer:2023a]. Specifically, we used *Love* plots to visualize covariate balance before and after adjusting.
+
+### G-computation {#sec-gcomp}
+
+We estimated average contrasts with the parametric g-formula, a method of standardization. The parametric g-formula involves the following steps: 1) fit a outcome model including both covariates and balancing weights; 2) create two new datasets identical to the original one but with the exposure shifted according to a user-specified intervention set by a deterministic function of the observed exposure levels; 3) use the outcome model to compute adjusted predictions in the two counterfactual datasets; 4) compute the difference between the means of the adjusted predictions in the counterfactual datasets. The causal parameter of interest $\phi$ was thus specified as the difference in the expected counterfactual outcomes under the shifted exposure levels $\left( \phi^\Delta = \mathbb{E} \left[ Y^{d_1} \right] - \mathbb{E} \left[ Y^{d_2} \right] \right)$. In order for this parameter to be identified, the usual causal identifiability conditions (no unmeasured confounding, positivity, and consistency) are required. Since these conditions are likely not satisfied, we focused on the estimation of a statistical estimand that is as close as possible to the causal parameter of interest.
+
+We fit the outcome model using the `glm` function and a Gaussian family with identity link from base R. The exposure variable was modeled using natural cubic splines with 3 degrees of freedom, to more flexibly capture the \acr{adrf}. When the outcome was a ratio, as was the case for cortisol metabolism and 11bHSD activity, we included the logarithm of its denominator, cortisol and cortisol production, respectively, as a control variable [@BartlettPartnoy:2020].
+
+To estimate the average contrasts, we used the `avg_comparisons` function from the `marginaleffects` R package [@Arel-Bundock:2023]. The two counterfactual datasets were obtained by setting the exposures levels to 90th percentile ($d_1$) and the 10th percentile ($d_2$), for each cohort separately. The average contrasts were computed using the estimated balancing weights above. Robust standard errors were computed with the `sandwich` R package, using cohort as variable indicating clustering of observations [@Zeileis:2004; @ZeileisKollGraham:2020].
+For each outcome, we report the results as differences between average contrasts.
+
+We further estimated the \acr{adrf} using the `avg_predictions` function from the `marginaleffects` R package, examining 50 exposure values from the 10th to the 90th percentiles of the exposure. As done for the average contrasts, we included the estimated balancing weights and used cohort as a clustering variable when computing robust standard errors.
+
+### Effect-modification analysis
+
+We tested for possible effect-modification by sex. To do so, balancing weights were estimated separately for each level of the sex variable, and an interaction term between the exposure and sex was included in the outcome model. Similarly, the average contrasts were aggregated separately for each level of sex. We further tested for significance of the difference between the average contrasts of males and females.
 
 # Results {#sec-res}
 
-{{< include sections/results.qmd >}}
+## Participants {#sec-res-participants}
+
+## Descriptive data {#sec-res-pop-desc}
+
+## Outcome data {#sec-res-out-desc}
+
+## Main results {#sec-res-main}
+
+- All results on which study conclusions or inferences are based, including null findings and results of secondary or sensitivity analyses, must be reported. Use of sub-headings that describe the nature of the results (but no declarative statements).
+  - Provide a clear and concise description of all findings without extrapolating beyond the study results.
+  - Do not limit results to those *statistically significant* or that support the study hypotheses. Avoid using statistical significance testing as the sole or primary criterion for interpreting the obtained results. If significance testing or *p*-values are used, report numeric *p*-values, rounded to 1-2 digits, for all results. Use an uppercase italic letter "P", and the values should not be bolded. Indicate whether are 1- or 2-sided.
+- Give unadjusted and confounder-adjusted estimates and their precision (e.g., $95\%$ confidence interval). Make clear which confounders were adjusted for and why they were included. Include the number of observations for each analysis after accounting for missing data. Include numeric data within figures (e.g., forest plots), or provide tables with corresponding numeric data for all figures.
+  - [`marginaleffects` tables](https://vincentarelbundock.github.io/marginaleffects/articles/tables.html).
+- Report category boundaries when continuous variables were categorized.
+
+## Other analyses {#sec-res-other}
+
+- Report other analyses done (e.g., analyses of subgroups and interactions, and sensitivity analyses).
 
 # Discussion {#sec-discussion}
 
-{{< include sections/discussion.qmd >}}
+## Key results {#sec-disc-res-key}
 
-\newpage
+- Summarise key results with reference to study objectives.
+- Provide a review of the relevant literature to put the study findings into context.
+  - It should be complete and balanced, including inconsistent results.
+  - It should include, for each source, sufficient details: study design, sample size, population, specific exposures and outcomes.
+
+### What does the literature say?
+
+- EDCs and neurodevelopment (ANT).
+- EDCs and corticosteroids.
+- Corticosteroids and neurodevelopment (ANT).
+
+## Limitations {#sec-limitations}
+
+- Discuss limitations of the study, taking into account sources of potential bias or imprecision.
+- Discuss both direction and magnitude of any potential bias.
+
+Some limitations:
+
+- Cross-sectional study.
+- Chemicals measured in night and morning samples, whereas metabolites (the outcome) were measured only in night samples.
+- Cortisol measured at night, when should be lowest.
+- Change of estimand when trimming weights.
+- Model misspecification.
+- Mixtures effect.
+- Residual confounding.
+- Some confounders were not used since large percentage of missing values.
+- Multiple comparisons.
+
+## Interpretation {#sec-interpretation}
+
+- End with a summary of the key findings and their implications for the study hypotheses, future research, and policy.
+- Give a cautious overall interpretation of results considering objectives, limitations, multiplicity of analyses, results from similar studies, and other relevant evidence.
+
+## Generalisability {#sec-general}
+
+- Discuss the generalisability (external validity) of the study results.
+
+{{< pagebreak >}}
 
 # Funding
 
-\newpage
+{{< pagebreak >}}
 
 # References {.unnumbered}
+
+::: {#refs}
+:::
+
+{{< pagebreak >}}
+
+{{< include _tables.qmd >}}
+
+{{< pagebreak >}}
+
+{{< include _figures.qmd >}}
+
+{{< pagebreak >}}
+
+{{< include _si.qmd >}}

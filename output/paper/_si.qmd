@@ -1,58 +1,5 @@
----
-title: "Supplementary Material"
-
-format:
-  docx:
-    reference-doc: reference_document.docx
-
-crossref:
-  fig-title: Supplementary Figure
-  tbl-title: Supplementary Table
-
-bibliography: bibliography.bib
-csl: ama11.csl
-
-link-citations: true
-linkcolor: blue
-
-editor_options: 
-  chunk_output_type: console
-
-execute:
-  echo: false
-  warning: false
-  error: false
-  message: false
----
-
 ```{r}
-here::i_am("output/paper/si.qmd")
-```
-
-```{r vars}
-source(here::here("code/dictionaries.R"))
-source(here::here("code/data.R"))
-source(here::here("code/proc_res.R"))
-
-is_hpc <- FALSE
-store <- ifelse(
-  is_hpc, 
-  paste0(
-    "/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/",
-    "lorenzoF/data/data_paper3/_targets/_targets_res"
-  ), 
-  "~/mounts/rstudioserver/data/data_paper3/_targets/_targets_res"
-)
-
-id_var <- "HelixID"
-num_digits_est = 3
-num_digits_sig = 2
-params_ <- params(is_hpc = is_hpc)
-threshold_within_lod <- params_$steps$rq2$preproc_outcome$llodq$threshold_within
-threshold_overall_lod <- params_$steps$rq2$preproc_outcome$llodq$threshold_overall
-threshold_within_nan <- params_$steps$rq2$preproc_outcome$missings$threshold_within
-threshold_overall_nan <- params_$steps$rq2$preproc_outcome$missings$threshold_overall
-knn_k <- params_$steps$rq2$preproc_outcome$missings$k
+here::i_am("output/paper/_si.qmd")
 ```
 
 - Files for supplementary data must be accompanied by a summary of the file names and types.
@@ -81,7 +28,7 @@ cat(all_dags$marker_to_out)
 ### Study populations
 
 ```{r codebook-1}
-#| label: tbl-codebook-1
+#| label: supptbl-codebook-1
 #| tbl-cap: Codebook for covariates used in RQ1
 
 targets::tar_load(
@@ -92,14 +39,14 @@ codebook_1
 ```
 
 ```{r codebook-2}
-#| label: tbl-codebook-2
+#| label: supptbl-codebook-2
 #| tbl-cap: Codebook for covariates used in RQ2
 
 codebook_2
 ```
 
 ```{r codebook-3}
-#| label: tbl-codebook-3
+#| label: supptbl-codebook-3
 #| tbl-cap: Codebook for covariates used in RQ3
 
 codebook_3
@@ -108,7 +55,7 @@ codebook_3
 ### Description of chemicals
 
 ```{r info-chems}
-#| label: tbl-info-chems
+#| label: supptbl-info-chems
 #| tbl-cap: Information about non-persistent EDCs
 
 edcs_info <- myphd::edcs_information() |>
@@ -144,7 +91,7 @@ gt::gt(edcs_info,
 ### Description of metabolites
 
 ```{r info-mets}
-#| label: tbl-info-mets
+#| label: supptbl-info-mets
 #| tbl-cap: Information about metabolites
 
 mets_info <- readODS::read_ods(
@@ -182,7 +129,7 @@ gt::gt(mets_info,
 ```
 
 ```{r lloq-mets}
-#| label: tbl-lloq-mets
+#| label: supptbl-lloq-mets
 #| tbl-cap: Lower limits of quantification for the corticosteroids
 
 lloq_mets <- load_steroids()$loq |>
@@ -216,7 +163,7 @@ targets::tar_load(
 ```
 
 ```{r weights-1sa}
-#| label: tbl-weights-1sa
+#| label: supptbl-weights-1sa
 #| tbl-cap: Weights
 
 tidy_res_weighted_fits(
@@ -227,7 +174,7 @@ tidy_res_weighted_fits(
 ```
 
 ```{r weights-2sa}
-#| label: tbl-weights-2sa
+#| label: supptbl-weights-2sa
 #| tbl-cap: Weights
 
 tidy_res_weighted_fits(
@@ -238,7 +185,7 @@ tidy_res_weighted_fits(
 ```
 
 ```{r weights-3sa}
-#| label: tbl-weights-3sa
+#| label: supptbl-weights-3sa
 #| tbl-cap: Weights
 
 tidy_res_weighted_fits(
@@ -255,7 +202,7 @@ tidy_res_weighted_fits(
 ### Description of chemicals
 
 ```{r desc-chems-lod}
-#| label: fig-desc-chems
+#| label: suppfig-desc-chems
 #| fig-cap: Description of chemicals
 #| fig-width: 6
 #| fig-height: 7
@@ -271,7 +218,7 @@ viz_desc_vars(
 ### Description of metabolites
 
 ```{r desc-mets-lod}
-#| label: fig-desc-mets
+#| label: suppfig-desc-mets
 #| fig-cap: Description of metabolites
 #| fig-width: 6
 #| fig-height: 7
@@ -307,14 +254,10 @@ targets::tar_load(
 ```
 
 ```{r adrfs-rq3}
-#| label: fig-adrfs-rq3
+#| label: suppfig-adrfs-rq3
 #| fig-cap: Average dose-response functions for RQ3
-#| fig-subcap:
-#|   - "Cortisol production"
-#|   - "11bHSD"
 #| fig-width: 6
 #| fig-height: 7
-#| layout-ncol: 2
 
 exposures_of_interest <- c(
   "cortisol production",
@@ -331,7 +274,7 @@ ret_adrfs <- lapply(
   }
 )
 ret_adrfs[[1]]
-ret_adrfs[[2]]
+#ret_adrfs[[2]]
 ```
 
 ## Other results
@@ -346,7 +289,7 @@ targets::tar_load(
 ```
 
 ```{r marginal-1sa}
-#| label: fig-marginal-1sa
+#| label: suppfig-marginal-1sa
 #| fig-cap: Average comparisons for effect modification
 #| fig-width: 6
 #| fig-height: 7
@@ -361,7 +304,7 @@ tidy_res_meffects(
 ```
 
 ```{r marginal-2sa}
-#| label: fig-marginal-2sa
+#| label: suppfig-marginal-2sa
 #| fig-cap: Average comparisons for effect modification
 #| fig-width: 9
 #| fig-height: 10
@@ -376,7 +319,7 @@ tidy_res_meffects(
 ```
 
 ```{r marginal-3sa}
-#| label: fig-marginal-3sa
+#| label: suppfig-marginal-3sa
 #| fig-cap: Average comparisons for effect modification
 #| fig-width: 5
 #| fig-height: 5
@@ -389,8 +332,3 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
-
-# References {.unnumbered}
-
-::: {#refs}
-:::

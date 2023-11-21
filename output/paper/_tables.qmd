@@ -1,51 +1,23 @@
----
-title: "Tables"
+<!-- title: "Tables" -->
 
-format:
-  docx:
-    reference-doc: reference_document.docx
+<!-- format: -->
+<!--   docx: -->
+<!--     reference-doc: reference_document.docx -->
 
-link-citations: true
-linkcolor: blue
+<!-- link-citations: true -->
+<!-- linkcolor: blue -->
 
-editor_options:
-  chunk_output_type: console
+<!-- editor_options: -->
+<!--   chunk_output_type: console -->
 
-execute:
-  echo: false
-  warning: false
-  error: false
-  message: false
----
+<!-- execute: -->
+<!--   echo: false -->
+<!--   warning: false -->
+<!--   error: false -->
+<!--   message: false -->
 
 ```{r}
-here::i_am("output/paper/tables.qmd")
-```
-
-```{r vars}
-source(here::here("code/dictionaries.R"))
-source(here::here("code/data.R"))
-source(here::here("code/proc_res.R"))
-
-is_hpc <- FALSE
-store <- ifelse(
-  is_hpc, 
-  paste0(
-    "/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/",
-    "lorenzoF/data/data_paper3/_targets/_targets_res"
-  ), 
-  "~/mounts/rstudioserver/data/data_paper3/_targets/_targets_res"
-)
-
-id_var <- "HelixID"
-num_digits_est = 3
-num_digits_sig = 2
-params <- params(is_hpc = is_hpc)
-threshold_within_lod <- params$steps$rq2$preproc_outcome$llodq$threshold_within
-threshold_overall_lod <- params$steps$rq2$preproc_outcome$llodq$threshold_overall
-threshold_within_nan <- params$steps$rq2$preproc_outcome$missings$threshold_within
-threshold_overall_nan <- params$steps$rq2$preproc_outcome$missings$threshold_overall
-knn_k <- params$steps$rq2$preproc_outcome$missings$k
+here::i_am("output/paper/_tables.qmd")
 ```
 
 # Descriptive data
