@@ -27,37 +27,38 @@ cat(all_dags$marker_to_out)
 
 ### Study populations
 
-```{r codebook-1}
-#| label: supptbl-codebook-1
-#| tbl-cap: Codebook for covariates used in RQ1
-
+```{r}
 targets::tar_load(
   dplyr::contains("codebook_"),
   store = store
 )
+```
+
+::: {#supptbl-codebook-1}
+```{r codebook-1}
 codebook_1
 ```
+Codebook for covariates used in RQ1
+:::
 
+::: {#supptbl-codebook-2}
 ```{r codebook-2}
-#| label: supptbl-codebook-2
-#| tbl-cap: Codebook for covariates used in RQ2
-
 codebook_2
 ```
+Codebook for covariates used in RQ2
+:::
 
+::: {#supptbl-codebook-3}
 ```{r codebook-3}
-#| label: supptbl-codebook-3
-#| tbl-cap: Codebook for covariates used in RQ3
-
 codebook_3
 ```
+Codebook for covariates used in RQ3
+:::
 
 ### Description of chemicals
 
+::: {#supptbl-info-chems}
 ```{r info-chems}
-#| label: supptbl-info-chems
-#| tbl-cap: Information about non-persistent EDCs
-
 edcs_info <- myphd::edcs_information() |>
   tidylog::select(-c(chem_id, smiles, ctd_id, exposome_explorer_id)) |>
   tidylog::mutate(
@@ -87,13 +88,13 @@ gt::gt(edcs_info,
     style = list(gt::cell_text(weight = "bold"))
   )
 ```
+Information about non-persistent EDCs
+:::
 
 ### Description of metabolites
 
+::: {#supptbl-info-mets}
 ```{r info-mets}
-#| label: supptbl-info-mets
-#| tbl-cap: Information about metabolites
-
 mets_info <- readODS::read_ods(
   path = here::here("docs", "steroids.ods")
 ) |>
@@ -127,11 +128,11 @@ gt::gt(mets_info,
     )
   )
 ```
+Information about metabolites
+:::
 
+::: {#supptbl-lloq-mets}
 ```{r lloq-mets}
-#| label: supptbl-lloq-mets
-#| tbl-cap: Lower limits of quantification for the corticosteroids
-
 lloq_mets <- load_steroids()$loq |>
   tidylog::mutate(
     metabolite = stringr::str_replace(
@@ -150,6 +151,8 @@ gt::gt(lloq_mets |> dplyr::arrange(metabolite)) |>
     )
   )
 ```
+Lower limits of quantification for the corticosteroids
+:::
 
 ## Other results
 
@@ -162,38 +165,38 @@ targets::tar_load(
 )
 ```
 
+::: {#supptbl-weights-1sa}
 ```{r weights-1sa}
-#| label: supptbl-weights-1sa
-#| tbl-cap: Weights
-
 tidy_res_weighted_fits(
   dat_tbl = weights_1SA$dat_tbl,
   dat_plt = weights_1SA$dat_plt,
   sa_var = "e3_sex"
 )$table
 ```
+Weights
+:::
 
+::: {#supptbl-weights-2sa}
 ```{r weights-2sa}
-#| label: supptbl-weights-2sa
-#| tbl-cap: Weights
-
 tidy_res_weighted_fits(
   dat_tbl = weights_2SA$dat_tbl,
   dat_plt = weights_2SA$dat_plt,
   sa_var = "e3_sex"
 )$table
 ```
+Weights
+:::
 
+::: {#supptbl-weights-3sa}
 ```{r weights-3sa}
-#| label: supptbl-weights-3sa
-#| tbl-cap: Weights
-
 tidy_res_weighted_fits(
   dat_tbl = weights_3SA$dat_tbl,
   dat_plt = weights_3SA$dat_plt,
   sa_var = "e3_sex"
 )$table
 ```
+Weights
+:::
 
 # Supplementary figures
 
@@ -201,9 +204,8 @@ tidy_res_weighted_fits(
 
 ### Description of chemicals
 
+::: {#suppfig-desc-chems}
 ```{r desc-chems-lod}
-#| label: suppfig-desc-chems
-#| fig-cap: Description of chemicals
 #| fig-width: 6
 #| fig-height: 7
 
@@ -214,12 +216,13 @@ viz_desc_vars(
   is_chem = TRUE
 )$plot
 ```
+Description of chemicals
+:::
 
 ### Description of metabolites
 
+::: {#suppfig-desc-mets}
 ```{r desc-mets-lod}
-#| label: suppfig-desc-mets
-#| fig-cap: Description of metabolites
 #| fig-width: 6
 #| fig-height: 7
 
@@ -241,6 +244,8 @@ viz_desc_vars(
   is_chem = FALSE
 )$plot
 ```
+Description of metabolites
+:::
 
 ## Main results
 
@@ -253,9 +258,8 @@ targets::tar_load(
 )
 ```
 
+::: {#suppfig-adrfs-rq3}
 ```{r adrfs-rq3}
-#| label: suppfig-adrfs-rq3
-#| fig-cap: Average dose-response functions for RQ3
 #| fig-width: 6
 #| fig-height: 7
 
@@ -276,6 +280,8 @@ ret_adrfs <- lapply(
 ret_adrfs[[1]]
 #ret_adrfs[[2]]
 ```
+Average dose-response functions for RQ3
+:::
 
 ## Other results
 
@@ -288,9 +294,8 @@ targets::tar_load(
 )
 ```
 
+::: {#suppfig-marginal-1sa}
 ```{r marginal-1sa}
-#| label: suppfig-marginal-1sa
-#| fig-cap: Average comparisons for effect modification
 #| fig-width: 6
 #| fig-height: 7
 
@@ -302,10 +307,11 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
+Average comparisons for effect modification
+:::
 
+::: {#suppfig-marginal-2sa}
 ```{r marginal-2sa}
-#| label: suppfig-marginal-2sa
-#| fig-cap: Average comparisons for effect modification
 #| fig-width: 9
 #| fig-height: 10
 
@@ -317,10 +323,11 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
+Average comparisons for effect modification
+:::
 
+::: {#suppfig-marginal-3sa}
 ```{r marginal-3sa}
-#| label: suppfig-marginal-3sa
-#| fig-cap: Average comparisons for effect modification
 #| fig-width: 5
 #| fig-height: 5
 
@@ -332,3 +339,5 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
+Average comparisons for effect modification
+:::

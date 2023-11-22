@@ -62,6 +62,78 @@ It looks simple, but lots of literature searches:
 * Computation of **robust** standard errors for inference using `cohort` as clusters.
 * Careful usage of tools to improve **replicability** across the entire project (from data loading to paper writing).
 
+## Even more difficulties
+
+Most likely there is reverse causality (assumption of time-ordering from DAGs is not satisfied).
+
+:::: {.columns}
+::: {.column}
+```{r}
+coords <- tibble::tribble(
+  ~name, ~x, ~y,
+  "edc", 0, 0,
+  "cortisol", 1, 0,
+  "U", 0.5, 0.5
+)
+dag <- ggdag::dagify(
+  cortisol ~ edc + U,
+  edc ~ U,
+  exposure = "edc",
+  outcome = "cortisol",
+  labels = c(
+    "edc" = "EDC",
+    "cortisol" = "cortisol",
+    "U" = "confounders"
+  ),
+  coords = coords
+)
+
+ggdag::ggdag(
+  dag,
+  text = FALSE,
+  use_labels = "label"
+) +
+  ggdag::theme_dag()
+```
+:::
+
+::: {.column}
+```{r}
+coords <- tibble::tribble(
+  ~name, ~x, ~y,
+  "edc", 1, 0,
+  "cortisol", 0, 0,
+  "U", 0.5, 0.5,
+  "iv", -0.5, 0
+)
+dag <- ggdag::dagify(
+  cortisol ~ iv + U,
+  edc ~ cortisol + U,
+  exposure = "cortisol",
+  outcome = "edc",
+  labels = c(
+    "edc" = "EDC",
+    "cortisol" = "cortisol",
+    "U" = "confounders",
+    "iv" = "SNP"
+  ),
+  coords = coords
+)
+
+ggdag::ggdag(
+  dag,
+  text = FALSE,
+  use_labels = "label"
+) +
+  ggdag::theme_dag()
+```
+:::
+::::
+
+* We cannot use 2-sample MR since there are no SNPs for the *outcome*.
+* We do not have single metabolites but sums and ratios.
+* I am not sure it makes sense...
+
 ## Results
 
 See files...

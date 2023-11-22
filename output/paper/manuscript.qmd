@@ -7,7 +7,7 @@ title: "Estimating associations between childhood exposure to non-persistent end
 format:
   docx:
     reference-doc: reference_document.docx
-    citeproc: false
+    citeproc: true
   # pdf:
   #   pdf-engine: lualatex
   #   number-sections: true
@@ -47,7 +47,7 @@ linkcolor: blue
 filters:
   - acronyms
   # - authors-block
-  - ../../../../all_phd/_extensions/wordcount/citeproc.lua
+  # - ../../../../all_phd/_extensions/wordcount/citeproc.lua
   - ../../../../all_phd/_extensions/wordcount/wordcount.lua
 
 acronyms:
@@ -134,7 +134,8 @@ For each research question, defined by a specific type of exposure and outcome, 
 
 ### Endocrine disrupting chemicals {#sec-edcs}
 
-Children were assessed between December 2013 and February 2016, and included neurological testing and urine collection. Urine samples of the night before and the first morning void on the day of the visit were combined to provide a more reliable exposure assessment. Non-persistent \acr{edcs} assessed in urine samples from children included phthalate metabolites, phenols, and \acr{op} pesticide metabolites. A list of the environmental chemicals determined in urine samples and used for the present study is given in @supptbl-info-chems. The laboratory protocols for the analysis are described elsewhere [@HaugSakhiCequier:2018].
+Children were assessed between December 2013 and February 2016, and included neurological testing and urine collection. Urine samples of the night before and the first morning void on the day of the visit were combined to provide a more reliable exposure assessment. Non-persistent \acr{edcs} assessed in urine samples from children included phthalate metabolites, phenols, and \acr{op} pesticide metabolites. A list of the environmental chemicals determined in urine samples and used for the present study is given in @supptbl-info-chems. Briefly, we analyzed a total of 7 phenols, 4 non-specific organophosphate pesticide metabolites, and 10 phthalate metabolites originating from 6 distinct phthalate parent compounds.
+The laboratory protocols for the analysis are described elsewhere [@HaugSakhiCequier:2018].
 
 ### Corticosteroids {#sec-steroids}
 
@@ -189,7 +190,7 @@ In total, 1,297 children were included in the dataset. Of these, 976 had informa
 
 ## Descriptive data {#sec-res-pop-desc}
 
-Levels of unprocessed non-persistent \acr{edcs} and corticosteroids are presented in @tbl-edc-desc and @tbl-met-desc, respectively.
+Levels of unprocessed non-persistent \acr{edcs} and corticosteroids, by cohort and overall, are presented in @tbl-edc-desc and @tbl-met-desc, respectively.
 
 ## Main results {#sec-res-main}
 
