@@ -253,22 +253,18 @@ load_dat_request <- function() {
       hs_date_neu = lubridate::as_date(dat$hs_date_neu),
       dplyr::across(
         dplyr::all_of(c(
-          "hs_bf",
           "e3_alcpreg_yn", "e3_alcpreg_1g", "e3_alcpreg_1gd",
           "hs_sample_c",
           "hs_tob", "hs_smk_parents", "hs_globalexp",
           "hs_fam_car", "hs_c_room",
           "hs_wrk_m", "hs_finance", "FAS_cat", "FAS_score",
-          "hs_neuro_diag",
           "hs_temp", "hs_noise", "hs_qual_test", "hs_rest_nth",
           "hs_mood", "hs_healthc_tday"
         )),
         \(x) factor(x)
       ),
-      h_bf = factor(h_bf,
-                    levels = c("Never", "Ever"),
-                    labels = c(0, 1)
-      ),
+      hs_neuro_diag = factor(hs_neuro_diag),
+      hs_bf = factor(hs_bf),
       cohort = factor(cohort,
                       levels = c(
                         "BIB", "EDEN",
@@ -298,8 +294,8 @@ load_dat_request <- function() {
         )),
         function(x) {
           factor(x,
-                 levels = c("yes", "no"),
-                 labels = c(1, 2)
+                 levels = c("no", "yes"),
+                 labels = c(0, 1)
           )
         }
       ),

@@ -153,7 +153,7 @@ tbl_desc_pop <- function(num_digits_est, num_digits_sig) {
     ) |>
     tidylog::select(
       -HelixID,
-      -dplyr::matches("^hs_.*_c|_cadj$")
+      -dplyr::any_of(colnames(rq2_preproc_dat$exposures))
     )
   
   # Add metadata for better labels
