@@ -101,7 +101,7 @@ select_adjustment_set <- function(dat, meta, res_dag, strategy) {
 #' @returns A named list of exposures, covariates, and outcomes.
 #'
 #' @export
-rq_load_data <- function(res_dag, remove_kanc) {
+rq_load_data <- function(res_dag, remove_kanc, filter_panel) {
   rq <- Sys.getenv("TAR_PROJECT")
   rq <- switch(rq,
                "rq01" = "rq1",
@@ -119,6 +119,11 @@ rq_load_data <- function(res_dag, remove_kanc) {
   if (remove_kanc == TRUE) {
     dat_request$dat <- dat_request$dat |>
       tidylog::filter(cohort != "KANC")
+    dat_request$dat$cohort <- droplevels(dat_request$dat$cohort)
+  }
+  if (filter_panel == TRUE) {
+    dat_request$dat <- dat_request$dat |>
+      tidylog::filter(HelixID %in% readRDS("results/files/helixid_child_panel"))
     dat_request$dat$cohort <- droplevels(dat_request$dat$cohort)
   }
   
@@ -162,10 +167,12 @@ rq_load_data <- function(res_dag, remove_kanc) {
       dplyr::rename_with(.fn = ~ gsub("_cdesc", "", .x, fixed = TRUE))
     dat$lods <- metabolites[["loq"]]
     colnames(dat$lods) <- c("var", "val")
-    dat_request$dat <- tidylog::inner_join(dat_request$dat,
-                                           metabolites$metabolome,
-                                           by = params_dat$variables$identifier
+    dat_request$dat <- tidylog::inner_join(
+      dat_request$dat,
+      metabolites$metabolome,
+      by = params_dat$variables$identifier
     )
+    dat_request$dat$cohort <- droplevels(dat_request$dat$cohort)
     dat$metab_desc <- dat$metab_desc |>
       tidylog::filter(.data[[params_dat$variables$identifier]] %in%
                         dat_request$dat[[params_dat$variables$identifier]])
