@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.3.2",
+    "Version": "4.3.1",
     "Repositories": [
       {
         "Name": "BioCsoft",
@@ -1961,7 +1961,7 @@
     },
     "insight": {
       "Package": "insight",
-      "Version": "0.19.6",
+      "Version": "0.19.7",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1970,7 +1970,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "cc21c0957774c1602ec3324a5a47d798"
+      "Hash": "750aba9b42391da33ac290b71a749023"
     },
     "introdataviz": {
       "Package": "introdataviz",
@@ -2538,11 +2538,11 @@
       "Version": "0.0.1",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "myphd",
       "RemoteUsername": "isglobal-cep",
+      "RemoteRepo": "myphd",
       "RemoteRef": "HEAD",
       "RemoteSha": "adfabed1effb13b3b057bf5edcb4632e905aa913",
+      "RemoteHost": "api.github.com",
       "Requirements": [
         "WeightIt",
         "assertthat",
@@ -3437,7 +3437,7 @@
     },
     "seriation": {
       "Package": "seriation",
-      "Version": "1.5.1",
+      "Version": "1.5.2",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -3456,7 +3456,7 @@
         "stats",
         "vegan"
       ],
-      "Hash": "178b876c49bb35981b97d34eec0a3b47"
+      "Hash": "0f19562fb8fb2ca86ba0a378cfdc2354"
     },
     "servr": {
       "Package": "servr",
@@ -3579,7 +3579,7 @@
     },
     "stringi": {
       "Package": "stringi",
-      "Version": "1.8.2",
+      "Version": "1.8.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -3588,7 +3588,7 @@
         "tools",
         "utils"
       ],
-      "Hash": "e68c45f81639001af5f1b15cd3599bbd"
+      "Hash": "12bf57fdcb9b7068bea39b32f87ecac9"
     },
     "stringr": {
       "Package": "stringr",
