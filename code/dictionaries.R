@@ -109,7 +109,8 @@ params <- function(is_hpc) {
   
   paths <- list(
     path_dat_request = "data/data_paper3/requests/AP136/HELIX_AP_136_request_updated12jun.2023.csv",
-    path_all_steroids = "data/data_paper3/requests/AP136/steroids/"
+    path_all_steroids = "data/data_paper3/requests/AP136/steroids/",
+    path_cp_data = "data/data_paper3/requests/AP136/biomarker_children panel_database_20171220.dta"
   )
   paths <- lapply(paths, function(x) {
     paste0(common_path, x)
@@ -125,16 +126,23 @@ params <- function(is_hpc) {
       "FAS_score"
     ),
     categorical = c(
-      "e3_sex", "h_ethnicity_spiro",
+      "e3_sex", "h_ethnicity_c",
       "cohort",
       "hs_sample_c",
       "hs_tob"
     )
   )
+  selection_covariates_names <- c(
+    "hs_age_years", "e3_sex", "h_ethnicity_c",
+    "hs_c_weight", "hs_c_height",
+    "FAS_score", "hs_tob",
+    "cohort"
+  )
   
   variables <- list(
     identifier = "HelixID",
     strategy_select_adj_set = "minimize_missings",
+    selection_covariates_names = selection_covariates_names,
     ############################################################################
     rq1 = list(
       outcome = clinical_outcomes,

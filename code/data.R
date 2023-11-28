@@ -227,6 +227,49 @@ load_steroids <- function() {
 } # End function load_steroids
 ################################################################################
 
+#' Title
+#'
+#' @param which_sample 
+#'
+#' @return
+#' @export
+load_cp_data <- function(which_sample) {
+  params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
+  
+  chems <- vars_of_interest(append_to_chem = "c")$chemicals
+  chems <- stringr::str_replace(
+    string = chems,
+    pattern = "hs_",
+    replacement = "hcp_"
+  )
+  
+  # Load dataset
+  dat <- haven::read_dta(
+    file = params_dat$paths$path_cp_data
+  ) |>
+    tidylog::filter(
+      # Keep only first visit
+      hcp_period_c == 1,
+      # Type of sample for measuring chemicals
+      hcp_sample == which_sample
+    ) |>
+    tidylog::select(
+      helix_id,
+      dplyr::all_of(chems)
+    ) |>
+    tidylog::rename(
+      HelixID = "helix_id"
+    )
+  colnames(dat) <- stringr::str_replace(
+    string = colnames(dat),
+    pattern = "hcp_",
+    replacement = "hs_"
+  )
+  
+  return(dat)
+} # End function load_cp_data
+################################################################################
+
 #' Load and clean the dataset corresponding to the HELIX data request
 #'
 #' @returns A named list of data and metadata.
