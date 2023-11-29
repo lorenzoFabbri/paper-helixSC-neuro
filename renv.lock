@@ -547,7 +547,7 @@
     },
     "bslib": {
       "Package": "bslib",
-      "Version": "0.6.0",
+      "Version": "0.6.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -564,7 +564,7 @@
         "rlang",
         "sass"
       ],
-      "Hash": "fac047b773ad75cea6e2a25214b09ca0"
+      "Hash": "c0d8599494bc7fb408cd206bbdd9cab0"
     },
     "ca": {
       "Package": "ca",
@@ -1284,7 +1284,7 @@
     },
     "gam": {
       "Package": "gam",
-      "Version": "1.22-2",
+      "Version": "1.22-3",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1294,7 +1294,7 @@
         "splines",
         "stats"
       ],
-      "Hash": "fed7831c88d8eb0fad64437c6d8febaf"
+      "Hash": "3ff819acc26930ea8d4ebc743ca63618"
     },
     "gclus": {
       "Package": "gclus",
@@ -3428,19 +3428,9 @@
       ],
       "Hash": "3838071b66e0c566d55cc26bd6e27bf4"
     },
-    "sensemakr": {
-      "Package": "sensemakr",
-      "Version": "0.1.4",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R"
-      ],
-      "Hash": "aa5a2dfce598cdf851b55dea30a1416b"
-    },
     "seriation": {
       "Package": "seriation",
-      "Version": "1.5.2",
+      "Version": "1.5.3",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -3459,7 +3449,7 @@
         "stats",
         "vegan"
       ],
-      "Hash": "0f19562fb8fb2ca86ba0a378cfdc2354"
+      "Hash": "225bdf576bfdc7978090c10c4e66a127"
     },
     "servr": {
       "Package": "servr",

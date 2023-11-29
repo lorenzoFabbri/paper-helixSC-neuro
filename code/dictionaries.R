@@ -143,6 +143,7 @@ params <- function(is_hpc) {
     identifier = "HelixID",
     strategy_select_adj_set = "minimize_missings",
     selection_covariates_names = selection_covariates_names,
+    type_sample_hcp = 6,
     ############################################################################
     rq1 = list(
       outcome = clinical_outcomes,

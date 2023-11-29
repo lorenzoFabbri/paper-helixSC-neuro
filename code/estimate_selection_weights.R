@@ -14,6 +14,7 @@ estimate_selection_weights <- function(dat, idxs_selected, id_var,
     )
   ## Eventually filter out observations
   if (length(filter_out) > 0) {
+    old_dat <- dat
     dat <- dat |>
       tidylog::filter(
         ! .data[[names(filter_out)]] %in% filter_out[[1]]
@@ -57,6 +58,29 @@ estimate_selection_weights <- function(dat, idxs_selected, id_var,
     {{ id_var }} := dat[[id_var]],
     selected = dat$selected,
     selection_weights = sel_weights$weights
+  )
+  ret_full <- tidylog::left_join(
+    old_dat |>
+      tidylog::select(-selected),
+    ret,
+    by = id_var
+  ) |>
+    tidylog::select(dplyr::all_of(c(
+      id_var, "selected", "selection_weights"
+    ))) |>
+    tidylog::replace_na(
+      list(
+        selected = 0,
+        selection_weights = 0
+      )
+    )
+  ret_full <- ret_full[match(
+    old_dat[[id_var]], ret_full[[id_var]]
+  ), ] |>
+    tibble::as_tibble()
+  assertthat::assert_that(
+    nrow(ret_full) == nrow(old_dat),
+    msg = "Something went wrong when merging results of weighting with complete data."
   )
   
   return(ret)

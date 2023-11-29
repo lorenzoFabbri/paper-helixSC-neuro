@@ -291,7 +291,7 @@ rq_load_data <- function(res_dag) {
 #' containing the variables of interest.
 #'
 #' @export
-rq_prepare_data <- function(dat, filter_panel) {
+rq_prepare_data <- function(dat, filter_panel, type_sample_hcp) {
   rq <- Sys.getenv("TAR_PROJECT")
   rq <- switch(rq,
                "rq01" = "rq1",
@@ -304,7 +304,7 @@ rq_prepare_data <- function(dat, filter_panel) {
   steps_covars <- params_dat$steps[[rq]]$preproc_covars
   steps_exposures <- params_dat$steps[[rq]]$preproc_exposures
   steps_outcome <- params_dat$steps[[rq]]$preproc_outcome
-  
+  params_ana <- params_analyses()[[rq]]
   # Create folders to store results
   invisible(lapply(c("figures"), function(x) {
     path_save_res <- paste0(
@@ -315,6 +315,78 @@ rq_prepare_data <- function(dat, filter_panel) {
     }
   }))
   
+  ##############################################################################
+  # Eventually estimate weights for selection into child panel
+  if (rq == "rq2" & filter_panel == TRUE) {
+    # Load CP data and pre-process chemicals
+    if (is.null(type_sample_hcp)) {
+      type_sample_hcp <- params_dat$variables$type_sample_hcp
+    }
+    dat_cp <- load_cp_data(which_sample = type_sample_hcp) |>
+      myphd::extract_cohort(
+        id_var = params_dat$variables$identifier
+      ) |>
+      myphd::preproc_data(
+        covariates = NULL,
+        outcome = NULL,
+        dic_steps = steps_exposures,
+        id_var = params_dat$variables$identifier,
+        by_var = "cohort"
+      ) |>
+      tidylog::select(-cohort)
+    
+    # Estimate selection weights
+    dat$selection_weights <- estimate_selection_weights(
+      dat = myphd::preproc_data(
+        dat = dat$covariates,
+        covariates = NULL,
+        outcome = NULL,
+        dic_steps = steps_covars,
+        id_var = params_dat$variables$identifier,
+        by_var = "cohort"
+      ),
+      idxs_selected = dat_cp[[params_dat$variables$identifier]],
+      id_var = params_dat$variables$identifier,
+      filter_out = list(
+        cohort = c("MOBA")
+      ),
+      list_covars = params_dat$variables$selection_covariates_names,
+      method = "glm",
+      method_args = list(
+        stabilize = params_ana$stabilize,
+        by = NULL,
+        sl_lib = params_ana$sl_lib,
+        sl_discrete = params_ana$sl_discrete,
+        use_kernel = params_ana$use_kernel
+      ),
+      trim_weights = ifelse(
+        !is.null(params_ana$weights_trim),
+        TRUE, FALSE
+      ),
+      threshold_trim = params_ana$weights_trim
+    ) # End estimation selection weights
+    
+    # Filter out subjects not in HCP
+    dat <- lapply(dat, function(x) {
+      if (!is.null(colnames(x)) & "HelixID" %in% colnames(x)) {
+        x |>
+          tidylog::filter(
+            HelixID %in% dat_cp[[params_dat$variables$identifier]]
+          ) |>
+          droplevels()
+      } else {
+        x
+      }
+    }) # End loop filtering HCP
+    
+    # Replace chemicals with those in HCP
+    dat_cp <- dat_cp[match(dat$covariates$HelixID, dat_cp$HelixID), ] |>
+      tibble::as_tibble()
+    dat$exposures <- dat_cp
+  } # End if for filter panel weights
+  ##############################################################################
+  
+  ##############################################################################
   # Process covariates
   dat$covariates <- myphd::preproc_data(
     dat = dat$covariates,
@@ -324,7 +396,14 @@ rq_prepare_data <- function(dat, filter_panel) {
     id_var = params_dat$variables$identifier,
     by_var = "cohort"
   )
+  ## Check if some factors have only one level and drop them
+  dat$covariates <- dat$covariates |>
+    tidylog::select(
+      dplyr::where(\(x) dplyr::n_distinct(x) > 1)
+    )
+  ##############################################################################
   
+  ##############################################################################
   # Process exposures
   dat$exposures <- myphd::preproc_data(
     dat = myphd::extract_cohort(
@@ -367,31 +446,9 @@ rq_prepare_data <- function(dat, filter_panel) {
       tidylog::select(-cohort) |>
       tidylog::select(-dplyr::all_of(cols_to_remove))
   }
-  ## Eventually process chemicals from child panel
-  dat$dat_cp <- NULL
-  if (rq == "rq2" & filter_panel == TRUE) {
-    dat_cp <- load_cp_data(which_sample = 8)
-    
-    dat_cp <- myphd::preproc_data(
-      dat = myphd::extract_cohort(
-        dat = dat_cp,
-        id_var = params_dat$variables$identifier
-      ),
-      dat_desc = myphd::extract_cohort(
-        dat = dat$metab_desc,
-        id_var = params_dat$variables$identifier
-      ),
-      covariates = dat$covariates,
-      outcome = NULL,
-      dat_llodq = dat$lods,
-      dic_steps = steps_exposures,
-      id_var = params_dat$variables$identifier,
-      by_var = "cohort"
-    ) |>
-      tidylog::select(-cohort)
-    dat$dat_cp <- dat_cp
-  } # End if for child panel
+  ##############################################################################
   
+  ##############################################################################
   # Process outcome
   dat$outcome <- myphd::preproc_data(
     dat = myphd::extract_cohort(
@@ -434,9 +491,7 @@ rq_prepare_data <- function(dat, filter_panel) {
       tidylog::select(-cohort) |>
       tidylog::select(-dplyr::all_of(cols_to_remove))
   }
-  
-  # Process metadata
-  dat$meta
+  ##############################################################################
   
   return(dat)
 } # End function rq_prepare_data
@@ -455,7 +510,7 @@ rq_prepare_data <- function(dat, filter_panel) {
 #' balance exploration.
 #'
 #' @export
-rq_estimate_weights <- function(dat, by = NULL, filter_panel,
+rq_estimate_weights <- function(dat, by = NULL, include_selection_weights,
                                 save_results,
                                 parallel, workers = NULL) {
   rq <- Sys.getenv("TAR_PROJECT")
@@ -469,6 +524,7 @@ rq_estimate_weights <- function(dat, by = NULL, filter_panel,
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   params_ana <- params_analyses()[[rq]]
   
+  ##############################################################################
   # Step 1: estimate weights for covariate balance
   if (rq %in% c("rq3", "rq4")) {
     list_exposures <- vars_of_interest()$new_metabolites
@@ -554,37 +610,7 @@ rq_estimate_weights <- function(dat, by = NULL, filter_panel,
   names(estimated_weights) <- list_exposures
   ##############################################################################
   
-  # Step 1b: estimate weights for selection into child panel
-  if (rq == "rq2" & filter_panel == TRUE) {
-    res_selection <- estimate_selection_weights(
-      dat = dat_analysis,
-      idxs_selected = dat$dat_cp[[params_dat$variables$identifier]],
-      id_var = params_dat$variables$identifier,
-      filter_out = list(
-        cohort = c("MOBA")
-      ),
-      list_covars = params_dat$variables$selection_covariates_names,
-      method = "glm",
-      method_args = list(
-        stabilize = params_ana$stabilize,
-        by = NULL,
-        sl_lib = params_ana$sl_lib,
-        sl_discrete = params_ana$sl_discrete,
-        use_kernel = params_ana$use_kernel
-      ),
-      trim_weights = ifelse(
-        !is.null(params_ana$weights_trim),
-        TRUE, FALSE
-      ),
-      threshold_trim = params_ana$weights_trim
-    ) # End estimation selection weights
-    
-    # Append subjects removed during estimation of selection weights (e.g., MOBA)
-    
-    # Multiply balancing and selection weights
-  } # End if for filter panel weights
   ##############################################################################
-  
   # Step 2: explore balance
   balance <-
     furrr::future_map(names(estimated_weights), function(x) {
@@ -627,6 +653,25 @@ rq_estimate_weights <- function(dat, by = NULL, filter_panel,
       height = 6
     )
   } # End save_results
+  ##############################################################################
+  
+  ##############################################################################
+  # Step 3: eventually include selection weights
+  if (rq == "rq2" & include_selection_weights == TRUE) {
+    assertthat::assert_that(
+      identical(estimated_weights[[1]]$HelixID, dat$selection_weights$HelixID),
+      msg = "Something went wrong when computing selection weights."
+    )
+    
+    # Multiply balancing and selection weights for each exposure
+    estimated_weights <- base::lapply(seq_along(estimated_weights), function(idx) {
+      estimated_weights[[idx]]$weights <- estimated_weights[[idx]]$weights *
+        c(dat$selection_weights$selection_weights)
+      estimated_weights[[idx]]
+    }) # End loop product weights
+    names(estimated_weights) <- list_exposures
+  } # End step 3
+  ##############################################################################
   
   balance <- lapply(balance, function(x) {
     x$love <- NULL
