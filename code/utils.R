@@ -621,7 +621,9 @@ rq_estimate_weights <- function(dat, by = NULL, include_selection_weights,
         ),
         covariates = estimated_weights[[x]]$covs |>
           colnames(),
-        weights = estimated_weights[[x]]
+        weights = estimated_weights[[x]],
+        type_exposure = "continuous",
+        threshold_cor = 0.1
       )[c("exposure", "tab", "love")]
     },
     .options = furrr::furrr_options(seed = TRUE)

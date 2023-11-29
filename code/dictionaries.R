@@ -73,15 +73,15 @@ vars_of_interest <- function(append_to_chem = NULL) {
     "X11bHSD",
     #"global_reductase_f",
     #"global_reductase_e",
-    "cyp3a4",
-    "corticosterone_production",
+    #"cyp3a4",
+    "corticosterone_production"
     #"X11deoxycortisol_production",
     #"X11hydroxylase",
     #"X17hydroxylase",
-    "androgens_production",
+    #"androgens_production",
     #"X5a_reductase",
-    "lyase",
-    "global_adrenal_function"
+    #"lyase",
+    #"global_adrenal_function"
   )
   outcomes <- c(
     "hs_hitrtse"

@@ -74,9 +74,11 @@ ret <- lapply(5:8, function(idx) {
     
     rq_estimate_marginal_effects(
       fits = fits$fits,
-      parallel = TRUE,
+      parallel = FALSE,
       workers = 2
     )
   }) # End loop over outcomes
+  
+  return(res)
 }) # End loop over types of sample
 ################################################################################
