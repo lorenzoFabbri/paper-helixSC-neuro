@@ -133,10 +133,11 @@ params <- function(is_hpc) {
     )
   )
   selection_covariates_names <- c(
-    "hs_age_years", "e3_sex", "h_ethnicity_c",
-    "hs_c_weight", "hs_c_height",
-    "FAS_score", "hs_tob",
-    "cohort"
+    "hs_age_years", "e3_sex", "h_ethnicity_c", "h_ethnicity_m",
+    #"hs_c_weight", "hs_c_height",
+    "FAS_score", "hs_finance", "hs_tob",
+    "hs_head_circ",
+    "cohort", "hs_date_neu"
   )
   
   variables <- list(
