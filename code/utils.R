@@ -516,7 +516,8 @@ rq_prepare_data <- function(dat, filter_panel, type_sample_hcp, is_sa = FALSE) {
 #' balance exploration.
 #'
 #' @export
-rq_estimate_weights <- function(dat, by = NULL, include_selection_weights,
+rq_estimate_weights <- function(dat, by = NULL,
+                                include_selection_weights,
                                 save_results,
                                 parallel, workers = NULL) {
   rq <- Sys.getenv("TAR_PROJECT")
@@ -529,6 +530,15 @@ rq_estimate_weights <- function(dat, by = NULL, include_selection_weights,
   )
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   params_ana <- params_analyses()[[rq]]
+  
+  ##############################################################################
+  # Step 0: decide whether to include selection weights or not
+  if (rq == "rq2" & include_selection_weights == TRUE) {
+    s.weights <- c(dat$selection_weights$selection_weights)
+  } else {
+    s.weights <- NULL
+  }
+  ##############################################################################
   
   ##############################################################################
   # Step 1: estimate weights for covariate balance
@@ -577,6 +587,7 @@ rq_estimate_weights <- function(dat, by = NULL, include_selection_weights,
                 )),
               exposure = x,
               covariates = list_covariates,
+              s.weights = s.weights,
               id_var = params_dat$variables$identifier,
               method = params_ana$method_weightit,
               method_args = list(
@@ -615,6 +626,13 @@ rq_estimate_weights <- function(dat, by = NULL, include_selection_weights,
       ) # End loop over exposures to estimate weights
   }) # End progress bar
   names(estimated_weights) <- list_exposures
+  
+  if (rq == "rq2" & include_selection_weights == TRUE) {
+    assertthat::assert_that(
+      identical(estimated_weights[[1]]$HelixID, dat$selection_weights$HelixID),
+      msg = "Something went wrong when computing selection weights."
+    )
+  }
   ##############################################################################
   
   ##############################################################################
@@ -640,9 +658,14 @@ rq_estimate_weights <- function(dat, by = NULL, include_selection_weights,
   ## Save results
   if (save_results) {
     ### love.plot
+    .path.rq <- dplyr::case_when(
+      include_selection_weights == TRUE ~ paste0(rq, "_HCP"),
+      !is.null(by) ~ paste0(rq, "_SA"),
+      .default = rq
+    )
     .path <- paste0(
       "results/figures/",
-      Sys.getenv("TAR_PROJECT"),
+      .path.rq,
       "/loveplot_",
       ifelse(
         !is.null(by),
@@ -662,24 +685,6 @@ rq_estimate_weights <- function(dat, by = NULL, include_selection_weights,
       height = 6
     )
   } # End save_results
-  ##############################################################################
-  
-  ##############################################################################
-  # Step 3: eventually include selection weights
-  if (rq == "rq2" & include_selection_weights == TRUE) {
-    assertthat::assert_that(
-      identical(estimated_weights[[1]]$HelixID, dat$selection_weights$HelixID),
-      msg = "Something went wrong when computing selection weights."
-    )
-    
-    # Multiply balancing and selection weights for each exposure
-    estimated_weights <- base::lapply(seq_along(estimated_weights), function(idx) {
-      estimated_weights[[idx]]$weights <- estimated_weights[[idx]]$weights *
-        c(dat$selection_weights$selection_weights)
-      estimated_weights[[idx]]
-    }) # End loop product weights
-    names(estimated_weights) <- list_exposures
-  } # End step 3
   ##############################################################################
   
   balance <- lapply(balance, function(x) {
@@ -706,7 +711,8 @@ rq_estimate_weights <- function(dat, by = NULL, include_selection_weights,
 #' @returns A named list containing the fitted models.
 #'
 #' @export
-rq_fit_model_weighted <- function(dat, outcome, by = c(),
+rq_fit_model_weighted <- function(dat, outcome,
+                                  by = c(), is_panel = FALSE,
                                   weights,
                                   parallel, workers = NULL) {
   rq <- Sys.getenv("TAR_PROJECT")
@@ -830,13 +836,13 @@ rq_fit_model_weighted <- function(dat, outcome, by = c(),
             threshold_k = params_ana$threshold_k
           )
         ) # End fit current exposure
-        path_save_res <- glue::glue(
-          "results/figures/{rq}/model_check_out_{outcome}_{exposure}"
+        .path.rq <- dplyr::case_when(
+          is_panel == TRUE ~ paste0(rq, "_HCP"),
+          !is_empty(by) ~ paste0(rq, "_SA"),
+          .default = rq
         )
-        path_save_res <- ifelse(
-          is_empty(by),
-          paste0(path_save_res, ".png"),
-          paste0(path_save_res, "_by", ".png")
+        path_save_res <- glue::glue(
+          "results/figures/{.path.rq}/model_check_out_{outcome}_{exposure}.png"
         )
         check_mod_out <- myphd::check_model(
           model = fit$fit,
@@ -873,8 +879,10 @@ rq_fit_model_weighted <- function(dat, outcome, by = c(),
 #' and the results of average comparisons.
 #'
 #' @export
-rq_estimate_marginal_effects <-
-  function(fits, by = NULL, parallel, workers = NULL) {
+rq_estimate_marginal_effects <- function(fits,
+                                         by = NULL, is_hcp = FALSE,
+                                         parallel,
+                                         workers = NULL) {
     rq <- Sys.getenv("TAR_PROJECT")
     params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
     params_ana <- params_analyses()[[rq]]
@@ -902,6 +910,21 @@ rq_estimate_marginal_effects <-
       weights <- fits[[exposure]]$weights
       
       ########################################################################
+      # Covariance matrix for all steps
+      if (is_hcp == FALSE) {
+        vcov <- sandwich::vcovCL(
+          x = mod,
+          cluster = ~ cohort,
+          type = "HC3"
+        )
+      } else {
+        vcov <- sandwich::vcovCL(
+          x = mod,
+          cluster = ~ cohort,
+          type = "HC1"
+        )
+      } # End choice/computation of covariance matrix
+      
       # G-computation (ADRF)
       ## Values of exposure for counterfactual predictions, based on quantiles
       values <- with(dat, seq(
@@ -917,10 +940,9 @@ rq_estimate_marginal_effects <-
               {exposure} = values
             ),
             wts = weights,
-            vcov = {vcov}
+            vcov = vcov
           )",
-          exposure = exposure,
-          vcov = "~ cohort"
+          exposure = exposure
         )
       )) |> # End G-computation (avg_predictions)
         marginaleffects::tidy()
@@ -966,10 +988,9 @@ rq_estimate_marginal_effects <-
             ),
             by = {by},
             wts = weights,
-            vcov = {vcov}
+            vcov = vcov
           )",
-          exposure = exposure,
-          vcov = "~ cohort"
+          exposure = exposure
         )
       )) |> # End marginal estimates (avg_comparisons)
         marginaleffects::tidy() |>
@@ -990,11 +1011,10 @@ rq_estimate_marginal_effects <-
             by = {by},
             hypothesis = {hypothesis},
             wts = weights,
-            vcov = {vcov}
+            vcov = vcov
           )",
             exposure = exposure,
-            hypothesis = glue::double_quote("pairwise"),
-            vcov = "~ cohort"
+            hypothesis = glue::double_quote("pairwise")
           )
         )) |> # End marginal estimates (avg_comparisons)
           marginaleffects::tidy() |>

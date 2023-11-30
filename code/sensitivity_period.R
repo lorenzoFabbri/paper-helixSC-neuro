@@ -73,7 +73,7 @@ progressr::with_progress({
     ww <- rq_estimate_weights(
       dat = preproc_dat,
       include_selection_weights = TRUE,
-      save_results = FALSE,
+      save_results = TRUE,
       parallel = FALSE,
       workers = 10
     )
@@ -83,6 +83,7 @@ progressr::with_progress({
       fits <- rq_fit_model_weighted(
         dat = preproc_dat,
         outcome = out,
+        is_panel = TRUE,
         weights = ww$estimated_weights,
         parallel = FALSE,
         workers = 10
