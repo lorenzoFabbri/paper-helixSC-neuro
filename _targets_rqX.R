@@ -62,7 +62,7 @@ list(
   targets::tar_target_raw(
     name = paste0(rq, "_preproc_dat"),
     command = substitute(
-      rq_prepare_data(dat = dat),
+      rq_prepare_data(dat = dat, filter_panel = FALSE, type_sample_hcp = NULL),
       env = list(dat = as.symbol(paste0(rq, "_load_dat")))
     )
   ),
@@ -73,6 +73,7 @@ list(
     command = substitute(
       rq_estimate_weights(
         dat = dat,
+        include_selection_weights = FALSE,
         save_results = TRUE,
         parallel = FALSE,
         workers = 10

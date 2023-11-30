@@ -291,7 +291,7 @@ rq_load_data <- function(res_dag) {
 #' containing the variables of interest.
 #'
 #' @export
-rq_prepare_data <- function(dat, filter_panel, type_sample_hcp) {
+rq_prepare_data <- function(dat, filter_panel, type_sample_hcp, is_sa = FALSE) {
   rq <- Sys.getenv("TAR_PROJECT")
   rq <- switch(rq,
                "rq01" = "rq1",
@@ -308,7 +308,12 @@ rq_prepare_data <- function(dat, filter_panel, type_sample_hcp) {
   # Create folders to store results
   invisible(lapply(c("figures"), function(x) {
     path_save_res <- paste0(
-      "results/", x, "/", rq
+      "results/", x, "/",
+      dplyr::case_when(
+        filter_panel == TRUE ~ paste0(rq, "_HCP"),
+        is_sa == TRUE ~ paste0(rq, "_SA"),
+        .default = rq
+      )
     )
     if (!dir.exists(path_save_res)) {
       dir.create(path_save_res)
@@ -336,7 +341,7 @@ rq_prepare_data <- function(dat, filter_panel, type_sample_hcp) {
       tidylog::select(-cohort)
     
     # Estimate selection weights
-    dat$selection_weights <- estimate_selection_weights(
+    dat$selection_weights <- myphd::estimate_selection_weights(
       dat = myphd::preproc_data(
         dat = dat$covariates,
         covariates = NULL,
@@ -357,7 +362,8 @@ rq_prepare_data <- function(dat, filter_panel, type_sample_hcp) {
         by = NULL,
         sl_lib = params_ana$sl_lib,
         sl_discrete = params_ana$sl_discrete,
-        use_kernel = params_ana$use_kernel
+        use_kernel = params_ana$use_kernel,
+        family_link = params_ana$family_link_weightit
       ),
       trim_weights = ifelse(
         !is.null(params_ana$weights_trim),
@@ -578,7 +584,8 @@ rq_estimate_weights <- function(dat, by = NULL, include_selection_weights,
                 by = by,
                 sl_lib = params_ana$sl_lib,
                 sl_discrete = params_ana$sl_discrete,
-                use_kernel = params_ana$use_kernel
+                use_kernel = params_ana$use_kernel,
+                family_link = NULL
               )
             )
           )) # End estimation weights current exposure

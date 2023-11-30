@@ -16,14 +16,14 @@ id_var <- "HelixID"
 by_var <- "cohort"
 rq <- Sys.getenv("TAR_PROJECT")
 exposure <- switch(rq,
-  "rq01" = "chemical",
-  "rq02" = "chemical",
-  "rq03" = "biomarker"
+                   "rq01" = "chemical",
+                   "rq02" = "chemical",
+                   "rq03" = "biomarker"
 )
 outcome <- switch(rq,
-  "rq01" = "outcome",
-  "rq02" = "biomarker",
-  "rq03" = "outcome"
+                  "rq01" = "outcome",
+                  "rq02" = "biomarker",
+                  "rq03" = "outcome"
 )
 
 list(
@@ -42,7 +42,7 @@ list(
   targets::tar_target_raw(
     name = paste0(rq, "_load_dat"),
     command = substitute(
-      rq_load_data(res_dag = dag, remove_kanc = FALSE),
+      rq_load_data(res_dag = dag),
       env = list(dag = as.symbol(paste0(rq, "_dag")))
     )
   ),
@@ -63,7 +63,7 @@ list(
     command = expression(
       viz_desc_vars(
         dat = myphd::extract_cohort(load_steroids()$desc,
-          id_var = id_var
+                                    id_var = id_var
         ) |>
           tidylog::mutate(
             cohort = dplyr::case_when(
@@ -87,7 +87,7 @@ list(
     command = substitute(
       myphd::explore_missings(
         myphd::extract_cohort(dat$covariates,
-          id_var = id_var
+                              id_var = id_var
         ),
         id_var = id_var,
         by_var = by_var,
@@ -107,7 +107,7 @@ list(
     command = substitute(
       myphd::explore_missings(
         myphd::extract_cohort(dat$exposures,
-          id_var = id_var
+                              id_var = id_var
         ),
         id_var = id_var,
         by_var = by_var,
@@ -127,7 +127,7 @@ list(
     command = substitute(
       myphd::explore_missings(
         myphd::extract_cohort(dat$outcome,
-          id_var = id_var
+                              id_var = id_var
         ),
         id_var = id_var,
         by_var = by_var,
@@ -148,7 +148,7 @@ list(
     command = substitute(
       myphd::describe_data(
         dat = myphd::extract_cohort(dat$covariates,
-          id_var = id_var
+                                    id_var = id_var
         ),
         id_var = id_var,
         by_var = by_var
@@ -163,7 +163,7 @@ list(
     command = substitute(
       myphd::describe_data(
         dat = myphd::extract_cohort(dat$exposures,
-          id_var = id_var
+                                    id_var = id_var
         ) |>
           tidylog::mutate(
             cohort = dplyr::case_when(
@@ -190,7 +190,7 @@ list(
     command = substitute(
       myphd::describe_data(
         dat = myphd::extract_cohort(dat$outcome,
-          id_var = id_var
+                                    id_var = id_var
         ) |>
           tidylog::mutate(
             cohort = dplyr::case_when(
@@ -216,7 +216,7 @@ list(
   targets::tar_target_raw(
     name = paste0(rq, "_preproc_dat"),
     command = substitute(
-      rq_prepare_data(dat = dat),
+      rq_prepare_data(dat = dat, filter_panel = FALSE, type_sample_hcp = NULL),
       env = list(
         dat = as.symbol(paste0(rq, "_load_dat"))
       )
@@ -228,7 +228,7 @@ list(
     command = substitute(
       myphd::describe_data(
         dat = myphd::extract_cohort(dat$covariates,
-          id_var = id_var
+                                    id_var = id_var
         ),
         id_var = id_var,
         by_var = by_var
@@ -243,7 +243,7 @@ list(
     command = substitute(
       myphd::describe_data(
         dat = myphd::extract_cohort(dat$exposures,
-          id_var = id_var
+                                    id_var = id_var
         ),
         id_var = id_var,
         by_var = by_var
@@ -258,7 +258,7 @@ list(
     command = substitute(
       myphd::describe_data(
         dat = myphd::extract_cohort(dat$outcome,
-          id_var = id_var
+                                    id_var = id_var
         ),
         id_var = id_var,
         by_var = by_var

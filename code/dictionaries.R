@@ -133,10 +133,8 @@ params <- function(is_hpc) {
     )
   )
   selection_covariates_names <- c(
-    "hs_age_years", "e3_sex", "h_ethnicity_c", "h_ethnicity_m",
-    #"hs_c_weight", "hs_c_height",
-    "FAS_score", "hs_finance", "hs_tob",
-    "hs_head_circ",
+    "hs_age_years", "e3_sex", "h_ethnicity_c",
+    "FAS_score", "hs_tob",
     "cohort", "hs_date_neu"
   )
   
@@ -413,6 +411,7 @@ params_analyses <- function() {
     ############################################################################
     # WeightIt, Cobalt, marginaleffects
     method_weightit = "energy",
+    family_link_weightit = "probit",
     stabilize = TRUE,
     weights_trim = 0.9,
     sl_lib = c(

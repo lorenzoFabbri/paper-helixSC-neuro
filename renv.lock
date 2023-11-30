@@ -2542,7 +2542,7 @@
       "RemoteUsername": "isglobal-cep",
       "RemoteRepo": "myphd",
       "RemoteRef": "HEAD",
-      "RemoteSha": "2970703b7c113a3a6826ece2beea858303132f34",
+      "RemoteSha": "ca36c932ab6d1f25c65e5f7abc57fda6e1020de4",
       "RemoteHost": "api.github.com",
       "Requirements": [
         "WeightIt",
@@ -2577,7 +2577,7 @@
         "tmvtnorm",
         "visdat"
       ],
-      "Hash": "c8d35330c354cebb1a29c96b8632a22d"
+      "Hash": "ac39b005d7e3d7b68e7d0a166a866f94"
     },
     "naniar": {
       "Package": "naniar",

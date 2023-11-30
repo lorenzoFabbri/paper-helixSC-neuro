@@ -1,4 +1,4 @@
-Sys.setenv(is_hpc = FALSE)
+Sys.setenv(is_hpc = TRUE)
 # Custom path to _targets for different research questions
 path_store <- ifelse(
   Sys.getenv("is_hpc"), 
@@ -22,14 +22,14 @@ for (rq in c("1", "2", "3", "4")) {
   # Analyses
   Sys.setenv(TAR_PROJECT = paste0("rq", rq))
   store <- paste0(path_store, rq)
-  targets::tar_make(script = "_targets_raw_rqX.R", 
+  targets::tar_make(script = "_targets_rqX.R", 
                     store = store)
   
   # Sensitivity analyses
   if (rq != "4") {
     Sys.setenv(TAR_PROJECT = paste0("rq", rq))
     store <- paste0(path_store, rq, "SA")
-    targets::tar_make(script = "_targets_sa_raw_rqX.R", 
+    targets::tar_make(script = "_targets_sa_rqX.R", 
                       store = store)
   }
 }
