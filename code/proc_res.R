@@ -813,11 +813,11 @@ tidy_res_meffects <- function(df, sa_var = NULL,
 #' @export
 plot_estimate_over_time <- function(df) {
   # Structure of df:
-  # - time_period (character, x-axis)
-  # - outcome (character)
-  # - variable (character, for faceting)
-  # - estimate (numeric, y-axis)
-  # - s.value, conf.low, conf.high (for size dots and error bars).
+  # - time_period (character, x-axis).
+  # - outcome (character).
+  # - variable (character, for faceting).
+  # - estimate (numeric, y-axis).
+  # - rvar (for distribution of estimate).
   
   # Add information on EDCs
   info_edcs <- myphd::edcs_information() |>
@@ -850,65 +850,52 @@ plot_estimate_over_time <- function(df) {
     )
   
   # Plot
-  plt <- df |>
-    dplyr::group_by(class) |>
-    dplyr::arrange(dplyr::desc(variable)) |>
-    dplyr::ungroup() |>
-    ggplot2::ggplot(ggplot2::aes(
-      x = time_period,
-      y = estimate,
-      group = variable,
-      color = class
-    )) +
-    ggplot2::scale_x_discrete() +
-    ggplot2::geom_point(
-      mapping = ggplot2::aes(
-        size = .data[["s.value"]]
-      ),
-      position = "identity",
-      show.legend = TRUE
-    ) +
-    ggplot2::geom_line(
-      color = "grey"
-    ) +
-    ggplot2::geom_hline(
-      yintercept = 0.0,
-      linewidth = 0.3
-    ) +
-    ggplot2::geom_errorbar(
-      mapping = ggplot2::aes(
-        ymin = conf.low,
-        ymax = conf.high
-      ),
-      position = "identity",
-      width = 0.0,
-      linewidth = 0.3
-    ) +
-    ggplot2::guides(
-      size = "none"
-    ) +
-    ggplot2::labs(
-      title = glue::glue(
-        "Outcome: {out}.",
-        out = stringr::str_replace(
-          df$outcome[[1]],
-          pattern = "_",
-          replacement = " "
+  plts <- lapply(unique(df$variable), function(x) {
+    df |>
+      dplyr::filter(variable == x) |>
+      dplyr::group_by(class) |>
+      dplyr::arrange(dplyr::desc(variable)) |>
+      dplyr::ungroup() |>
+      ggplot2::ggplot(ggplot2::aes(
+        x = time_period,
+        ydist = rvar
+      )) +
+      ggplot2::scale_x_discrete() +
+      ggdist::stat_slabinterval() +
+      ggplot2::geom_hline(
+        yintercept = 0.0,
+        linewidth = 0.2
+      ) +
+      ggplot2::guides(size = "none") +
+      ggplot2::labs(
+        title = glue::glue(
+          "Outcome: {out}. Exposure: {expo}",
+          out = stringr::str_replace(
+            df$outcome[[1]],
+            pattern = "_",
+            replacement = " "
+          ),
+          expo = x
+        ),
+        subtitle = "Simulation-based inference",
+        x = "time period",
+        y = "estimate",
+        caption = "nu: night urine. mu: morning urine. week: pooled weekly sample."
+      ) +
+      ggplot2::theme(
+        plot.caption = ggplot2::element_text(hjust = 0),
+        text = ggplot2::element_text(
+          size = 12
         )
       )
-    ) +
-    ggplot2::theme(
-      plot.caption = ggplot2::element_text(hjust = 0),
-      text = ggplot2::element_text(
-        size = 12
-      )
-    ) +
-    ggplot2::facet_wrap(
-      ~ forcats::fct_reorder(variable, as.integer(class)),
-      ncol = 3
-    )
+  }) # End loop plot exposures
+  ## Arrange all plots in multiple pages
+  ret <- gridExtra::marrangeGrob(
+    grobs = plts,
+    nrow = 1, ncol = 1
+  )
   
-  return(plt)
+  return(ret)
 } # End function plot_estimate_over_time
 ################################################################################
 

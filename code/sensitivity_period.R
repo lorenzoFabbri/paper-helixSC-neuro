@@ -73,12 +73,12 @@ progressr::with_progress({
     ww <- rq_estimate_weights(
       dat = preproc_dat,
       include_selection_weights = TRUE,
-      save_results = TRUE,
+      save_results = FALSE,
       parallel = FALSE,
       workers = 10
     )
     # Loop over outcomes
-    res <- lapply(tbl_outcomes$outcome, function(out) {
+    res <- lapply(tbl_outcomes$outcome[[1]], function(out) {
       # Fit outcome model
       fits <- rq_fit_model_weighted(
         dat = preproc_dat,
@@ -91,6 +91,7 @@ progressr::with_progress({
       # Estimate marginal contrasts
       rq_estimate_marginal_effects(
         fits = fits$fits,
+        is_hcp = TRUE,
         parallel = TRUE,
         workers = 3
       )
@@ -112,12 +113,17 @@ ret_proc <- lapply(ret, function(x) {
 
 comparisons_by_chemout <- lapply(ret_proc, function(x) {
   tmp <- lapply(x, function(y) {
-    lapply(y$marginal_effects, "[[", "comparisons") |>
+    lapply(y$marginal_effects, function(z) {
+      marginaleffects::posterior_draws(
+        x = z$comparisons,
+        shape = "rvar"
+      )
+    }) |>
       dplyr::bind_rows()
   }) |>
     dplyr::bind_rows(.id = "outcome") |>
     tidylog::select(
-      outcome, variable, estimate, s.value, conf.low, conf.high
+      outcome, variable, estimate, rvar
     )
 }) |>
   dplyr::bind_rows(.id = "time_period")

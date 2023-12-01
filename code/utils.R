@@ -883,58 +883,58 @@ rq_estimate_marginal_effects <- function(fits,
                                          by = NULL, is_hcp = FALSE,
                                          parallel,
                                          workers = NULL) {
-    rq <- Sys.getenv("TAR_PROJECT")
-    params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
-    params_ana <- params_analyses()[[rq]]
+  rq <- Sys.getenv("TAR_PROJECT")
+  params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
+  params_ana <- params_analyses()[[rq]]
+  
+  old_by <- by
+  if (is.null(by)) {
+    by <- TRUE
+  } else {
+    by <- glue::double_quote(by)
+  }
+  
+  # Loop over the fitted models to estimate marginal effects
+  if (parallel == TRUE) {
+    future::plan(future::multisession,
+                 workers = workers
+    )
+  } else {
+    future::plan(future::sequential())
+  }
+  
+  ret <- furrr::future_map(seq_along(fits), function(idx) {
+    exposure <- names(fits)[[idx]]
+    mod <- fits[[exposure]]$fit
+    dat <- fits[[exposure]]$dat
+    weights <- fits[[exposure]]$weights
     
-    old_by <- by
-    if (is.null(by)) {
-      by <- TRUE
-    } else {
-      by <- glue::double_quote(by)
-    }
-    
-    # Loop over the fitted models to estimate marginal effects
-    if (parallel == TRUE) {
-      future::plan(future::multisession,
-                   workers = workers
+    ########################################################################
+    # Covariance matrix for all steps
+    if (is_hcp == FALSE) {
+      vcov <- sandwich::vcovCL(
+        x = mod,
+        cluster = ~ cohort,
+        type = "HC3"
       )
     } else {
-      future::plan(future::sequential())
-    }
+      vcov <- sandwich::vcovCL(
+        x = mod,
+        cluster = ~ cohort,
+        type = "HC1"
+      )
+    } # End choice/computation of covariance matrix
     
-    ret <- furrr::future_map(seq_along(fits), function(idx) {
-      exposure <- names(fits)[[idx]]
-      mod <- fits[[exposure]]$fit
-      dat <- fits[[exposure]]$dat
-      weights <- fits[[exposure]]$weights
-      
-      ########################################################################
-      # Covariance matrix for all steps
-      if (is_hcp == FALSE) {
-        vcov <- sandwich::vcovCL(
-          x = mod,
-          cluster = ~ cohort,
-          type = "HC3"
-        )
-      } else {
-        vcov <- sandwich::vcovCL(
-          x = mod,
-          cluster = ~ cohort,
-          type = "HC1"
-        )
-      } # End choice/computation of covariance matrix
-      
-      # G-computation (ADRF)
-      ## Values of exposure for counterfactual predictions, based on quantiles
-      values <- with(dat, seq(
-        quantile(get(exposure), params_ana$type_avg_comparison[1]),
-        quantile(get(exposure), params_ana$type_avg_comparison[2]),
-        length.out = 50
-      ))
-      gcomp <- eval(parse(
-        text = glue::glue(
-          "marginaleffects::avg_predictions(
+    # G-computation (ADRF)
+    ## Values of exposure for counterfactual predictions, based on quantiles
+    values <- with(dat, seq(
+      quantile(get(exposure), params_ana$type_avg_comparison[1]),
+      quantile(get(exposure), params_ana$type_avg_comparison[2]),
+      length.out = 50
+    ))
+    gcomp <- eval(parse(
+      text = glue::glue(
+        "marginaleffects::avg_predictions(
             model = mod,
             variables = list(
               {exposure} = values
@@ -942,46 +942,46 @@ rq_estimate_marginal_effects <- function(fits,
             wts = weights,
             vcov = vcov
           )",
-          exposure = exposure
-        )
-      )) |> # End G-computation (avg_predictions)
-        marginaleffects::tidy()
-      ########################################################################
-      
-      ########################################################################
-      # Slopes (AMEF)
-      # weights_repeated <- rep(weights,
-      #                         times = length(values)
-      # )
-      # slopes <- eval(parse(
-      #   text = glue::glue(
-      #     "marginaleffects::avg_slopes(
-      #       model = mod,
-      #       variables = {glue::double_quote(exposure)},
-      #       newdata = marginaleffects::datagridcf({exposure} = values),
-      #       by = {glue::double_quote(exposure)},
-      #       wts = weights_repeated,
-      #       vcov = {glue::double_quote(vcov)}
-      #     )",
-      #     exposure = exposure,
-      #     vcov = "HC3"
-      #   )
-      # )) # End slopes (avg_slopes)
-      ########################################################################
-      
-      ########################################################################
-      # Comparisons (marginal estimates)
-      ## Create dataframe with `high` and `low` values for exposure
-      df_comparisons <- myphd::create_df_marginal_comparisons(
-        dat = dat,
-        var = exposure,
-        percentiles = params_ana$type_avg_comparison,
-        by_var = "cohort"
+        exposure = exposure
       )
-      
-      avg_comp <- eval(parse(
-        text = glue::glue(
-          "marginaleffects::avg_comparisons(
+    )) |> # End G-computation (avg_predictions)
+      marginaleffects::tidy()
+    ########################################################################
+    
+    ########################################################################
+    # Slopes (AMEF)
+    # weights_repeated <- rep(weights,
+    #                         times = length(values)
+    # )
+    # slopes <- eval(parse(
+    #   text = glue::glue(
+    #     "marginaleffects::avg_slopes(
+    #       model = mod,
+    #       variables = {glue::double_quote(exposure)},
+    #       newdata = marginaleffects::datagridcf({exposure} = values),
+    #       by = {glue::double_quote(exposure)},
+    #       wts = weights_repeated,
+    #       vcov = {glue::double_quote(vcov)}
+    #     )",
+    #     exposure = exposure,
+    #     vcov = "HC3"
+    #   )
+    # )) # End slopes (avg_slopes)
+    ########################################################################
+    
+    ########################################################################
+    # Comparisons (marginal estimates)
+    ## Create dataframe with `high` and `low` values for exposure
+    df_comparisons <- myphd::create_df_marginal_comparisons(
+      dat = dat,
+      var = exposure,
+      percentiles = params_ana$type_avg_comparison,
+      by_var = "cohort"
+    )
+    
+    avg_comp <- eval(parse(
+      text = glue::glue(
+        "marginaleffects::avg_comparisons(
             model = mod,
             variables = list(
               {exposure} = df_comparisons
@@ -990,20 +990,36 @@ rq_estimate_marginal_effects <- function(fits,
             wts = weights,
             vcov = vcov
           )",
-          exposure = exposure
-        )
-      )) |> # End marginal estimates (avg_comparisons)
+        exposure = exposure
+      )
+    )) # End marginal estimates (avg_comparisons)
+    
+    if (is_hcp == FALSE) {
+      avg_comp <- avg_comp |>
         marginaleffects::tidy() |>
         tidylog::rename(
           variable = term,
           se = std.error
         )
-      
-      avg_comp_hyp <- NULL
-      if (!is.null(old_by)) {
-        avg_comp_hyp <- eval(parse(
-          text = glue::glue(
-            "marginaleffects::avg_comparisons(
+    } else {
+      # Since the sample size is small, use simulation-based inference
+      avg_comp <- marginaleffects::inferences(
+        x = avg_comp,
+        method = "simulation",
+        R = 299
+      ) |>
+        marginaleffects::tidy() |>
+        tidylog::rename(
+          variable = term,
+          se = std.error
+        )
+    }
+    
+    avg_comp_hyp <- NULL
+    if (!is.null(old_by)) {
+      avg_comp_hyp <- eval(parse(
+        text = glue::glue(
+          "marginaleffects::avg_comparisons(
             model = mod,
             variables = list(
               {exposure} = df_comparisons
@@ -1013,34 +1029,34 @@ rq_estimate_marginal_effects <- function(fits,
             wts = weights,
             vcov = vcov
           )",
-            exposure = exposure,
-            hypothesis = glue::double_quote("pairwise")
-          )
-        )) |> # End marginal estimates (avg_comparisons)
-          marginaleffects::tidy() |>
-          tidylog::rename(
-            variable = term,
-            se = std.error
-          )
-      }
-      ########################################################################
-      
-      return(list(
-        gcomp = gcomp,
-        #adrf = adrf,
-        #slopes = slopes,
-        #amef = amef,
-        comparisons = avg_comp,
-        hypothesis = avg_comp_hyp
-      ))
-    },
-    .options = furrr::furrr_options(seed = TRUE)
-    ) # End loop over fitted models
-    future::plan(future::sequential)
-    names(ret) <- names(fits)
+          exposure = exposure,
+          hypothesis = glue::double_quote("pairwise")
+        )
+      )) |> # End marginal estimates (avg_comparisons)
+        marginaleffects::tidy() |>
+        tidylog::rename(
+          variable = term,
+          se = std.error
+        )
+    }
+    ########################################################################
     
-    return(list(marginal_effects = ret))
-  } # End function rq_estimate_marginal_effects
+    return(list(
+      gcomp = gcomp,
+      #adrf = adrf,
+      #slopes = slopes,
+      #amef = amef,
+      comparisons = avg_comp,
+      hypothesis = avg_comp_hyp
+    ))
+  },
+  .options = furrr::furrr_options(seed = TRUE)
+  ) # End loop over fitted models
+  future::plan(future::sequential)
+  names(ret) <- names(fits)
+  
+  return(list(marginal_effects = ret))
+} # End function rq_estimate_marginal_effects
 ################################################################################
 
 #' Fit models using `lmtp`
