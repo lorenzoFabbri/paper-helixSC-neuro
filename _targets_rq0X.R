@@ -2,7 +2,7 @@ source("DAGs/dag_v2.R")
 source("code/dictionaries.R")
 source("code/data.R")
 source("code/utils.R")
-source("code/plot.R")
+source("code/proc_res.R")
 
 targets::tar_option_set(
   format = "qs"
