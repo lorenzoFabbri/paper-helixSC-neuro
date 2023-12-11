@@ -3,7 +3,7 @@
 #' @param dat Dataset containing original variables. A dataframe.
 #'
 #' @return A dataset with additional variables. A dataframe.
-#' 
+#'
 #' @export
 create_steroid_scores <- function(dat) {
   warning(
@@ -14,7 +14,7 @@ create_steroid_scores <- function(dat) {
   dat_ret <- dat |>
     tidylog::mutate(
       # Cortisol
-      cortisol_production = rowSums(dplyr::across(c(`F`, X20aDHF, X20bDHF, X5bDHF, X5aTHF, X5bTHF, X6OHF, X5a20acortol, X5a20bcortol, X5b20acortol, X5b20bcortol))), 
+      cortisol_production = rowSums(dplyr::across(c(`F`, X20aDHF, X20bDHF, X5bDHF, X5aTHF, X5bTHF, X6OHF, X5a20acortol, X5a20bcortol, X5b20acortol, X5b20bcortol))),
       cortisol_metabolism = rowSums(dplyr::across(c(X20aDHF, X20bDHF, X5bDHF, X5aTHF, X5bTHF, X6OHF, X5a20acortol, X5a20bcortol, X5b20acortol, X5b20bcortol))) / `F`,
       # Cortisone
       cortisone_production = rowSums(dplyr::across(c(CortisoneE, X20aDHE, X20bDHE, X5aTHE, X5bTHE, X6OHE, X5b20acortolone, X5b20bcortolone))),
@@ -22,22 +22,23 @@ create_steroid_scores <- function(dat) {
       # 11beta
       X11bHSD = cortisone_production / cortisol_production,
       # Global reductases
-      #global_reductase_f = rowSums(dplyr::across(c(X5aTHF, X5bTHF))) / `F`,
-      #global_reductase_e = X5bTHE / CortisoneE,
+      # global_reductase_f = rowSums(dplyr::across(c(X5aTHF, X5bTHF))) / `F`,
+      # global_reductase_e = X5bTHE / CortisoneE,
       # Others
       cyp3a4 = X6OHF / `F`,
       corticosterone_production = rowSums(dplyr::across(c(X5aTHB, X5bTHB, A, X17DOcortolone))),
-      #X11deoxycortisol_production = rowSums(dplyr::across(c(S, X5bDHS, X5bTHS))),
-      #X11hydroxylase = rowSums(dplyr::across(c(X5aTHF, X5bTHF, X5bTHE))) / X5bTHS,
-      #X17hydroxylase = rowSums(dplyr::across(c(X5aTHF, X5bTHF))) / rowSums(dplyr::across(c(X5aTHB, X5bTHB))),
+      # X11deoxycortisol_production = rowSums(dplyr::across(c(S, X5bDHS, X5bTHS))),
+      # X11hydroxylase = rowSums(dplyr::across(c(X5aTHF, X5bTHF, X5bTHE))) / X5bTHS,
+      # X17hydroxylase = rowSums(dplyr::across(c(X5aTHF, X5bTHF))) / rowSums(dplyr::across(c(X5aTHB, X5bTHB))),
       androgens_production = rowSums(dplyr::across(c(`T`, Andros, Etio))),
-      #X5a_reductase = Andreos / Etio,
+      # X5a_reductase = Andreos / Etio,
       lyase = rowSums(dplyr::across(c(Andros, Etio))) / rowSums(dplyr::across(c(X17HP, PT))),
       global_adrenal_function = rowSums(dplyr::across(c(X5aTHF, X5bTHF, X5bTHE))) / rowSums(dplyr::across(c(X17HP, PT)))
     )
   
   return(dat_ret)
 }
+################################################################################
 
 #' Load the steroid metabolomics data
 #'
@@ -80,7 +81,7 @@ load_steroids <- function() {
     # Remove samples w/o data
     dd <- dd |>
       tidylog::filter(
-        ! HelixID %in% c("RHE232094", "MOB154")
+        !HelixID %in% c("RHE232094", "MOB154")
       )
     
     # LOD information
@@ -133,7 +134,7 @@ load_steroids <- function() {
     )
     
     ## Remove unwanted columns and change to numeric
-    #unwanted_cols <- c("AED")
+    # unwanted_cols <- c("AED")
     unwanted_cols <- c()
     dd <- dd |>
       tidylog::select(-dplyr::all_of(unwanted_cols)) |>
@@ -171,7 +172,10 @@ load_steroids <- function() {
     
     tbl_vals <- dd_cdesc
     tbl_vals$HelixID <- NULL
-    tbl_vals <- tbl_vals |> c() |> unlist() |> unname() |>
+    tbl_vals <- tbl_vals |>
+      c() |>
+      unlist() |>
+      unname() |>
       table()
     assertthat::assert_that(
       sum(is.na(dd)) == sum(tbl_vals[2:4]),
@@ -229,7 +233,7 @@ load_steroids <- function() {
 
 #' Title
 #'
-#' @param which_sample 
+#' @param which_sample
 #'
 #' @return
 #' @export

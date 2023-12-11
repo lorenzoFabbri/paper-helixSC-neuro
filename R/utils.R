@@ -286,12 +286,15 @@ rq_load_data <- function(res_dag) {
 #'
 #' @param dat A named list of dataframes containing the
 #' variables of interest. A list.
+#' @param filter_panel
+#' @param type_sample_hcp
+#' @param is_sa
 #'
 #' @returns A named list of pre-processed dataframes
 #' containing the variables of interest.
 #'
 #' @export
-rq_prepare_data <- function(dat, filter_panel, type_sample_hcp, is_sa = FALSE) {
+rq_prepare_data <- function(dat, filter_panel, type_sample_hcp, is_sa) {
   rq <- Sys.getenv("TAR_PROJECT")
   rq <- switch(rq,
                "rq01" = "rq1",
@@ -329,7 +332,8 @@ rq_prepare_data <- function(dat, filter_panel, type_sample_hcp, is_sa = FALSE) {
     }
     dat_cp <- load_cp_data(which_sample = type_sample_hcp) |>
       myphd::extract_cohort(
-        id_var = params_dat$variables$identifier
+        id_var = params_dat$variables$identifier,
+        st = 1, en = 3
       ) |>
       myphd::preproc_data(
         covariates = NULL,
@@ -414,11 +418,13 @@ rq_prepare_data <- function(dat, filter_panel, type_sample_hcp, is_sa = FALSE) {
   dat$exposures <- myphd::preproc_data(
     dat = myphd::extract_cohort(
       dat = dat$exposures,
-      id_var = params_dat$variables$identifier
+      id_var = params_dat$variables$identifier,
+      st = 1, en = 3
     ),
     dat_desc = myphd::extract_cohort(
       dat = dat$metab_desc,
-      id_var = params_dat$variables$identifier
+      id_var = params_dat$variables$identifier,
+      st = 1, en = 3
     ),
     covariates = dat$covariates,
     outcome = NULL,
@@ -432,10 +438,12 @@ rq_prepare_data <- function(dat, filter_panel, type_sample_hcp, is_sa = FALSE) {
   if (rq %in% c("rq3", "rq4")) {
     cols_to_remove <- setdiff(
       colnames(dat$exposures),
-      c(params_dat$variables$identifier,
+      c(
+        params_dat$variables$identifier,
         "F", "cortisol_production", "CortisoneE",
         "X5bTHS", "X5aTHB", "X5bTHB",
-        "Etio", "X17HP", "PT")
+        "Etio", "X17HP", "PT"
+      )
     )
     dat$exposures <- create_steroid_scores(dat = dat$exposures)
     
@@ -443,7 +451,8 @@ rq_prepare_data <- function(dat, filter_panel, type_sample_hcp, is_sa = FALSE) {
     dat$exposures <- myphd::handle_transformation(
       dat = myphd::extract_cohort(
         dat$exposures,
-        id_var = "HelixID"
+        id_var = "HelixID",
+        st = 1, en = 3
       ),
       id_var = params_dat$variables$identifier,
       by_var = "cohort",
@@ -459,11 +468,13 @@ rq_prepare_data <- function(dat, filter_panel, type_sample_hcp, is_sa = FALSE) {
   dat$outcome <- myphd::preproc_data(
     dat = myphd::extract_cohort(
       dat = dat$outcome,
-      id_var = params_dat$variables$identifier
+      id_var = params_dat$variables$identifier,
+      st = 1, en = 3
     ),
     dat_desc = myphd::extract_cohort(
       dat = dat$metab_desc,
-      id_var = params_dat$variables$identifier
+      id_var = params_dat$variables$identifier,
+      st = 1, en = 3
     ),
     covariates = dat$covariates,
     outcome = outcome,
@@ -477,10 +488,12 @@ rq_prepare_data <- function(dat, filter_panel, type_sample_hcp, is_sa = FALSE) {
   if (rq == "rq2") {
     cols_to_remove <- setdiff(
       colnames(dat$outcome),
-      c(params_dat$variables$identifier,
+      c(
+        params_dat$variables$identifier,
         "F", "cortisol_production", "CortisoneE",
         "X5bTHS", "X5aTHB", "X5bTHB",
-        "Etio", "X17HP", "PT")
+        "Etio", "X17HP", "PT"
+      )
     )
     dat$outcome <- create_steroid_scores(dat = dat$outcome)
     
@@ -488,7 +501,8 @@ rq_prepare_data <- function(dat, filter_panel, type_sample_hcp, is_sa = FALSE) {
     dat$outcome <- myphd::handle_transformation(
       dat = myphd::extract_cohort(
         dat$outcome,
-        id_var = "HelixID"
+        id_var = "HelixID",
+        st = 1, en = 3
       ),
       id_var = params_dat$variables$identifier,
       by_var = "cohort",
@@ -508,18 +522,19 @@ rq_prepare_data <- function(dat, filter_panel, type_sample_hcp, is_sa = FALSE) {
 #' @param dat A named list of dataframes containing
 #' the variables of interest. A list.
 #' @param by
+#' @param include_selection_weights
 #' @param save_results Whether to save figures and tables to file. A logical.
 #' @param parallel Whether to perform steps in parallel. A logical.
-#' @param workers Optional number of workers to use. An integer.
+#' @param workers Number of workers to use. An integer.
 #'
 #' @returns A named list containing estimated weights and results of
 #' balance exploration.
 #'
 #' @export
-rq_estimate_weights <- function(dat, by = NULL,
+rq_estimate_weights <- function(dat, by,
                                 include_selection_weights,
                                 save_results,
-                                parallel, workers = NULL) {
+                                parallel, workers) {
   rq <- Sys.getenv("TAR_PROJECT")
   rq <- switch(rq,
                "rq01" = "rq1",
@@ -543,7 +558,7 @@ rq_estimate_weights <- function(dat, by = NULL,
   ##############################################################################
   # Step 1: estimate weights for covariate balance
   if (rq %in% c("rq3", "rq4")) {
-    list_exposures <- vars_of_interest()$new_metabolites
+    list_exposures <- vars_of_interest(append_to_chem = NULL)$new_metabolites
   } else {
     list_exposures <- names(dat$exposures)
   }
@@ -703,18 +718,19 @@ rq_estimate_weights <- function(dat, by = NULL,
 #' the variables of interest. A list.
 #' @param outcome Name of the outcome of interest. A string.
 #' @param by
+#' @param is_panel
 #' @param weights Estimated weights resulting from a call to
 #' [rq_estimate_weights()]. A list.
 #' @param parallel Whether to perform steps in parallel. A logical.
-#' @param workers Optional number of workers to use. An integer.
+#' @param workers Number of workers to use. An integer.
 #'
 #' @returns A named list containing the fitted models.
 #'
 #' @export
 rq_fit_model_weighted <- function(dat, outcome,
-                                  by = c(), is_panel = FALSE,
+                                  by = c(), is_panel,
                                   weights,
-                                  parallel, workers = NULL) {
+                                  parallel, workers) {
   rq <- Sys.getenv("TAR_PROJECT")
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   params_ana <- params_analyses()[[rq]]
@@ -761,7 +777,7 @@ rq_fit_model_weighted <- function(dat, outcome,
       outcome
     )))
   if (rq %in% c("rq3", "rq4")) {
-    list_exposures <- vars_of_interest()$new_metabolites
+    list_exposures <- vars_of_interest(append_to_chem = NULL)$new_metabolites
   } else {
     list_exposures <- names(dat$exposures)
   }
@@ -871,8 +887,9 @@ rq_fit_model_weighted <- function(dat, outcome,
 #' @param fits A list of fitted models. Results from a call to
 #' [rq_fit_model_weighted()]. A list.
 #' @param by
+#' @param is_hcp
 #' @param parallel Whether to perform steps in parallel. A logical.
-#' @param workers Optional number of workers to use. An integer.
+#' @param workers Number of workers to use. An integer.
 #'
 #' @returns A list of estimated marginal effects. Specifically, the
 #' average dose-response function, the average marginal effect function,
@@ -880,9 +897,9 @@ rq_fit_model_weighted <- function(dat, outcome,
 #'
 #' @export
 rq_estimate_marginal_effects <- function(fits,
-                                         by = NULL, is_hcp = FALSE,
+                                         by, is_hcp,
                                          parallel,
-                                         workers = NULL) {
+                                         workers) {
   rq <- Sys.getenv("TAR_PROJECT")
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   params_ana <- params_analyses()[[rq]]
@@ -914,13 +931,13 @@ rq_estimate_marginal_effects <- function(fits,
     if (is_hcp == FALSE) {
       vcov <- sandwich::vcovCL(
         x = mod,
-        cluster = ~ cohort,
-        type = "HC3"
+        cluster = ~cohort,
+        type = "HC1"
       )
     } else {
       vcov <- sandwich::vcovCL(
         x = mod,
-        cluster = ~ cohort,
+        cluster = ~cohort,
         type = "HC1"
       )
     } # End choice/computation of covariance matrix
@@ -1043,9 +1060,9 @@ rq_estimate_marginal_effects <- function(fits,
     
     return(list(
       gcomp = gcomp,
-      #adrf = adrf,
-      #slopes = slopes,
-      #amef = amef,
+      # adrf = adrf,
+      # slopes = slopes,
+      # amef = amef,
       comparisons = avg_comp,
       hypothesis = avg_comp_hyp
     ))
@@ -1077,7 +1094,8 @@ run_mtp <- function(dat, shift_exposure) {
   # Process outcome
   dat$outcome <- myphd::extract_cohort(
     dat = dat$outcome,
-    id_var = params_dat$variables$identifier
+    id_var = params_dat$variables$identifier,
+    st = 1, en = 3
   )
   dat$outcome <- myphd::preproc_data(
     dat = dat$outcome,

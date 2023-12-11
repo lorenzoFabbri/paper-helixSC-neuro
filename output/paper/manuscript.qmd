@@ -71,9 +71,9 @@ here::i_am("output/paper/manuscript.qmd")
 ```
 
 ```{r vars-methods}
-source(here::here("code/dictionaries.R"))
-source(here::here("code/data.R"))
-source(here::here("code/proc_res.R"))
+source(here::here("R/dictionaries.R"))
+source(here::here("R/data.R"))
+source(here::here("R/proc_res.R"))
 
 is_hpc <- FALSE
 store <- ifelse(

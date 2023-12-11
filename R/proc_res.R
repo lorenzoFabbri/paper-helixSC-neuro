@@ -1,6 +1,6 @@
 #' Title
 #'
-#' @param rq 
+#' @param rq
 #'
 #' @return
 #' @export
@@ -23,8 +23,10 @@ tidy_codebooks <- function(rq) {
       dag %in% adj_set &
         variable %in% mapped_covars
     ) |>
-    tidylog::select(dag, variable, type, description, code, label,
-                    remark, comments)
+    tidylog::select(
+      dag, variable, type, description, code, label,
+      remark, comments
+    )
   meta <- meta |>
     dplyr::rowwise() |>
     tidylog::mutate(
@@ -86,8 +88,8 @@ tidy_codebooks <- function(rq) {
 
 #' Title
 #'
-#' @param num_digits_est 
-#' @param num_digits_sig 
+#' @param num_digits_est
+#' @param num_digits_sig
 #'
 #' @return
 #' @export
@@ -127,10 +129,12 @@ tbl_desc_pop <- function(num_digits_est, num_digits_sig) {
     )
     
     # Only actually used covariates
-    mapped_adj_sets[[paste0("rq",
-                            rq)]] <- colnames(get(
-                              paste0("rq", rq, "_preproc_dat")
-                            )$covariates)
+    mapped_adj_sets[[paste0(
+      "rq",
+      rq
+    )]] <- colnames(get(
+      paste0("rq", rq, "_preproc_dat")
+    )$covariates)
   }
   
   # Select confounders and clinical outcome in data request
@@ -298,9 +302,9 @@ load_tidy_res_weighting <- function(path_store, rq) {
 
 #' Title
 #'
-#' @param path_store 
-#' @param rq 
-#' @param sa_var 
+#' @param path_store
+#' @param rq
+#' @param sa_var
 #'
 #' @return
 #' @export
@@ -313,15 +317,19 @@ load_res_weighted_fits <- function(path_store, rq, sa_var) {
   res_list <- mget(ls(
     pattern = paste0("rq", substr(rq, 1, 1), "_weighted_fits_*")
   ))
-  names_ <- gsub(paste0("rq", substr(rq, 1, 1), "_weighted_fits_"),
-                 "",
-                 names(res_list))
+  names_ <- gsub(
+    paste0("rq", substr(rq, 1, 1), "_weighted_fits_"),
+    "",
+    names(res_list)
+  )
   
   # Extract weights
   weights_ <- lapply(1:1, function(idx) {
-    outcome <- gsub(paste0("rq", substr(rq, 1, 1), "_weighted_fits_"),
-                    "",
-                    names_[idx])
+    outcome <- gsub(
+      paste0("rq", substr(rq, 1, 1), "_weighted_fits_"),
+      "",
+      names_[idx]
+    )
     tmp <- lapply(res_list[[idx]]$fits, "[[", "weights")
     tmp <- lapply(seq_along(tmp), function(idx2) {
       ret <- tibble::tibble(tmp[[idx2]])
@@ -414,7 +422,7 @@ load_res_weighted_fits <- function(path_store, rq, sa_var) {
 #'
 #' @return
 #' @export
-tidy_res_weighted_fits <- function(dat_tbl, dat_plt, sa_var = NULL) {
+tidy_res_weighted_fits <- function(dat_tbl, dat_plt, sa_var) {
   # Plot distribution of weights
   plot <- dat_plt |>
     ggplot2::ggplot(
@@ -463,7 +471,11 @@ tidy_res_weighted_fits <- function(dat_tbl, dat_plt, sa_var = NULL) {
   )
   dat_tbl <- dat_tbl |>
     tidylog::select(-outcome)
-  by <- if (is.null(sa_var)) {NULL} else {"modifier"}
+  by <- if (is.null(sa_var)) {
+    NULL
+  } else {
+    "modifier"
+  }
   tbl <- c("{median} ({p25}, {p75})", "{min}, {max}") |>
     purrr::map(
       ~ dat_tbl |>
@@ -515,10 +527,10 @@ tidy_res_weighted_fits <- function(dat_tbl, dat_plt, sa_var = NULL) {
 
 #' Title
 #'
-#' @param path_store 
-#' @param rq 
-#' @param sa_var 
-#' @param which_res 
+#' @param path_store
+#' @param rq
+#' @param sa_var
+#' @param which_res
 #'
 #' @return
 #' @export
@@ -531,15 +543,19 @@ load_res_meffects <- function(path_store, rq, sa_var, which_res) {
   marginal_effects <- mget(ls(
     pattern = paste0("rq", substr(rq, 1, 1), "_marginal_*")
   ))
-  names_ <- gsub(paste0("rq", substr(rq, 1, 1), "_marginal_"),
-                 "",
-                 names(marginal_effects))
+  names_ <- gsub(
+    paste0("rq", substr(rq, 1, 1), "_marginal_"),
+    "",
+    names(marginal_effects)
+  )
   
   # Loop over outcomes
   ret <- lapply(seq_along(marginal_effects), function(idx) {
-    outcome <- gsub(paste0("rq", substr(rq, 1, 1), "_marginal_"),
-                    "",
-                    names(marginal_effects[idx]))
+    outcome <- gsub(
+      paste0("rq", substr(rq, 1, 1), "_marginal_"),
+      "",
+      names(marginal_effects[idx])
+    )
     if (outcome != "x11bhsd") {
       outcome <- gsub("hs", "", outcome)
     } else {
@@ -547,16 +563,20 @@ load_res_meffects <- function(path_store, rq, sa_var, which_res) {
     }
     # Table for one outcome and all exposures
     x <- marginal_effects[[idx]]
-    if (length(x$marginal_effects) == 0) return(NULL)
+    if (length(x$marginal_effects) == 0) {
+      return(NULL)
+    }
     
     if (which_res == "gcomp") {
       gcomp_res <- lapply(x$marginal_effects, "[[", which_res)
       df <- lapply(gcomp_res, function(x) {
         x <- setNames(
           x,
-          c("exposure", "estimate",
+          c(
+            "exposure", "estimate",
             "p.value", "s.value",
-            "conf.low", "conf.high")
+            "conf.low", "conf.high"
+          )
         )
         x
       }) |>
@@ -627,8 +647,9 @@ load_res_meffects <- function(path_store, rq, sa_var, which_res) {
       dplyr::across(
         c("class", "variable"),
         \(x) {
-          x = factor(
-            x, levels = sort(unique(x))
+          x <- factor(
+            x,
+            levels = sort(unique(x))
           )
         }
       ),
@@ -665,31 +686,37 @@ load_res_meffects <- function(path_store, rq, sa_var, which_res) {
 #'
 #' @return
 #' @export
-tidy_res_meffects <- function(df, sa_var = NULL,
+tidy_res_meffects <- function(df, sa_var,
                               which_res,
                               num_digits_est, num_digits_sig) {
   # Forest plots side-by-side
   if (is.null(sa_var) | which_res == "hypothesis") {
     plot <- df |>
       ggplot2::ggplot(
-        mapping = ggplot2::aes(x = estimate,
-                               y = forcats::fct_reorder2(
-                                 variable, estimate, class
-                               ),
-                               color = class)
+        mapping = ggplot2::aes(
+          x = estimate,
+          y = forcats::fct_reorder2(
+            variable, estimate, class
+          ),
+          color = class
+        )
       )
   } else {
     plot <- df |>
       ggplot2::ggplot(
-        mapping = ggplot2::aes(x = estimate,
-                               y = forcats::fct_reorder2(
-                                 variable, estimate, class
-                               ),
-                               color = class,
-                               shape = modifier)
+        mapping = ggplot2::aes(
+          x = estimate,
+          y = forcats::fct_reorder2(
+            variable, estimate, class
+          ),
+          color = class,
+          shape = modifier
+        )
       )
   }
-  position <- if (is.null(sa_var)) {"identity"} else {
+  position <- if (is.null(sa_var)) {
+    "identity"
+  } else {
     ggstance::position_dodgev(height = 0.5)
   }
   plot <- plot +
@@ -734,7 +761,9 @@ tidy_res_meffects <- function(df, sa_var = NULL,
   
   # Pretty tables w/ numerical results
   names_ <- unique(df$outcome)
-  names_ <- if (is.null(sa_var) | which_res == "hypothesis") {names_} else {
+  names_ <- if (is.null(sa_var) | which_res == "hypothesis") {
+    names_
+  } else {
     paste0(names_, "_", c(unique(df$modifier)))
   }
   df_gt <- df |>
@@ -789,7 +818,7 @@ tidy_res_meffects <- function(df, sa_var = NULL,
         \(x) {
           gt::cells_body(
             columns = x,
-            rows = stringr::str_detect(!! rlang::sym(x), "\\*")
+            rows = stringr::str_detect(!!rlang::sym(x), "\\*")
           )
         }
       )
@@ -807,7 +836,7 @@ tidy_res_meffects <- function(df, sa_var = NULL,
 
 #' Title
 #'
-#' @param df 
+#' @param df
 #'
 #' @return
 #' @export
@@ -842,9 +871,11 @@ plot_estimate_over_time <- function(df) {
       outcome = factor(outcome),
       class = factor(
         class,
-        levels = c("OP pesticide metabolites",
-                   "Phenols",
-                   "Phthalate metabolites")
+        levels = c(
+          "OP pesticide metabolites",
+          "Phenols",
+          "Phthalate metabolites"
+        )
       ),
       variable = as.factor(variable)
     )
@@ -947,6 +978,7 @@ plot_adrf <- function(df_preds) {
 #' @param group_var
 #' @param lower_percentile
 #' @param upper_percentile
+#' @param rq
 #'
 #' @returns
 #' @export
@@ -1034,8 +1066,9 @@ viz_overlap_quantiles <- function(dat,
 viz_clinical_outcome <- function() {
   # Load data
   dat <- load_dat_request()$dat
-  dat <- myphd::extract_cohort(dat, id_var = "HelixID")
-  outcome <- vars_of_interest()$outcomes
+  dat <- myphd::extract_cohort(dat, id_var = "HelixID",
+                               st = 1, en = 3)
+  outcome <- vars_of_interest(append_to_chem = NULL)$outcomes
   dat_sel <- dat |>
     tidylog::select(
       cohort,
@@ -1060,7 +1093,8 @@ viz_clinical_outcome <- function() {
       x = age,
       y = hrt,
       fill = sex
-    )) +
+    )
+  ) +
     introdataviz::geom_split_violin(
       alpha = 0.4,
       trim = FALSE

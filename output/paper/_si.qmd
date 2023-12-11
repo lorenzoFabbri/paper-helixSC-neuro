@@ -228,7 +228,8 @@ Description of chemicals
 
 viz_desc_vars(
   dat = myphd::extract_cohort(load_steroids()$desc,
-                              id_var = id_var) |>
+                              id_var = id_var,
+                              st = 1, en = 3) |>
     tidylog::mutate(
       cohort = dplyr::case_when(
         cohort == "EDE" ~ "EDEN",
@@ -238,7 +239,7 @@ viz_desc_vars(
         .default = cohort
       )
     ),
-  vars = vars_of_interest()$metabolites |>
+  vars = vars_of_interest(append_to_chem = NULL)$metabolites |>
     paste0("_cdesc"),
   fct_levels = c(1, 2, 3, 4),
   is_chem = FALSE

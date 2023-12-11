@@ -1,8 +1,8 @@
 source("DAGs/dag_v2.R")
-source("code/dictionaries.R")
-source("code/data.R")
-source("code/utils.R")
-source("code/proc_res.R")
+source("R/dictionaries.R")
+source("R/data.R")
+source("R/utils.R")
+source("R/proc_res.R")
 
 targets::tar_option_set(
   format = "qs"
@@ -62,8 +62,10 @@ list(
     name = paste0(rq, "_viz_desc_metabs"),
     command = expression(
       viz_desc_vars(
-        dat = myphd::extract_cohort(load_steroids()$desc,
-                                    id_var = id_var
+        dat = myphd::extract_cohort(
+          load_steroids()$desc,
+          id_var = id_var,
+          st = 1, en = 3
         ) |>
           tidylog::mutate(
             cohort = dplyr::case_when(
@@ -74,7 +76,7 @@ list(
               .default = cohort
             )
           ),
-        vars = vars_of_interest()$metabolites |>
+        vars = vars_of_interest(append_to_chem = NULL)$metabolites |>
           paste0("_cdesc"),
         fct_levels = c(1, 2, 3, 4),
         is_chem = FALSE
@@ -86,8 +88,10 @@ list(
     name = paste0(rq, "_viz_miss_covars"),
     command = substitute(
       myphd::explore_missings(
-        myphd::extract_cohort(dat$covariates,
-                              id_var = id_var
+        myphd::extract_cohort(
+          dat$covariates,
+          id_var = id_var,
+          st = 1, en = 3
         ),
         id_var = id_var,
         by_var = by_var,
@@ -106,8 +110,10 @@ list(
     name = paste0(rq, "_viz_miss_exp"),
     command = substitute(
       myphd::explore_missings(
-        myphd::extract_cohort(dat$exposures,
-                              id_var = id_var
+        myphd::extract_cohort(
+          dat$exposures,
+          id_var = id_var,
+          st = 1, en = 3
         ),
         id_var = id_var,
         by_var = by_var,
@@ -126,8 +132,10 @@ list(
     name = paste0(rq, "_viz_miss_out"),
     command = substitute(
       myphd::explore_missings(
-        myphd::extract_cohort(dat$outcome,
-                              id_var = id_var
+        myphd::extract_cohort(
+          dat$outcome,
+          id_var = id_var,
+          st = 1, en = 3
         ),
         id_var = id_var,
         by_var = by_var,
@@ -147,8 +155,10 @@ list(
     name = paste0(rq, "_desc_data_covars"),
     command = substitute(
       myphd::describe_data(
-        dat = myphd::extract_cohort(dat$covariates,
-                                    id_var = id_var
+        dat = myphd::extract_cohort(
+          dat$covariates,
+          id_var = id_var,
+          st = 1, en = 3
         ),
         id_var = id_var,
         by_var = by_var
@@ -162,8 +172,10 @@ list(
     name = paste0(rq, "_desc_data_exp"),
     command = substitute(
       myphd::describe_data(
-        dat = myphd::extract_cohort(dat$exposures,
-                                    id_var = id_var
+        dat = myphd::extract_cohort(
+          dat$exposures,
+          id_var = id_var,
+          st = 1, en = 3
         ) |>
           tidylog::mutate(
             cohort = dplyr::case_when(
@@ -189,8 +201,10 @@ list(
     name = paste0(rq, "_desc_data_out"),
     command = substitute(
       myphd::describe_data(
-        dat = myphd::extract_cohort(dat$outcome,
-                                    id_var = id_var
+        dat = myphd::extract_cohort(
+          dat$outcome,
+          id_var = id_var,
+          st = 1, en = 3
         ) |>
           tidylog::mutate(
             cohort = dplyr::case_when(
@@ -216,7 +230,12 @@ list(
   targets::tar_target_raw(
     name = paste0(rq, "_preproc_dat"),
     command = substitute(
-      rq_prepare_data(dat = dat, filter_panel = FALSE, type_sample_hcp = NULL),
+      rq_prepare_data(
+        dat = dat,
+        filter_panel = FALSE,
+        type_sample_hcp = NULL,
+        is_sa = FALSE
+      ),
       env = list(
         dat = as.symbol(paste0(rq, "_load_dat"))
       )
@@ -227,8 +246,10 @@ list(
     name = paste0(rq, "_desc_data_covars_proc"),
     command = substitute(
       myphd::describe_data(
-        dat = myphd::extract_cohort(dat$covariates,
-                                    id_var = id_var
+        dat = myphd::extract_cohort(
+          dat$covariates,
+          id_var = id_var,
+          st = 1, en = 3
         ),
         id_var = id_var,
         by_var = by_var
@@ -242,8 +263,10 @@ list(
     name = paste0(rq, "_desc_data_exp_proc"),
     command = substitute(
       myphd::describe_data(
-        dat = myphd::extract_cohort(dat$exposures,
-                                    id_var = id_var
+        dat = myphd::extract_cohort(
+          dat$exposures,
+          id_var = id_var,
+          st = 1, en = 3
         ),
         id_var = id_var,
         by_var = by_var
@@ -257,8 +280,10 @@ list(
     name = paste0(rq, "_desc_data_out_proc"),
     command = substitute(
       myphd::describe_data(
-        dat = myphd::extract_cohort(dat$outcome,
-                                    id_var = id_var
+        dat = myphd::extract_cohort(
+          dat$outcome,
+          id_var = id_var,
+          st = 1, en = 3
         ),
         id_var = id_var,
         by_var = by_var

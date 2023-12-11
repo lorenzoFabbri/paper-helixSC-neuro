@@ -1,7 +1,7 @@
 source("DAGs/dag_v2.R")
-source("code/dictionaries.R")
-source("code/data.R")
-source("code/utils.R")
+source("R/dictionaries.R")
+source("R/data.R")
+source("R/utils.R")
 
 targets::tar_option_set(
   format = "qs"
@@ -69,7 +69,7 @@ list(
   targets::tar_target(
     name = weights, 
     command = rq_estimate_weights(dat = preproc_dat, 
-                                  save_results = TRUE, 
+                                  save_results = FALSE, 
                                   parallel = FALSE, 
                                   workers = 10)
   ), # End weights target

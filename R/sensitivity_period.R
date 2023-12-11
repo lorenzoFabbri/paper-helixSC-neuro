@@ -4,11 +4,11 @@ parallel <- TRUE
 num_workers <- 2
 # Custom path to _targets for different research questions
 path_store <- ifelse(
-  Sys.getenv("is_hpc"), 
+  Sys.getenv("is_hpc"),
   paste0(
     "/PROJECTES/HELIX_OMICS/DATA_PREVIOUS_MIGRATION/lorenzoF/",
     "data/data_paper3/_targets/_targetsRQ"
-  ), 
+  ),
   "~/mounts/rstudioserver/data/data_paper3/_targets/_targetsRQ"
 )
 Sys.setenv(path_store = path_store)
@@ -19,9 +19,9 @@ store <- paste0(path_store, rq)
 
 ################################################################################
 source("DAGs/dag_v2.R")
-source("code/dictionaries.R")
-source("code/data.R")
-source("code/utils.R")
+source("R/dictionaries.R")
+source("R/data.R")
+source("R/utils.R")
 
 targets::tar_option_set(
   format = "qs"
@@ -35,9 +35,9 @@ rq <- Sys.getenv("TAR_PROJECT")
 exposure <- "chemical"
 outcome <- "biomarker"
 tbl_outcomes <- tibble::tibble(
-  name = vars_of_interest()$new_metabolites |>
+  name = vars_of_interest(append_to_chem = NULL)$new_metabolites |>
     stringr::str_to_lower(),
-  outcome = vars_of_interest()$new_metabolites
+  outcome = vars_of_interest(append_to_chem = NULL)$new_metabolites
 )
 ################################################################################
 
@@ -67,11 +67,13 @@ progressr::with_progress({
     preproc_dat <- rq_prepare_data(
       dat = load_dat,
       filter_panel = TRUE,
-      type_sample_hcp = idx
+      type_sample_hcp = idx,
+      is_sa = FALSE
     )
     # Estimate balancing weights
     ww <- rq_estimate_weights(
       dat = preproc_dat,
+      by = NULL,
       include_selection_weights = TRUE,
       save_results = FALSE,
       parallel = FALSE,
@@ -83,6 +85,7 @@ progressr::with_progress({
       fits <- rq_fit_model_weighted(
         dat = preproc_dat,
         outcome = out,
+        by = NULL,
         is_panel = TRUE,
         weights = ww$estimated_weights,
         parallel = FALSE,
@@ -91,6 +94,7 @@ progressr::with_progress({
       # Estimate marginal contrasts
       rq_estimate_marginal_effects(
         fits = fits$fits,
+        by = NULL,
         is_hcp = TRUE,
         parallel = TRUE,
         workers = 3

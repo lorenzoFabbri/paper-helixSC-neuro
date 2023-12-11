@@ -1,7 +1,7 @@
 source("DAGs/dag_v2.R")
-source("code/dictionaries.R")
-source("code/data.R")
-source("code/utils.R")
+source("R/dictionaries.R")
+source("R/data.R")
+source("R/utils.R")
 
 targets::tar_option_set(
   format = "qs"
@@ -25,9 +25,9 @@ outcome <- switch(rq,
 
 if (rq == "rq2") {
   tbl_outcomes <- tibble::tibble(
-    name = vars_of_interest()$new_metabolites |>
+    name = vars_of_interest(append_to_chem = NULL)$new_metabolites |>
       stringr::str_to_lower(),
-    outcome = vars_of_interest()$new_metabolites
+    outcome = vars_of_interest(append_to_chem = NULL)$new_metabolites
   )
 } else {
   tbl_outcomes <- tibble::tibble(
@@ -77,9 +77,9 @@ list(
     command = substitute(
       rq_estimate_weights(
         dat = dat,
-        include_selection_weights = FALSE,
         by = by,
-        save_results = TRUE,
+        include_selection_weights = FALSE,
+        save_results = FALSE,
         parallel = FALSE,
         workers = 10
       ),
@@ -97,6 +97,7 @@ list(
           dat = dat,
           outcome = outcome,
           by = c(by),
+          is_panel = FALSE,
           weights = weights$estimated_weights,
           parallel = FALSE,
           workers = 10
@@ -114,6 +115,7 @@ list(
         rq_estimate_marginal_effects(
           fits = all_fits$fits,
           by = by,
+          is_hcp = FALSE,
           parallel = TRUE,
           workers = 3
         ),

@@ -1,7 +1,7 @@
 source("DAGs/dag_v2.R")
-source("code/dictionaries.R")
-source("code/data.R")
-source("code/utils.R")
+source("R/dictionaries.R")
+source("R/data.R")
+source("R/utils.R")
 
 targets::tar_option_set(
   format = "qs"
@@ -25,9 +25,9 @@ outcome <- switch(rq,
 
 if (rq == "rq2") {
   tbl_outcomes <- tibble::tibble(
-    name = vars_of_interest()$new_metabolites |>
+    name = vars_of_interest(append_to_chem = NULL)$new_metabolites |>
       stringr::str_to_lower(),
-    outcome = vars_of_interest()$new_metabolites
+    outcome = vars_of_interest(append_to_chem = NULL)$new_metabolites
   )
 } else {
   tbl_outcomes <- tibble::tibble(
@@ -62,7 +62,12 @@ list(
   targets::tar_target_raw(
     name = paste0(rq, "_preproc_dat"),
     command = substitute(
-      rq_prepare_data(dat = dat, filter_panel = FALSE, type_sample_hcp = NULL),
+      rq_prepare_data(
+        dat = dat,
+        filter_panel = FALSE,
+        type_sample_hcp = NULL,
+        is_sa = FALSE
+      ),
       env = list(dat = as.symbol(paste0(rq, "_load_dat")))
     )
   ),
@@ -73,8 +78,9 @@ list(
     command = substitute(
       rq_estimate_weights(
         dat = dat,
+        by = NULL,
         include_selection_weights = FALSE,
-        save_results = TRUE,
+        save_results = FALSE,
         parallel = FALSE,
         workers = 10
       ),
@@ -91,6 +97,8 @@ list(
         rq_fit_model_weighted(
           dat = dat,
           outcome = outcome,
+          by = NULL,
+          is_panel = FALSE,
           weights = weights$estimated_weights,
           parallel = FALSE,
           workers = 10
@@ -107,6 +115,8 @@ list(
       command = substitute(
         rq_estimate_marginal_effects(
           fits = all_fits$fits,
+          by = NULL,
+          is_hcp = FALSE,
           parallel = TRUE,
           workers = 3
         ),

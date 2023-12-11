@@ -3,7 +3,7 @@
 ################################################################################
 # Parameters for entire paper
 ################################################################################
-vars_of_interest <- function(append_to_chem = NULL) {
+vars_of_interest <- function(append_to_chem) {
   chemicals <- c(
     "hs_mep_",
     "hs_mibp_",
@@ -71,21 +71,21 @@ vars_of_interest <- function(append_to_chem = NULL) {
     "cortisone_production",
     "cortisone_metabolism",
     "X11bHSD",
-    #"global_reductase_f",
-    #"global_reductase_e",
-    #"cyp3a4",
+    # "global_reductase_f",
+    # "global_reductase_e",
+    # "cyp3a4",
     "corticosterone_production"
-    #"X11deoxycortisol_production",
-    #"X11hydroxylase",
-    #"X17hydroxylase",
-    #"androgens_production",
-    #"X5a_reductase",
-    #"lyase",
-    #"global_adrenal_function"
+    # "X11deoxycortisol_production",
+    # "X11hydroxylase",
+    # "X17hydroxylase",
+    # "androgens_production",
+    # "X5a_reductase",
+    # "lyase",
+    # "global_adrenal_function"
   )
   outcomes <- c(
     "hs_hitrtse"
-    #"hs_dcolors3"
+    # "hs_dcolors3"
   )
   
   return(list(
@@ -95,6 +95,7 @@ vars_of_interest <- function(append_to_chem = NULL) {
     outcomes = outcomes
   ))
 } # End function vars_of_interest
+################################################################################
 
 ################################################################################
 # Parameters for entire paper
@@ -118,8 +119,8 @@ params <- function(is_hpc) {
   ##############################################################################
   
   chemicals <- vars_of_interest(append_to_chem = "c")$chemicals
-  metabolites <- vars_of_interest()$metabolites
-  clinical_outcomes <- vars_of_interest()$outcomes
+  metabolites <- vars_of_interest(append_to_chem = NULL)$metabolites
+  clinical_outcomes <- vars_of_interest(append_to_chem = NULL)$outcomes
   creatinine_covariates_names <- list(
     numerical = c(
       "hs_age_years", "hs_c_weight", "hs_c_height",
@@ -391,6 +392,7 @@ params <- function(is_hpc) {
     steps = steps
   ))
 } # End function params
+################################################################################
 
 ################################################################################
 # Parameters for running analyses
@@ -442,3 +444,4 @@ params_analyses <- function() {
   
   return(ret)
 } # End function params_analyses
+################################################################################

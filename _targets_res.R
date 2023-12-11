@@ -1,7 +1,7 @@
 source("DAGs/dag_v2.R")
-source("code/dictionaries.R")
-source("code/data.R")
-source("code/proc_res.R")
+source("R/dictionaries.R")
+source("R/data.R")
+source("R/proc_res.R")
 
 targets::tar_option_set(
   format = "qs"
@@ -109,7 +109,8 @@ list(
         viz_overlap_quantiles(
           dat = myphd::extract_cohort(
             dat = get(paste0("rq", rq, "_preproc_dat"))$exposures,
-            id_var = "HelixID"
+            id_var = "HelixID",
+            st = 1, en = 3
           ),
           id_var = "HelixID",
           group_var = "cohort",
