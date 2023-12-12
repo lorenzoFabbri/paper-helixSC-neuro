@@ -19,7 +19,6 @@ dags <- function() {
     maternalSmoking_preg ~ ethnicity_mother + maternalSEP_preg + paternalSEP_preg,
     neuropsychologicalDiagnosis_child ~ ethnicity_mother + maternalSEP_preg + sex_child + ethnicity_child + breastfeeding + bw + gestational_age + maternalAlcohol_preg + maternalDiet_preg + maternalSmoking_preg + paternalSEP_preg,
     outcome ~ creatinine + age_child + biomarker + breastfeeding + characteristics_child + chemical + child_diet + child_smoking + cohort + envFactors_visit + ethnicity_child + ethnicity_mother + familySEP + maternalAlcohol_preg + maternalDiet_preg + maternalSEP_preg + maternalSmoking_preg + neuropsychologicalDiagnosis_child + paternalSEP_preg + sex_child,
-    qualityTesting_child ~ envFactors_visit,
     exposure = "chemical",
     outcome = "outcome"
   )
@@ -43,7 +42,6 @@ dags <- function() {
     maternalSmoking_preg ~ ethnicity_mother + maternalSEP_preg + paternalSEP_preg,
     neuropsychologicalDiagnosis_child ~ ethnicity_mother + maternalSEP_preg + sex_child + ethnicity_child + breastfeeding + bw + gestational_age + maternalAlcohol_preg + maternalDiet_preg + maternalSmoking_preg + paternalSEP_preg,
     outcome ~ creatinine + age_child + biomarker + breastfeeding + characteristics_child + chemical + child_diet + child_smoking + cohort + envFactors_visit + ethnicity_child + ethnicity_mother + familySEP + maternalAlcohol_preg + maternalDiet_preg + maternalSEP_preg + maternalSmoking_preg + neuropsychologicalDiagnosis_child + paternalSEP_preg + sex_child,
-    qualityTesting_child ~ envFactors_visit,
     exposure = "chemical",
     outcome = "biomarker"
   )
@@ -67,7 +65,6 @@ dags <- function() {
     maternalSmoking_preg ~ ethnicity_mother + maternalSEP_preg + paternalSEP_preg,
     neuropsychologicalDiagnosis_child ~ ethnicity_mother + maternalSEP_preg + sex_child + ethnicity_child + breastfeeding + bw + gestational_age + maternalAlcohol_preg + maternalDiet_preg + maternalSmoking_preg + paternalSEP_preg,
     outcome ~ creatinine + age_child + biomarker + breastfeeding + characteristics_child + chemical + child_diet + child_smoking + cohort + envFactors_visit + ethnicity_child + ethnicity_mother + familySEP + maternalAlcohol_preg + maternalDiet_preg + maternalSEP_preg + maternalSmoking_preg + neuropsychologicalDiagnosis_child + paternalSEP_preg + sex_child,
-    qualityTesting_child ~ envFactors_visit,
     exposure = "biomarker",
     outcome = "outcome"
   )
@@ -91,7 +88,6 @@ dags <- function() {
     maternalSmoking_preg ~ ethnicity_mother + maternalSEP_preg + paternalSEP_preg,
     neuropsychologicalDiagnosis_child ~ ethnicity_mother + maternalSEP_preg + sex_child + ethnicity_child + breastfeeding + bw + gestational_age + maternalAlcohol_preg + maternalDiet_preg + maternalSmoking_preg + paternalSEP_preg,
     outcome ~ creatinine + age_child + biomarker + breastfeeding + characteristics_child + chemical + child_diet + child_smoking + cohort + envFactors_visit + ethnicity_child + ethnicity_mother + familySEP + maternalAlcohol_preg + maternalDiet_preg + maternalSEP_preg + maternalSmoking_preg + neuropsychologicalDiagnosis_child + paternalSEP_preg + sex_child,
-    qualityTesting_child ~ envFactors_visit,
     exposure = "biomarker",
     outcome = "chemical"
   )

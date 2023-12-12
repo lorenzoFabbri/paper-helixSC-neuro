@@ -447,7 +447,8 @@ load_dat_request <- function() {
         )
     ) |>
     # Exclude subjects with not usable test
-    tidylog::filter(hs_qual_test %in% c(1, 2))
+    tidylog::filter(hs_qual_test %in% c(1, 2)) |>
+    tidylog::select(-hs_qual_test)
   
   which_meta <- switch(Sys.getenv("TAR_PROJECT"),
                        "rq01" = "rq1",

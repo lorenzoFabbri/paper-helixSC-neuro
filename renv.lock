@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.3.0",
+    "Version": "4.3.2",
     "Repositories": [
       {
         "Name": "BioCsoft",
@@ -1618,9 +1618,9 @@
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteUsername": "psyteachr",
       "RemoteRepo": "glossary",
-      "RemoteRef": "master",
+      "RemoteUsername": "psyteachr",
+      "RemoteRef": "HEAD",
       "RemoteSha": "afad260aeacd519a5921dffd1dd3dfc864aee184",
       "Requirements": [
         "R.utils",
@@ -1642,7 +1642,7 @@
         "webexercises",
         "xml2"
       ],
-      "Hash": "7e481ebb49bc8d1f888fe744c069a68e"
+      "Hash": "711903613ebb60596aa31b2c26d25c04"
     },
     "glue": {
       "Package": "glue",
@@ -2544,7 +2544,7 @@
       "RemoteUsername": "isglobal-cep",
       "RemoteRepo": "myphd",
       "RemoteRef": "HEAD",
-      "RemoteSha": "0e5dc974ea262ca6f574ab96dc1257a7d200b078",
+      "RemoteSha": "5a3ff03dd358139450dc89975913ca7b4cabb2d0",
       "RemoteHost": "api.github.com",
       "Requirements": [
         "WeightIt",
@@ -2579,7 +2579,7 @@
         "tmvtnorm",
         "visdat"
       ],
-      "Hash": "c61f039d4857a0f13a74706d8650651a"
+      "Hash": "ae23c7639fbf8ea58260287c44db7008"
     },
     "naniar": {
       "Package": "naniar",
@@ -2761,11 +2761,11 @@
       "Version": "0.1.2.9000",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteUsername": "crsh",
-      "RemoteRepo": "papaja",
-      "RemoteRef": "main",
-      "RemoteSha": "2a979a25da14754ee0c48c35f4ca18f0a1bd134e",
       "RemoteHost": "api.github.com",
+      "RemoteRepo": "papaja",
+      "RemoteUsername": "crsh",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "2a979a25da14754ee0c48c35f4ca18f0a1bd134e",
       "Requirements": [
         "R",
         "bookdown",
@@ -2780,7 +2780,7 @@
         "yaml",
         "zip"
       ],
-      "Hash": "b9acf7485ac81853aa855b19c967608b"
+      "Hash": "892e426cc97ff96407e514261364c09f"
     },
     "parallelly": {
       "Package": "parallelly",
