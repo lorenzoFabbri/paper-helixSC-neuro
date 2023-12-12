@@ -75,12 +75,12 @@ progressr::with_progress({
       dat = preproc_dat,
       by = NULL,
       include_selection_weights = TRUE,
-      save_results = FALSE,
+      save_results = TRUE,
       parallel = FALSE,
       workers = 10
     )
     # Loop over outcomes
-    res <- lapply(tbl_outcomes$outcome[[1]], function(out) {
+    res <- lapply(tbl_outcomes$outcome, function(out) {
       # Fit outcome model
       fits <- rq_fit_model_weighted(
         dat = preproc_dat,

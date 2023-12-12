@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.3.2",
+    "Version": "4.3.0",
     "Repositories": [
       {
         "Name": "BioCsoft",
@@ -1618,9 +1618,9 @@
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteRepo": "glossary",
       "RemoteUsername": "psyteachr",
-      "RemoteRef": "HEAD",
+      "RemoteRepo": "glossary",
+      "RemoteRef": "master",
       "RemoteSha": "afad260aeacd519a5921dffd1dd3dfc864aee184",
       "Requirements": [
         "R.utils",
@@ -1642,7 +1642,7 @@
         "webexercises",
         "xml2"
       ],
-      "Hash": "711903613ebb60596aa31b2c26d25c04"
+      "Hash": "7e481ebb49bc8d1f888fe744c069a68e"
     },
     "glue": {
       "Package": "glue",
@@ -2541,11 +2541,11 @@
       "Version": "0.0.1",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "myphd",
       "RemoteUsername": "isglobal-cep",
+      "RemoteRepo": "myphd",
       "RemoteRef": "HEAD",
-      "RemoteSha": "918d0230ef350841120e57e6a04fd5131f6cf373",
+      "RemoteSha": "0e5dc974ea262ca6f574ab96dc1257a7d200b078",
+      "RemoteHost": "api.github.com",
       "Requirements": [
         "WeightIt",
         "assertthat",
@@ -2579,7 +2579,7 @@
         "tmvtnorm",
         "visdat"
       ],
-      "Hash": "deb21e928e2383d33e85abe44339fd90"
+      "Hash": "c61f039d4857a0f13a74706d8650651a"
     },
     "naniar": {
       "Package": "naniar",
@@ -2761,11 +2761,11 @@
       "Version": "0.1.2.9000",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "papaja",
       "RemoteUsername": "crsh",
-      "RemoteRef": "HEAD",
+      "RemoteRepo": "papaja",
+      "RemoteRef": "main",
       "RemoteSha": "2a979a25da14754ee0c48c35f4ca18f0a1bd134e",
+      "RemoteHost": "api.github.com",
       "Requirements": [
         "R",
         "bookdown",
@@ -2780,7 +2780,7 @@
         "yaml",
         "zip"
       ],
-      "Hash": "892e426cc97ff96407e514261364c09f"
+      "Hash": "b9acf7485ac81853aa855b19c967608b"
     },
     "parallelly": {
       "Package": "parallelly",
@@ -3373,7 +3373,7 @@
     },
     "sandwich": {
       "Package": "sandwich",
-      "Version": "3.0-2",
+      "Version": "3.1-0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -3382,7 +3382,7 @@
         "utils",
         "zoo"
       ],
-      "Hash": "dd5af939b8690baa8ee0bca996e99924"
+      "Hash": "1cf6ae532f0179350862fefeb0987c9b"
     },
     "sass": {
       "Package": "sass",
@@ -3433,7 +3433,7 @@
     },
     "seriation": {
       "Package": "seriation",
-      "Version": "1.5.3",
+      "Version": "1.5.4",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -3452,7 +3452,7 @@
         "stats",
         "vegan"
       ],
-      "Hash": "225bdf576bfdc7978090c10c4e66a127"
+      "Hash": "786c381ec4c40d1425e50ace3fee54bc"
     },
     "servr": {
       "Package": "servr",
@@ -3575,7 +3575,7 @@
     },
     "stringi": {
       "Package": "stringi",
-      "Version": "1.8.2",
+      "Version": "1.8.3",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -3584,7 +3584,7 @@
         "tools",
         "utils"
       ],
-      "Hash": "e68c45f81639001af5f1b15cd3599bbd"
+      "Hash": "058aebddea264f4c99401515182e656a"
     },
     "stringr": {
       "Package": "stringr",
@@ -3679,7 +3679,7 @@
     },
     "targets": {
       "Package": "targets",
-      "Version": "1.3.2",
+      "Version": "1.4.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -3702,7 +3702,7 @@
         "vctrs",
         "yaml"
       ],
-      "Hash": "eea57f5c8154c12cf13467c6ffb919de"
+      "Hash": "0be50803a2b160210f4f64792e6a29a5"
     },
     "testthat": {
       "Package": "testthat",
@@ -4176,10 +4176,10 @@
     },
     "yaml": {
       "Package": "yaml",
-      "Version": "2.3.7",
+      "Version": "2.3.8",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "0d0056cc5383fbc240ccd0cb584bf436"
+      "Hash": "29240487a071f535f5e5d5a323b7afbd"
     },
     "zip": {
       "Package": "zip",

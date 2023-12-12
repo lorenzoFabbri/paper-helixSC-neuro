@@ -79,7 +79,7 @@ list(
         dat = dat,
         by = by,
         include_selection_weights = FALSE,
-        save_results = FALSE,
+        save_results = TRUE,
         parallel = FALSE,
         workers = 10
       ),

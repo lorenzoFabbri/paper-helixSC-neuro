@@ -249,10 +249,6 @@ rq_load_data <- function(res_dag) {
     ))
   
   ## Metadata
-  warning(
-    "Add meta to dat.",
-    call. = TRUE
-  )
   dat$meta <- dat_request$meta
   
   # Checks
