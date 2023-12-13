@@ -23,10 +23,6 @@ source("R/dictionaries.R")
 source("R/data.R")
 source("R/utils.R")
 
-targets::tar_option_set(
-  format = "qs"
-)
-
 params_dag <- list(
   type = "minimal",
   effect = "total"
@@ -97,7 +93,7 @@ progressr::with_progress({
         by = NULL,
         is_hcp = TRUE,
         parallel = TRUE,
-        workers = 3
+        workers = 2
       )
     }) # End loop over outcomes
     
