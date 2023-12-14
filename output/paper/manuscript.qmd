@@ -194,12 +194,10 @@ Levels of unprocessed non-persistent \acr{edcs} and corticosteroids, by cohort a
 
 ## Main results {#sec-res-main}
 
-- All results on which study conclusions or inferences are based, including null findings and results of secondary or sensitivity analyses, must be reported. Use of sub-headings that describe the nature of the results (but no declarative statements).
-  - Provide a clear and concise description of all findings without extrapolating beyond the study results.
-  - Do not limit results to those *statistically significant* or that support the study hypotheses. Avoid using statistical significance testing as the sole or primary criterion for interpreting the obtained results. If significance testing or *p*-values are used, report numeric *p*-values, rounded to 1-2 digits, for all results. Use an uppercase italic letter "P", and the values should not be bolded. Indicate whether are 1- or 2-sided.
-- Give unadjusted and confounder-adjusted estimates and their precision (e.g., $95\%$ confidence interval). Make clear which confounders were adjusted for and why they were included. Include the number of observations for each analysis after accounting for missing data. Include numeric data within figures (e.g., forest plots), or provide tables with corresponding numeric data for all figures.
-  - [`marginaleffects` tables](https://vincentarelbundock.github.io/marginaleffects/articles/tables.html).
-- Report category boundaries when continuous variables were categorized.
+- Use an uppercase italic letter "P", and the values should not be bolded. Indicate whether are 1- or 2-sided.
+- Include the number of observations for each analysis after accounting for missing data. Include numeric data within figures (e.g., forest plots), or provide tables with corresponding numeric data for all figures.
+
+
 
 ## Other analyses {#sec-res-other}
 
@@ -214,38 +212,21 @@ Levels of unprocessed non-persistent \acr{edcs} and corticosteroids, by cohort a
   - It should be complete and balanced, including inconsistent results.
   - It should include, for each source, sufficient details: study design, sample size, population, specific exposures and outcomes.
 
-### What does the literature say?
-
-- EDCs and neurodevelopment (ANT).
-- EDCs and corticosteroids.
-- Corticosteroids and neurodevelopment (ANT).
-
 ## Limitations {#sec-limitations}
-
-Some limitations:
-
-- Cross-sectional study.
-- Chemicals measured in night and morning samples, whereas metabolites (the outcome) were measured only in night samples.
-- Cortisol measured at night, when should be lowest.
-- Change of estimand when trimming weights.
-- Model misspecification.
-- Mixtures effect.
-- Residual confounding.
-- Some confounders were not used since large percentage of missing values.
-- Multiple comparisons.
 
 These findings should be interpreted in light of the following limitations and strengths.
 
-Strengths of the present study include...
+Limitations include the cross-sectional design of the present study. Importantly, the non-persistent \acr{edcs} were measured in a pool of night and morning urine samples before the clinical visit, whereas the corticosteroids were measured in the night urine sample only. Although we included a wide range of confounders there is the possibility, as with other observational studies, of residual confounding, which might lead to a bias away from the null. Some of the confounders indicated in the adjustment sets had to be remove due to large fractions of missing values. There is further the possibility of misspecification of the outcome model, although we included a spline of the exposure to relax some of the linearity assumptions. The use of more data-adaptive learners was excluded due to the relatively small sample size. We finally acknowledge the possibility that some of chemicals might not act independently (mixture effect). Further research is thus warranted.
+
+Strengths of the present study include the use of pooled urine samples for chemical assessment, since it is known that these specific \acr{edcs} have very short half-lives [@CasasBasaganaSakhi:2018].
+We decided to model both the *treatment* mechanisms, for the estimation of balancing weights, and the outcomes, with traditional covariates adjustment, to try to obtain *doubly robust* effect estimates. Finally, we decided not to interpret our results by focusing on the estimated coefficients of the regression models, but by making use of the g-computation procedure and estimate average comparisons.
 
 ## Interpretation {#sec-interpretation}
 
 - End with a summary of the key findings and their implications for the study hypotheses, future research, and policy.
 - Give a cautious overall interpretation of results considering objectives, limitations, multiplicity of analyses, results from similar studies, and other relevant evidence.
 
-## Generalisability {#sec-general}
-
-- Discuss the generalisability (external validity) of the study results.
+In conclusion, in a study of...
 
 {{< pagebreak >}}
 
