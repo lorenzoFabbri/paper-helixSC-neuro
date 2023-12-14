@@ -20,7 +20,7 @@
 here::i_am("output/paper/_tables.qmd")
 ```
 
-# Descriptive data
+# Tables for descriptive data
 
 ## Study populations
 
@@ -51,7 +51,7 @@ desc_chems_mets$desc_chems
 desc_chems_mets$desc_mets
 ```
 
-# Main results
+# Tables for main results
 
 ## Balancing weights
 
@@ -64,7 +64,7 @@ targets::tar_load(
 
 ```{r balance-1}
 #| label: tbl-balance-1
-#| tbl-cap: Effective number of observations
+#| tbl-cap: Effective sample size before and after weights estimation for $hitrtse ~ edc$
 
 balance_1 |>
   tidylog::group_by(class) |>
