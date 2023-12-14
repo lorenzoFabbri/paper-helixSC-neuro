@@ -23,7 +23,7 @@ cat(all_dags$marker_to_out)
 
 # Supplementary tables
 
-## Descriptive data
+## Tables for descriptive data
 
 ### Study populations
 
@@ -38,21 +38,21 @@ targets::tar_load(
 ```{r codebook-1}
 codebook_1
 ```
-Codebook for covariates used in RQ1
+Codebook for covariates used in $hitrtse \sim edc$
 :::
 
 ::: {#supptbl-codebook-2}
 ```{r codebook-2}
 codebook_2
 ```
-Codebook for covariates used in RQ2
+Codebook for covariates used in $metabolite \sim edc$
 :::
 
 ::: {#supptbl-codebook-3}
 ```{r codebook-3}
 codebook_3
 ```
-Codebook for covariates used in RQ3
+Codebook for covariates used in $hitrtse \sim metabolite$
 :::
 
 ### Description of chemicals
@@ -154,7 +154,122 @@ gt::gt(lloq_mets |> dplyr::arrange(metabolite)) |>
 Lower limits of quantification for the corticosteroids
 :::
 
-## Other results
+## Tables for main results
+
+### Balancing weights
+
+```{r}
+targets::tar_load(
+  dplyr::matches("balance_(\\d)$"),
+  store = store
+)
+```
+
+::: {#supptbl-balance-1}
+```{r balance-1}
+balance_1 |>
+  tidylog::group_by(class) |>
+  dplyr::arrange(dplyr::desc(Adjusted)) |>
+  tidylog::ungroup() |>
+  gt::gt(groupname_col = "class") |>
+  gt::fmt_number(n_sigfig = 4) |>
+  gt::tab_footnote(
+    footnote = "N.",
+    locations = gt::cells_column_labels(
+      columns = c(Unadjusted, Adjusted)
+    )
+  ) |>
+  gt::tab_footnote(
+    footnote = "Truncated weights.",
+    locations = gt::cells_column_labels(columns = Adjusted)
+  )
+```
+Effective sample size before and after weights estimation for $hitrtse \sim edc$
+:::
+
+::: {#supptbl-balance-2}
+```{r balance-2}
+balance_2 |>
+  tidylog::group_by(class) |>
+  dplyr::arrange(dplyr::desc(Adjusted)) |>
+  tidylog::ungroup() |>
+  gt::gt(groupname_col = "class") |>
+  gt::fmt_number(n_sigfig = 4) |>
+  gt::tab_footnote(
+    footnote = "N.",
+    locations = gt::cells_column_labels(
+      columns = c(Unadjusted, Adjusted)
+    )
+  ) |>
+  gt::tab_footnote(
+    footnote = "Truncated weights.",
+    locations = gt::cells_column_labels(columns = Adjusted)
+  )
+```
+Effective sample size before and after weights estimation for $metabolite \sim edc$
+:::
+
+::: {#supptbl-balance-3}
+```{r balance-3}
+balance_3 |>
+  dplyr::arrange(dplyr::desc(Adjusted)) |>
+  gt::gt() |>
+  gt::fmt_number(n_sigfig = 4) |>
+  gt::tab_footnote(
+    footnote = "N.",
+    locations = gt::cells_column_labels(
+      columns = c(Unadjusted, Adjusted)
+    )
+  ) |>
+  gt::tab_footnote(
+    footnote = "Truncated weights.",
+    locations = gt::cells_column_labels(columns = Adjusted)
+  )
+```
+Effective sample size before and after weights estimation for $hitrtse \sim metabolite$
+:::
+
+```{r}
+targets::tar_load(
+  dplyr::matches("weights_(\\d)$"),
+  store = store
+)
+```
+
+::: {#supptbl-weights-1}
+```{r weights-1}
+tidy_res_weighted_fits(
+  dat_tbl = weights_1$dat_tbl,
+  dat_plt = weights_1$dat_plt,
+  sa_var = NULL
+)$table
+```
+Summary statistics of the estimated balancing weights for $hitrtse \sim edc$
+:::
+
+::: {#supptbl-weights-2}
+```{r weights-2}
+tidy_res_weighted_fits(
+  dat_tbl = weights_2$dat_tbl,
+  dat_plt = weights_2$dat_plt,
+  sa_var = NULL
+)$table
+```
+Summary statistics of the estimated balancing weights for $metabolite \sim edc$
+:::
+
+::: {#supptbl-weights-3}
+```{r weights-3}
+tidy_res_weighted_fits(
+  dat_tbl = weights_3$dat_tbl,
+  dat_plt = weights_3$dat_plt,
+  sa_var = NULL
+)$table
+```
+Summary statistics of the estimated balancing weights for $hitrtse \sim metabolite$
+:::
+
+## Tables for other results
 
 ### Balancing weights for effect modification
 
@@ -173,7 +288,7 @@ tidy_res_weighted_fits(
   sa_var = "e3_sex"
 )$table
 ```
-Weights
+Summary statistics of the estimated balancing weights for $hitrtse \sim edc \times sex$
 :::
 
 ::: {#supptbl-weights-2sa}
@@ -184,7 +299,7 @@ tidy_res_weighted_fits(
   sa_var = "e3_sex"
 )$table
 ```
-Weights
+Summary statistics of the estimated balancing weights for $metabolite \sim edc \times sex$
 :::
 
 ::: {#supptbl-weights-3sa}
@@ -195,12 +310,12 @@ tidy_res_weighted_fits(
   sa_var = "e3_sex"
 )$table
 ```
-Weights
+Summary statistics of the estimated balancing weights for $hitrtse \sim metabolite \times sex$
 :::
 
 # Supplementary figures
 
-## Descriptive data
+## Figures for descriptive data
 
 ### Description of chemicals
 
@@ -216,7 +331,7 @@ viz_desc_vars(
   is_chem = TRUE
 )$plot
 ```
-Description of chemicals
+Classification of the measured non-persistent EDCs, by cohort.
 :::
 
 ### Description of metabolites
@@ -245,10 +360,10 @@ viz_desc_vars(
   is_chem = FALSE
 )$plot
 ```
-Description of metabolites
+Classification of the measured corticosteroids, by cohort.
 :::
 
-## Main results
+## Figures for main results
 
 ### Average dose-response functions for significant results
 
@@ -281,10 +396,10 @@ ret_adrfs <- lapply(
 ret_adrfs[[1]]
 #ret_adrfs[[2]]
 ```
-Average dose-response functions for RQ3
+Average dose-response functions for...
 :::
 
-## Other results
+## Figures for other results
 
 ### Marginal comparisons for effect modification
 
@@ -308,7 +423,7 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
-Average comparisons for effect modification
+Marginal comparison results for $hitrtse \sim edc \times sex$
 :::
 
 ::: {#suppfig-marginal-2sa}
@@ -324,7 +439,7 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
-Average comparisons for effect modification
+Marginal comparison results for $metabolite \sim edc \times sex$
 :::
 
 ::: {#suppfig-marginal-3sa}
@@ -340,5 +455,5 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
-Average comparisons for effect modification
+Marginal comparison results for $hitrtse \sim metabolite \times sex$
 :::

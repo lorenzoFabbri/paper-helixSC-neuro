@@ -222,9 +222,6 @@ Levels of unprocessed non-persistent \acr{edcs} and corticosteroids, by cohort a
 
 ## Limitations {#sec-limitations}
 
-- Discuss limitations of the study, taking into account sources of potential bias or imprecision.
-- Discuss both direction and magnitude of any potential bias.
-
 Some limitations:
 
 - Cross-sectional study.
@@ -236,6 +233,10 @@ Some limitations:
 - Residual confounding.
 - Some confounders were not used since large percentage of missing values.
 - Multiple comparisons.
+
+These findings should be interpreted in light of the following limitations and strengths.
+
+Strengths of the present study include...
 
 ## Interpretation {#sec-interpretation}
 
