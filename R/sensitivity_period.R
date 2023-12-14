@@ -1,6 +1,6 @@
 ################################################################################
 Sys.setenv(is_hpc = TRUE)
-parallel <- TRUE
+parallel <- FALSE
 num_workers <- 2
 # Custom path to _targets for different research questions
 path_store <- ifelse(

@@ -3923,13 +3923,13 @@
     },
     "ucminf": {
       "Package": "ucminf",
-      "Version": "1.2.0",
+      "Version": "1.2.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
-      "Hash": "892048d061cd01149ba86d9e841297ae"
+      "Hash": "48f2c17a0f91a1669cffdc8593aa62b2"
     },
     "ukbabynames": {
       "Package": "ukbabynames",
