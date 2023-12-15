@@ -680,15 +680,37 @@ load_res_meffects <- function(path_store, rq, sa_var, which_res) {
 #'
 #' @param df
 #' @param sa_var
+#' @param outcome
 #' @param which_res
 #' @param num_digits_est
 #' @param num_digits_sig
 #'
 #' @return
 #' @export
-tidy_res_meffects <- function(df, sa_var,
+tidy_res_meffects <- function(df, sa_var, outcome,
                               which_res,
                               num_digits_est, num_digits_sig) {
+  if (!is.null(outcome)) {
+    df <- df |>
+      tidylog::filter(
+        outcome == .env$outcome
+      )
+  }
+  
+  df <- df |>
+    tidylog::mutate(
+      variable = as.character(variable),
+      variable = dplyr::case_match(
+        variable,
+        "corticosterone production" ~ "corticost. prod.",
+        "cortisol production" ~ "cortisol prod.",
+        "cortisone production" ~ "cortisone prod.",
+        "cortisol metabolism" ~ "cortisol met.",
+        "cortisone metabolism" ~ "cortisone met.",
+        .default = variable
+      )
+    )
+  
   # Forest plots side-by-side
   if (is.null(sa_var) | which_res == "hypothesis") {
     plot <- df |>
@@ -720,7 +742,6 @@ tidy_res_meffects <- function(df, sa_var,
     ggstance::position_dodgev(height = 0.5)
   }
   plot <- plot +
-    ggplot2::scale_y_discrete() +
     ggplot2::geom_point(
       mapping = ggplot2::aes(
         size = .data[["s.value"]]
@@ -737,27 +758,54 @@ tidy_res_meffects <- function(df, sa_var,
         xmax = conf.high
       ),
       position = position,
-      width = 0.0,
+      width = 0.3,
       linewidth = 0.3
     ) +
     ggplot2::geom_vline(
-      xintercept = 0.0
-    ) +
-    ggplot2::facet_wrap(
-      ggplot2::vars(outcome),
-      ncol = 2,
-      scales = "free_x"
+      xintercept = 0.0,
+      linetype = "longdash"
     ) +
     ggplot2::labs(
-      y = "exposure",
-      caption = "Size of the dots based on the S value."
+      x = "Marginal contrast"
     ) +
-    ggplot2::theme(
-      plot.caption = ggplot2::element_text(hjust = 0),
-      text = ggplot2::element_text(
-        size = 12
+    ggplot2::theme_classic()
+  if (is.null(sa_var) & which_res == "comparisons") {
+    plot <- plot +
+      ggplot2::coord_cartesian(
+        ylim = c(1, nrow(df) + 1)
+      ) +
+      ggplot2::annotate(
+        "text",
+        x = 0, y = nrow(df) + 1,
+        label = ""
+      ) +
+      ggplot2::theme(
+        legend.position = "bottom",
+        axis.title.y = ggplot2::element_blank(),
+        axis.text.y = ggplot2::element_blank(),
+        axis.ticks.y = ggplot2::element_blank(),
+        axis.line.y = ggplot2::element_blank(),
+        axis.line.x = ggplot2::element_line(size = 0.6),
+        axis.ticks.length = ggplot2::unit(0.3, "cm")
       )
-    )
+  } else {
+    plot <- plot +
+      ggplot2::labs(
+        y = "exposure"
+      ) +
+      ggplot2::facet_wrap(
+        ggplot2::vars(outcome),
+        ncol = 2
+      ) +
+      ggplot2::theme(
+        plot.caption = ggplot2::element_text(hjust = 0),
+        strip.background = ggplot2::element_blank(),
+        legend.position = "right",
+        axis.ticks.y = ggplot2::element_blank(),
+        axis.line.x = ggplot2::element_line(size = 0.6),
+        axis.ticks.length = ggplot2::unit(0.3, "cm")
+      )
+  }
   
   # Pretty tables w/ numerical results
   names_ <- unique(df$outcome)
@@ -766,7 +814,7 @@ tidy_res_meffects <- function(df, sa_var,
   } else {
     paste0(names_, "_", c(unique(df$modifier)))
   }
-  df_gt <- df |>
+  processed_df <- df |>
     dplyr::arrange(
       outcome, class, dplyr::desc(variable)
     ) |>
@@ -794,9 +842,11 @@ tidy_res_meffects <- function(df, sa_var,
       dplyr::any_of(c(
         "class", "variable", "outcome",
         "modifier",
-        "val"
+        "val", "estimate"
       ))
-    ) |>
+    )
+  df_gt <- processed_df |>
+    tidylog::select(-estimate) |>
     tidyr::pivot_wider(
       names_from = dplyr::any_of(c("outcome", "modifier")),
       values_from = c("val")
@@ -827,7 +877,21 @@ tidy_res_meffects <- function(df, sa_var,
       footnote = "*Significant results."
     )
   
+  if (is.null(sa_var) & which_res == "comparisons") {
+    processed_df <- dplyr::bind_rows(
+      tibble::tibble(
+        variable = "Exposure",
+        val = "Marginal contrast (95% CI)",
+        estimate = 100,
+        outcome = "",
+        class = ""
+      ),
+      processed_df
+    )
+  }
+  
   return(list(
+    numerical_results = processed_df,
     table = df_gt,
     plot = plot
   ))

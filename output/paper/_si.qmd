@@ -418,6 +418,7 @@ targets::tar_load(
 tidy_res_meffects(
   df = marginal_comparisons_1SA,
   sa_var = "e3_sex",
+  outcome = NULL,
   which_res = "comparisons",
   num_digits_est = num_digits_est,
   num_digits_sig = num_digits_sig
@@ -429,11 +430,15 @@ Marginal comparison results for $hitrtse \sim edc \times sex$
 ::: {#suppfig-marginal-2sa}
 ```{r marginal-2sa}
 #| fig-width: 9
-#| fig-height: 10
+#| fig-height: 12
 
 tidy_res_meffects(
-  df = marginal_comparisons_2SA,
+  df = marginal_comparisons_2SA |>
+    tidylog::filter(
+      !grepl("metabolism", outcome)
+    ),
   sa_var = "e3_sex",
+  outcome = NULL,
   which_res = "comparisons",
   num_digits_est = num_digits_est,
   num_digits_sig = num_digits_sig
@@ -444,12 +449,13 @@ Marginal comparison results for $metabolite \sim edc \times sex$
 
 ::: {#suppfig-marginal-3sa}
 ```{r marginal-3sa}
-#| fig-width: 5
+#| fig-width: 6
 #| fig-height: 5
 
 tidy_res_meffects(
   df = marginal_comparisons_3SA,
   sa_var = "e3_sex",
+  outcome = NULL,
   which_res = "comparisons",
   num_digits_est = num_digits_est,
   num_digits_sig = num_digits_sig

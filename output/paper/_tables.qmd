@@ -56,6 +56,9 @@ desc_chems_mets$desc_mets
 ## Marginal comparisons
 
 ```{r}
+#| eval: false
+#| echo: false
+
 targets::tar_load(
   dplyr::matches("marginal_comparisons_(\\d)$"),
   store = store
@@ -63,6 +66,8 @@ targets::tar_load(
 ```
 
 ```{r marginal-1}
+#| eval: false
+#| echo: false
 #| label: tbl-marginal-1
 #| tbl-cap: Marginal comparison results for $hitrtse \sim edc$
 
@@ -76,6 +81,8 @@ tidy_res_meffects(
 ```
 
 ```{r marginal-2}
+#| eval: false
+#| echo: false
 #| label: tbl-marginal-2
 #| tbl-cap: Marginal comparison results for $metabolite \sim edc$
 
@@ -89,6 +96,8 @@ tidy_res_meffects(
 ```
 
 ```{r marginal-3}
+#| eval: false
+#| echo: false
 #| label: tbl-marginal-3
 #| tbl-cap: Marginal comparison results for $hitrtse \sim metabolite$
 
@@ -119,6 +128,7 @@ targets::tar_load(
 tidy_res_meffects(
   df = marginal_hypothesis_1SA,
   sa_var = "e3sex",
+  outcome = NULL,
   which_res = "hypothesis",
   num_digits_est = num_digits_est,
   num_digits_sig = num_digits_sig
@@ -132,6 +142,7 @@ tidy_res_meffects(
 tidy_res_meffects(
   df = marginal_hypothesis_2SA,
   sa_var = "e3sex",
+  outcome = NULL,
   which_res = "hypothesis",
   num_digits_est = num_digits_est,
   num_digits_sig = num_digits_sig
@@ -145,6 +156,7 @@ tidy_res_meffects(
 tidy_res_meffects(
   df = marginal_hypothesis_3SA,
   sa_var = "e3sex",
+  outcome = NULL,
   which_res = "hypothesis",
   num_digits_est = num_digits_est,
   num_digits_sig = num_digits_sig

@@ -201,9 +201,14 @@ supptbl-balance-1 and supptbl-weights-1
 supptbl-balance-2 and supptbl-weights-2
 supptbl-balance-3 and supptbl-weights-3
 
-tbl-marginal-1 and fig-marginal-1
-tbl-marginal-2 and fig-marginal-2
-tbl-marginal-3 and fig-marginal-3
+
+
+fig-marginal-1
+fig-marginal-2-cortisolprod
+fig-marginal-2-cortisoneprod
+fig-marginal-2-corticosteroneprod
+fig-marginal-2-11b
+fig-marginal-3
 
 suppfig-adrfs-rq...
 
@@ -249,11 +254,11 @@ In conclusion, in a study of...
 
 {{< pagebreak >}}
 
-{{< include _tables.qmd >}}
+<!-- {{< include _tables.qmd >}} -->
 
 {{< pagebreak >}}
 
-{{< include _figures.qmd >}}
+<!-- {{< include _figures.qmd >}} -->
 
 {{< pagebreak >}}
 

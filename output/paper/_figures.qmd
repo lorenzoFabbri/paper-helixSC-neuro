@@ -33,6 +33,63 @@
 here::i_am("output/paper/_figures.qmd")
 ```
 
+```{r}
+# Function to align forest plot with table numerical results
+forest_plot <- function(obj, r = 4) {
+  # From table of numerical results to ggplot object
+  tbl_num_res <- obj$numerical_results |>
+    tidylog::mutate(
+      variable = forcats::fct_reorder2(
+        variable, estimate, class
+      )
+    ) |>
+    tidylog::select(-estimate) |>
+    ggplot2::ggplot(
+      ggplot2::aes(y = variable)
+    ) +
+    ggplot2::geom_text(
+      ggplot2::aes(
+        x = 0,
+        label = variable
+      ),
+      hjust = 0,
+      fontface = "bold"
+    ) +
+    ggplot2::geom_text(
+      ggplot2::aes(
+        x = 1,
+        label = val
+      ),
+      hjust = 0,
+      fontface = ifelse(
+        obj$numerical_results$val == "Marginal contrast (95% CI)",
+        "bold", "plain"
+      )
+    ) +
+    ggplot2::theme_void() +
+    ggplot2::theme(
+      strip.background = ggplot2::element_blank(),
+      strip.text = ggplot2::element_blank()
+    ) +
+    ggplot2::coord_cartesian(
+      xlim = c(0, 4)
+    )
+  
+  # Assemble elements
+  ret <- patchwork::wrap_plots(
+    tbl_num_res, obj$plot
+  ) +
+    patchwork::plot_layout(
+      design = c(
+        patchwork::area(t = 0, l = 1, b = 3, r = r),
+        patchwork::area(t = 1, l = r, b = 3, r = r + 4)
+      )
+    )
+  
+  return(ret)
+} # End function forest_plot
+```
+
 - Figure titles and legends should be submitted as single paragraph.
 
 # Figures for main results
@@ -49,44 +106,101 @@ targets::tar_load(
 ```{r marginal-1}
 #| label: fig-marginal-1
 #| fig-cap: Marginal comparison results for $hitrtse \sim edc$
-#| fig-width: 6
-#| fig-height: 7
-
-tidy_res_meffects(
-  df = marginal_comparisons_1,
-  sa_var = NULL,
-  which_res = "comparisons",
-  num_digits_est = num_digits_est,
-  num_digits_sig = num_digits_sig
-)$plot
-```
-
-```{r marginal-2}
-#| label: fig-marginal-2
-#| fig-cap: Marginal comparison results for $metabolite \sim edc$
 #| fig-width: 9
 #| fig-height: 10
 
-tidy_res_meffects(
-  df = marginal_comparisons_2,
+obj1 <- tidy_res_meffects(
+  df = marginal_comparisons_1,
   sa_var = NULL,
+  outcome = "hitrtse",
   which_res = "comparisons",
   num_digits_est = num_digits_est,
   num_digits_sig = num_digits_sig
-)$plot
+)
+forest_plot(obj = obj1)
+```
+
+```{r marginal-21}
+#| label: fig-marginal-2-cortisolprod
+#| fig-cap: Marginal comparison results for $cortisol production \sim edc$
+#| fig-width: 9
+#| fig-height: 10
+
+obj2 <- tidy_res_meffects(
+  df = marginal_comparisons_2,
+  sa_var = NULL,
+  outcome = "cortisol production",
+  which_res = "comparisons",
+  num_digits_est = num_digits_est,
+  num_digits_sig = num_digits_sig
+)
+forest_plot(obj = obj2)
+```
+
+```{r marginal-22}
+#| label: fig-marginal-2-cortisoneprod
+#| fig-cap: Marginal comparison results for $cortisone production \sim edc$
+#| fig-width: 9
+#| fig-height: 10
+
+obj2 <- tidy_res_meffects(
+  df = marginal_comparisons_2,
+  sa_var = NULL,
+  outcome = "cortisone production",
+  which_res = "comparisons",
+  num_digits_est = num_digits_est,
+  num_digits_sig = num_digits_sig
+)
+forest_plot(obj = obj2)
+```
+
+```{r marginal-23}
+#| label: fig-marginal-2-corticosteroneprod
+#| fig-cap: Marginal comparison results for $corticosterone production \sim edc$
+#| fig-width: 9
+#| fig-height: 10
+
+obj2 <- tidy_res_meffects(
+  df = marginal_comparisons_2,
+  sa_var = NULL,
+  outcome = "corticosterone production",
+  which_res = "comparisons",
+  num_digits_est = num_digits_est,
+  num_digits_sig = num_digits_sig
+)
+forest_plot(obj = obj2)
+```
+
+```{r marginal-24}
+#| label: fig-marginal-2-11b
+#| fig-cap: Marginal comparison results for $11bhsd \sim edc$
+#| fig-width: 9
+#| fig-height: 10
+
+obj2 <- tidy_res_meffects(
+  df = marginal_comparisons_2,
+  sa_var = NULL,
+  outcome = "11bhsd",
+  which_res = "comparisons",
+  num_digits_est = num_digits_est,
+  num_digits_sig = num_digits_sig
+)
+forest_plot(obj = obj2)
 ```
 
 ```{r marginal-3}
 #| label: fig-marginal-3
 #| fig-cap: Marginal comparison results for $hitrtse \sim metabolite$
-#| fig-width: 5
+#| fig-width: 9
 #| fig-height: 5
 
-tidy_res_meffects(
+obj3 <- tidy_res_meffects(
   df = marginal_comparisons_3,
   sa_var = NULL,
+  outcome = "hitrtse",
   which_res = "comparisons",
   num_digits_est = num_digits_est,
   num_digits_sig = num_digits_sig
-)$plot
+)
+forest_plot(obj = obj3, r = 5)
 ```
