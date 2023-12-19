@@ -690,10 +690,10 @@ load_res_meffects <- function(path_store, rq, sa_var, which_res) {
 tidy_res_meffects <- function(df, sa_var, outcome,
                               which_res,
                               num_digits_est, num_digits_sig) {
-  if (!is.null(outcome)) {
+  if (length(outcome) > 0) {
     df <- df |>
       tidylog::filter(
-        outcome == .env$outcome
+        outcome %in% .env$outcome
       )
   }
   
@@ -713,16 +713,26 @@ tidy_res_meffects <- function(df, sa_var, outcome,
   
   # Forest plots side-by-side
   if (is.null(sa_var) | which_res == "hypothesis") {
-    plot <- df |>
-      ggplot2::ggplot(
-        mapping = ggplot2::aes(
-          x = estimate,
-          y = forcats::fct_reorder2(
-            variable, estimate, class
-          ),
-          color = class
+    if (length(outcome) > 0) {
+      plot <- df |>
+        ggplot2::ggplot(
+          mapping = ggplot2::aes(
+            x = estimate,
+            y = forcats::fct_reorder2(variable, estimate, class),
+            color = class,
+            shape = outcome
+          )
         )
-      )
+    } else {
+      plot <- df |>
+        ggplot2::ggplot(
+          mapping = ggplot2::aes(
+            x = estimate,
+            y = forcats::fct_reorder2(variable, estimate, class),
+            color = class
+          )
+        )
+    }
   } else {
     plot <- df |>
       ggplot2::ggplot(
@@ -736,10 +746,10 @@ tidy_res_meffects <- function(df, sa_var, outcome,
         )
       )
   }
-  position <- if (is.null(sa_var)) {
+  position <- if (is.null(sa_var) & length(outcome) <= 1) {
     "identity"
   } else {
-    ggstance::position_dodgev(height = 0.5)
+    ggstance::position_dodgev(height = 0.9)
   }
   plot <- plot +
     ggplot2::geom_point(
@@ -770,17 +780,32 @@ tidy_res_meffects <- function(df, sa_var, outcome,
     ) +
     ggplot2::theme_classic()
   if (is.null(sa_var) & which_res == "comparisons") {
+    if (length(outcome) > 1) {
+      plot <- plot +
+        ggplot2::coord_cartesian(
+          ylim = c(1, (nrow(df) / length(outcome)) + 1)
+        ) +
+        ggplot2::annotate(
+          "text",
+          x = 0, y = (nrow(df) / length(outcome)) + 1,
+          label = ""
+        )
+    } else {
+      plot <- plot +
+        ggplot2::coord_cartesian(
+          ylim = c(1, nrow(df) + 1)
+        ) +
+        ggplot2::annotate(
+          "text",
+          x = 0, y = nrow(df) + 1,
+          label = ""
+        )
+    }
     plot <- plot +
-      ggplot2::coord_cartesian(
-        ylim = c(1, nrow(df) + 1)
-      ) +
-      ggplot2::annotate(
-        "text",
-        x = 0, y = nrow(df) + 1,
-        label = ""
-      ) +
       ggplot2::theme(
         legend.position = "bottom",
+        legend.box = "vertical",
+        legend.margin = ggplot2::margin(),
         axis.title.y = ggplot2::element_blank(),
         axis.text.y = ggplot2::element_blank(),
         axis.ticks.y = ggplot2::element_blank(),
@@ -806,6 +831,7 @@ tidy_res_meffects <- function(df, sa_var, outcome,
         axis.ticks.length = ggplot2::unit(0.3, "cm")
       )
   }
+  ##############################################################################
   
   # Pretty tables w/ numerical results
   names_ <- unique(df$outcome)

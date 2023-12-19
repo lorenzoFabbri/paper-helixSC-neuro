@@ -45,7 +45,10 @@ forest_plot <- function(obj, r = 4) {
     ) |>
     tidylog::select(-estimate) |>
     ggplot2::ggplot(
-      ggplot2::aes(y = variable)
+      ggplot2::aes(
+        y = variable,
+        shape = outcome
+      )
     ) +
     ggplot2::geom_text(
       ggplot2::aes(
@@ -61,15 +64,15 @@ forest_plot <- function(obj, r = 4) {
         label = val
       ),
       hjust = 0,
-      fontface = ifelse(
-        obj$numerical_results$val == "Marginal contrast (95% CI)",
-        "bold", "plain"
-      )
+      position = ggstance::position_dodgev(height = 0.9)
     ) +
     ggplot2::theme_void() +
     ggplot2::theme(
       strip.background = ggplot2::element_blank(),
-      strip.text = ggplot2::element_blank()
+      strip.text = ggplot2::element_blank(),
+      legend.position = "bottom",
+      legend.box = "vertical",
+      legend.margin = ggplot2::margin()
     ) +
     ggplot2::coord_cartesian(
       xlim = c(0, 4)
@@ -112,7 +115,7 @@ targets::tar_load(
 obj1 <- tidy_res_meffects(
   df = marginal_comparisons_1,
   sa_var = NULL,
-  outcome = "hitrtse",
+  outcome = c("hitrtse"),
   which_res = "comparisons",
   num_digits_est = num_digits_est,
   num_digits_sig = num_digits_sig
@@ -120,67 +123,20 @@ obj1 <- tidy_res_meffects(
 forest_plot(obj = obj1)
 ```
 
-```{r marginal-21}
-#| label: fig-marginal-2-cortisolprod
-#| fig-cap: Marginal comparison results for $cortisol production \sim edc$
+```{r marginal-2}
+#| label: fig-marginal-2
+#| fig-cap: Marginal comparison results for $production \sim edc$
 #| fig-width: 9
-#| fig-height: 10
+#| fig-height: 12
 
 obj2 <- tidy_res_meffects(
   df = marginal_comparisons_2,
   sa_var = NULL,
-  outcome = "cortisol production",
-  which_res = "comparisons",
-  num_digits_est = num_digits_est,
-  num_digits_sig = num_digits_sig
-)
-forest_plot(obj = obj2)
-```
-
-```{r marginal-22}
-#| label: fig-marginal-2-cortisoneprod
-#| fig-cap: Marginal comparison results for $cortisone production \sim edc$
-#| fig-width: 9
-#| fig-height: 10
-
-obj2 <- tidy_res_meffects(
-  df = marginal_comparisons_2,
-  sa_var = NULL,
-  outcome = "cortisone production",
-  which_res = "comparisons",
-  num_digits_est = num_digits_est,
-  num_digits_sig = num_digits_sig
-)
-forest_plot(obj = obj2)
-```
-
-```{r marginal-23}
-#| label: fig-marginal-2-corticosteroneprod
-#| fig-cap: Marginal comparison results for $corticosterone production \sim edc$
-#| fig-width: 9
-#| fig-height: 10
-
-obj2 <- tidy_res_meffects(
-  df = marginal_comparisons_2,
-  sa_var = NULL,
-  outcome = "corticosterone production",
-  which_res = "comparisons",
-  num_digits_est = num_digits_est,
-  num_digits_sig = num_digits_sig
-)
-forest_plot(obj = obj2)
-```
-
-```{r marginal-24}
-#| label: fig-marginal-2-11b
-#| fig-cap: Marginal comparison results for $11bhsd \sim edc$
-#| fig-width: 9
-#| fig-height: 10
-
-obj2 <- tidy_res_meffects(
-  df = marginal_comparisons_2,
-  sa_var = NULL,
-  outcome = "11bhsd",
+  outcome = c(
+    "cortisol production",
+    "cortisone production",
+    "corticosterone production"
+  ),
   which_res = "comparisons",
   num_digits_est = num_digits_est,
   num_digits_sig = num_digits_sig
@@ -197,7 +153,7 @@ forest_plot(obj = obj2)
 obj3 <- tidy_res_meffects(
   df = marginal_comparisons_3,
   sa_var = NULL,
-  outcome = "hitrtse",
+  outcome = c("hitrtse"),
   which_res = "comparisons",
   num_digits_est = num_digits_est,
   num_digits_sig = num_digits_sig
