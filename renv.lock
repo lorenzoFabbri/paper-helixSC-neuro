@@ -2544,7 +2544,7 @@
       "RemoteUsername": "isglobal-cep",
       "RemoteRepo": "myphd",
       "RemoteRef": "HEAD",
-      "RemoteSha": "5a3ff03dd358139450dc89975913ca7b4cabb2d0",
+      "RemoteSha": "b0ffd5e3aae4526d96d8e2937b3e2c467e4c41b6",
       "RemoteHost": "api.github.com",
       "Requirements": [
         "WeightIt",
@@ -2579,7 +2579,7 @@
         "tmvtnorm",
         "visdat"
       ],
-      "Hash": "ae23c7639fbf8ea58260287c44db7008"
+      "Hash": "e60f83d7174985b4d0135de04a4e8939"
     },
     "naniar": {
       "Package": "naniar",
@@ -2761,11 +2761,11 @@
       "Version": "0.1.2.9000",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "papaja",
       "RemoteUsername": "crsh",
+      "RemoteRepo": "papaja",
       "RemoteRef": "HEAD",
-      "RemoteSha": "2a979a25da14754ee0c48c35f4ca18f0a1bd134e",
+      "RemoteSha": "4df1164c09bea0bc2910b100b30ddf85bbbd3a3b",
+      "RemoteHost": "api.github.com",
       "Requirements": [
         "R",
         "bookdown",
@@ -2780,7 +2780,7 @@
         "yaml",
         "zip"
       ],
-      "Hash": "892e426cc97ff96407e514261364c09f"
+      "Hash": "df0ce171745cf2ed6a34e141426459e0"
     },
     "parallelly": {
       "Package": "parallelly",
@@ -3754,7 +3754,7 @@
     },
     "tidygraph": {
       "Package": "tidygraph",
-      "Version": "1.2.3",
+      "Version": "1.3.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -3763,6 +3763,7 @@
         "cpp11",
         "dplyr",
         "igraph",
+        "lifecycle",
         "magrittr",
         "pillar",
         "rlang",
@@ -3772,7 +3773,7 @@
         "tools",
         "utils"
       ],
-      "Hash": "0fc97a52b4b32a0b4a3de4c5241348e2"
+      "Hash": "5c1d6e75684cd37665f7f686dad19510"
     },
     "tidylog": {
       "Package": "tidylog",

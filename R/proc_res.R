@@ -802,7 +802,7 @@ tidy_res_meffects <- function(df, sa_var, outcome,
         strip.background = ggplot2::element_blank(),
         legend.position = "right",
         axis.ticks.y = ggplot2::element_blank(),
-        axis.line.x = ggplot2::element_line(size = 0.6),
+        axis.line.x = ggplot2::element_line(linewidth = 0.6),
         axis.ticks.length = ggplot2::unit(0.3, "cm")
       )
   }
@@ -875,6 +875,12 @@ tidy_res_meffects <- function(df, sa_var, outcome,
     ) |>
     gt::tab_footnote(
       footnote = "*Significant results."
+    ) |>
+    gt::tab_footnote(
+      footnote = "Estimate and 95% CI.",
+      locations = gt::cells_column_labels(
+        columns = names_
+      )
     )
   
   if (is.null(sa_var) & which_res == "comparisons") {
