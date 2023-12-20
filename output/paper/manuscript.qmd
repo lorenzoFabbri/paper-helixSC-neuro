@@ -198,7 +198,7 @@ The effective sample sizes before and after balancing weights estimation are pre
 
 @Fig-marginal-1 presents the forest plot for the marginal effects of the non-persistent \acr{edcs} on \acr{hitrtse}. Overall, a cohort-specific increase in the levels of the exposures from the 10th to the 90th percentiles was associated with a positive marginal contrast, indicating an increase in the values of \acr{hitrtse}. Most of the \acr{ci} included the null effect, though. Statistically significant associations were observed for the phenol MEPA (\acr{mc} = $0.042$, $95\%$ \acr{ci}: $0.013, 0.071$), and the phthalate metabolites oxo-MiNP (\acr{mc} = $0.023$, $95\%$ \acr{ci}: $0.003, 0.044$), oh-MiNP (\acr{mc} = $0.039$, $95\%$ \acr{ci}: $0.001, 0.076$), and MEHP (\acr{mc} = $0.036$, $95\%$ \acr{ci}: $0.008, 0.063$). The \acr{opp} DETP was strongly negatively associated with \acr{hitrtse} (\acr{mc} = $-0.026$, $95\%$ \acr{ci}: $-0.054, 0.001$).
 
-Figures [-@fig-marginal-2-cortisolprod; -@fig-marginal-2-cortisoneprod; -@fig-marginal-2-corticosteroneprod; -@fig-marginal-2-11b] present the forest plots for the marginal effects of the non-persistent \acr{edcs} on cortisol production, cortisone production, corticosterone production, and 11bHSD activity, respectively.
+@Fig-marginal-2 presents the forest plot for the marginal effects of the non-persistent \acr{edcs} on cortisol production, cortisone production, corticosterone production, and 11bHSD activity, respectively.
 
 @Fig-marginal-3 presents the forest plot for the marginal effects of the corticosteroids on \acr{hitrtse}.
 

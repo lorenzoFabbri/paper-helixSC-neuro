@@ -2544,7 +2544,7 @@
       "RemoteUsername": "isglobal-cep",
       "RemoteRepo": "myphd",
       "RemoteRef": "HEAD",
-      "RemoteSha": "b0ffd5e3aae4526d96d8e2937b3e2c467e4c41b6",
+      "RemoteSha": "80aaefd20ad59021767a112645d21a5b5e848054",
       "RemoteHost": "api.github.com",
       "Requirements": [
         "WeightIt",
@@ -2579,7 +2579,7 @@
         "tmvtnorm",
         "visdat"
       ],
-      "Hash": "e60f83d7174985b4d0135de04a4e8939"
+      "Hash": "89c03e763f8f2c9ffd085b2238200f90"
     },
     "naniar": {
       "Package": "naniar",
@@ -3456,7 +3456,7 @@
     },
     "servr": {
       "Package": "servr",
-      "Version": "0.27",
+      "Version": "0.28",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -3466,7 +3466,7 @@
         "mime",
         "xfun"
       ],
-      "Hash": "f4d1414c2ddc0a34ea27923134ac3c7b"
+      "Hash": "70954f91166202e83476043dd1942071"
     },
     "shape": {
       "Package": "shape",
