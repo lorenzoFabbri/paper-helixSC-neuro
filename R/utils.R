@@ -370,7 +370,7 @@ rq_prepare_data <- function(dat, filter_panel, type_sample_hcp, is_sa) {
         TRUE, FALSE
       ),
       threshold_trim = params_ana$weights_trim
-    ) # End estimation selection weights
+    )$df # End estimation selection weights
     
     # Filter out subjects not in HCP
     dat <- lapply(dat, function(x) {

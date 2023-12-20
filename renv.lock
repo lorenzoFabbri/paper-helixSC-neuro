@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.3.2",
+    "Version": "4.3.0",
     "Repositories": [
       {
         "Name": "BioCsoft",
@@ -1618,9 +1618,9 @@
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteRepo": "glossary",
       "RemoteUsername": "psyteachr",
-      "RemoteRef": "HEAD",
+      "RemoteRepo": "glossary",
+      "RemoteRef": "master",
       "RemoteSha": "afad260aeacd519a5921dffd1dd3dfc864aee184",
       "Requirements": [
         "R.utils",
@@ -1642,7 +1642,7 @@
         "webexercises",
         "xml2"
       ],
-      "Hash": "711903613ebb60596aa31b2c26d25c04"
+      "Hash": "7e481ebb49bc8d1f888fe744c069a68e"
     },
     "glue": {
       "Package": "glue",
@@ -2541,11 +2541,11 @@
       "Version": "0.0.1",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteUsername": "isglobal-cep",
+      "RemoteHost": "api.github.com",
       "RemoteRepo": "myphd",
+      "RemoteUsername": "isglobal-cep",
       "RemoteRef": "HEAD",
       "RemoteSha": "80aaefd20ad59021767a112645d21a5b5e848054",
-      "RemoteHost": "api.github.com",
       "Requirements": [
         "WeightIt",
         "assertthat",
@@ -2763,7 +2763,7 @@
       "RemoteType": "github",
       "RemoteUsername": "crsh",
       "RemoteRepo": "papaja",
-      "RemoteRef": "HEAD",
+      "RemoteRef": "main",
       "RemoteSha": "4df1164c09bea0bc2910b100b30ddf85bbbd3a3b",
       "RemoteHost": "api.github.com",
       "Requirements": [
@@ -2780,7 +2780,7 @@
         "yaml",
         "zip"
       ],
-      "Hash": "df0ce171745cf2ed6a34e141426459e0"
+      "Hash": "fb8716faf3a2910b176179c4bcb05fee"
     },
     "parallelly": {
       "Package": "parallelly",
@@ -3031,7 +3031,7 @@
     },
     "psych": {
       "Package": "psych",
-      "Version": "2.3.9",
+      "Version": "2.3.12",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -3044,7 +3044,7 @@
         "parallel",
         "stats"
       ],
-      "Hash": "4c7165bb5b5342f39bcfdb52db26f163"
+      "Hash": "3be0b93e14bede70d41d3d8f9dce13d6"
     },
     "purrr": {
       "Package": "purrr",

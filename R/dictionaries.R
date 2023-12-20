@@ -67,10 +67,10 @@ vars_of_interest <- function(append_to_chem) {
   )
   new_metabolites <- c(
     "cortisol_production",
-    "cortisol_metabolism",
+    #"cortisol_metabolism",
     "cortisone_production",
-    "cortisone_metabolism",
-    "X11bHSD",
+    #"cortisone_metabolism",
+    #"X11bHSD",
     # "global_reductase_f",
     # "global_reductase_e",
     # "cyp3a4",
