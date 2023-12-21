@@ -194,11 +194,66 @@ Levels of unprocessed non-persistent \acr{edcs} and corticosteroids, by cohort a
 
 ## Main results {#sec-res-main}
 
+```{r}
+format_res <- function(df, exposure, outcome) {
+  # df: variable, val, estimate, outcome, class
+  # exposure in variable, outcome in outcome
+  
+  val <- df[df$variable == exposure & df$outcome == outcome, ]$val
+  val <- stringr::str_replace(
+    string = val,
+    pattern = "\\*",
+    replacement = ""
+  )
+  glue::glue(
+    "\\acr{{mc}} and $95\\%$ \\acr{{ci}}: {val}"
+  )
+}
+```
+
+```{r}
+#| echo: false
+
+targets::tar_load(
+  dplyr::matches("marginal_comparisons_(\\d)$"),
+  store = store
+)
+meffects1 <- tidy_res_meffects(
+  df = marginal_comparisons_1,
+  sa_var = NULL,
+  outcome = c("hitrtse"),
+  which_res = "comparisons",
+  num_digits_est = num_digits_est,
+  num_digits_sig = num_digits_sig
+)$numerical_results
+meffects2 <- tidy_res_meffects(
+  df = marginal_comparisons_2,
+  sa_var = NULL,
+  outcome = c(
+    "cortisol production",
+    "cortisone production",
+    "corticosterone production"
+  ),
+  which_res = "comparisons",
+  num_digits_est = num_digits_est,
+  num_digits_sig = num_digits_sig
+)$numerical_results
+meffects3 <- tidy_res_meffects(
+  df = marginal_comparisons_3,
+  sa_var = NULL,
+  outcome = c("hitrtse"),
+  which_res = "comparisons",
+  num_digits_est = num_digits_est,
+  num_digits_sig = num_digits_sig
+)$numerical_results
+```
+
 The effective sample sizes before and after balancing weights estimation are presented in Tables [-@supptbl-balance-1; -@supptbl-balance-2; -@supptbl-balance-3], while basic summary statistics of the estimated balancing weights are presented in Tables [-@supptbl-weights-1; -@supptbl-weights-2; -@supptbl-weights-3]. As expected, the median value of the weights for each exposure was close to $1.00$.
 
-@Fig-marginal-1 presents the forest plot for the marginal effects of the non-persistent \acr{edcs} on \acr{hitrtse}. Overall, a cohort-specific increase in the levels of the exposures from the 10th to the 90th percentiles was associated with a positive marginal contrast, indicating an increase in the values of \acr{hitrtse}. Most of the \acr{ci} included the null effect, though. Statistically significant associations were observed for the phenol MEPA (\acr{mc} = $0.042$, $95\%$ \acr{ci}: $0.013, 0.071$), and the phthalate metabolites oxo-MiNP (\acr{mc} = $0.023$, $95\%$ \acr{ci}: $0.003, 0.044$), oh-MiNP (\acr{mc} = $0.039$, $95\%$ \acr{ci}: $0.001, 0.076$), and MEHP (\acr{mc} = $0.036$, $95\%$ \acr{ci}: $0.008, 0.063$). The \acr{opp} DETP was strongly negatively associated with \acr{hitrtse} (\acr{mc} = $-0.026$, $95\%$ \acr{ci}: $-0.054, 0.001$).
+@Fig-marginal-1 presents the forest plot for the marginal effects of the non-persistent \acr{edcs} on \acr{hitrtse}. Overall, a cohort-specific increase in the levels of the exposures from the 10th to the 90th percentiles was associated with a positive marginal contrast, indicating an increase in the values of \acr{hitrtse}. Most of the \acr{ci}s included the null effect, though. Statistically significant associations were observed for the phenol MEPA (`r format_res(meffects1, "mepa", "hitrtse")`), and the phthalate metabolites oxo-MiNP (`r format_res(meffects1, "oxominp", "hitrtse")`), oh-MiNP (`r format_res(meffects1, "ohminp", "hitrtse")`), and MEHP (`r format_res(meffects1, "mehp", "hitrtse")`). The \acr{opp} DETP was strongly negatively associated with \acr{hitrtse} (`r format_res(meffects1, "detp", "hitrtse")`).
 
-@Fig-marginal-2 presents the forest plot for the marginal effects of the non-persistent \acr{edcs} on cortisol production, cortisone production, corticosterone production, and 11bHSD activity, respectively.
+@Fig-marginal-2 presents the forest plot for the marginal effects of the non-persistent \acr{edcs} on cortisone production, cortisol production, and corticosterone production. Overall, a cohort-specific increase in the levels of the exposures from the 10th to the 90th percentiles was associated with a positive marginal contrast, indicating an increase in the total production of these metabolites, with the exception of BUPA, which was associated with negative marginal contrasts for all three outcomes, and MiBP, which was associated with a negative marginal contrast for total cortisone production only.
+The majority of the associations for the phenols and phthalate metabolites included the null. The phenol BPA showed the largest marginal contrasts across all three outcomes (cortisone production, `r format_res(meffects2, "bpa", "cortisone production")`; cortisol production, `r format_res(meffects1, "bpa", "cortisol production")`; corticosterone production, `r format_res(meffects1, "bpa", "corticosterone production")`).
 
 @Fig-marginal-3 presents the forest plot for the marginal effects of the corticosteroids on \acr{hitrtse}.
 
@@ -248,7 +303,7 @@ In conclusion, in a study of...
 
 {{< pagebreak >}}
 
-<!-- {{< include _tables.qmd >}} -->
+{{< include _tables.qmd >}}
 
 {{< pagebreak >}}
 
@@ -256,4 +311,4 @@ In conclusion, in a study of...
 
 {{< pagebreak >}}
 
-<!-- {{< include _si.qmd >}} -->
+{{< include _si.qmd >}}

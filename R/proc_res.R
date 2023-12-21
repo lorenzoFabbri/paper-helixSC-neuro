@@ -810,7 +810,7 @@ tidy_res_meffects <- function(df, sa_var, outcome,
         axis.text.y = ggplot2::element_blank(),
         axis.ticks.y = ggplot2::element_blank(),
         axis.line.y = ggplot2::element_blank(),
-        axis.line.x = ggplot2::element_line(size = 0.6),
+        axis.line.x = ggplot2::element_line(linewidth = 0.6),
         axis.ticks.length = ggplot2::unit(0.3, "cm")
       )
   } else {

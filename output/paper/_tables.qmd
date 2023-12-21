@@ -74,6 +74,7 @@ targets::tar_load(
 tidy_res_meffects(
   df = marginal_comparisons_1,
   sa_var = NULL,
+  outcome = NULL,
   which_res = "comparisons",
   num_digits_est = num_digits_est,
   num_digits_sig = num_digits_sig
