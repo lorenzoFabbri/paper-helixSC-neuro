@@ -363,42 +363,6 @@ viz_desc_vars(
 Classification of the measured corticosteroids, by cohort.
 :::
 
-## Figures for main results
-
-### Average dose-response functions for significant results
-
-```{r}
-targets::tar_load(
-  dplyr::matches("marginal_gcomp_(\\d)$"),
-  store = store
-)
-```
-
-::: {#suppfig-adrfs-rq3}
-```{r adrfs-rq3}
-#| fig-width: 6
-#| fig-height: 7
-
-exposures_of_interest <- c(
-  "cortisol production",
-  "X11bHSD"
-)
-ret_adrfs <- lapply(
-  exposures_of_interest, function(x) {
-    plot_adrf(
-      df_preds = marginal_gcomp_3 |>
-        tidylog::filter(
-          variable == x
-        )
-    )
-  }
-)
-ret_adrfs[[1]]
-#ret_adrfs[[2]]
-```
-Average dose-response functions for...
-:::
-
 ## Figures for other results
 
 ### Marginal comparisons for effect modification

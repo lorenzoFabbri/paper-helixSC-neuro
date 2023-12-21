@@ -51,69 +51,9 @@ desc_chems_mets$desc_chems
 desc_chems_mets$desc_mets
 ```
 
-# Tables for main results
-
-## Marginal comparisons
-
-```{r}
-#| eval: false
-#| echo: false
-
-targets::tar_load(
-  dplyr::matches("marginal_comparisons_(\\d)$"),
-  store = store
-)
-```
-
-```{r marginal-1}
-#| eval: false
-#| echo: false
-#| label: tbl-marginal-1
-#| tbl-cap: Marginal comparison results for $hitrtse \sim edc$
-
-tidy_res_meffects(
-  df = marginal_comparisons_1,
-  sa_var = NULL,
-  outcome = NULL,
-  which_res = "comparisons",
-  num_digits_est = num_digits_est,
-  num_digits_sig = num_digits_sig
-)$table
-```
-
-```{r marginal-2}
-#| eval: false
-#| echo: false
-#| label: tbl-marginal-2
-#| tbl-cap: Marginal comparison results for $metabolite \sim edc$
-
-tidy_res_meffects(
-  df = marginal_comparisons_2,
-  sa_var = NULL,
-  which_res = "comparisons",
-  num_digits_est = num_digits_est,
-  num_digits_sig = num_digits_sig
-)$table
-```
-
-```{r marginal-3}
-#| eval: false
-#| echo: false
-#| label: tbl-marginal-3
-#| tbl-cap: Marginal comparison results for $hitrtse \sim metabolite$
-
-tidy_res_meffects(
-  df = marginal_comparisons_3,
-  sa_var = NULL,
-  which_res = "comparisons",
-  num_digits_est = num_digits_est,
-  num_digits_sig = num_digits_sig
-)$table
-```
-
 # Tables for other analyses
 
-## Marginal hypothesis
+## Marginal hypotheses for effect modification
 
 ```{r}
 targets::tar_load(

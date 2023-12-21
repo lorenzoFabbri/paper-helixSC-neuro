@@ -255,15 +255,54 @@ The effective sample sizes before and after balancing weights estimation are pre
 @Fig-marginal-2 presents the forest plot for the marginal effects of the non-persistent \acr{edcs} on cortisone production, cortisol production, and corticosterone production. Overall, a cohort-specific increase in the levels of the exposures from the 10th to the 90th percentiles was associated with a positive marginal contrast, indicating an increase in the total production of these metabolites, with the exception of BUPA, which was associated with negative marginal contrasts for all three outcomes, and MiBP, which was associated with a negative marginal contrast for total cortisone production only.
 The majority of the associations for the phenols and phthalate metabolites included the null. The phenol BPA showed the largest marginal contrasts across all three outcomes (cortisone production, `r format_res(meffects2, "bpa", "cortisone production")`; cortisol production, `r format_res(meffects1, "bpa", "cortisol production")`; corticosterone production, `r format_res(meffects1, "bpa", "corticosterone production")`).
 
-@Fig-marginal-3 presents the forest plot for the marginal effects of the corticosteroids on \acr{hitrtse}.
-
-Results are presented as effect estimate of the marginal contrast and the $95\%$ \acr{ci}.
-
-suppfig-adrfs-rq...
+@Fig-marginal-3 presents the forest plot for the marginal effects of the corticosteroids on \acr{hitrtse}. All marginal contrasts included the null, with no clear indication of directionality of the effect.
 
 ## Other analyses {#sec-res-other}
 
-- Report other analyses done (e.g., analyses of subgroups and interactions, and sensitivity analyses).
+### Effect modification by sex
+
+```{r}
+#| echo: false
+
+targets::tar_load(
+  dplyr::matches("marginal_hypothesis_(\\d)SA$"),
+  store = store
+)
+heffects1 <- tidy_res_meffects(
+  df = marginal_hypothesis_1SA,
+  sa_var = "e3sex",
+  outcome = NULL,
+  which_res = "hypothesis",
+  num_digits_est = num_digits_est,
+  num_digits_sig = num_digits_sig
+)$numerical_results
+heffects2 <- tidy_res_meffects(
+  df = marginal_hypothesis_2SA,
+  sa_var = "e3sex",
+  outcome = NULL,
+  which_res = "hypothesis",
+  num_digits_est = num_digits_est,
+  num_digits_sig = num_digits_sig
+)$numerical_results
+heffects3 <- tidy_res_meffects(
+  df = marginal_hypothesis_3SA,
+  sa_var = "e3sex",
+  outcome = NULL,
+  which_res = "hypothesis",
+  num_digits_est = num_digits_est,
+  num_digits_sig = num_digits_sig
+)$numerical_results
+```
+
+Basic summary statistics of the estimated balancing weights for effect modification are presented in Tables [-@supptbl-weights-1sa; -@supptbl-weights-2sa; -@supptbl-weights-3sa]. As expected, the median value of the weights for each exposure was close to $1.00$.
+
+@Tbl-hypothesis-1 presents the results of a hypothesis test for the difference between estimates of the marginal contrasts for females and males, for each exposure. Significant differences were present for the phenol OXBE (`r format_res(heffects1, "oxbe", "hitrtse")`) and the phthalate metabolites MEP (`r format_res(heffects1, "mep", "hitrtse")`) and MbZP (`r format_res(heffects1, "mbzp", "hitrtse")`). The forest plot of the individual marginal contrasts is presented in @suppfig-marginal-1sa.
+
+@Tbl-hypothesis-2 presents the results of a hypothesis test for the difference between estimates of the marginal contrasts for females and males, for each exposure and outcome. Significant differences were present across all three classes of \acr{edcs} and for all outcomes. The largest differences were attributable to the \acr{opps} DMTP (cortisol production, `r format_res(heffects2, "dmtp", "cortisol production")`) and DETP (corticosterone production, (`r format_res(heffects2, "detp", "corticosterone production")`); cortisone production, (`r format_res(heffects2, "detp", "cortisone production")`)). The forest plots of the individual marginal contrasts are presented in @suppfig-marginal-2sa.
+
+@Tbl-hypothesis-3 presents the results of a hypothesis test for the difference between estimates of the marginal contrasts for females and males, for each exposure. Significant differences were present for cortisone production (`r format_res(heffects3, "cortisone prod.", "hitrtse")`) and corticosterone production (`r format_res(heffects3, "corticost. prod.", "hitrtse")`). Furthermore, for all exposures, the marginal contrasts had opposite sign (positive for males and negative for females). The forest plot of the individual marginal contrasts is presented in @suppfig-marginal-3sa.
+
+### Sensitivity to exposure assessment
 
 # Discussion {#sec-discussion}
 
@@ -289,10 +328,6 @@ We decided to model both the *treatment* mechanisms, for the estimation of balan
 - Give a cautious overall interpretation of results considering objectives, limitations, multiplicity of analyses, results from similar studies, and other relevant evidence.
 
 In conclusion, in a study of...
-
-{{< pagebreak >}}
-
-# Funding
 
 {{< pagebreak >}}
 
