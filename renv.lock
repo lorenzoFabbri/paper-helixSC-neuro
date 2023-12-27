@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.3.2",
+    "Version": "4.3.0",
     "Repositories": [
       {
         "Name": "BioCsoft",
@@ -36,15 +36,15 @@
       "Repository": "CRAN",
       "Hash": "85bf3bd8fa58da21a22d84fd4f4ef0a8"
     },
-    "FNN": {
-      "Package": "FNN",
-      "Version": "1.1.3.2",
+    "DEoptimR": {
+      "Package": "DEoptimR",
+      "Version": "1.1-3",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
-        "R"
+        "stats"
       ],
-      "Hash": "e9e53a559ef99e0c02bc2f9a944f0bee"
+      "Hash": "72f87e0092e39384aee16df8d67d7410"
     },
     "Formula": {
       "Package": "Formula",
@@ -308,6 +308,35 @@
       ],
       "Hash": "435359b59b8a9b8f9235135da471ea3c"
     },
+    "VIM": {
+      "Package": "VIM",
+      "Version": "6.2.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "MASS",
+        "R",
+        "Rcpp",
+        "car",
+        "colorspace",
+        "data.table",
+        "e1071",
+        "grDevices",
+        "graphics",
+        "grid",
+        "laeken",
+        "magrittr",
+        "methods",
+        "nnet",
+        "ranger",
+        "robustbase",
+        "sp",
+        "stats",
+        "utils",
+        "vcd"
+      ],
+      "Hash": "48f4f87cfb5037ed4dfda9af8261166f"
+    },
     "WeightIt": {
       "Package": "WeightIt",
       "Version": "0.14.2",
@@ -405,6 +434,22 @@
         "backports"
       ],
       "Hash": "0c54cf3a08cc0e550fbd64ad33166143"
+    },
+    "bayestestR": {
+      "Package": "bayestestR",
+      "Version": "0.13.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "datawizard",
+        "graphics",
+        "insight",
+        "methods",
+        "stats",
+        "utils"
+      ],
+      "Hash": "61f643ea5ee9fe0e70ab0246340b3c2e"
     },
     "bigD": {
       "Package": "bigD",
@@ -686,6 +731,19 @@
       ],
       "Hash": "426a04600c755952486b5242e55e3baf"
     },
+    "class": {
+      "Package": "class",
+      "Version": "7.3-22",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "MASS",
+        "R",
+        "stats",
+        "utils"
+      ],
+      "Hash": "f91f6b29f38b8c280f2b9477787d4bb2"
+    },
     "cli": {
       "Package": "cli",
       "Version": "3.6.2",
@@ -932,6 +990,19 @@
       ],
       "Hash": "6ea17a32294d8ca00455825ab0cf71b9"
     },
+    "datawizard": {
+      "Package": "datawizard",
+      "Version": "0.9.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "insight",
+        "stats",
+        "utils"
+      ],
+      "Hash": "51cf8172b52cfa5b4b988c73c37accfa"
+    },
     "desc": {
       "Package": "desc",
       "Version": "1.4.3",
@@ -1066,6 +1137,22 @@
         "vctrs"
       ],
       "Hash": "fedd9d00c2944ff00a0e2696ccf048ec"
+    },
+    "e1071": {
+      "Package": "e1071",
+      "Version": "1.7-14",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "class",
+        "grDevices",
+        "graphics",
+        "methods",
+        "proxy",
+        "stats",
+        "utils"
+      ],
+      "Hash": "4ef372b716824753719a8a38b258442d"
     },
     "ellipsis": {
       "Package": "ellipsis",
@@ -1618,9 +1705,9 @@
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteRepo": "glossary",
       "RemoteUsername": "psyteachr",
-      "RemoteRef": "HEAD",
+      "RemoteRepo": "glossary",
+      "RemoteRef": "master",
       "RemoteSha": "afad260aeacd519a5921dffd1dd3dfc864aee184",
       "Requirements": [
         "R.utils",
@@ -1642,7 +1729,7 @@
         "webexercises",
         "xml2"
       ],
-      "Hash": "711903613ebb60596aa31b2c26d25c04"
+      "Hash": "7e481ebb49bc8d1f888fe744c069a68e"
     },
     "glue": {
       "Package": "glue",
@@ -2180,6 +2267,18 @@
       ],
       "Hash": "1ec27c624ece6c20431e9249bd232797"
     },
+    "laeken": {
+      "Package": "laeken",
+      "Version": "0.5.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "MASS",
+        "R",
+        "boot"
+      ],
+      "Hash": "c925bf1563ee407d4ced4f3b3cf2ba5f"
+    },
     "later": {
       "Package": "later",
       "Version": "1.3.2",
@@ -2292,6 +2391,19 @@
         "stats"
       ],
       "Hash": "f04948de84602afc23bfa9f5427e954d"
+    },
+    "lmtest": {
+      "Package": "lmtest",
+      "Version": "0.9-40",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "graphics",
+        "stats",
+        "zoo"
+      ],
+      "Hash": "c6fafa6cccb1e1dfe7f7d122efd6e6a7"
     },
     "lmtp": {
       "Package": "lmtp",
@@ -2455,20 +2567,6 @@
       ],
       "Hash": "f48238f8d4740426ca12f53f27d004dd"
     },
-    "missRanger": {
-      "Package": "missRanger",
-      "Version": "2.4.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "FNN",
-        "R",
-        "ranger",
-        "stats",
-        "utils"
-      ],
-      "Hash": "524ac6d1df47e52d21f55e0da5f46688"
-    },
     "mitml": {
       "Package": "mitml",
       "Version": "0.4-5",
@@ -2544,9 +2642,10 @@
       "RemoteUsername": "isglobal-cep",
       "RemoteRepo": "myphd",
       "RemoteRef": "HEAD",
-      "RemoteSha": "80aaefd20ad59021767a112645d21a5b5e848054",
+      "RemoteSha": "ad393de6393778898d0582def0d34f5b0fe6bf70",
       "RemoteHost": "api.github.com",
       "Requirements": [
+        "VIM",
         "WeightIt",
         "assertthat",
         "cobalt",
@@ -2566,9 +2665,10 @@
         "lifecycle",
         "lubridate",
         "mgcv",
-        "missRanger",
         "modelr",
         "naniar",
+        "patchwork",
+        "performance",
         "purrr",
         "rlang",
         "splines",
@@ -2579,7 +2679,7 @@
         "tmvtnorm",
         "visdat"
       ],
-      "Hash": "89c03e763f8f2c9ffd085b2238200f90"
+      "Hash": "661cf5ba0f40bd18fb1aeec6a87a997a"
     },
     "naniar": {
       "Package": "naniar",
@@ -2763,7 +2863,7 @@
       "RemoteType": "github",
       "RemoteUsername": "crsh",
       "RemoteRepo": "papaja",
-      "RemoteRef": "HEAD",
+      "RemoteRef": "main",
       "RemoteSha": "4df1164c09bea0bc2910b100b30ddf85bbbd3a3b",
       "RemoteHost": "api.github.com",
       "Requirements": [
@@ -2780,7 +2880,7 @@
         "yaml",
         "zip"
       ],
-      "Hash": "df0ce171745cf2ed6a34e141426459e0"
+      "Hash": "fb8716faf3a2910b176179c4bcb05fee"
     },
     "parallelly": {
       "Package": "parallelly",
@@ -2850,6 +2950,22 @@
         "parallel"
       ],
       "Hash": "3b5b99f4d3f067bb9c1d59317d071370"
+    },
+    "performance": {
+      "Package": "performance",
+      "Version": "0.10.8",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "bayestestR",
+        "datawizard",
+        "insight",
+        "methods",
+        "stats",
+        "utils"
+      ],
+      "Hash": "92873fb57cc5b73fe2aa0b09056a789a"
     },
     "permute": {
       "Package": "permute",
@@ -3017,6 +3133,18 @@
         "stats"
       ],
       "Hash": "0d8a15c9d000970ada1ab21405387dee"
+    },
+    "proxy": {
+      "Package": "proxy",
+      "Version": "0.4-27",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "stats",
+        "utils"
+      ],
+      "Hash": "e0ef355c12942cf7a6b91a6cfaea8b3e"
     },
     "ps": {
       "Package": "ps",
@@ -3299,6 +3427,21 @@
       ],
       "Hash": "d2e1277195d221e6118d8a77dda2e877"
     },
+    "robustbase": {
+      "Package": "robustbase",
+      "Version": "0.99-1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "DEoptimR",
+        "R",
+        "graphics",
+        "methods",
+        "stats",
+        "utils"
+      ],
+      "Hash": "3adb5cc6a5cc5650cb4569204a3209c3"
+    },
     "rpart": {
       "Package": "rpart",
       "Version": "4.1.23",
@@ -3572,6 +3715,23 @@
         "R"
       ],
       "Hash": "5f5a7629f956619d519205ec475fe647"
+    },
+    "sp": {
+      "Package": "sp",
+      "Version": "2.1-2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "grDevices",
+        "graphics",
+        "grid",
+        "lattice",
+        "methods",
+        "stats",
+        "utils"
+      ],
+      "Hash": "40a9887191d33b2521a1d741f8c8aea2"
     },
     "stringi": {
       "Package": "stringi",
@@ -3964,6 +4124,23 @@
         "R"
       ],
       "Hash": "62b65c52671e6665f803ff02954446e9"
+    },
+    "vcd": {
+      "Package": "vcd",
+      "Version": "1.4-11",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "MASS",
+        "R",
+        "colorspace",
+        "grDevices",
+        "grid",
+        "lmtest",
+        "stats",
+        "utils"
+      ],
+      "Hash": "bc6c0945029585c46a3a6854d8642ff8"
     },
     "vctrs": {
       "Package": "vctrs",
