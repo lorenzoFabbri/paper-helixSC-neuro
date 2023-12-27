@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.3.0",
+    "Version": "4.3.2",
     "Repositories": [
       {
         "Name": "BioCsoft",
@@ -1705,9 +1705,9 @@
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteUsername": "psyteachr",
       "RemoteRepo": "glossary",
-      "RemoteRef": "master",
+      "RemoteUsername": "psyteachr",
+      "RemoteRef": "HEAD",
       "RemoteSha": "afad260aeacd519a5921dffd1dd3dfc864aee184",
       "Requirements": [
         "R.utils",
@@ -1729,7 +1729,7 @@
         "webexercises",
         "xml2"
       ],
-      "Hash": "7e481ebb49bc8d1f888fe744c069a68e"
+      "Hash": "711903613ebb60596aa31b2c26d25c04"
     },
     "glue": {
       "Package": "glue",
@@ -2863,7 +2863,7 @@
       "RemoteType": "github",
       "RemoteUsername": "crsh",
       "RemoteRepo": "papaja",
-      "RemoteRef": "main",
+      "RemoteRef": "HEAD",
       "RemoteSha": "4df1164c09bea0bc2910b100b30ddf85bbbd3a3b",
       "RemoteHost": "api.github.com",
       "Requirements": [
@@ -2880,7 +2880,7 @@
         "yaml",
         "zip"
       ],
-      "Hash": "fb8716faf3a2910b176179c4bcb05fee"
+      "Hash": "df0ce171745cf2ed6a34e141426459e0"
     },
     "parallelly": {
       "Package": "parallelly",

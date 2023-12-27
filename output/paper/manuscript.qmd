@@ -26,16 +26,14 @@ format:
 crossref:
   custom: 
     - kind: float
-      ref-type: supptbl
+      key: supptbl
       latex-env: supptbl
-      prefix: Table S
-      name: Table S
+      reference-prefix: Table S
       space-before-numbering: false
     - kind: float
-      ref-type: suppfig
+      key: suppfig
       latex-env: suppfig
-      prefix: Figure S
-      name: Figure S
+      reference-prefix: Figure S
       space-before-numbering: false
 
 bibliography: bibliography.bib
@@ -100,7 +98,6 @@ knn_k <- params_$steps$rq2$preproc_outcome$missings$k
 {{< pagebreak >}}
 
 - Authorship must follow the ICMJE's criteria. Author names should be listed in ScholarOne and author contributions should be detailed in the cover letter ("Author A..."). Neither names nor contributions should appear in the blinded manuscript. Do not include conflicts of interest.
-- The use of the word "effect(s)" as a proxy for "association(s)" is discouraged.
 - The length of the abstract must be less or equal than 200 words, and should be unstructured, stating the research questions, the methods used, and the results and conclusions of the research.
 - The length must be <4,000 words, excluding abstract, references, tables, figure captions, acknowledgments, and Supplementary Material.
 - In-text citations: full-sized Arabic numerals in parentheses within the sentence.
@@ -110,11 +107,12 @@ The prevalence of several neurodevelopmental disorders has increased in the pedi
 
 \acr{opps} might have a deleterious effect on neurodevelopment, although the few studies conducted on children and using a biological matrix for exposure assessment suffered from a series of limitations, including a small sample size and few \acr{opp} metabolites measured [@RamirezGalvez-OntiverosGonzalez-Domenech:2022]. Phthalates and their metabolites have been associated to several adverse effects on neurodevelopment [@RamirezGalvez-OntiverosGonzalez-Domenech:2022]. Similarly, these studies focused on few phthalates metabolites and were conducted in small populations. On the other hand, the effects of exposure to \acr{bpa} on cognitive functions are still unclear [@RamirezGalvez-OntiverosGonzalez-Domenech:2022].
 
-Another major limitation of these epidemiological studies, especially when non-persistent chemicals are analyzed, is the reliance on single-spot urine samples for exposure assessment, which might not be representative of long-term exposures.
+There is furthermore evidence that exposure to certain \acr{edcs}, specifically phthalates, might interfere with the \acr{hpa} axis and might interact with the glucocorticoid receptor [@KimLeeMoon:2018; @SunLiJin:2018; @SearsLiuLanphear:2023].
 
-Something about corticosteroids...
+Finally, the development of the fetal brain is regulated by, among others, glucocorticoids [@SunLiJin:2018], with regulation of their homeostasis being crucial for neurodevelopment in childhood [@SearsLiuLanphear:2023].
 
-In the present study, we estimated associations between 1) non-persistent \acr{edcs} and attention, 2) non-persistent \acr{edcs} and corticosteroids, and 3) corticosteroids and attention, using the parametric g-formula and average contrasts, in children of a large prospective birth cohort in Europe.
+Taken together, these results suggest that the negative influence of exposure to certain \acr{edcs} on neurodevelopmental outcomes, might be mediated, at least partially, by disruption of the \acr{hpa} axis' homeostasis.
+In the present study, we thus estimated associations between 1) non-persistent \acr{edcs} and attention, 2) non-persistent \acr{edcs} and corticosteroids, and 3) corticosteroids and attention, using the parametric g-formula and average contrasts, in children of a large prospective birth cohort in Europe.
 
 # Methods {#sec-methods}
 
@@ -306,7 +304,16 @@ Basic summary statistics of the estimated balancing weights for effect modificat
 
 # Discussion {#sec-discussion}
 
+The impact of exposure to (non-persistent) \acr{edcs} on human health has attracted considerable research interest. While research in this area has mainly investigated the effects of prenatal exposure on child neurodevelopment [@RamirezGalvez-OntiverosGonzalez-Domenech:2022], little is still known about later-in-life exposure and childhood neurodevelopment. In this study, consisting of almost 1,000 children from 6 European birth cohorts, we observed that short-term childhood exposure to non-persistent \acr{edcs} had negative effects on \acr{hitrtse} and total production of cortisol, cortisone, and corticosterone, with the majority of the \acr{ci}s including the null effect. Increased production of these glucocorticoids did not seem to affect \acr{hitrtse}. Some of these effects differed for females and males, including significant differences for the effects of increased production of cortisone and corticosterone on \acr{hitrtse}. Specifically, an increased production of these glucocorticoids was associated with lower values of \acr{hitrtse} for females, and higher values for males. Taken together, these results suggest that these non-persistent \acr{edcs} might be responsible for perturbations of the \acr{hpa} axis' homeostasis, and that higher levels of these glucocorticoids might interfere with different functions of attention in a sex-specific manner.
 
+Our results are consistent with prior research that associated exposure to certain \acr{edcs} with higher levels of urinary cortisol [@KimLeeMoon:2018; @SearsLiuLanphear:2023]. Contrary to these prior studies, we did find effect modification by sex. We are not aware of other epidemiological studies investigating phthalates metabolites, phenols, and \acr{opps}, in relation to urinary glucocorticoids in childhood.
+We are also not aware of prior studies specifically investigating the effects of exposure to \acr{edcs} and elevated levels of glucocorticoids in relation to \acr{hitrtse}.
+
+[] EDCs to HITRTSE
+[X] EDCs to CORT.
+[] CORT. to HITRTSE
+
+---
 
 These findings should be interpreted in light of the following limitations and strengths.
 
