@@ -117,7 +117,7 @@ list(
           by = by,
           is_hcp = FALSE,
           parallel = TRUE,
-          workers = 3
+          workers = 4
         ),
         env = list(all_fits = as.symbol(paste0(rq, "_weighted_fits")))
       )
