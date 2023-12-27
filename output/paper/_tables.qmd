@@ -20,6 +20,8 @@
 here::i_am("output/paper/_tables.qmd")
 ```
 
+**Table titles should give details on the place of the study, the time of the study, and the study population (if applicable). Example, “Baseline Characteristics of Infants With Initial and Follow-up Screening, London, United Kingdom, 2001–2003.” In the table body, leave blank spaces for no entry; avoid using dashes. Order of footnotes: 1) Abbreviations: (no footnote symbol, listed alphabetically, separated by semicolons); 2) other footnotes as necessary, each preceded by a superscript lowercase letter. Footnotes must be cited in order when reading from left to right and top to bottom.**
+
 # Tables for descriptive data
 
 ## Study populations

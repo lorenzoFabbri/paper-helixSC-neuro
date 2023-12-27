@@ -306,14 +306,7 @@ Basic summary statistics of the estimated balancing weights for effect modificat
 
 # Discussion {#sec-discussion}
 
-## Key results {#sec-disc-res-key}
 
-- Summarise key results with reference to study objectives.
-- Provide a review of the relevant literature to put the study findings into context.
-  - It should be complete and balanced, including inconsistent results.
-  - It should include, for each source, sufficient details: study design, sample size, population, specific exposures and outcomes.
-
-## Limitations {#sec-limitations}
 
 These findings should be interpreted in light of the following limitations and strengths.
 
@@ -321,11 +314,6 @@ Limitations include the cross-sectional design of the present study. Importantly
 
 Strengths of the present study include the use of pooled urine samples for chemical assessment, since it is known that these specific \acr{edcs} have very short half-lives [@CasasBasaganaSakhi:2018].
 We decided to model both the *treatment* mechanisms, for the estimation of balancing weights, and the outcomes, with traditional covariates adjustment, to try to obtain *doubly robust* effect estimates. Finally, we decided not to interpret our results by focusing on the estimated coefficients of the regression models, but by making use of the g-computation procedure and estimate average comparisons.
-
-## Interpretation {#sec-interpretation}
-
-- End with a summary of the key findings and their implications for the study hypotheses, future research, and policy.
-- Give a cautious overall interpretation of results considering objectives, limitations, multiplicity of analyses, results from similar studies, and other relevant evidence.
 
 In conclusion, in a study of...
 

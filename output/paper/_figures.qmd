@@ -33,6 +33,8 @@
 here::i_am("output/paper/_figures.qmd")
 ```
 
+**The figure titles and legends should be submitted as a single paragraph. The text of figure legends beyond the scale, arrow, panel locant, and axis information should not be included on the figures themselves but should be typed after the reference list. Each legend should be formatted as a separate paragraph and should include details on the place of the study, the time of the study, and the study population (if applicable). Define all figure abbreviations in the legend.**
+
 ```{r}
 # Function to align forest plot with table numerical results
 forest_plot <- function(obj, r = 4) {
