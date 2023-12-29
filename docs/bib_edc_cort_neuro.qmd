@@ -1,0 +1,299 @@
+---
+title: "Some references on EDCs, corticosteroids, and neurodevelopment"
+
+format:
+  pdf:
+    pdf-engine: pdflatex
+    number-sections: true
+    number-depth: 2
+    toc: true
+    toc-depth: 2
+
+bibliography: ../output/paper/bibliography.bib
+
+link-citations: true
+linkcolor: blue
+
+execute:
+  echo: false
+  warning: false
+  error: false
+  message: false
+
+editor_options:
+  chunk_output_type: console
+---
+
+``` {r template}
+#| echo: false
+#| eval: false
+
+## @
+
+- Title: **.
+- Exposures: .
+- Medium exposure assessment: .
+- Timing exposure assessment: .
+- Outcomes: .
+- Medium outcome assessment: .
+- Timing outcome assessment: .
+- Results:
+    - .
+- Sex-specific results: .
+```
+
+# EDCs and neurodevelopment
+
+## @BouchardBellingerWright:2010
+
+- Title: *Attention-Deficit/Hyperactivity Disorder and Urinary Metabolites of Organophosphate Pesticides*.
+- Exposures: dialkylphosphate metabolites (biomarkers of organophosphate pesticide exposure).
+- Medium exposure assessment: spot urine samples.
+- Timing exposure assessment: ages 8-15.
+- Outcomes: ADHD diagnostic status.
+- Timing outcome assessment: ages 8-15.
+- Results:
+  - Exposure to OP pesticides might contribute to ADHD.
+- Sex-specific results: NA.
+
+## @CartierWarembourgLeManer-Idrissi:2016
+
+- Title: *Organophosphate Insecticide Metabolites in Prenatal and Childhood Urine Samples and Intelligence Scores at 6 Years of Age: Results from the Mother–Child PELAGIE Cohort*.
+- Exposures: dialkylphosphate metabolites (biomarkers of organophosphate pesticide exposure).
+- Medium exposure assessment: spot urine samples.
+- Timing exposure assessment: age 6.
+- Outcomes: Wechsler Intelligence Scale for Children.
+- Timing outcome assessment: age 6.
+- Results:
+  - No association between total DAP metabolites and WISC scores.
+  - WISC working memory score inversely associated with levels of DE metabolites.
+- Sex-specific results: NA.
+
+## @FurlongHerringBuckley:2017
+
+- Title: *Prenatal exposure to organophosphorus pesticides and childhood neurodevelopmental phenotypes*.
+- Exposures: organophosphorus pesticides. Total diethylphosphate and total dimethylphosphate.
+- Medium exposure assessment: spot urine samples.
+- Timing exposure assessment: prenatal between 25 and 40 weeks of gestation.
+- Outcomes: behavior, executive functioning, and IQ.
+- Timing outcome assessment: ages 6–9.
+- Results:
+  - Dimethylphosphate metabolites negatively associated with Internalizing factor scores.
+  - Dimethylphosphate metabolites positively associated with Executive Functioning factor scores.
+  - Diethylphosphate metabolites negatively associated with Working Memory Index.
+- Sex-specific results: no interactions by sex.
+
+## @
+
+- Title: **.
+- Exposures: .
+- Medium exposure assessment: .
+- Timing exposure assessment: .
+- Outcomes: .
+- Medium outcome assessment: .
+- Timing outcome assessment: .
+- Results:
+    - .
+- Sex-specific results: .
+
+## @Gonzalez-AlzagaHernandezRodriguez-Barranco:2015
+
+- Title: *Pre- and postnatal exposures to pesticides and neurodevelopmental effects in children living in agricultural communities from South-Eastern Spain*.
+- Exposures: dialkylphosphate metabolites (biomarkers of organophosphate pesticide exposure).
+- Medium exposure assessment: urine samples.
+- Timing exposure assessment: ages 6-11.
+- Outcomes: Wechsler Intelligence Scale for Children.
+- Timing outcome assessment: ages 6-11.
+- Results:
+  - DAP levels inversely associated with performance on intelligence quotient and verbal comprehension domain.
+- Sex-specific results: stronger associations in males.
+
+## @HuangChenSu:2015
+
+- Title: *Association of Exposure to Endocrine-Disrupting Chemicals During Adolescence With Attention-Deficit/Hyperactivity Disorder–Related Behaviors*.
+- Exposures: seven metabolite of phthalate esters.
+- Medium exposure assessment: urine samples.
+- Timing exposure assessment: prenatal and at ages 2, 5, 8, and 11.
+- Outcomes: Bayley and Wechsler tests for assessing neurocognitive functions and intelligence (IQ).
+- Timing outcome assessment: ages 2, 5, 8, and 11.
+- Results:
+  - Children’s phthalate exposure (MEOHP and sum of DEHP metabolites) inversely associated with cognitive development.
+- Sex-specific results: NA.
+
+## @HuangTsaiChen:2017
+
+- Title: *Intellectual evaluation of children exposed to phthalate-tainted products after the 2011 Taiwan phthalate episode*.
+- Exposures: 5 phthalate metabolites.
+- Medium exposure assessment: first-morning urine samples.
+- Timing exposure assessment: ages 3-12.
+- Outcomes: Wechsler tests for assessing the children's intelligence quotient.
+- Timing outcome assessment: ages 3-12.
+- Results:
+  - MEOHP, MnBP, and MiBP inversely associated with verbal intelligence.
+- Sex-specific results: NA.
+
+## @KimHongShin:2017
+
+- Title: *The effects of maternal and children phthalate exposure on the neurocognitive function of 6-year-old children*.
+- Exposures: phthalate metabolites.
+- Medium exposure assessment: urine samples.
+- Timing exposure assessment: age 6
+- Outcomes: IQ scores and continuous performance test variables.
+- Timing outcome assessment: age 6.
+- Results:
+  - DEHP metabolites (including MEHHP and MEOHP) inversely associated with intelligence, attention, and response time variability.
+- Sex-specific results: NA.
+
+## @LiZhangKuang:2018
+
+- Title: *Relationship between bisphenol A exposure and attention-deficit/ hyperactivity disorder: A case-control study for primary school children in Guangzhou, China*.
+- Exposures: bisphenol-A.
+- Medium exposure assessment: spot urine samples.
+- Timing exposure assessment: ages 6-12.
+- Outcomes: ADHD.
+- Timing outcome assessment: ages 6-12.
+- Results:
+  - Positive association between BPA levels and odds of ADHD.
+- Sex-specific results: stronger associations in males.
+
+## @
+
+- Title: **.
+- Exposures: .
+- Medium exposure assessment: .
+- Timing exposure assessment: .
+- Outcomes: .
+- Medium outcome assessment: .
+- Timing outcome assessment: .
+- Results:
+    - .
+- Sex-specific results: .
+
+## @Rodriguez-CarrilloMustielesPerez-Lobato:2019
+
+- Title: *Bisphenol A and cognitive function in school-age boys: Is BPA predominantly related to behavior?*.
+- Exposures: bisphenol-A.
+- Medium exposure assessment: spot urine samples.
+- Timing exposure assessment: ages 9-11.
+- Outcomes: comprehensive neuropsychological test battery.
+- Timing outcome assessment: ages 9-11.
+- Results:
+  - No consistent association between BPA levels and cognitive abilities.
+  - Possible inverse association between BPA levels and working memory.
+- Sex-specific results: assessment only in males.
+
+## @ShoaffCoullWeuve:2020
+
+- Title: *Association of Exposure to Endocrine-Disrupting Chemicals During Adolescence With Attention-Deficit/Hyperactivity Disorder–Related Behaviors*.
+- Exposures: phthalates, parabens, phenols, and triclocarban.
+- Medium exposure assessment: urine samples.
+- Timing exposure assessment: age 15.3
+- Outcomes: Conners Attention Deficit Scale and the Behavior Assessment System for Children.
+- Timing outcome assessment: age 15.3
+- Results:
+  - Exposure to antiandrogenic phthalates increases the risk of ADHD-related behavior problems.
+- Sex-specific results: stronger associations in males.
+
+## @TewarAuingerBraun:2016
+
+- Title: *Association of Bisphenol A exposure and Attention-Deficit/Hyperactivity Disorder in a national sample of U.S. children*.
+- Exposures: bisphenol-A.
+- Medium exposure assessment: spot urine samples.
+- Timing exposure assessment: ages 8-15.
+- Outcomes: presence of ADHD in the past year.
+- Timing outcome assessment: ages 8-15.
+- Results:
+  - Positive association between BPA levels and ADHD.
+- Sex-specific results: stronger associations in males.
+
+## @
+
+- Title: **.
+- Exposures: .
+- Medium exposure assessment: .
+- Timing exposure assessment: .
+- Outcomes: .
+- Medium outcome assessment: .
+- Timing outcome assessment: .
+- Results:
+    - .
+- Sex-specific results: .
+
+## @YuDuChiou:2016
+
+- Title: *Increased risk of attention-deficit/hyperactivity disorder associated with exposure to organophosphate pesticide in Taiwanese children*.
+- Exposures: dialkylphosphate metabolites (biomarkers of organophosphate pesticide exposure).
+- Medium exposure assessment: urine samples.
+- Timing exposure assessment: ages 4-15.
+- Outcomes: ADHD.
+- Timing outcome assessment: ages 4-15.
+- Results:
+  - Dose–response relationship between urinary concentrations of dimethylphosphate and ADHD.
+- Sex-specific results: NA.
+
+TODO:
+
+- Gascon et al. 2015
+- Oh et al. 2023
+- Vilmand et al. 2023
+
+---
+
+# EDCs and glucocorticosteroids
+
+## @
+
+- Title: **.
+- Exposures: .
+- Medium exposure assessment: .
+- Timing exposure assessment: .
+- Outcomes: .
+- Medium outcome assessment: .
+- Timing outcome assessment: .
+- Results:
+    - .
+- Sex-specific results: .
+
+## @SearsLiuLanphear:2023
+
+- Title: *Evaluating mixtures of urinary phthalate metabolites and serum per-/polyfluoroalkyl substances in relation to adolescent hair cortisol: The HOME Study*.
+- Exposures: phthalate metabolites.
+- Medium exposure assessment: spot urine samples.
+- Timing exposure assessment: ages 1-5 and 8.
+- Outcomes: cortisol.
+- Medium outcome assessment: hair.
+- Timing outcome assessment: age 12.
+- Results:
+    - Positive association between mixture of phthalates metabolites measured in childhood and hair cortisol measured in adolescence. Driven by MEP, MiBP, MBzP.
+- Sex-specific results: no evidence of modification by sex.
+
+## @
+
+- Title: **.
+- Exposures: .
+- Medium exposure assessment: .
+- Timing exposure assessment: .
+- Outcomes: .
+- Medium outcome assessment: .
+- Timing outcome assessment: .
+- Results:
+    - .
+- Sex-specific results: .
+
+TODO:
+
+- Kim et al. 2018
+- Sun et al. 2018
+
+---
+
+# Glucocorticosteroids and neurodevelopment
+
+
+
+---
+
+# References {.unnumbered}
+
+::: {#refs}
+:::
