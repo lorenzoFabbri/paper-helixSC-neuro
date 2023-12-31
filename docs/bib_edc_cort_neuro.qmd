@@ -1,5 +1,5 @@
 ---
-title: "Some references on EDCs, corticosteroids, and neurodevelopment"
+title: "Some references on EDCs, glucocorticosteroids, and neurodevelopment"
 
 format:
   pdf:
@@ -83,19 +83,6 @@ editor_options:
   - Diethylphosphate metabolites negatively associated with Working Memory Index.
 - Sex-specific results: no interactions by sex.
 
-## @
-
-- Title: **.
-- Exposures: .
-- Medium exposure assessment: .
-- Timing exposure assessment: .
-- Outcomes: .
-- Medium outcome assessment: .
-- Timing outcome assessment: .
-- Results:
-    - .
-- Sex-specific results: .
-
 ## @Gonzalez-AlzagaHernandezRodriguez-Barranco:2015
 
 - Title: *Pre- and postnatal exposures to pesticides and neurodevelopmental effects in children living in agricultural communities from South-Eastern Spain*.
@@ -156,18 +143,24 @@ editor_options:
   - Positive association between BPA levels and odds of ADHD.
 - Sex-specific results: stronger associations in males.
 
-## @
+## @OhKimKannan:2023
 
-- Title: **.
-- Exposures: .
-- Medium exposure assessment: .
-- Timing exposure assessment: .
-- Outcomes: .
-- Medium outcome assessment: .
-- Timing outcome assessment: .
+- Title: *Early childhood exposure to environmental phenols and parabens, phthalates, organophosphate pesticides, and trace elements in association with attention de cit hyperactivity disorder (ADHD) symptoms in the CHARGE study*.
+- Exposures: phenols/parabens, phthalates, OP pesticides, trace elements.
+- Medium exposure assessment: spot urine samples.
+- Timing exposure assessment: ages 2-5.
+- Outcomes: ADHD symptoms.
+- Timing outcome assessment: ages 2-5.
 - Results:
-    - .
-- Sex-specific results: .
+    - Positive associations of MECPP and MEHHP with Hyperactivity subscale scores and hyperactivity/impulsivity subdomain scores.
+    - Positive associations of MNBP with hyperactivity/impulsivity subdomain scores.
+    - Inverse associations of TCS with Hyperactivity subscale scores.
+    - Inverse associations of TCS with inattention subdomain scores.
+    - Positive associations of mixture of phthalates with scores of the ABC Hyperactivity subscale and hyperactivity/impulsivity subdomain.
+      - Drivers by subdomain, hyperactivity/impulsivity subdomain: MHPP, MEHHP, and MBZP.
+    - Positive associations of mixture of phenols/parabens with inattention subdomain score.
+      - Drivers by subdomain, inattention subdomain: MEPB, PRPB, and OHMEP.
+- Sex-specific results: association of mixture of phthalates with hyperactivity-related subscale and subdomain significant in males only.
 
 ## @Rodriguez-CarrilloMustielesPerez-Lobato:2019
 
@@ -206,18 +199,17 @@ editor_options:
   - Positive association between BPA levels and ADHD.
 - Sex-specific results: stronger associations in males.
 
-## @
+## @VilmandBeckBilenberg:2023
 
-- Title: **.
-- Exposures: .
-- Medium exposure assessment: .
-- Timing exposure assessment: .
-- Outcomes: .
-- Medium outcome assessment: .
-- Timing outcome assessment: .
+- Title: *Prenatal and current phthalate exposure and cognitive development in 7-year-old children from the Odense child cohort*.
+- Exposures: phthalates metabolites.
+- Medium exposure assessment: spot urine samples.
+- Timing exposure assessment: 7 years.
+- Outcomes: IQ (subtests from Wechsler Intelligence Scale for Children).
+- Timing outcome assessment: 7 years.
 - Results:
-    - .
-- Sex-specific results: .
+    - Inverse associations of MCPP, sum of DnHxPm, sum of DiDPm, and sum of DiNPm with IQ points.
+- Sex-specific results: no evidence of effect modification by sex.
 
 ## @YuDuChiou:2016
 
@@ -231,28 +223,22 @@ editor_options:
   - Dose–response relationship between urinary concentrations of dimethylphosphate and ADHD.
 - Sex-specific results: NA.
 
-TODO:
-
-- Gascon et al. 2015
-- Oh et al. 2023
-- Vilmand et al. 2023
-
 ---
 
 # EDCs and glucocorticosteroids
 
-## @
+## @KimLeeMoon:2018
 
-- Title: **.
-- Exposures: .
-- Medium exposure assessment: .
-- Timing exposure assessment: .
-- Outcomes: .
-- Medium outcome assessment: .
-- Timing outcome assessment: .
+- Title: *Association of phthalate exposures with urinary free cortisol and 8-hydroxy-2'-deoxyguanosine in early childhood*.
+- Exposures: four phthalate metabolites.
+- Medium exposure assessment: spot urine samples.
+- Timing exposure assessment: prenatal and at ages 0, 3, 9, 12, 15 months.
+- Outcomes: free cortisol.
+- Medium outcome assessment: spot urine samples.
+- Timing outcome assessment: prenatal and at ages 0, 3, 9, 12, 15 months.
 - Results:
-    - .
-- Sex-specific results: .
+    - Positive associations between MEHHP, MEOHP, MiBP, and MnBP, with free cortisol.
+- Sex-specific results: no evidence of modification by sex.
 
 ## @SearsLiuLanphear:2023
 
@@ -267,29 +253,33 @@ TODO:
     - Positive association between mixture of phthalates metabolites measured in childhood and hair cortisol measured in adolescence. Driven by MEP, MiBP, MBzP.
 - Sex-specific results: no evidence of modification by sex.
 
-## @
+## @SunLiJin:2018
 
-- Title: **.
-- Exposures: .
-- Medium exposure assessment: .
-- Timing exposure assessment: .
-- Outcomes: .
-- Medium outcome assessment: .
-- Timing outcome assessment: .
+- Title: *Associations between repeated measures of maternal urinary phthalate metabolites during pregnancy and cord blood glucocorticoids*.
+- Exposures: phthalate metabolites.
+- Medium exposure assessment: spot urine samples.
+- Timing exposure assessment: 14, 24, and 36 weeks of gestation.
+- Outcomes: cortisol and cortisone.
+- Medium outcome assessment: cord blood.
+- Timing outcome assessment: 14, 24, and 36 weeks of gestation.
 - Results:
-    - .
-- Sex-specific results: .
-
-TODO:
-
-- Kim et al. 2018
-- Sun et al. 2018
+    - Positive association of MEHP 3rd trimester with cortisol.
+    - Inverse association of MECPP and MEOHP 3rd trimester with cortisone.
+    - Positive association of MBzP 1st trimester with cortisol/cortisone ration.
+- Sex-specific results: evidence of modification by sex, but not significant.
+    - Females: positive associations with glucocorticoids (MEHP and MBzP 1st trimester, and DEHP 3rd trimester).
+    - Males: inverse associations with glucocorticoids (MECPP, MEHHP, and MEOHP 3rd trimester).
 
 ---
 
 # Glucocorticosteroids and neurodevelopment
 
+## @LupienMcEwenGunnar:2009
 
+- Title: *Effects of stress throughout the lifespan on the brain, behaviour and cognition*.
+
+The HPA axis, which can be activated by stress, is responsible for the production of glucocorticoids. The brain, and its proper functioning, is a potential target, due to the presence of receptors for these hormones.
+Glucocorticoids are necessary for brain maturation, although their under- or over-production might interfere with its normal development and ultimately lead to long-term impaired functioning.
 
 ---
 

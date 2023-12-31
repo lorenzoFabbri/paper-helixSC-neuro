@@ -74,7 +74,7 @@
     },
     "Matrix": {
       "Package": "Matrix",
-      "Version": "1.6-3",
+      "Version": "1.6-4",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -87,7 +87,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "1d1b6901cf9b6b1b446bc56a7d47efa4"
+      "Hash": "d9c655b30a2edc6bb2244c1d1e8d549d"
     },
     "MatrixModels": {
       "Package": "MatrixModels",
@@ -500,7 +500,7 @@
     },
     "boot": {
       "Package": "boot",
-      "Version": "1.3-28",
+      "Version": "1.3-28.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -508,7 +508,7 @@
         "graphics",
         "stats"
       ],
-      "Hash": "0baa960e3b49c6176a4f42addcbacc59"
+      "Hash": "9a052fbcbe97a98ceb18dbfd30ebd96e"
     },
     "brio": {
       "Package": "brio",
@@ -1056,11 +1056,11 @@
       "Version": "0.6.3",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "dlookr",
       "RemoteUsername": "choonghyunryu",
+      "RemoteRepo": "dlookr",
       "RemoteRef": "HEAD",
-      "RemoteSha": "79257ae54e6531a060248a626841d4367cfeb209",
+      "RemoteSha": "f21e899e0d947aaaf05f8db4cb556d305f39bf4a",
+      "RemoteHost": "api.github.com",
       "Requirements": [
         "R",
         "dplyr",
@@ -1087,7 +1087,7 @@
         "tidyselect",
         "utils"
       ],
-      "Hash": "aba9046e069fb8b20e9399d1a0430067"
+      "Hash": "fe813e977b583a103d7765086da78b72"
     },
     "downlit": {
       "Package": "downlit",
@@ -2679,7 +2679,7 @@
     },
     "nlme": {
       "Package": "nlme",
-      "Version": "3.1-163",
+      "Version": "3.1-164",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -2689,7 +2689,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "8d1938040a05566f4f7a14af4feadd6b"
+      "Hash": "a623a2239e642806158bc4dc3f51565d"
     },
     "nloptr": {
       "Package": "nloptr",
@@ -4076,7 +4076,7 @@
     },
     "vcd": {
       "Package": "vcd",
-      "Version": "1.4-11",
+      "Version": "1.4-12",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -4089,7 +4089,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "bc6c0945029585c46a3a6854d8642ff8"
+      "Hash": "f02d066892ab61a82753a84b2d007af6"
     },
     "vctrs": {
       "Package": "vctrs",
