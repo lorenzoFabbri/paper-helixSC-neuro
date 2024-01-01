@@ -28,7 +28,7 @@ here::i_am("output/paper/_tables.qmd")
 
 ```{r pop-desc}
 #| label: tbl-pop-desc
-#| tbl-cap: Characteristics of the children included in the analyses, by cohort and overall
+#| tbl-cap: Participant characteristics, by cohort and overall (HELIX Study; 2013-2016).
 
 targets::tar_load("table1", store = store)
 table1
@@ -38,17 +38,17 @@ table1
 
 ```{r edc-desc}
 #| label: tbl-edc-desc
-#| tbl-cap: Levels of unprocessed chemicals, by cohort and overall
+#| tbl-cap: Participants endocrine disruptors concentrations, by cohort and overall (HELIX Study; 2013-2016).
 
 targets::tar_load("desc_chems_mets", store = store)
 desc_chems_mets$desc_chems
 ```
 
-## Corticosteroids
+## Glucocorticosteroids
 
 ```{r met-desc}
 #| label: tbl-met-desc
-#| tbl-cap: Levels of unprocessed corticosteroids, by cohort and overall
+#| tbl-cap: Participants glucocorticosteroids concentrations, by cohort and overall (HELIX Study; 2013-2016).
 
 desc_chems_mets$desc_mets
 ```
@@ -66,7 +66,7 @@ targets::tar_load(
 
 ```{r hypothesis-1}
 #| label: tbl-hypothesis-1
-#| tbl-cap: Hypothesis testing results of effect modification by sex for $hitrtse \sim edc$
+#| tbl-cap: Hypothesis testing results of effect modification by sex for $hitrtse \sim edc$.
 
 tidy_res_meffects(
   df = marginal_hypothesis_1SA,
@@ -80,7 +80,7 @@ tidy_res_meffects(
 
 ```{r hypothesis-2}
 #| label: tbl-hypothesis-2
-#| tbl-cap: Hypothesis testing results of effect modification by sex for $metabolite \sim edc$
+#| tbl-cap: Hypothesis testing results of effect modification by sex for $metabolite \sim edc$.
 
 tidy_res_meffects(
   df = marginal_hypothesis_2SA,
@@ -94,7 +94,7 @@ tidy_res_meffects(
 
 ```{r hypothesis-3}
 #| label: tbl-hypothesis-3
-#| tbl-cap: Hypothesis testing results of effect modification by sex for $hitrtse \sim metabolite$
+#| tbl-cap: Hypothesis testing results of effect modification by sex for $hitrtse \sim metabolite$.
 
 tidy_res_meffects(
   df = marginal_hypothesis_3SA,

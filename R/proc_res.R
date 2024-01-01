@@ -183,7 +183,11 @@ tbl_desc_pop <- function(num_digits_est, num_digits_sig) {
         gtsummary::all_categorical() ~ "{n} ({p}%)"
       )
     ) |>
-    gtsummary::add_overall()
+    gtsummary::add_overall() |>
+    gtsummary::as_gt() |>
+    gt::opt_footnote_marks(
+      marks = "letters"
+    )
   
   # Save table
   path <- "results/tables/"
@@ -194,7 +198,7 @@ tbl_desc_pop <- function(num_digits_est, num_digits_sig) {
   #   filename = paste0(path, name)
   # )
   
-  return(gtsummary::as_gt(desc_covars))
+  return(desc_covars)
 } # End function tbl_desc_pop
 ################################################################################
 
@@ -237,9 +241,20 @@ tbl_desc_vars <- function() {
   #   filename = paste0(path, name)
   # )
   
+  desc_chems <- rq02_desc_data_exp$step3 |>
+    gtsummary::as_gt() |>
+    gt::opt_footnote_marks(
+      marks = "letters"
+    )
+  desc_mets <- rq02_desc_data_out$step3 |>
+    gtsummary::as_gt() |>
+    gt::opt_footnote_marks(
+      marks = "letters"
+    )
+  
   return(list(
-    desc_chems = gtsummary::as_gt(rq02_desc_data_exp$step3),
-    desc_mets = gtsummary::as_gt(rq02_desc_data_out$step3)
+    desc_chems = desc_chems,
+    desc_mets = desc_mets
   ))
 } # End function tbl_desc_vars
 ################################################################################

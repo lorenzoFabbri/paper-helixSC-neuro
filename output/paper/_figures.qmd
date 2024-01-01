@@ -99,7 +99,7 @@ forest_plot <- function(obj, r = 4) {
 
 # Figures for main results
 
-## Marginal comparisons
+## Marginal contrasts
 
 ```{r}
 targets::tar_load(
@@ -110,7 +110,7 @@ targets::tar_load(
 
 ```{r marginal-1}
 #| label: fig-marginal-1
-#| fig-cap: Marginal comparison results for $hitrtse \sim edc$
+#| fig-cap: Marginal contrast results for $hitrtse \sim edc$
 #| fig-width: 9
 #| fig-height: 10
 
@@ -127,7 +127,7 @@ forest_plot(obj = obj1)
 
 ```{r marginal-2}
 #| label: fig-marginal-2
-#| fig-cap: Marginal comparison results for $production \sim edc$
+#| fig-cap: Marginal contrast results for $production \sim edc$
 #| fig-width: 9
 #| fig-height: 12
 
@@ -148,7 +148,7 @@ forest_plot(obj = obj2)
 
 ```{r marginal-3}
 #| label: fig-marginal-3
-#| fig-cap: Marginal comparison results for $hitrtse \sim metabolite$
+#| fig-cap: Marginal contrast results for $hitrtse \sim metabolite$
 #| fig-width: 9
 #| fig-height: 5
 

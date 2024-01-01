@@ -151,7 +151,7 @@ gt::gt(lloq_mets |> dplyr::arrange(metabolite)) |>
     )
   )
 ```
-Lower limits of quantification for the corticosteroids
+Lower limits of quantification for the glucocorticosteroids
 :::
 
 ## Tables for main results
@@ -360,12 +360,12 @@ viz_desc_vars(
   is_chem = FALSE
 )$plot
 ```
-Classification of the measured corticosteroids, by cohort.
+Classification of the measured glucocorticosteroids, by cohort.
 :::
 
 ## Figures for other results
 
-### Marginal comparisons for effect modification
+### Marginal contrasts for effect modification
 
 ```{r}
 targets::tar_load(
@@ -388,7 +388,7 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
-Marginal comparison results for $hitrtse \sim edc \times sex$
+Marginal contrast results for $hitrtse \sim edc \times sex$
 :::
 
 ::: {#suppfig-marginal-2sa}
@@ -408,7 +408,7 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
-Marginal comparison results for $metabolite \sim edc \times sex$
+Marginal contrast results for $metabolite \sim edc \times sex$
 :::
 
 ::: {#suppfig-marginal-3sa}
@@ -425,7 +425,7 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
-Marginal comparison results for $hitrtse \sim metabolite \times sex$
+Marginal contrast results for $hitrtse \sim metabolite \times sex$
 :::
 
 ### Sensitivity to exposure assessment

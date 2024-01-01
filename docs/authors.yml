@@ -1,0 +1,93 @@
+authors:
+  - name: Lorenzo Fabbri
+    email: lorenzo.fabbri@isglobal.org
+    orcid: 0000-0003-3031-322X
+    affiliations:
+      - ref: isg
+      - ref: upf
+    corresponding: true
+  - name: Vaia Lida Chatzi
+    email: chatzi@usc.edu
+    affiliations:
+      - ref: usc
+  - name: Regina Gražulevičienė
+    email: regina.grazuleviciene@vdu.lt
+    orcid: 0000-0002-0210-8053
+    affiliations:
+      - ref: vdu
+  - name: Mònica Guxens
+    email: monica.guxens@isglobal.org 
+    orcid: 0000-0002-8624-0333
+    affiliations:
+      - ref: isg
+      - ref: upf
+      - ref: erasmus
+  - name: Barbara Heude
+    email: barbara.heude@inserm.fr
+    orcid: 0000-0002-1565-1629
+    affiliations:
+      - ref: inserm
+  - name: Léa Maitre
+    email: lea.maitre@isglobal.org
+    affiliations:
+      - ref: isg
+  - name: Óscar J Pozo
+    email: opozo@researchmar.net
+    affiliations:
+      - ref: imim
+  - name: Oliver Robinson
+    email: o.robinson@imperial.ac.uk
+    orcid: 0000-0002-4735-0468
+    affiliations:
+      - ref: imperial
+  - name: Cathrine Thomsen
+    email: Cathrine.Thomsen@fhi.no
+    orcid: 0000-0002-6889-7868
+    affiliations:
+      - ref: fhi
+  - name: John Wright
+    email: john.wright@bthft.nhs.uk
+    orcid: 0000-0001-9572-7293
+    affiliations:
+      - ref: bib
+  - name: Martine Vrijheid
+    email: martine.vrijheid@isglobal.org
+    orcid: 0000-0002-7090-1758
+    affiliations:
+      - ref: isg
+      - ref: upf
+affiliations:
+  - id: isg
+    name: Barcelona Institute for Global Health (ISGlobal), Barcelona, Spain
+  - id: upf
+    name: Pompeu Fabra University, Barcelona, Spain
+  - id: imim
+    name: Hospital del Mar Research Institute, Barcelona, Spain
+  - id: vdu
+    name: Department of Environmental Sciences, Vytautas Magnus University, Kaunas, Lithuania
+  - id: fhi
+    name: Norwegian Institute of Public Health, Oslo, Norway
+  - id: erasmus
+    name: |
+      Department of Child and Adolescent Psychiatry/Psychology, 
+      Erasmus University Medical Center, Rotterdam, Netherlands
+  - id: inserm
+    name: |
+      Inserm UMR 1153-Centre de Recherche Epidémiologie et Biostatistique Sorbonne Paris Cité (CRESS), 
+      Equipe de recherche sur les origines précoces de la santé et du développement de l'enfant (ORCHAD), 
+      Villejuif, France
+  - id: bib
+    name: |
+      Bradford Institute for Health Research, 
+      Bradford Teaching Hospitals NHS Foundation Trust, Bradford, UK
+  - id: usc
+    name: |
+      Department of Preventive Medicine, 
+      Keck School of Medicine, 
+      University of Southern California, Los Angeles, California, USA
+  - id: imperial
+    name: |
+      MRC Centre for Environment and Health, 
+      Department of Epidemiology and Biostatistics, 
+      School of Public Health, 
+      Imperial College London, London, UK

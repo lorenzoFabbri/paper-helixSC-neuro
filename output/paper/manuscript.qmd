@@ -1,8 +1,8 @@
 ---
-title: "Estimating associations between childhood exposure to non-persistent endocrine disruptors, corticosteroids, and neurodevelopment: A study based on the parametric g-formula"
+title: "Childhood exposure to non-persistent endocrine disruptors, glucocorticosteroids, and neurodevelopment: A study based on the parametric g-formula"
 
 # metadata-files:
-#   - ../../../../all_phd/authors.yml
+#   - ../../docs/authors.yml
 
 format:
   docx:
@@ -103,16 +103,16 @@ knn_k <- params_$steps$rq2$preproc_outcome$missings$k
 - In-text citations: full-sized Arabic numerals in parentheses within the sentence.
 - Submission: SER members receive a 10% discount on the fees per page. This should be requested in the cover letter. Also 20% discount for Open Access charges. If uploading a single file (document, tables, figures, SM), designate the file as "Main document - anonymous".
 
-The prevalence of several neurodevelopmental disorders has increased in the pediatric population [@GrandjeanLandrigan:2014], and multiple environmental pollutants play a role in the increased rates of these disorders [@RamirezGalvez-OntiverosGonzalez-Domenech:2022]. \acr{edcs}, chemicals that are capable of interfering with the endocrine system, have been shown to have a role in childhood neurodevelopment [@Braun:2017]. Although both pregnancy and early childhood are crucial stages of (neuro)development, most of the available literature is focused on the effects of prenatal exposure to \acr{edcs} on child neurodevelopment [@RamirezGalvez-OntiverosGonzalez-Domenech:2022]. Moreover, little is known about the biological mechanisms of action [@RamirezGalvez-OntiverosGonzalez-Domenech:2022].
+The prevalence of several neurodevelopmental disorders has increased in the pediatric population [@GrandjeanLandrigan:2014], and multiple environmental pollutants play a role in the increased rates of these disorders [@RamirezGalvez-OntiverosGonzalez-Domenech:2022]. \acr{edcs}, chemicals that are capable of interfering with the endocrine system, have been shown to have a role in childhood neurodevelopment and behavior [@BouchardBellingerWright:2010; @Gonzalez-AlzagaHernandezRodriguez-Barranco:2015; @HuangChenSu:2015; @CartierWarembourgLeManer-Idrissi:2016; @TewarAuingerBraun:2016; @YuDuChiou:2016; @HuangTsaiChen:2017; @KimHongShin:2017; @FurlongHerringBuckley:2017; @Braun:2017; @LiZhangKuang:2018; @Rodriguez-CarrilloMustielesPerez-Lobato:2019; @ShoaffCoullWeuve:2020; @OhKimKannan:2023; @VilmandBeckBilenberg:2023]. Although both pregnancy and early childhood are crucial stages of (neuro)development, most of the available literature is focused on the effects of prenatal exposure to \acr{edcs} on child neurodevelopment [@RamirezGalvez-OntiverosGonzalez-Domenech:2022]. Moreover, little is known about the biological mechanisms of action [@RamirezGalvez-OntiverosGonzalez-Domenech:2022].
 
 \acr{opps} might have a deleterious effect on neurodevelopment, although the few studies conducted on children and using a biological matrix for exposure assessment suffered from a series of limitations, including a small sample size and few \acr{opp} metabolites measured [@RamirezGalvez-OntiverosGonzalez-Domenech:2022]. Phthalates and their metabolites have been associated to several adverse effects on neurodevelopment [@RamirezGalvez-OntiverosGonzalez-Domenech:2022]. Similarly, these studies focused on few phthalates metabolites and were conducted in small populations. On the other hand, the effects of exposure to \acr{bpa} on cognitive functions are still unclear [@RamirezGalvez-OntiverosGonzalez-Domenech:2022].
 
-There is furthermore evidence that exposure to certain \acr{edcs}, specifically phthalates, might interfere with the \acr{hpa} axis and might interact with the glucocorticoid receptor [@KimLeeMoon:2018; @SunLiJin:2018; @SearsLiuLanphear:2023].
+There is also evidence that exposure to certain \acr{edcs}, specifically phthalates, might interfere with the \acr{hpa} axis and might interact with the glucocorticoid receptor [@KimLeeMoon:2018; @SunLiJin:2018; @SearsLiuLanphear:2023].
 
-Finally, the development of the fetal brain is regulated by, among others, glucocorticoids [@SunLiJin:2018], with regulation of their homeostasis being crucial for neurodevelopment in childhood [@SearsLiuLanphear:2023].
+The HPA axis, which can be activated by stress, is responsible for the production of glucocorticosteroids. The brain, and its proper functioning, is a potential target, due to the presence of receptors for these hormones [@LupienMcEwenGunnar:2009; @SunLiJin:2018]. Glucocorticosteroids are necessary for brain maturation, although their under- or over-production might interfere with its normal development and ultimately lead to long-term impaired functioning [@LupienMcEwenGunnar:2009; @SearsLiuLanphear:2023].
 
 Taken together, these results suggest that the negative influence of exposure to certain \acr{edcs} on neurodevelopmental outcomes, might be mediated, at least partially, by disruption of the \acr{hpa} axis' homeostasis.
-In the present study, we thus estimated associations between 1) non-persistent \acr{edcs} and attention, 2) non-persistent \acr{edcs} and corticosteroids, and 3) corticosteroids and attention, using the parametric g-formula and average contrasts, in children of a large prospective birth cohort in Europe.
+In the present study, we thus estimated associations between 1) non-persistent \acr{edcs} and attention, 2) non-persistent \acr{edcs} and glucocorticosteroids, and 3) glucocorticosteroids and attention, using the parametric g-formula and marginal contrasts, in children of a large prospective birth cohort in Europe.
 
 # Methods {#sec-methods}
 
@@ -132,16 +132,63 @@ For each research question, defined by a specific type of exposure and outcome, 
 
 ### Endocrine disrupting chemicals {#sec-edcs}
 
-Children were assessed between December 2013 and February 2016, and included neurological testing and urine collection. Urine samples of the night before and the first morning void on the day of the visit were combined to provide a more reliable exposure assessment. Non-persistent \acr{edcs} assessed in urine samples from children included phthalate metabolites, phenols, and \acr{op} pesticide metabolites. A list of the environmental chemicals determined in urine samples and used for the present study is given in @supptbl-info-chems. Briefly, we analyzed a total of 7 phenols, 4 non-specific organophosphate pesticide metabolites, and 10 phthalate metabolites originating from 6 distinct phthalate parent compounds.
+```{r}
+info_edcs <- myphd::edcs_information()
+print_tidy_abbreviations_edcs <- function(df, class_) {
+  tmp <- df |>
+    dplyr::filter(class == class_) |>
+    dplyr::select(chem_id, full_name) |>
+    dplyr::arrange(full_name) |>
+    dplyr::mutate(
+      ret = glue::glue("{full_name} ({chem_id})")
+    )
+  tmp$ret |>
+    paste0(collapse = ", ")
+}
+```
+
+Children were assessed between December 2013 and February 2016, and included neurological testing and urine collection. Urine samples of the night before and the first morning void on the day of the visit were combined to provide a more reliable exposure assessment. Non-persistent \acr{edcs} assessed in urine samples from children included phthalate metabolites, phenols, and \acr{op} pesticide metabolites. A list of the environmental chemicals determined in urine samples and used for the present study is given in @supptbl-info-chems. Briefly, we analyzed a total of 7 phenols (`r print_tidy_abbreviations_edcs(info_edcs, "Phenols")`), 6 non-specific organophosphate pesticide metabolites (`r print_tidy_abbreviations_edcs(info_edcs, "OP pesticide metabolites")`), and 10 phthalate metabolites (`r print_tidy_abbreviations_edcs(info_edcs, "Phthalate metabolites")`) originating from 6 distinct phthalate parent compounds.
 The laboratory protocols for the analysis are described elsewhere [@HaugSakhiCequier:2018].
 
-### Corticosteroids {#sec-steroids}
+### Glucocorticosteroids {#sec-steroids}
 
-Urine samples of the night before the day of the visit were used to measure levels of the corticosteroids. These included glucocorticosteroids, glucocorticosteroid metabolites, glucocorticosteroid precursors, glucocorticosteroid precursor metabolites, androgens, and androgen metabolites. A list of the corticosteroids determined in urine samples and used for the present study is given in @supptbl-info-mets.
+```{r}
+info_steroids <- readODS::read_ods("docs/steroids.ods")
+print_tidy_abbreviations_steroids <- function(df, score) {
+  cortisol_prod <- c(
+    "20aDHF", "20bDHF", "5bDHF", "5aTHF", "5bTHF",
+    "6OHF",
+    "5a20acortol", "5a20bcortol", "5b20acortol", "5b20bcortol"
+  )
+  cortisone_prod <- c(
+    "20aDHE", "20bDHE", "5aTHE", "5bTHE",
+    "6OHE",
+    "5b20acortolone", "5b20bcortolone"
+  )
+  corticosterone_prod <- c(
+    "5aTHB", "5bTHB", "A", "17-DO-cortolone"
+  )
+  tmp <- df |>
+    dplyr::filter(dplyr::case_when(
+      score == "cortisol_prod" ~ acronym %in% cortisol_prod,
+      score == "cortisone_prod" ~ acronym %in% cortisone_prod,
+      score == "corticosterone_prod" ~ acronym %in% corticosterone_prod,
+    )) |>
+    dplyr::select(analyte, acronym) |>
+    dplyr::arrange(analyte) |>
+    dplyr::mutate(
+      ret = glue::glue("{analyte} ({acronym})")
+    )
+  tmp$ret |>
+    paste0(collapse = ", ")
+}
+```
 
-To assess the levels of corticosteroids and their metabolites, LC-MS/MS analysis was applied at the Applied Metabolomics Research Group, IMIM (Hospital del Mar Medical Research Institute). The laboratory protocols for the analysis are described elsewhere [@MarcosRenauCasals:2014; @Gomez-GomezPozo:2020]. Of the 1,004 urine samples, 980 children were matched to the \acr{helix} subcohort.
+Urine samples of the night before the day of the visit were used to measure levels of the glucocorticosteroids. These included glucocorticosteroids, glucocorticosteroid metabolites, glucocorticosteroid precursors, glucocorticosteroid precursor metabolites, androgens, and androgen metabolites. A list of the glucocorticosteroids determined in urine samples and used for the present study is given in @supptbl-info-mets.
 
-Three additional markers, cortisol production, cortisol metabolism, cortisone production, and 11bHSD activity, were computed based on the following: cortisol production as the sum of cortisol and its metabolites (20aDHF, 20bDHF, 5bDHF, 5aTHF, 5bTHF, 6OHF, 5a20acortol, 5a20bcortol, 5b20acortol, 5b20bcortol), cortisol metabolism as the inverse of the ratio between cortisol and its metabolites, cortisone production as the sum of cortisone and its metabolites (20aDHE, 20bDHE, 5aTHE, 5bTHE, 6OHE, 5b20acortolone, b20bcortolone), and 11bHSD activity as the ratio between cortisone production and cortisol production. 11bHSD activity gives a measure of conversion of cortisone to cortisol.
+To assess the levels of glucocorticosteroids and their metabolites, LC-MS/MS analysis was applied at the Applied Metabolomics Research Group, IMIM (Hospital del Mar Medical Research Institute). The laboratory protocols for the analysis are described elsewhere [@MarcosRenauCasals:2014; @Gomez-GomezPozo:2020]. Of the 1,004 urine samples, 980 children were matched to the \acr{helix} subcohort.
+
+Three additional markers, total cortisol production, total cortisone production, and total corticosterone production, were computed based on the following: cortisol production as the sum of cortisol and its metabolites (`r print_tidy_abbreviations_steroids(info_steroids, "cortisol_prod")`), cortisone production as the sum of cortisone and its metabolites (`r print_tidy_abbreviations_steroids(info_steroids, "cortisone_prod")`), and corticosterone production as the sum of `r print_tidy_abbreviations_steroids(info_steroids, "corticosterone_prod")`.
 
 ### Neurodevelopment {#sec-neurodevelopment}
 
@@ -151,7 +198,7 @@ Neurodevelopmental outcomes were assessed with standardized, non-linguistic, and
 
 ### Data pre-processing {#sec-dat-preproc}
 
-Concentrations of the corticosteroids were classified as quantifiable, below the \acr{loq}, possible interference or out of range, and not detected. For each metabolite, we computed the fraction of values below the \acr{loq} and not detected, both within each cohort and overall. We proceeded to impute these values using half the value of the corresponding \acr{lloq}, for those metabolites that had less than `r threshold_within_lod`% of missings within each cohort and `r threshold_overall_lod`% of missings overall. Information about the \acr{lloq} for the corticosteroids is provided in @supptbl-lloq-mets. The remaining missing values were imputed using kNN from the `VIM` R package [@KowarikTempl:2016], for those metabolites that had less than `r threshold_within_nan`% of remaining missings within each cohort and `r threshold_overall_nan`% of remaining missings overall. We used `r knn_k` nearest neighbors. We natural log-transformed them to improve model fit, assessed with posterior predictive checks. To do so, replicated data were simulated with the fitted models and compared to the observed data. We used the `check_predictions` function from the `performance` R package using the default arguments [@LudeckeBen-ShacharPatil:2021]. Values of cortisol production and cortisone production were expressed in nanograms per millilitre, whereas values of cortisol metabolism and 11bHSD activity were unitless.
+Concentrations of the glucocorticosteroids were classified as quantifiable, below the \acr{loq}, possible interference or out of range, and not detected. For each metabolite, we computed the fraction of values below the \acr{loq} and not detected, both within each cohort and overall. We proceeded to impute these values using half the value of the corresponding \acr{lloq}, for those metabolites that had less than `r threshold_within_lod`% of missings within each cohort and `r threshold_overall_lod`% of missings overall. Information about the \acr{lloq} for the glucocorticosteroids is provided in @supptbl-lloq-mets. The remaining missing values were imputed using kNN from the `VIM` R package [@KowarikTempl:2016], for those metabolites that had less than `r threshold_within_nan`% of remaining missings within each cohort and `r threshold_overall_nan`% of remaining missings overall. We used `r knn_k` nearest neighbors. We natural log-transformed them to improve model fit, assessed with posterior predictive checks. To do so, replicated data were simulated with the fitted models and compared to the observed data. We used the `check_predictions` function from the `performance` R package using the default arguments [@LudeckeBen-ShacharPatil:2021]. Values of cortisol production and cortisone production were expressed in nanograms per millilitre, whereas values of cortisol metabolism and 11bHSD activity were unitless.
 
 Concentrations of the non-persistent \acr{edcs} were classified as quantifiable, below the \acr{lod}, possible interference or out of range, and not analysed. Concentrations below the \acr{lod} were singly imputed using a quantile regression approach for the imputation of left-censored missing data, as implemented in the `impute.QRILC` function from the `imputeLCMD` R package [@lazar2015imputelcmd]. Information about the lower limits of detection can be found in @HaugSakhiCequier:2018. Chemicals with more than 70% of observations below the \acr{lod} were not considered in the present study. Remaining missing values were imputed similarly using kNN. Values of the chemicals were expressed in $\mu$grams per litre.
 
@@ -167,28 +214,28 @@ Covariate balance was assessed using functionalities provided by the `cobalt` R 
 
 ### G-computation {#sec-gcomp}
 
-We estimated average contrasts with the parametric g-formula, a method of standardization. The parametric g-formula involves the following steps: 1) fit a outcome model including both covariates and balancing weights; 2) create two new datasets identical to the original one but with the exposure shifted according to a user-specified intervention set by a deterministic function of the observed exposure levels; 3) use the outcome model to compute adjusted predictions in the two counterfactual datasets; 4) compute the difference between the means of the adjusted predictions in the counterfactual datasets. The causal parameter of interest $\phi$ was thus specified as the difference in the expected counterfactual outcomes under the shifted exposure levels $\left( \phi^\Delta = \mathbb{E} \left[ Y^{d_1} \right] - \mathbb{E} \left[ Y^{d_2} \right] \right)$. In order for this parameter to be identified, the usual causal identifiability conditions (no unmeasured confounding, positivity, and consistency) are required. Since these conditions are likely not satisfied, we focused on the estimation of a statistical estimand that is as close as possible to the causal parameter of interest.
+We estimated marginal contrasts with the parametric g-formula, a method of standardization. The parametric g-formula involves the following steps: 1) fit a outcome model including both covariates and balancing weights; 2) create two new datasets identical to the original one but with the exposure shifted according to a user-specified intervention set by a deterministic function of the observed exposure levels; 3) use the outcome model to compute adjusted predictions in the two counterfactual datasets; 4) compute the difference between the means of the adjusted predictions in the counterfactual datasets. The causal parameter of interest $\phi$ was thus specified as the difference in the expected counterfactual outcomes under the shifted exposure levels $\left( \phi^\Delta = \mathbb{E} \left[ Y^{d_1} \right] - \mathbb{E} \left[ Y^{d_2} \right] \right)$. In order for this parameter to be identified, the usual causal identifiability conditions (no unmeasured confounding, positivity, and consistency) are required. Since these conditions are likely not satisfied, we focused on the estimation of a statistical estimand that is as close as possible to the causal parameter of interest.
 
 We fit the outcome model using the `glm` function and a Gaussian family with identity link from base R. The exposure variable was modeled using natural cubic splines with 3 degrees of freedom, to more flexibly capture the \acr{adrf}. When the outcome was a ratio, as was the case for cortisol metabolism and 11bHSD activity, we included the logarithm of its denominator, cortisol and cortisol production, respectively, as a control variable [@BartlettPartnoy:2020].
 
-To estimate the average contrasts, we used the `avg_comparisons` function from the `marginaleffects` R package [@Arel-Bundock:2023]. The two counterfactual datasets were obtained by setting the exposures levels to 90th percentile ($d_1$) and the 10th percentile ($d_2$), for each cohort separately. The average contrasts were computed using the estimated balancing weights above. Robust standard errors were computed with the `sandwich` R package, using cohort as variable indicating clustering of observations [@Zeileis:2004; @ZeileisKollGraham:2020].
-For each outcome, we report the results as differences between average contrasts.
+To estimate the marginal contrasts, we used the `avg_comparisons` function from the `marginaleffects` R package [@Arel-Bundock:2023]. The two counterfactual datasets were obtained by setting the exposures levels to 90th percentile ($d_1$) and the 10th percentile ($d_2$), for each cohort separately. The marginal contrasts were computed using the estimated balancing weights above. Robust standard errors were computed with the `sandwich` R package, using cohort as variable indicating clustering of observations [@Zeileis:2004; @ZeileisKollGraham:2020].
+For each outcome, we report the results as differences between marginal contrasts.
 
-We further estimated the \acr{adrf} using the `avg_predictions` function from the `marginaleffects` R package, examining 50 exposure values from the 10th to the 90th percentiles of the exposure. As done for the average contrasts, we included the estimated balancing weights and used cohort as a clustering variable when computing robust standard errors.
+We further estimated the \acr{adrf} using the `avg_predictions` function from the `marginaleffects` R package, examining 50 exposure values from the 10th to the 90th percentiles of the exposure. As done for the marginal contrasts, we included the estimated balancing weights and used cohort as a clustering variable when computing robust standard errors.
 
 ### Effect-modification analysis
 
-We tested for possible effect-modification by sex. To do so, balancing weights were estimated separately for each level of the sex variable, and an interaction term between the exposure and sex was included in the outcome model. Similarly, the average contrasts were aggregated separately for each level of sex. We further tested for significance of the difference between the average contrasts of males and females.
+We tested for possible effect-modification by sex. To do so, balancing weights were estimated separately for each level of the sex variable, and an interaction term between the exposure and sex was included in the outcome model. Similarly, the marginal contrasts were aggregated separately for each level of sex. We further tested for significance of the difference between the marginal contrasts of males and females.
 
 # Results {#sec-res}
 
 ## Participants {#sec-res-participants}
 
-In total, 1,297 children were included in the dataset. Of these, 976 had information also about the corticosteroids. The sample consisted of 55% girls. The median \acr{hitrtse} was 300 ms (\acr{iqr}, 231-368), with lower median values for EDEN, MOBA, and SAB, corresponding to the cohorts with older children. At the time of visit, the median age of the children was 8.06 years. The children were mostly Caucasian (90%) or Pakistani (6.2%). @tbl-pop-desc provides descriptive statistics for the outcome and covariates, by cohort and overall. Codebooks for the used covariates, by research question, are provided in @supptbl-codebook-1, @supptbl-codebook-2, and @supptbl-codebook-3.
+In total, 1,297 children were included in the dataset. Of these, 976 had information also about the glucocorticosteroids. The sample consisted of 55% girls. The median \acr{hitrtse} was 300 ms (\acr{iqr}, 231-368), with lower median values for EDEN, MOBA, and SAB, corresponding to the cohorts with older children. At the time of visit, the median age of the children was 8.06 years. The children were mostly Caucasian (90%) or Pakistani (6.2%). @tbl-pop-desc provides descriptive statistics for the outcome and covariates, by cohort and overall. Codebooks for the used covariates, by research question, are provided in @supptbl-codebook-1, @supptbl-codebook-2, and @supptbl-codebook-3.
 
 ## Descriptive data {#sec-res-pop-desc}
 
-Levels of unprocessed non-persistent \acr{edcs} and corticosteroids, by cohort and overall, are presented in @tbl-edc-desc and @tbl-met-desc, respectively.
+Levels of unprocessed non-persistent \acr{edcs} and glucocorticosteroids, by cohort and overall, are presented in @tbl-edc-desc and @tbl-met-desc, respectively.
 
 ## Main results {#sec-res-main}
 
@@ -248,12 +295,12 @@ meffects3 <- tidy_res_meffects(
 
 The effective sample sizes before and after balancing weights estimation are presented in Tables [-@supptbl-balance-1; -@supptbl-balance-2; -@supptbl-balance-3], while basic summary statistics of the estimated balancing weights are presented in Tables [-@supptbl-weights-1; -@supptbl-weights-2; -@supptbl-weights-3]. As expected, the median value of the weights for each exposure was close to $1.00$.
 
-@Fig-marginal-1 presents the forest plot for the marginal effects of the non-persistent \acr{edcs} on \acr{hitrtse}. Overall, a cohort-specific increase in the levels of the exposures from the 10th to the 90th percentiles was associated with a positive marginal contrast, indicating an increase in the values of \acr{hitrtse}. Most of the \acr{ci}s included the null effect, though. Statistically significant associations were observed for the phenol MEPA (`r format_res(meffects1, "mepa", "hitrtse")`), and the phthalate metabolites oxo-MiNP (`r format_res(meffects1, "oxominp", "hitrtse")`), oh-MiNP (`r format_res(meffects1, "ohminp", "hitrtse")`), and MEHP (`r format_res(meffects1, "mehp", "hitrtse")`). The \acr{opp} DETP was strongly negatively associated with \acr{hitrtse} (`r format_res(meffects1, "detp", "hitrtse")`).
+@Fig-marginal-1 presents the forest plot for the marginal contrasts of the non-persistent \acr{edcs} on \acr{hitrtse}. Overall, a cohort-specific increase in the levels of the exposures from the 10th to the 90th percentiles was associated with a positive marginal contrast, indicating an increase in the values of \acr{hitrtse}. Most of the \acr{ci}s included the null effect, though. Statistically significant effects were observed for the phenol MEPA (`r format_res(meffects1, "mepa", "hitrtse")`), and the phthalate metabolites oxo-MiNP (`r format_res(meffects1, "oxominp", "hitrtse")`), oh-MiNP (`r format_res(meffects1, "ohminp", "hitrtse")`), and MEHP (`r format_res(meffects1, "mehp", "hitrtse")`). The \acr{opp} DETP was strongly negatively associated with \acr{hitrtse} (`r format_res(meffects1, "detp", "hitrtse")`).
 
-@Fig-marginal-2 presents the forest plot for the marginal effects of the non-persistent \acr{edcs} on cortisone production, cortisol production, and corticosterone production. Overall, a cohort-specific increase in the levels of the exposures from the 10th to the 90th percentiles was associated with a positive marginal contrast, indicating an increase in the total production of these metabolites, with the exception of BUPA, which was associated with negative marginal contrasts for all three outcomes, and MiBP, which was associated with a negative marginal contrast for total cortisone production only.
-The majority of the associations for the phenols and phthalate metabolites included the null. The phenol BPA showed the largest marginal contrasts across all three outcomes (cortisone production, `r format_res(meffects2, "bpa", "cortisone production")`; cortisol production, `r format_res(meffects1, "bpa", "cortisol production")`; corticosterone production, `r format_res(meffects1, "bpa", "corticosterone production")`).
+@Fig-marginal-2 presents the forest plot for the marginal contrasts of the non-persistent \acr{edcs} on cortisone production, cortisol production, and corticosterone production. Overall, a cohort-specific increase in the levels of the exposures from the 10th to the 90th percentiles was associated with a positive marginal contrast, indicating an increase in the total production of these metabolites, with the exception of BUPA, which was associated with negative marginal contrasts for all three outcomes, and MiBP, which was associated with a negative marginal contrast for total cortisone production only.
+The majority of the effects for the phenols and phthalate metabolites included the null. The phenol BPA showed the largest marginal contrasts across all three outcomes (cortisone production, `r format_res(meffects2, "bpa", "cortisone production")`; cortisol production, `r format_res(meffects1, "bpa", "cortisol production")`; corticosterone production, `r format_res(meffects1, "bpa", "corticosterone production")`).
 
-@Fig-marginal-3 presents the forest plot for the marginal effects of the corticosteroids on \acr{hitrtse}. All marginal contrasts included the null, with no clear indication of directionality of the effect.
+@Fig-marginal-3 presents the forest plot for the marginal contrasts of the glucocorticosteroids on \acr{hitrtse}. All marginal contrasts included the null, with no clear indication of directionality of the effect.
 
 ## Other analyses {#sec-res-other}
 
@@ -304,10 +351,10 @@ Basic summary statistics of the estimated balancing weights for effect modificat
 
 # Discussion {#sec-discussion}
 
-The impact of exposure to (non-persistent) \acr{edcs} on human health has attracted considerable research interest. While research in this area has mainly investigated the effects of prenatal exposure on child neurodevelopment [@RamirezGalvez-OntiverosGonzalez-Domenech:2022], little is still known about later-in-life exposure and childhood neurodevelopment. In this study, consisting of almost 1,000 children from 6 European birth cohorts, we observed that short-term childhood exposure to non-persistent \acr{edcs} had negative effects on \acr{hitrtse} and total production of cortisol, cortisone, and corticosterone, with the majority of the \acr{ci}s including the null effect. Increased production of these glucocorticoids did not seem to affect \acr{hitrtse}. Some of these effects differed for females and males, including significant differences for the effects of increased production of cortisone and corticosterone on \acr{hitrtse}. Specifically, an increased production of these glucocorticoids was associated with lower values of \acr{hitrtse} for females, and higher values for males. Taken together, these results suggest that these non-persistent \acr{edcs} might be responsible for perturbations of the \acr{hpa} axis' homeostasis, and that higher levels of these glucocorticoids might interfere with different functions of attention in a sex-specific manner.
+The impact of exposure to (non-persistent) \acr{edcs} on human health has attracted considerable research interest. While research in this area has mainly investigated the effects of prenatal exposure on child neurodevelopment [@RamirezGalvez-OntiverosGonzalez-Domenech:2022], little is still known about later-in-life exposure and childhood neurodevelopment. In this study, consisting of almost 1,000 children from 6 European birth cohorts, we observed that short-term childhood exposure to non-persistent \acr{edcs} had negative effects on \acr{hitrtse} and total production of cortisol, cortisone, and corticosterone, with the majority of the \acr{ci}s including the null effect. Increased production of these glucocorticosteroids did not seem to affect \acr{hitrtse}. Some of these effects differed for females and males, including significant differences for the effects of increased production of cortisone and corticosterone on \acr{hitrtse}. Specifically, an increased production of these glucocorticosteroids was associated with lower values of \acr{hitrtse} for females, and higher values for males. Taken together, these results suggest that these non-persistent \acr{edcs} might be responsible for perturbations of the \acr{hpa} axis' homeostasis, and that higher levels of these glucocorticosteroids might interfere with different functions of attention in a sex-specific manner.
 
-Our results are consistent with prior research that associated exposure to certain \acr{edcs} with higher levels of urinary and hair cortisol [@KimLeeMoon:2018; @SearsLiuLanphear:2023]. Contrary to these prior studies, we did find effect modification by sex. We are not aware of other epidemiological studies investigating phthalates metabolites, phenols, and \acr{opps}, in relation to urinary glucocorticoids in childhood.
-We are also not aware of prior studies specifically investigating the effects of exposure to \acr{edcs} and elevated levels of glucocorticoids in relation to \acr{hitrtse}.
+Our results are consistent with prior research that associated exposure to certain \acr{edcs} with higher levels of urinary and hair cortisol [@KimLeeMoon:2018; @SearsLiuLanphear:2023]. Contrary to these prior studies, we did find effect modification by sex. We are not aware of other epidemiological studies investigating phthalates metabolites, phenols, and \acr{opps}, in relation to urinary glucocorticosteroids in childhood.
+We are also not aware of prior studies specifically investigating the effects of exposure to \acr{edcs} and elevated levels of glucocorticosteroids in relation to \acr{hitrtse}.
 
 [] EDCs to HITRTSE
 [X] EDCs to CORT.
@@ -317,10 +364,10 @@ We are also not aware of prior studies specifically investigating the effects of
 
 These findings should be interpreted in light of the following limitations and strengths.
 
-Limitations include the cross-sectional design of the present study. Importantly, the non-persistent \acr{edcs} were measured in a pool of night and morning urine samples before the clinical visit, whereas the corticosteroids were measured in the night urine sample only. Although we included a wide range of confounders there is the possibility, as with other observational studies, of residual confounding, which might lead to a bias away from the null. Some of the confounders indicated in the adjustment sets had to be remove due to large fractions of missing values. There is further the possibility of misspecification of the outcome model, although we included a spline of the exposure to relax some of the linearity assumptions. The use of more data-adaptive learners was excluded due to the relatively small sample size. We finally acknowledge the possibility that some of chemicals might not act independently (mixture effect). Further research is thus warranted.
+Limitations include the cross-sectional design of the present study. Importantly, the non-persistent \acr{edcs} were measured in a pool of night and morning urine samples before the clinical visit, whereas the glucocorticosteroids were measured in the night urine sample only. Although we included a wide range of confounders there is the possibility, as with other observational studies, of residual confounding, which might lead to a bias away from the null. Some of the confounders indicated in the adjustment sets had to be remove due to large fractions of missing values. There is further the possibility of misspecification of the outcome model, although we included a spline of the exposure to relax some of the linearity assumptions. The use of more data-adaptive learners was excluded due to the relatively small sample size. We finally acknowledge the possibility that some of chemicals might not act independently (mixture effect). Further research is thus warranted.
 
 Strengths of the present study include the use of pooled urine samples for chemical assessment, since it is known that these specific \acr{edcs} have very short half-lives [@CasasBasaganaSakhi:2018].
-We decided to model both the *treatment* mechanisms, for the estimation of balancing weights, and the outcomes, with traditional covariates adjustment, to try to obtain *doubly robust* effect estimates. Finally, we decided not to interpret our results by focusing on the estimated coefficients of the regression models, but by making use of the g-computation procedure and estimate average comparisons.
+We decided to model both the *treatment* mechanisms, for the estimation of balancing weights, and the outcomes, with traditional covariates adjustment, to try to obtain *doubly robust* effect estimates. Finally, we decided not to interpret our results by focusing on the estimated coefficients of the regression models, but by making use of the g-computation procedure and estimate marginal contrasts.
 
 In conclusion, in a study of...
 
@@ -333,12 +380,12 @@ In conclusion, in a study of...
 
 {{< pagebreak >}}
 
-{{< include _tables.qmd >}}
+<!-- {{< include _tables.qmd >}} -->
 
 {{< pagebreak >}}
 
-{{< include _figures.qmd >}}
+<!-- {{< include _figures.qmd >}} -->
 
 {{< pagebreak >}}
 
-{{< include _si.qmd >}}
+<!-- {{< include _si.qmd >}} -->
