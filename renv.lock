@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.3.2",
+    "Version": "4.3.0",
     "Repositories": [
       {
         "Name": "BioCsoft",
@@ -45,6 +45,17 @@
         "stats"
       ],
       "Hash": "72f87e0092e39384aee16df8d67d7410"
+    },
+    "Formula": {
+      "Package": "Formula",
+      "Version": "1.2-5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "stats"
+      ],
+      "Hash": "7a29697b75e027767a53fde6c903eca7"
     },
     "KernSmooth": {
       "Package": "KernSmooth",
@@ -1053,14 +1064,9 @@
     },
     "dlookr": {
       "Package": "dlookr",
-      "Version": "0.6.3",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteUsername": "choonghyunryu",
-      "RemoteRepo": "dlookr",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "f21e899e0d947aaaf05f8db4cb556d305f39bf4a",
-      "RemoteHost": "api.github.com",
+      "Version": "0.6.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
       "Requirements": [
         "R",
         "dplyr",
@@ -1074,11 +1080,11 @@
         "methods",
         "mice",
         "pagedown",
+        "partykit",
         "purrr",
         "reactable",
         "rlang",
         "rmarkdown",
-        "rpart",
         "shiny",
         "showtext",
         "sysfonts",
@@ -1087,7 +1093,7 @@
         "tidyselect",
         "utils"
       ],
-      "Hash": "fe813e977b583a103d7765086da78b72"
+      "Hash": "21bba94984f3e9154932deb23bd91c26"
     },
     "downlit": {
       "Package": "downlit",
@@ -2088,6 +2094,18 @@
       ],
       "Hash": "8f8a936a8064965bbe74e68f5aafa462"
     },
+    "inum": {
+      "Package": "inum",
+      "Version": "1.0-5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "libcoin",
+        "stats"
+      ],
+      "Hash": "baa4e298aa0fe48568c951d2fcc5d7c2"
+    },
     "isoband": {
       "Package": "isoband",
       "Version": "0.2.7",
@@ -2296,6 +2314,18 @@
         "R"
       ],
       "Hash": "d908914ae53b04d4c0c0fd72ecc35370"
+    },
+    "libcoin": {
+      "Package": "libcoin",
+      "Version": "1.0-10",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "mvtnorm",
+        "stats"
+      ],
+      "Hash": "3f3775a14588ff5d013e5eab4453bf28"
     },
     "lifecycle": {
       "Package": "lifecycle",
@@ -2609,11 +2639,11 @@
       "Version": "0.0.1",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "myphd",
       "RemoteUsername": "isglobal-cep",
+      "RemoteRepo": "myphd",
       "RemoteRef": "HEAD",
-      "RemoteSha": "409c357eb650488cec4aea581886ef1e7972c9df",
+      "RemoteSha": "3ce0010b25fed8f231838c9a0d0f4f252851ab88",
+      "RemoteHost": "api.github.com",
       "Requirements": [
         "VIM",
         "WeightIt",
@@ -2649,7 +2679,7 @@
         "tmvtnorm",
         "visdat"
       ],
-      "Hash": "69e769f1c8936c4842e36228aa20c713"
+      "Hash": "cdbdf75fef3568a78950ddeddbd8f615"
     },
     "naniar": {
       "Package": "naniar",
@@ -2863,6 +2893,27 @@
         "utils"
       ],
       "Hash": "bca377e1c87ec89ebed77bba00635b2e"
+    },
+    "partykit": {
+      "Package": "partykit",
+      "Version": "1.2-20",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "Formula",
+        "R",
+        "grDevices",
+        "graphics",
+        "grid",
+        "inum",
+        "libcoin",
+        "mvtnorm",
+        "rpart",
+        "stats",
+        "survival",
+        "utils"
+      ],
+      "Hash": "8551bfc8d1d6ab813e2e5c8917268cd4"
     },
     "patchwork": {
       "Package": "patchwork",

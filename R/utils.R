@@ -356,7 +356,7 @@ rq_prepare_data <- function(dat, filter_panel, type_sample_hcp, is_sa) {
         cohort = c("MOBA")
       ),
       list_covars = params_dat$variables$selection_covariates_names,
-      method = "glm",
+      method = params_ana$method_weightit,
       method_args = list(
         stabilize = params_ana$stabilize,
         by = NULL,
