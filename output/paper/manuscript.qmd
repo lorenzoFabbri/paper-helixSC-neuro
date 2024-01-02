@@ -71,6 +71,7 @@ here::i_am("output/paper/manuscript.qmd")
 ```{r vars-methods}
 source(here::here("R/dictionaries.R"))
 source(here::here("R/data.R"))
+source(here::here("R/utils.R"))
 source(here::here("R/proc_res.R"))
 
 is_hpc <- FALSE
@@ -235,7 +236,7 @@ In total, 1,297 children were included in the dataset. Of these, 976 had informa
 
 ## Descriptive data {#sec-res-pop-desc}
 
-Levels of unprocessed non-persistent \acr{edcs} and glucocorticosteroids, by cohort and overall, are presented in @tbl-edc-desc and @tbl-met-desc, respectively.
+Levels of unprocessed non-persistent \acr{edcs} and glucocorticosteroids, by cohort and overall, are presented in @tbl-edc-desc, @tbl-met-desc, and @tbl-met-new-desc.
 
 ## Main results {#sec-res-main}
 
@@ -357,7 +358,7 @@ Our results are consistent with prior research that associated exposure to certa
 We are also not aware of prior studies specifically investigating the effects of exposure to \acr{edcs} and elevated levels of glucocorticosteroids in relation to \acr{hitrtse}.
 
 [] EDCs to HITRTSE
-[X] EDCs to CORT.
+[] EDCs to CORT.
 [] CORT. to HITRTSE
 
 ---

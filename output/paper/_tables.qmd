@@ -51,6 +51,49 @@ desc_chems_mets$desc_mets
 **Participants glucocorticosteroids concentrations, by cohort and overall (HELIX Study; 2013-2016).**
 :::
 
+::: {#tbl-met-new-desc}
+```{r met-new-desc}
+metabolites <- load_steroids()
+scores <- create_steroid_scores(dat = metabolites$metabolome) |>
+  tidylog::select(
+    HelixID,
+    cortisol_production, cortisone_production,
+    corticosterone_production
+  )
+scores <- myphd::extract_cohort(
+  dat = scores,
+  id_var = "HelixID",
+  st = 1, en = 3
+) |>
+  tidylog::select(-HelixID) |>
+  tidylog::mutate(
+    cohort = dplyr::case_when(
+      cohort == "EDE" ~ "EDEN",
+      cohort == "KAN" ~ "KANC",
+      cohort == "MOB" ~ "MOBA",
+      cohort == "RHE" ~ "RHEA",
+      .default = cohort
+    )
+  ) |>
+  tidylog::rename(
+    "cortisol production" = "cortisol_production",
+    "cortisone production" = "cortisone_production",
+    "corticosterone production" = "corticosterone_production"
+  )
+
+scores |>
+  gtsummary::tbl_summary(
+    by = "cohort"
+  ) |>
+  gtsummary::add_overall() |>
+  gtsummary::as_gt() |>
+  gt::opt_footnote_marks(
+    marks = "letters"
+  )
+```
+**Participants derived glucocorticosteroids concentrations, by cohort and overall (HELIX Study; 2013-2016).**
+:::
+
 # Tables for other analyses
 
 ## Marginal hypotheses for effect modification
