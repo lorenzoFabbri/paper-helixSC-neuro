@@ -33,8 +33,6 @@
 here::i_am("output/paper/_figures.qmd")
 ```
 
-**The figure titles and legends should be submitted as a single paragraph. The text of figure legends beyond the scale, arrow, panel locant, and axis information should not be included on the figures themselves but should be typed after the reference list. Each legend should be formatted as a separate paragraph and should include details on the place of the study, the time of the study, and the study population (if applicable). Define all figure abbreviations in the legend.**
-
 ```{r}
 # Function to align forest plot with table numerical results
 forest_plot <- function(obj, r = 4) {
@@ -95,8 +93,6 @@ forest_plot <- function(obj, r = 4) {
 } # End function forest_plot
 ```
 
-- Figure titles and legends should be submitted as single paragraph.
-
 # Figures for main results
 
 ## Marginal contrasts
@@ -108,9 +104,8 @@ targets::tar_load(
 )
 ```
 
+::: {#fig-marginal-1}
 ```{r marginal-1}
-#| label: fig-marginal-1
-#| fig-cap: Marginal contrast results for $hitrtse \sim edc$
 #| fig-width: 9
 #| fig-height: 10
 
@@ -124,10 +119,12 @@ obj1 <- tidy_res_meffects(
 )
 forest_plot(obj = obj1)
 ```
+**Marginal contrasts (exposures: \acr{edcs}; outcome: \acr{hitrtse}) (HELIX Study; 2013-2016).**
+Circles indicate effect estimates. Solid lines indicate the $95\%$ \acr{ci}.
+:::
 
+::: {#fig-marginal-2}
 ```{r marginal-2}
-#| label: fig-marginal-2
-#| fig-cap: Marginal contrast results for $production \sim edc$
 #| fig-width: 9
 #| fig-height: 12
 
@@ -145,10 +142,12 @@ obj2 <- tidy_res_meffects(
 )
 forest_plot(obj = obj2)
 ```
+**Marginal contrasts (exposures: \acr{edcs}; outcomes: glucocorticosteroids) (HELIX Study; 2013-2016).**
+Circles, triangles, and squares indicate effect estimates. Solid lines indicate the $95\%$ \acr{ci}.
+:::
 
+::: {#fig-marginal-3}
 ```{r marginal-3}
-#| label: fig-marginal-3
-#| fig-cap: Marginal contrast results for $hitrtse \sim metabolite$
 #| fig-width: 9
 #| fig-height: 5
 
@@ -162,3 +161,6 @@ obj3 <- tidy_res_meffects(
 )
 forest_plot(obj = obj3, r = 5)
 ```
+**Marginal contrasts (exposures: glucocorticosteroids; outcome: \acr{hitrtse}) (HELIX Study; 2013-2016).**
+Circles indicate effect estimates. Solid lines indicate the $95\%$ \acr{ci}.
+:::

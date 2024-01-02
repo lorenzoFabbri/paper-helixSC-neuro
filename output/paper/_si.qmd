@@ -38,21 +38,21 @@ targets::tar_load(
 ```{r codebook-1}
 codebook_1
 ```
-Codebook for covariates used in $hitrtse \sim edc$
+Codebook for the covariates used in the estimation of the marginal comparisons of \acr{edcs} on \acr{hitrtse}.
 :::
 
 ::: {#supptbl-codebook-2}
 ```{r codebook-2}
 codebook_2
 ```
-Codebook for covariates used in $metabolite \sim edc$
+Codebook for the covariates used in the estimation of the marginal comparisons of \acr{edcs} on the glucocorticosteroids.
 :::
 
 ::: {#supptbl-codebook-3}
 ```{r codebook-3}
 codebook_3
 ```
-Codebook for covariates used in $hitrtse \sim metabolite$
+Codebook for the covariates used in the estimation of the marginal comparisons of the glucocorticosteroids on \acr{hitrtse}.
 :::
 
 ### Description of chemicals
@@ -88,7 +88,7 @@ gt::gt(edcs_info,
     style = list(gt::cell_text(weight = "bold"))
   )
 ```
-Information about non-persistent EDCs
+Information about non-persistent EDCs, including the full compound name, the standard symbol, the used variable name, the identifier from PubChem, and the parental compound.
 :::
 
 ### Description of metabolites
@@ -116,42 +116,37 @@ gt::gt(mets_info,
     style = list(gt::cell_text(weight = "bold"))
   ) |>
   gt::tab_footnote(
-    footnote = "Human Metabolome Database",
-    locations = gt::cells_column_labels(
-      columns = hmdb_id
-    )
+    footnote = "Abbreviations: Human Metabolome Database (HMDB); Chemical Abstracts Service (CAS).",
   ) |>
-  gt::tab_footnote(
-    footnote = "Chemical Abstracts Service",
-    locations = gt::cells_column_labels(
-      columns = cas_number
-    )
+  gt::opt_footnote_marks(
+    marks = "letters"
   )
 ```
-Information about metabolites
+Information about the glucocorticosteroids, including the full metabolite name, the standard symbol, the identifier from the HMDB, and the CAS number.
 :::
 
 ::: {#supptbl-lloq-mets}
 ```{r lloq-mets}
 lloq_mets <- load_steroids()$loq |>
   tidylog::mutate(
-    metabolite = stringr::str_replace(
+    Metabolite = stringr::str_replace(
       metabolite,
       "^X", ""
     )
   ) |>
   tidylog::rename(
-    lloq = "loq"
-  )
-gt::gt(lloq_mets |> dplyr::arrange(metabolite)) |>
+    LLOQ = "loq"
+  ) |>
+  tidylog::select(-metabolite)
+gt::gt(lloq_mets |> dplyr::arrange(Metabolite)) |>
   gt::tab_footnote(
-    footnote = "Lower limit of quantification expressed in nanograms per millilitre.",
-    locations = gt::cells_column_labels(
-      columns = lloq
-    )
+    footnote = "Abbreviations: lower limit of quantification (LLOQ), expressed in nanograms per millilitre."
+  ) |>
+  gt::opt_footnote_marks(
+    marks = "letters"
   )
 ```
-Lower limits of quantification for the glucocorticosteroids
+Lower limits of quantification for the glucocorticosteroids.
 :::
 
 ## Tables for main results
@@ -174,17 +169,14 @@ balance_1 |>
   gt::gt(groupname_col = "class") |>
   gt::fmt_number(n_sigfig = 4) |>
   gt::tab_footnote(
-    footnote = "N.",
-    locations = gt::cells_column_labels(
-      columns = c(Unadjusted, Adjusted)
-    )
-  ) |>
-  gt::tab_footnote(
     footnote = "Truncated weights.",
     locations = gt::cells_column_labels(columns = Adjusted)
+  ) |>
+  gt::opt_footnote_marks(
+    marks = "letters"
   )
 ```
-Effective sample size before and after weights estimation for $hitrtse \sim edc$
+Effective sample size before and after balancing weights estimation (exposures: \acr{edcs}; outcome: \acr{hitrtse}).
 :::
 
 ::: {#supptbl-balance-2}
@@ -196,17 +188,14 @@ balance_2 |>
   gt::gt(groupname_col = "class") |>
   gt::fmt_number(n_sigfig = 4) |>
   gt::tab_footnote(
-    footnote = "N.",
-    locations = gt::cells_column_labels(
-      columns = c(Unadjusted, Adjusted)
-    )
-  ) |>
-  gt::tab_footnote(
     footnote = "Truncated weights.",
     locations = gt::cells_column_labels(columns = Adjusted)
+  ) |>
+  gt::opt_footnote_marks(
+    marks = "letters"
   )
 ```
-Effective sample size before and after weights estimation for $metabolite \sim edc$
+Effective sample size before and after balancing weights estimation (exposures: \acr{edcs}; outcomes: glucocorticosteroids).
 :::
 
 ::: {#supptbl-balance-3}
@@ -216,17 +205,14 @@ balance_3 |>
   gt::gt() |>
   gt::fmt_number(n_sigfig = 4) |>
   gt::tab_footnote(
-    footnote = "N.",
-    locations = gt::cells_column_labels(
-      columns = c(Unadjusted, Adjusted)
-    )
-  ) |>
-  gt::tab_footnote(
     footnote = "Truncated weights.",
     locations = gt::cells_column_labels(columns = Adjusted)
+  ) |>
+  gt::opt_footnote_marks(
+    marks = "letters"
   )
 ```
-Effective sample size before and after weights estimation for $hitrtse \sim metabolite$
+Effective sample size before and after balancing weights estimation (exposures: glucocorticosteroids; outcome: \acr{hitrtse}).
 :::
 
 ```{r}
@@ -244,7 +230,7 @@ tidy_res_weighted_fits(
   sa_var = NULL
 )$table
 ```
-Summary statistics of the estimated balancing weights for $hitrtse \sim edc$
+Summary statistics of the estimated balancing weights (exposures: \acr{edcs}; outcome: \acr{hitrtse}).
 :::
 
 ::: {#supptbl-weights-2}
@@ -255,7 +241,7 @@ tidy_res_weighted_fits(
   sa_var = NULL
 )$table
 ```
-Summary statistics of the estimated balancing weights for $metabolite \sim edc$
+Summary statistics of the estimated balancing weights (exposures: \acr{edcs}; outcomes: glucocorticosteroids).
 :::
 
 ::: {#supptbl-weights-3}
@@ -266,7 +252,7 @@ tidy_res_weighted_fits(
   sa_var = NULL
 )$table
 ```
-Summary statistics of the estimated balancing weights for $hitrtse \sim metabolite$
+Summary statistics of the estimated balancing weights (exposures: glucocorticosteroids; outcome: \acr{hitrtse}).
 :::
 
 ## Tables for other results
@@ -288,7 +274,7 @@ tidy_res_weighted_fits(
   sa_var = "e3_sex"
 )$table
 ```
-Summary statistics of the estimated balancing weights for $hitrtse \sim edc \times sex$
+Summary statistics of the estimated balancing weights for effect modification (exposures: \acr{edcs}; outcome: \acr{hitrtse}; modifier: sex).
 :::
 
 ::: {#supptbl-weights-2sa}
@@ -299,7 +285,7 @@ tidy_res_weighted_fits(
   sa_var = "e3_sex"
 )$table
 ```
-Summary statistics of the estimated balancing weights for $metabolite \sim edc \times sex$
+Summary statistics of the estimated balancing weights for effect modification (exposures: \acr{edcs}; outcomes: glucocorticosteroids; modifier: sex).
 :::
 
 ::: {#supptbl-weights-3sa}
@@ -310,7 +296,7 @@ tidy_res_weighted_fits(
   sa_var = "e3_sex"
 )$table
 ```
-Summary statistics of the estimated balancing weights for $hitrtse \sim metabolite \times sex$
+Summary statistics of the estimated balancing weights for effect modification (exposures: glucocorticosteroids; outcome: \acr{hitrtse}; modifier: sex).
 :::
 
 # Supplementary figures
@@ -331,7 +317,8 @@ viz_desc_vars(
   is_chem = TRUE
 )$plot
 ```
-Classification of the measured non-persistent EDCs, by cohort.
+**Measurement classification of \acr{edcs}, by cohort.**
+Coding: 1, quantifiable; 2, <LOD; 3, interference or out of range; 4. not analysed.
 :::
 
 ### Description of metabolites
@@ -360,7 +347,8 @@ viz_desc_vars(
   is_chem = FALSE
 )$plot
 ```
-Classification of the measured glucocorticosteroids, by cohort.
+**Measurement classification of the glucocorticosteroids, by cohort.**
+Coding: 1, quantifiable; 2, <LOQ; 3, interference or out of range; 4, not detected.
 :::
 
 ## Figures for other results
@@ -388,7 +376,8 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
-Marginal contrast results for $hitrtse \sim edc \times sex$
+**Marginal contrasts for effect modification (exposures: \acr{edcs}; outcome: \acr{hitrtse}; modifier: sex) (HELIX Study; 2013-2016).**
+Circles and triangles indicate effect estimates. Solid lines indicate the $95\%$ \acr{ci}.
 :::
 
 ::: {#suppfig-marginal-2sa}
@@ -408,7 +397,8 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
-Marginal contrast results for $metabolite \sim edc \times sex$
+**Marginal contrasts for effect modification (exposures: \acr{edcs}; outcomes: glucocorticosteroids; modifier: sex) (HELIX Study; 2013-2016).**
+Circles and triangles indicate effect estimates. Solid lines indicate the $95\%$ \acr{ci}.
 :::
 
 ::: {#suppfig-marginal-3sa}
@@ -425,7 +415,8 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
-Marginal contrast results for $hitrtse \sim metabolite \times sex$
+**Marginal contrasts for effect modification (exposures: glucocorticosteroids; outcome: \acr{hitrtse}; modifier: sex) (HELIX Study; 2013-2016).**
+Circles and triangles indicate effect estimates. Solid lines indicate the $95\%$ \acr{ci}.
 :::
 
 ### Sensitivity to exposure assessment

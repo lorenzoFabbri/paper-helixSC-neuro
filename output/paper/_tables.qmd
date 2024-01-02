@@ -20,8 +20,6 @@
 here::i_am("output/paper/_tables.qmd")
 ```
 
-**Table titles should give details on the place of the study, the time of the study, and the study population (if applicable). Example, “Baseline Characteristics of Infants With Initial and Follow-up Screening, London, United Kingdom, 2001–2003.” In the table body, leave blank spaces for no entry; avoid using dashes. Order of footnotes: 1) Abbreviations: (no footnote symbol, listed alphabetically, separated by semicolons); 2) other footnotes as necessary, each preceded by a superscript lowercase letter. Footnotes must be cited in order when reading from left to right and top to bottom.**
-
 # Tables for descriptive data
 
 ## Study populations
@@ -66,7 +64,7 @@ targets::tar_load(
 
 ```{r hypothesis-1}
 #| label: tbl-hypothesis-1
-#| tbl-cap: Hypothesis testing results of effect modification by sex for $hitrtse \sim edc$.
+#| tbl-cap: Pairwise differences between sex-specific marginal contrasts for the effect of \acr{edcs} on \acr{hitrtse} (HELIX Study; 2013-2016).
 
 tidy_res_meffects(
   df = marginal_hypothesis_1SA,
@@ -80,7 +78,7 @@ tidy_res_meffects(
 
 ```{r hypothesis-2}
 #| label: tbl-hypothesis-2
-#| tbl-cap: Hypothesis testing results of effect modification by sex for $metabolite \sim edc$.
+#| tbl-cap: Pairwise differences between sex-specific marginal contrasts for the effect of \acr{edcs} on the glucocorticosteroids (HELIX Study; 2013-2016).
 
 tidy_res_meffects(
   df = marginal_hypothesis_2SA,
@@ -94,7 +92,7 @@ tidy_res_meffects(
 
 ```{r hypothesis-3}
 #| label: tbl-hypothesis-3
-#| tbl-cap: Hypothesis testing results of effect modification by sex for $hitrtse \sim metabolite$.
+#| tbl-cap: Pairwise differences between sex-specific marginal contrasts for the effect of the glucocorticosteroids on \acr{hitrtse} (HELIX Study; 2013-2016).
 
 tidy_res_meffects(
   df = marginal_hypothesis_3SA,

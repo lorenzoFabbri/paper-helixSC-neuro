@@ -80,6 +80,9 @@ tidy_codebooks <- function(rq) {
         "Percentage of confounders included in the models: {perc_included}%."
       ),
       locations = gt::cells_column_labels(columns = included)
+    ) |>
+    gt::opt_footnote_marks(
+      marks = "letters"
     )
   
   return(ret)
@@ -241,13 +244,61 @@ tbl_desc_vars <- function() {
   #   filename = paste0(path, name)
   # )
   
+  edcs <- myphd::edcs_information()
   desc_chems <- rq02_desc_data_exp$step3 |>
     gtsummary::as_gt() |>
+    gt::tab_row_group(
+      label = "OP pesticide metabolites",
+      rows = variable %in% as.character(edcs[edcs$class == "OP pesticide metabolites", ]$chem_id)
+    ) |>
+    gt::tab_row_group(
+      label = "Phenols",
+      rows = variable %in% as.character(edcs[edcs$class == "Phenols", ]$chem_id)
+    ) |>
+    gt::tab_row_group(
+      label = "Phthalate metabolites",
+      rows = variable %in% as.character(edcs[edcs$class == "Phthalate metabolites", ]$chem_id)
+    ) |>
+    gt::row_group_order(
+      groups = c("OP pesticide metabolites",
+                 "Phenols",
+                 "Phthalate metabolites")
+    ) |>
+    gt::tab_style(
+      locations = gt::cells_row_groups(group = dplyr::everything()),
+      style = list(gt::cell_text(weight = "bold"))
+    ) |>
     gt::opt_footnote_marks(
       marks = "letters"
     )
+  
+  steroids <- readODS::read_ods("docs/steroids.ods")
   desc_mets <- rq02_desc_data_out$step3 |>
-    gtsummary::as_gt() |>
+    gtsummary::as_gt()
+  for (x in unique(steroids$type)) {
+    desc_mets <- desc_mets |>
+      gt::tab_row_group(
+        label = x,
+        rows = variable %in% as.character(
+          steroids[steroids$type == x, ]$acronym
+        )
+      )
+  }
+  desc_mets <- desc_mets |>
+    gt::tab_style(
+      locations = gt::cells_row_groups(group = dplyr::everything()),
+      style = list(gt::cell_text(weight = "bold"))
+    ) |>
+    gt::row_group_order(
+      groups = c(
+        "Glucocorticosteroid",
+        "Glucocorticosteroid metabolite",
+        "Glucocorticosteroid precursor",
+        "Glucocorticosteroid precursor metabolite",
+        "Androgen",
+        "Androgen metabolite"
+      )
+    ) |>
     gt::opt_footnote_marks(
       marks = "letters"
     )
@@ -418,7 +469,7 @@ load_res_weighted_fits <- function(path_store, rq, sa_var) {
   } else {
     weights_ <- weights_ |>
       tidylog::mutate(
-        class = c("TMP")
+        class = c("Glucocorticosteroids")
       )
   }
   
@@ -531,6 +582,9 @@ tidy_res_weighted_fits <- function(dat_tbl, dat_plt, sa_var) {
     gt::tab_footnote(
       footnote = "Truncated weights.",
       locations = gt::cells_column_labels()
+    ) |>
+    gt::opt_footnote_marks(
+      marks = "letters"
     )
   
   return(list(
@@ -651,7 +705,7 @@ load_res_meffects <- function(path_store, rq, sa_var, which_res) {
   } else {
     df <- all_res |>
       tidylog::mutate(
-        class = c("TMP"),
+        class = c("Glucocorticosteroids"),
         variable = replace(
           variable, variable == "x11bhsd", "11bhsd"
         )
@@ -922,6 +976,9 @@ tidy_res_meffects <- function(df, sa_var, outcome,
       locations = gt::cells_column_labels(
         columns = names_
       )
+    ) |>
+    gt::opt_footnote_marks(
+      marks = "letters"
     )
   
   if (is.null(sa_var) & which_res == "comparisons") {
@@ -1313,13 +1370,13 @@ viz_desc_vars <- function(dat, vars, fct_levels, is_chem) {
       )
     )
   
-  if (is_chem) {
-    plt <- plt +
-      ggplot2::labs(caption = "1: quantifiable, 2: <LOD, 3: interference or out of range, 4: not analysed")
-  } else {
-    plt <- plt +
-      ggplot2::labs(caption = "1: quantifiable, 2: <LOQ, 3: interference or out of range, 4: not detected")
-  }
+  # if (is_chem) {
+  #   plt <- plt +
+  #     ggplot2::labs(caption = "1: quantifiable, 2: <LOD, 3: interference or out of range, 4: not analysed")
+  # } else {
+  #   plt <- plt +
+  #     ggplot2::labs(caption = "1: quantifiable, 2: <LOQ, 3: interference or out of range, 4: not detected")
+  # }
   
   df_plot <- df_plot |>
     dplyr::arrange(
