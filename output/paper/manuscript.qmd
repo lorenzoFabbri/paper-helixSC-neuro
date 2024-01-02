@@ -153,7 +153,7 @@ The laboratory protocols for the analysis are described elsewhere [@HaugSakhiCeq
 ### Glucocorticosteroids {#sec-steroids}
 
 ```{r}
-info_steroids <- readODS::read_ods("docs/steroids.ods")
+info_steroids <- readODS::read_ods("../../docs/steroids.ods")
 print_tidy_abbreviations_steroids <- function(df, score) {
   cortisol_prod <- c(
     "20aDHF", "20bDHF", "5bDHF", "5aTHF", "5bTHF",
@@ -380,12 +380,12 @@ In conclusion, in a study of...
 
 {{< pagebreak >}}
 
-<!-- {{< include _tables.qmd >}} -->
+{{< include _tables.qmd >}}
 
 {{< pagebreak >}}
 
-<!-- {{< include _figures.qmd >}} -->
+{{< include _figures.qmd >}}
 
 {{< pagebreak >}}
 
-<!-- {{< include _si.qmd >}} -->
+{{< include _si.qmd >}}

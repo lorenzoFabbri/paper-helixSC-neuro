@@ -38,21 +38,21 @@ targets::tar_load(
 ```{r codebook-1}
 codebook_1
 ```
-Codebook for the covariates used in the estimation of the marginal comparisons of \acr{edcs} on \acr{hitrtse}.
+**Codebook for the covariates used in the estimation of the marginal comparisons of \acr{edcs} on \acr{hitrtse}.**
 :::
 
 ::: {#supptbl-codebook-2}
 ```{r codebook-2}
 codebook_2
 ```
-Codebook for the covariates used in the estimation of the marginal comparisons of \acr{edcs} on the glucocorticosteroids.
+**Codebook for the covariates used in the estimation of the marginal comparisons of \acr{edcs} on the glucocorticosteroids.**
 :::
 
 ::: {#supptbl-codebook-3}
 ```{r codebook-3}
 codebook_3
 ```
-Codebook for the covariates used in the estimation of the marginal comparisons of the glucocorticosteroids on \acr{hitrtse}.
+**Codebook for the covariates used in the estimation of the marginal comparisons of the glucocorticosteroids on \acr{hitrtse}.**
 :::
 
 ### Description of chemicals
@@ -88,7 +88,7 @@ gt::gt(edcs_info,
     style = list(gt::cell_text(weight = "bold"))
   )
 ```
-Information about non-persistent EDCs, including the full compound name, the standard symbol, the used variable name, the identifier from PubChem, and the parental compound.
+**Information about non-persistent EDCs, including the full compound name, the standard symbol, the used variable name, the identifier from PubChem, and the parental compound.**
 :::
 
 ### Description of metabolites
@@ -122,7 +122,7 @@ gt::gt(mets_info,
     marks = "letters"
   )
 ```
-Information about the glucocorticosteroids, including the full metabolite name, the standard symbol, the identifier from the HMDB, and the CAS number.
+**Information about the glucocorticosteroids, including the full metabolite name, the standard symbol, the identifier from the HMDB, and the CAS number.**
 :::
 
 ::: {#supptbl-lloq-mets}
@@ -137,7 +137,7 @@ lloq_mets <- load_steroids()$loq |>
   tidylog::rename(
     LLOQ = "loq"
   ) |>
-  tidylog::select(-metabolite)
+  tidylog::select(-metabolite, Metabolite, LLOQ)
 gt::gt(lloq_mets |> dplyr::arrange(Metabolite)) |>
   gt::tab_footnote(
     footnote = "Abbreviations: lower limit of quantification (LLOQ), expressed in nanograms per millilitre."
@@ -146,7 +146,7 @@ gt::gt(lloq_mets |> dplyr::arrange(Metabolite)) |>
     marks = "letters"
   )
 ```
-Lower limits of quantification for the glucocorticosteroids.
+**Lower limits of quantification for the glucocorticosteroids (HELIX Study; 2013-2016).**
 :::
 
 ## Tables for main results
@@ -163,6 +163,7 @@ targets::tar_load(
 ::: {#supptbl-balance-1}
 ```{r balance-1}
 balance_1 |>
+  tidylog::rename(Exposure = "exposure") |>
   tidylog::group_by(class) |>
   dplyr::arrange(dplyr::desc(Adjusted)) |>
   tidylog::ungroup() |>
@@ -174,9 +175,15 @@ balance_1 |>
   ) |>
   gt::opt_footnote_marks(
     marks = "letters"
+  ) |>
+  gt::tab_style(
+    style = gt::cell_text(
+      weight = "bold"
+    ),
+    locations = gt::cells_row_groups()
   )
 ```
-Effective sample size before and after balancing weights estimation (exposures: \acr{edcs}; outcome: \acr{hitrtse}).
+**Effective sample size before and after balancing weights estimation (exposures: \acr{edcs}; outcome: \acr{hitrtse}) (HELIX Study; 2013-2016).**
 :::
 
 ::: {#supptbl-balance-2}
@@ -193,9 +200,15 @@ balance_2 |>
   ) |>
   gt::opt_footnote_marks(
     marks = "letters"
+  ) |>
+  gt::tab_style(
+    style = gt::cell_text(
+      weight = "bold"
+    ),
+    locations = gt::cells_row_groups()
   )
 ```
-Effective sample size before and after balancing weights estimation (exposures: \acr{edcs}; outcomes: glucocorticosteroids).
+**Effective sample size before and after balancing weights estimation (exposures: \acr{edcs}; outcomes: glucocorticosteroids) (HELIX Study; 2013-2016).**
 :::
 
 ::: {#supptbl-balance-3}
@@ -210,9 +223,15 @@ balance_3 |>
   ) |>
   gt::opt_footnote_marks(
     marks = "letters"
+  ) |>
+  gt::tab_style(
+    style = gt::cell_text(
+      weight = "bold"
+    ),
+    locations = gt::cells_row_groups()
   )
 ```
-Effective sample size before and after balancing weights estimation (exposures: glucocorticosteroids; outcome: \acr{hitrtse}).
+**Effective sample size before and after balancing weights estimation (exposures: glucocorticosteroids; outcome: \acr{hitrtse}) (HELIX Study; 2013-2016).**
 :::
 
 ```{r}
@@ -230,7 +249,7 @@ tidy_res_weighted_fits(
   sa_var = NULL
 )$table
 ```
-Summary statistics of the estimated balancing weights (exposures: \acr{edcs}; outcome: \acr{hitrtse}).
+**Summary statistics of the estimated balancing weights (exposures: \acr{edcs}; outcome: \acr{hitrtse}) (HELIX Study; 2013-2016).**
 :::
 
 ::: {#supptbl-weights-2}
@@ -241,7 +260,7 @@ tidy_res_weighted_fits(
   sa_var = NULL
 )$table
 ```
-Summary statistics of the estimated balancing weights (exposures: \acr{edcs}; outcomes: glucocorticosteroids).
+**Summary statistics of the estimated balancing weights (exposures: \acr{edcs}; outcomes: glucocorticosteroids) (HELIX Study; 2013-2016).**
 :::
 
 ::: {#supptbl-weights-3}
@@ -252,7 +271,7 @@ tidy_res_weighted_fits(
   sa_var = NULL
 )$table
 ```
-Summary statistics of the estimated balancing weights (exposures: glucocorticosteroids; outcome: \acr{hitrtse}).
+**Summary statistics of the estimated balancing weights (exposures: glucocorticosteroids; outcome: \acr{hitrtse}) (HELIX Study; 2013-2016).**
 :::
 
 ## Tables for other results
@@ -274,7 +293,7 @@ tidy_res_weighted_fits(
   sa_var = "e3_sex"
 )$table
 ```
-Summary statistics of the estimated balancing weights for effect modification (exposures: \acr{edcs}; outcome: \acr{hitrtse}; modifier: sex).
+**Summary statistics of the estimated balancing weights for effect modification (exposures: \acr{edcs}; outcome: \acr{hitrtse}; modifier: sex) (HELIX Study; 2013-2016).**
 :::
 
 ::: {#supptbl-weights-2sa}
@@ -285,7 +304,7 @@ tidy_res_weighted_fits(
   sa_var = "e3_sex"
 )$table
 ```
-Summary statistics of the estimated balancing weights for effect modification (exposures: \acr{edcs}; outcomes: glucocorticosteroids; modifier: sex).
+**Summary statistics of the estimated balancing weights for effect modification (exposures: \acr{edcs}; outcomes: glucocorticosteroids; modifier: sex) (HELIX Study; 2013-2016).**
 :::
 
 ::: {#supptbl-weights-3sa}
@@ -296,7 +315,7 @@ tidy_res_weighted_fits(
   sa_var = "e3_sex"
 )$table
 ```
-Summary statistics of the estimated balancing weights for effect modification (exposures: glucocorticosteroids; outcome: \acr{hitrtse}; modifier: sex).
+**Summary statistics of the estimated balancing weights for effect modification (exposures: glucocorticosteroids; outcome: \acr{hitrtse}; modifier: sex) (HELIX Study; 2013-2016).**
 :::
 
 # Supplementary figures
@@ -317,7 +336,7 @@ viz_desc_vars(
   is_chem = TRUE
 )$plot
 ```
-**Measurement classification of \acr{edcs}, by cohort.**
+**Measurement classification of \acr{edcs}, by cohort (HELIX Study; 2013-2016).** 
 Coding: 1, quantifiable; 2, <LOD; 3, interference or out of range; 4. not analysed.
 :::
 
@@ -347,7 +366,7 @@ viz_desc_vars(
   is_chem = FALSE
 )$plot
 ```
-**Measurement classification of the glucocorticosteroids, by cohort.**
+**Measurement classification of the glucocorticosteroids, by cohort (HELIX Study; 2013-2016).** 
 Coding: 1, quantifiable; 2, <LOQ; 3, interference or out of range; 4, not detected.
 :::
 
@@ -376,7 +395,7 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
-**Marginal contrasts for effect modification (exposures: \acr{edcs}; outcome: \acr{hitrtse}; modifier: sex) (HELIX Study; 2013-2016).**
+**Marginal contrasts for effect modification (exposures: \acr{edcs}; outcome: \acr{hitrtse}; modifier: sex) (HELIX Study; 2013-2016).** 
 Circles and triangles indicate effect estimates. Solid lines indicate the $95\%$ \acr{ci}.
 :::
 
@@ -397,7 +416,7 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
-**Marginal contrasts for effect modification (exposures: \acr{edcs}; outcomes: glucocorticosteroids; modifier: sex) (HELIX Study; 2013-2016).**
+**Marginal contrasts for effect modification (exposures: \acr{edcs}; outcomes: glucocorticosteroids; modifier: sex) (HELIX Study; 2013-2016).** 
 Circles and triangles indicate effect estimates. Solid lines indicate the $95\%$ \acr{ci}.
 :::
 
@@ -415,7 +434,7 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
-**Marginal contrasts for effect modification (exposures: glucocorticosteroids; outcome: \acr{hitrtse}; modifier: sex) (HELIX Study; 2013-2016).**
+**Marginal contrasts for effect modification (exposures: glucocorticosteroids; outcome: \acr{hitrtse}; modifier: sex) (HELIX Study; 2013-2016).** 
 Circles and triangles indicate effect estimates. Solid lines indicate the $95\%$ \acr{ci}.
 :::
 

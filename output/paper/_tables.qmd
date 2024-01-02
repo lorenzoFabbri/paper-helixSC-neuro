@@ -24,32 +24,32 @@ here::i_am("output/paper/_tables.qmd")
 
 ## Study populations
 
+::: {#tbl-pop-desc}
 ```{r pop-desc}
-#| label: tbl-pop-desc
-#| tbl-cap: Participant characteristics, by cohort and overall (HELIX Study; 2013-2016).
-
 targets::tar_load("table1", store = store)
 table1
 ```
+**Participant characteristics, by cohort and overall (HELIX Study; 2013-2016).**
+:::
 
 ## Endocrine disruptors
 
+::: {#tbl-edc-desc}
 ```{r edc-desc}
-#| label: tbl-edc-desc
-#| tbl-cap: Participants endocrine disruptors concentrations, by cohort and overall (HELIX Study; 2013-2016).
-
 targets::tar_load("desc_chems_mets", store = store)
 desc_chems_mets$desc_chems
 ```
+**Participants endocrine disruptors concentrations, by cohort and overall (HELIX Study; 2013-2016).**
+:::
 
 ## Glucocorticosteroids
 
+::: {#tbl-met-desc}
 ```{r met-desc}
-#| label: tbl-met-desc
-#| tbl-cap: Participants glucocorticosteroids concentrations, by cohort and overall (HELIX Study; 2013-2016).
-
 desc_chems_mets$desc_mets
 ```
+**Participants glucocorticosteroids concentrations, by cohort and overall (HELIX Study; 2013-2016).**
+:::
 
 # Tables for other analyses
 
@@ -62,10 +62,8 @@ targets::tar_load(
 )
 ```
 
+::: {#tbl-hypothesis-1}
 ```{r hypothesis-1}
-#| label: tbl-hypothesis-1
-#| tbl-cap: Pairwise differences between sex-specific marginal contrasts for the effect of \acr{edcs} on \acr{hitrtse} (HELIX Study; 2013-2016).
-
 tidy_res_meffects(
   df = marginal_hypothesis_1SA,
   sa_var = "e3sex",
@@ -75,11 +73,11 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$table
 ```
+**Pairwise differences between sex-specific marginal contrasts for the effect of \acr{edcs} on \acr{hitrtse} (HELIX Study; 2013-2016).**
+:::
 
+::: {#tbl-hypothesis-2}
 ```{r hypothesis-2}
-#| label: tbl-hypothesis-2
-#| tbl-cap: Pairwise differences between sex-specific marginal contrasts for the effect of \acr{edcs} on the glucocorticosteroids (HELIX Study; 2013-2016).
-
 tidy_res_meffects(
   df = marginal_hypothesis_2SA,
   sa_var = "e3sex",
@@ -89,11 +87,11 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$table
 ```
+**Pairwise differences between sex-specific marginal contrasts for the effect of \acr{edcs} on the glucocorticosteroids (HELIX Study; 2013-2016).**
+:::
 
+::: {#tbl-hypothesis-3}
 ```{r hypothesis-3}
-#| label: tbl-hypothesis-3
-#| tbl-cap: Pairwise differences between sex-specific marginal contrasts for the effect of the glucocorticosteroids on \acr{hitrtse} (HELIX Study; 2013-2016).
-
 tidy_res_meffects(
   df = marginal_hypothesis_3SA,
   sa_var = "e3sex",
@@ -103,3 +101,5 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$table
 ```
+**Pairwise differences between sex-specific marginal contrasts for the effect of the glucocorticosteroids on \acr{hitrtse} (HELIX Study; 2013-2016).**
+:::
