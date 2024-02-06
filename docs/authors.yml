@@ -5,16 +5,45 @@ authors:
     affiliations:
       - ref: isg
       - ref: upf
-    corresponding: true
+      - ref: ciberesp
+    role:
+      - conceptualization
+      - methodology
+      - data curation
+      - software
+      - formal analysis
+      - writing - original draft
+  - name: Oliver Robinson
+    email: o.robinson@imperial.ac.uk
+    orcid: 0000-0002-4735-0468
+    affiliations:
+      - ref: imperial
+    role:
+      - funding acquisition
+      - data curation
+      - writing - review & editing
+  - name: Xavier Basagaña
+    email: xavier.basagana@isglobal.org 
+    orcid: 0000-0002-8457-1489
+    affiliations:
+      - ref: isg
+      - ref: upf
+      - ref: ciberesp
+    role:
+      - writing - review & editing
   - name: Vaia Lida Chatzi
     email: chatzi@usc.edu
     affiliations:
       - ref: usc
+    role:
+      - writing - review & editing
   - name: Regina Gražulevičienė
     email: regina.grazuleviciene@vdu.lt
     orcid: 0000-0002-0210-8053
     affiliations:
       - ref: vdu
+    role:
+      - writing - review & editing
   - name: Mònica Guxens
     email: monica.guxens@isglobal.org 
     orcid: 0000-0002-8624-0333
@@ -22,6 +51,9 @@ authors:
       - ref: isg
       - ref: upf
       - ref: erasmus
+      - ref: ciberesp
+    role:
+      - writing - review & editing
   - name: Barbara Heude
     email: barbara.heude@inserm.fr
     orcid: 0000-0002-1565-1629
@@ -31,36 +63,52 @@ authors:
     email: lea.maitre@isglobal.org
     affiliations:
       - ref: isg
+      - ref: ciberesp
+    role:
+      - writing - review & editing
   - name: Óscar J Pozo
     email: opozo@researchmar.net
     affiliations:
       - ref: imim
-  - name: Oliver Robinson
-    email: o.robinson@imperial.ac.uk
-    orcid: 0000-0002-4735-0468
-    affiliations:
-      - ref: imperial
+    role:
+      - resources
+      - writing - review & editing
   - name: Cathrine Thomsen
     email: Cathrine.Thomsen@fhi.no
     orcid: 0000-0002-6889-7868
     affiliations:
       - ref: fhi
+    role:
+      - writing - review & editing
   - name: John Wright
     email: john.wright@bthft.nhs.uk
     orcid: 0000-0001-9572-7293
     affiliations:
       - ref: bib
+    role:
+      - writing - review & editing
   - name: Martine Vrijheid
     email: martine.vrijheid@isglobal.org
     orcid: 0000-0002-7090-1758
     affiliations:
       - ref: isg
       - ref: upf
+      - ref: ciberesp
+    corresponding: true
+    role:
+      - project administration
+      - funding acquisition
+      - resources
+      - supervision
+      - writing - review & editing
 affiliations:
   - id: isg
     name: Barcelona Institute for Global Health (ISGlobal), Barcelona, Spain
   - id: upf
     name: Pompeu Fabra University, Barcelona, Spain
+  - id: ciberesp
+    name: |
+      Spanish Consortium for Research and Public Health (CIBERESP), Instituto de Salud Carlos III, Madrid, Spain
   - id: imim
     name: Hospital del Mar Research Institute, Barcelona, Spain
   - id: vdu

@@ -190,6 +190,9 @@ tbl_desc_pop <- function(num_digits_est, num_digits_sig) {
     gtsummary::as_gt() |>
     gt::opt_footnote_marks(
       marks = "letters"
+    ) |>
+    gt::tab_options(
+      page.orientation = "landscape"
     )
   
   # Save table

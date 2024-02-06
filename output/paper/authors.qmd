@@ -1,0 +1,13 @@
+---
+title: "Childhood exposure to non-persistent endocrine disruptors, glucocorticosteroids, and neurodevelopment: A study based on the parametric g-formula"
+
+metadata-files:
+  - ../../docs/authors.yml
+
+format:
+  html:
+    embed-resources: true
+
+link-citations: true
+linkcolor: blue
+---

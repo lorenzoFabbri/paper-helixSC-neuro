@@ -146,7 +146,7 @@ gt::gt(lloq_mets |> dplyr::arrange(Metabolite)) |>
     marks = "letters"
   )
 ```
-**Lower limits of quantification for the glucocorticosteroids (HELIX Study; 2013-2016).**
+**Lower limits of quantification for the glucocorticosteroids (HELIX subcohort; 2013-2016).**
 :::
 
 ## Tables for main results
@@ -183,7 +183,7 @@ balance_1 |>
     locations = gt::cells_row_groups()
   )
 ```
-**Effective sample size before and after balancing weights estimation (exposures: \acr{edcs}; outcome: \acr{hitrtse}) (HELIX Study; 2013-2016).**
+**Effective sample size before and after balancing weights estimation (exposures: \acr{edcs}; outcome: \acr{hitrtse}) (HELIX subcohort; 2013-2016).**
 :::
 
 ::: {#supptbl-balance-2}
@@ -208,7 +208,7 @@ balance_2 |>
     locations = gt::cells_row_groups()
   )
 ```
-**Effective sample size before and after balancing weights estimation (exposures: \acr{edcs}; outcomes: glucocorticosteroids) (HELIX Study; 2013-2016).**
+**Effective sample size before and after balancing weights estimation (exposures: \acr{edcs}; outcomes: glucocorticosteroids) (HELIX subcohort; 2013-2016).**
 :::
 
 ::: {#supptbl-balance-3}
@@ -231,7 +231,7 @@ balance_3 |>
     locations = gt::cells_row_groups()
   )
 ```
-**Effective sample size before and after balancing weights estimation (exposures: glucocorticosteroids; outcome: \acr{hitrtse}) (HELIX Study; 2013-2016).**
+**Effective sample size before and after balancing weights estimation (exposures: glucocorticosteroids; outcome: \acr{hitrtse}) (HELIX subcohort; 2013-2016).**
 :::
 
 ```{r}
@@ -249,7 +249,7 @@ tidy_res_weighted_fits(
   sa_var = NULL
 )$table
 ```
-**Summary statistics of the estimated balancing weights (exposures: \acr{edcs}; outcome: \acr{hitrtse}) (HELIX Study; 2013-2016).**
+**Summary statistics of the estimated balancing weights (exposures: \acr{edcs}; outcome: \acr{hitrtse}) (HELIX subcohort; 2013-2016).**
 :::
 
 ::: {#supptbl-weights-2}
@@ -260,7 +260,7 @@ tidy_res_weighted_fits(
   sa_var = NULL
 )$table
 ```
-**Summary statistics of the estimated balancing weights (exposures: \acr{edcs}; outcomes: glucocorticosteroids) (HELIX Study; 2013-2016).**
+**Summary statistics of the estimated balancing weights (exposures: \acr{edcs}; outcomes: glucocorticosteroids) (HELIX subcohort; 2013-2016).**
 :::
 
 ::: {#supptbl-weights-3}
@@ -271,7 +271,7 @@ tidy_res_weighted_fits(
   sa_var = NULL
 )$table
 ```
-**Summary statistics of the estimated balancing weights (exposures: glucocorticosteroids; outcome: \acr{hitrtse}) (HELIX Study; 2013-2016).**
+**Summary statistics of the estimated balancing weights (exposures: glucocorticosteroids; outcome: \acr{hitrtse}) (HELIX subcohort; 2013-2016).**
 :::
 
 ## Tables for other results
@@ -293,7 +293,7 @@ tidy_res_weighted_fits(
   sa_var = "e3_sex"
 )$table
 ```
-**Summary statistics of the estimated balancing weights for effect modification (exposures: \acr{edcs}; outcome: \acr{hitrtse}; modifier: sex) (HELIX Study; 2013-2016).**
+**Summary statistics of the estimated balancing weights for effect modification (exposures: \acr{edcs}; outcome: \acr{hitrtse}; modifier: sex) (HELIX subcohort; 2013-2016).**
 :::
 
 ::: {#supptbl-weights-2sa}
@@ -304,7 +304,7 @@ tidy_res_weighted_fits(
   sa_var = "e3_sex"
 )$table
 ```
-**Summary statistics of the estimated balancing weights for effect modification (exposures: \acr{edcs}; outcomes: glucocorticosteroids; modifier: sex) (HELIX Study; 2013-2016).**
+**Summary statistics of the estimated balancing weights for effect modification (exposures: \acr{edcs}; outcomes: glucocorticosteroids; modifier: sex) (HELIX subcohort; 2013-2016).**
 :::
 
 ::: {#supptbl-weights-3sa}
@@ -315,7 +315,7 @@ tidy_res_weighted_fits(
   sa_var = "e3_sex"
 )$table
 ```
-**Summary statistics of the estimated balancing weights for effect modification (exposures: glucocorticosteroids; outcome: \acr{hitrtse}; modifier: sex) (HELIX Study; 2013-2016).**
+**Summary statistics of the estimated balancing weights for effect modification (exposures: glucocorticosteroids; outcome: \acr{hitrtse}; modifier: sex) (HELIX subcohort; 2013-2016).**
 :::
 
 # Supplementary figures
@@ -336,7 +336,7 @@ viz_desc_vars(
   is_chem = TRUE
 )$plot
 ```
-**Measurement classification of \acr{edcs}, by cohort (HELIX Study; 2013-2016).** 
+**Measurement classification of \acr{edcs}, by cohort (HELIX subcohort; 2013-2016).** 
 Coding: 1, quantifiable; 2, <LOD; 3, interference or out of range; 4. not analysed.
 :::
 
@@ -366,7 +366,7 @@ viz_desc_vars(
   is_chem = FALSE
 )$plot
 ```
-**Measurement classification of the glucocorticosteroids, by cohort (HELIX Study; 2013-2016).** 
+**Measurement classification of the glucocorticosteroids, by cohort (HELIX subcohort; 2013-2016).** 
 Coding: 1, quantifiable; 2, <LOQ; 3, interference or out of range; 4, not detected.
 :::
 
@@ -395,7 +395,7 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
-**Marginal contrasts for effect modification (exposures: \acr{edcs}; outcome: \acr{hitrtse}; modifier: sex) (HELIX Study; 2013-2016).** 
+**Marginal contrasts for effect modification (exposures: \acr{edcs}; outcome: \acr{hitrtse}; modifier: sex) (HELIX subcohort; 2013-2016).** 
 Circles and triangles indicate effect estimates. Solid lines indicate the $95\%$ \acr{ci}.
 :::
 
@@ -416,7 +416,7 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
-**Marginal contrasts for effect modification (exposures: \acr{edcs}; outcomes: glucocorticosteroids; modifier: sex) (HELIX Study; 2013-2016).** 
+**Marginal contrasts for effect modification (exposures: \acr{edcs}; outcomes: glucocorticosteroids; modifier: sex) (HELIX subcohort; 2013-2016).** 
 Circles and triangles indicate effect estimates. Solid lines indicate the $95\%$ \acr{ci}.
 :::
 
@@ -434,8 +434,6 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
-**Marginal contrasts for effect modification (exposures: glucocorticosteroids; outcome: \acr{hitrtse}; modifier: sex) (HELIX Study; 2013-2016).** 
+**Marginal contrasts for effect modification (exposures: glucocorticosteroids; outcome: \acr{hitrtse}; modifier: sex) (HELIX subcohort; 2013-2016).** 
 Circles and triangles indicate effect estimates. Solid lines indicate the $95\%$ \acr{ci}.
 :::
-
-### Sensitivity to exposure assessment
