@@ -166,7 +166,14 @@ tbl_desc_pop <- function(num_digits_est, num_digits_sig) {
   # Add metadata for better labels
   df_meta <- myphd::add_metadata(
     dat = df,
-    metadat = dat_request$meta,
+    metadat = dat_request$meta |>
+      tidylog::mutate(
+        comments = stringr::str_replace_all(
+          comments,
+          pattern = " ",
+          replacement = ""
+        )
+      ),
     categorical_types = c("categorical", "character", "integer"),
     cols_to_exclude = c("cohort")
   )
