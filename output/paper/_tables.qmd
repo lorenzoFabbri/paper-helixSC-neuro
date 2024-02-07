@@ -28,6 +28,15 @@ here::i_am("output/paper/_tables.qmd")
 ```{r pop-desc}
 targets::tar_load("table1", store = store)
 table1
+  # gt::cols_width(
+  #   label ~ gt::px(300)
+  # ) |>
+  # gt::tab_style(
+  #   style = gt::cell_text(size = gt::pct(90)),
+  #   locations = gt::cells_body(
+  #     columns = dplyr::everything()
+  #   )
+  # )
 ```
 **Participant characteristics, by cohort and overall (HELIX subcohort; 2013-2016).**
 :::

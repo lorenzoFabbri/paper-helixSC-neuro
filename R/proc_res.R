@@ -197,9 +197,6 @@ tbl_desc_pop <- function(num_digits_est, num_digits_sig) {
     gtsummary::as_gt() |>
     gt::opt_footnote_marks(
       marks = "letters"
-    ) |>
-    gt::tab_options(
-      page.orientation = "landscape"
     )
   
   # Save table
@@ -220,42 +217,38 @@ tbl_desc_pop <- function(num_digits_est, num_digits_sig) {
 #' @return
 #' @export
 tbl_desc_vars <- function() {
+  params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   path_store <- Sys.getenv("path_store")
   
-  ## Load objects
-  rq <- "02"
-  targets::tar_load(
-    "rq02_desc_data_exp",
-    store = paste0(path_store, rq)
-  )
-  
-  ## Save table
-  path <- "results/tables/"
-  name <- "tbl_desc_chemicals.docx"
-  # gt::gtsave(
-  #   data = rq02_desc_data_exp$step3 |>
-  #     gtsummary::as_gt(),
-  #   filename = paste0(path, name)
-  # )
-  ##############################################################################
-  
-  ## Load objects
-  targets::tar_load(
-    "rq02_desc_data_out",
-    store = paste0(path_store, rq)
-  )
-  
-  ## Save table
-  path <- "results/tables/"
-  name <- "tbl_desc_metabolites.docx"
-  # gt::gtsave(
-  #   data = rq02_desc_data_out$step3 |>
-  #     gtsummary::as_gt(),
-  #   filename = paste0(path, name)
-  # )
-  
+  dat_request <- load_dat_request()
   edcs <- myphd::edcs_information()
-  desc_chems <- rq02_desc_data_exp$step3 |>
+  metabolites <- load_steroids()$metabolome
+  steroids <- readODS::read_ods("docs/steroids.ods")
+  dat <- list()
+  
+  # EDCs
+  dat$exposures <- dat_request$dat |>
+    tidylog::select(
+      params_dat$variables$identifier,
+      dplyr::any_of(params_dat$variables[["rq1"]]$exposures)
+    )
+  tbl_edcs <- dat$exposures |>
+    tidylog::rename_with(
+      .fn = \(x) gsub("hs_|_c", "", x)
+    ) |>
+    tidylog::select(
+      -dplyr::any_of(c("cohort", "HelixID"))
+    ) |>
+    gtsummary::tbl_summary(
+      statistic = list(
+        gtsummary::all_continuous() ~ c(
+          "{median} ({p25}, {p75}); {N_miss} ({p_miss})"
+        )
+      ),
+      missing = "no"
+    )
+  
+  desc_chems <- tbl_edcs |>
     gtsummary::as_gt() |>
     gt::tab_row_group(
       label = "OP pesticide metabolites",
@@ -281,9 +274,47 @@ tbl_desc_vars <- function() {
     gt::opt_footnote_marks(
       marks = "letters"
     )
+  ##############################################################################
   
-  steroids <- readODS::read_ods("docs/steroids.ods")
-  desc_mets <- rq02_desc_data_out$step3 |>
+  ## Glucocorticosteroids
+  metabolites <- myphd::extract_cohort(
+    dat = metabolites,
+    id_var = "HelixID",
+    st = 1, en = 3
+  )
+  dat$outcome <- metabolites |>
+    tidylog::select(
+      cohort,
+      dplyr::any_of(params_dat$variables[["rq2"]]$outcome)
+    ) |>
+    tidylog::mutate(
+      cohort = dplyr::case_when(
+        cohort == "EDE" ~ "EDEN",
+        cohort == "KAN" ~ "KANC",
+        cohort == "MOB" ~ "MOBA",
+        cohort == "RHE" ~ "RHEA",
+        .default = cohort
+      )
+    ) |>
+    tidylog::rename_with(
+      .fn = \(x) gsub("^X", "", x)
+    ) |>
+    tidylog::rename(
+      `E` = "CortisoneE",
+      `17-DO-cortolone` = "17DOcortolone"
+    )
+  
+  desc_mets <- dat$outcome |>
+    gtsummary::tbl_summary(
+      statistic = list(
+        gtsummary::all_continuous() ~ c(
+          "{median} ({p25}, {p75})"
+        )
+      ),
+      missing = "ifany",
+      by = "cohort"
+    ) |>
+    gtsummary::add_overall() |>
     gtsummary::as_gt()
   for (x in unique(steroids$type)) {
     desc_mets <- desc_mets |>
@@ -312,6 +343,7 @@ tbl_desc_vars <- function() {
     gt::opt_footnote_marks(
       marks = "letters"
     )
+  ##############################################################################
   
   return(list(
     desc_chems = desc_chems,
@@ -966,21 +998,21 @@ tidy_res_meffects <- function(df, sa_var, outcome,
       ),
       locations = gt::cells_row_groups()
     ) |>
-    gt::tab_style(
-      style = gt::cell_text(weight = "bold"),
-      locations = purrr::map(
-        names_,
-        \(x) {
-          gt::cells_body(
-            columns = x,
-            rows = stringr::str_detect(!!rlang::sym(x), "\\*")
-          )
-        }
-      )
-    ) |>
-    gt::tab_footnote(
-      footnote = "*Significant results."
-    ) |>
+    # gt::tab_style(
+    #   style = gt::cell_text(weight = "bold"),
+    #   locations = purrr::map(
+    #     names_,
+    #     \(x) {
+    #       gt::cells_body(
+    #         columns = x,
+    #         rows = stringr::str_detect(!!rlang::sym(x), "\\*")
+    #       )
+    #     }
+    #   )
+    # ) |>
+    # gt::tab_footnote(
+    #   footnote = "*Significant results."
+    # ) |>
     gt::tab_footnote(
       footnote = "Estimate and 95% CI.",
       locations = gt::cells_column_labels(

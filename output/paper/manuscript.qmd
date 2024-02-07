@@ -6,7 +6,8 @@ title: "Childhood exposure to non-persistent endocrine disruptors, glucocorticos
 
 format:
   docx:
-    reference-doc: reference_document.docx
+    # reference-doc: reference_document.docx
+    page-width: 8.3
     citeproc: true
   # pdf:
   #   pdf-engine: lualatex
@@ -84,7 +85,7 @@ store <- ifelse(
   "~/mounts/rstudioserver/data/data_paper3/_targets/_targets_res"
 )
 id_var <- "HelixID"
-num_digits_est = 3
+num_digits_est = 2
 num_digits_sig = 2
 params_ <- params(is_hpc = is_hpc)
 threshold_within_lod <- params_$steps$rq2$preproc_outcome$llodq$threshold_within

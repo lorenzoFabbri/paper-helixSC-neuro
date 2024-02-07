@@ -46,17 +46,6 @@
       ],
       "Hash": "72f87e0092e39384aee16df8d67d7410"
     },
-    "Formula": {
-      "Package": "Formula",
-      "Version": "1.2-5",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "stats"
-      ],
-      "Hash": "7a29697b75e027767a53fde6c903eca7"
-    },
     "KernSmooth": {
       "Package": "KernSmooth",
       "Version": "2.23-22",
@@ -1064,9 +1053,14 @@
     },
     "dlookr": {
       "Package": "dlookr",
-      "Version": "0.6.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
+      "Version": "0.6.3.9005",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "dlookr",
+      "RemoteUsername": "choonghyunryu",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "164c8acc3677e93c9fe0f5b13a6a302bfc3df8b5",
       "Requirements": [
         "R",
         "dplyr",
@@ -1080,11 +1074,11 @@
         "methods",
         "mice",
         "pagedown",
-        "partykit",
         "purrr",
         "reactable",
         "rlang",
         "rmarkdown",
+        "rpart",
         "shiny",
         "showtext",
         "sysfonts",
@@ -1093,7 +1087,7 @@
         "tidyselect",
         "utils"
       ],
-      "Hash": "21bba94984f3e9154932deb23bd91c26"
+      "Hash": "cc5cf82ce88b8880faa15149eaa1d826"
     },
     "downlit": {
       "Package": "downlit",
@@ -2029,7 +2023,7 @@
     },
     "igraph": {
       "Package": "igraph",
-      "Version": "1.6.0",
+      "Version": "2.0.1.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -2047,7 +2041,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "eef74fe28b747e52288ea9e1d3600034"
+      "Hash": "fb2999614d40fe7fd61cf569b66a2dbc"
     },
     "insight": {
       "Package": "insight",
@@ -2093,18 +2087,6 @@
         "webexercises"
       ],
       "Hash": "8f8a936a8064965bbe74e68f5aafa462"
-    },
-    "inum": {
-      "Package": "inum",
-      "Version": "1.0-5",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "libcoin",
-        "stats"
-      ],
-      "Hash": "baa4e298aa0fe48568c951d2fcc5d7c2"
     },
     "isoband": {
       "Package": "isoband",
@@ -2312,18 +2294,6 @@
       ],
       "Hash": "d908914ae53b04d4c0c0fd72ecc35370"
     },
-    "libcoin": {
-      "Package": "libcoin",
-      "Version": "1.0-10",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "mvtnorm",
-        "stats"
-      ],
-      "Hash": "3f3775a14588ff5d013e5eab4453bf28"
-    },
     "lifecycle": {
       "Package": "lifecycle",
       "Version": "1.0.4",
@@ -2448,7 +2418,7 @@
     },
     "marginaleffects": {
       "Package": "marginaleffects",
-      "Version": "0.17.0",
+      "Version": "0.18.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -2462,7 +2432,7 @@
         "methods",
         "rlang"
       ],
-      "Hash": "8afe5c5de05ab33886b90c23c5ff62c2"
+      "Hash": "2010e8ebd5059eec442bd4345886cb7b"
     },
     "markdown": {
       "Package": "markdown",
@@ -2636,11 +2606,11 @@
       "Version": "0.0.1",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteUsername": "isglobal-cep",
+      "RemoteHost": "api.github.com",
       "RemoteRepo": "myphd",
+      "RemoteUsername": "isglobal-cep",
       "RemoteRef": "HEAD",
       "RemoteSha": "0f3e7e05ad2ee37c26e3d5d50796348d0e32fcca",
-      "RemoteHost": "api.github.com",
       "Requirements": [
         "VIM",
         "WeightIt",
@@ -2890,27 +2860,6 @@
         "utils"
       ],
       "Hash": "bca377e1c87ec89ebed77bba00635b2e"
-    },
-    "partykit": {
-      "Package": "partykit",
-      "Version": "1.2-20",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "Formula",
-        "R",
-        "grDevices",
-        "graphics",
-        "grid",
-        "inum",
-        "libcoin",
-        "mvtnorm",
-        "rpart",
-        "stats",
-        "survival",
-        "utils"
-      ],
-      "Hash": "8551bfc8d1d6ab813e2e5c8917268cd4"
     },
     "patchwork": {
       "Package": "patchwork",
@@ -3816,7 +3765,7 @@
     },
     "tarchetypes": {
       "Package": "tarchetypes",
-      "Version": "0.7.11",
+      "Version": "0.7.12",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -3833,7 +3782,7 @@
         "vctrs",
         "withr"
       ],
-      "Hash": "156780d04fe436c7141f2d21b2b3446e"
+      "Hash": "27cbcc70b864c0df53cd454f062ac581"
     },
     "targets": {
       "Package": "targets",
@@ -3912,7 +3861,7 @@
     },
     "tidygraph": {
       "Package": "tidygraph",
-      "Version": "1.3.0",
+      "Version": "1.3.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -3931,7 +3880,7 @@
         "tools",
         "utils"
       ],
-      "Hash": "5c1d6e75684cd37665f7f686dad19510"
+      "Hash": "2149824d406f233b57b087be72c5f163"
     },
     "tidylog": {
       "Package": "tidylog",
