@@ -9,6 +9,8 @@ format:
     # reference-doc: reference_document.docx
     page-width: 8.3
     citeproc: true
+    mermaid:
+      theme: neutral
   # pdf:
   #   pdf-engine: lualatex
   #   number-sections: true
@@ -231,7 +233,7 @@ print_tidy_abbreviations_steroids <- function(df, score) {
 
 Urine samples of the night before the day of the visit were used to measure levels of the glucocorticosteroids. These included glucocorticosteroids, glucocorticosteroid metabolites, glucocorticosteroid precursors, glucocorticosteroid precursor metabolites, androgens, and androgen metabolites. A list of the glucocorticosteroids determined in urine samples and used for the present study is given in @supptbl-info-mets.
 
-To assess the levels of glucocorticosteroids and their metabolites, LC-MS/MS analysis was applied at the Applied Metabolomics Research Group, IMIM (Hospital del Mar Medical Research Institute). The laboratory protocols for the analysis are described elsewhere [@MarcosRenauCasals:2014; @Gomez-GomezPozo:2020]. Measurements were available for 980 children of the \acr{helix} subcohort.
+To assess the levels of glucocorticosteroids and their metabolites, LC-MS/MS analysis was applied at the Applied Metabolomics Research Group, IMIM (Hospital del Mar Medical Research Institute). The laboratory protocols for the analysis are described elsewhere [@MarcosRenauCasals:2014; @Gomez-GomezPozo:2020].
 
 Three additional markers, total cortisol production, total cortisone production, and total corticosterone production, were computed based on the following: cortisol production as the sum of cortisol and its metabolites (`r print_tidy_abbreviations_steroids(info_steroids, "cortisol_prod")`), cortisone production as the sum of cortisone and its metabolites (`r print_tidy_abbreviations_steroids(info_steroids, "cortisone_prod")`), and corticosterone production as the sum of `r print_tidy_abbreviations_steroids(info_steroids, "corticosterone_prod")`.
 
@@ -241,7 +243,7 @@ Neurodevelopmental outcomes were assessed with standardized, non-linguistic, and
 
 ### Confounders {#sec-confounders}
 
-For each research question, defined by a specific type of exposure and outcome, the minimal set of covariates for inclusion in the analyses was selected on the basis of a \acr{dag} built with DAGitty [@TextorvanderZanderGilthorpe:2016] and ggdag [@Barrett:2023]. The sets of covariates were selected to estimate the total effect of the exposure on the outcome. Further, each minimal adjustment set was *augmented* with precision covariates, defined as the set of parents variable of the outcome that are not parents of the exposure. The adjustment sets are provided in the Supplementary Material as text files compatible with DAGitty. Codebooks for the used covariates, by research question, are provided in @supptbl-codebook-1, @supptbl-codebook-2, and @supptbl-codebook-3.
+For each research question, defined by a specific type of exposure and outcome, the minimal set of covariates for inclusion in the analyses was selected on the basis of a \acr{dag} built with `DAGitty` [@TextorvanderZanderGilthorpe:2016] and `ggdag` [@Barrett:2023]. The sets of covariates were selected to estimate the total effect of the exposure on the outcome. Further, each minimal adjustment set was *augmented* with precision covariates, defined as the set of parents variable of the outcome that are not parents of the exposure. The adjustment sets are provided in the Supplementary Material as text files compatible with DAGitty. Codebooks for the used covariates, by research question, are provided in Supplementary Tables [-@supptbl-codebook-1; -@supptbl-codebook-2; -@supptbl-codebook-3].
 
 - For RQ1 I used creatinine values from HELIX. For RQ3 the ones from the steroids dataset. For RQ2, I included in the model both variables.
 
@@ -280,9 +282,9 @@ We tested for possible effect-modification by sex. To do so, balancing weights w
 
 # Results {#sec-res}
 
-In total, 1,297 children were included in the study population. Of these, 976 had information also about the glucocorticosteroids. The sample consisted of 55% girls. The median \acr{hitrtse} was 300 ms (\acr{iqr}, 231-368), with lower median values for EDEN, MOBA, and INMA, corresponding to the cohorts with older children. At the time of visit, the median age of the children was 8.06 years. The children were mostly Caucasian (90%), and the largest minority were of Pakistani origin (6.2%). @tbl-pop-desc provides descriptive statistics for the outcome and covariates, by cohort and overall.
+Of the 1,301 children of the \acr{helix} subcohort, 1,297 had measurements of the non-persistent \acr{edcs}. Measurements of the glucocorticosteroids were available for 1,004 children, of which 980 were matched to the \acr{helix} subcohort. Measurements of both non-persistent \acr{edcs} and glucocorticosteroids were available for 976 children of the subcohort. A flowchart describing the sample size for each research question is presented in @suppfig-flow-pop. The sample consisted of 55% girls. The median \acr{hitrtse} was 300 ms (\acr{iqr}, 231-368), with lower median values for EDEN, MOBA, and INMA, corresponding to the cohorts with older children. At the time of visit, the median age of the children was 8.06 years. The children were mostly Caucasian (90%), and the largest minority were of Pakistani origin (6.2%). @tbl-pop-desc provides descriptive statistics for the outcome and covariates, by cohort and overall.
 
-Levels of unprocessed non-persistent \acr{edcs} and glucocorticosteroids, by cohort and overall, are presented in @tbl-edc-desc, @tbl-met-desc, and @tbl-met-new-desc.
+Levels of unprocessed non-persistent \acr{edcs} and glucocorticosteroids are presented in @tbl-edc-desc, @tbl-met-new-desc, and @supptbl-met-desc.
 
 The effective sample sizes before and after balancing weights estimation are presented in Supplementary Tables [-@supptbl-balance-1; -@supptbl-balance-2; -@supptbl-balance-3], while basic summary statistics of the estimated balancing weights are presented in Supplementary Tables [-@supptbl-weights-1; -@supptbl-weights-2; -@supptbl-weights-3]. As expected, the median value of the weights for each exposure was close to $1.00$.
 

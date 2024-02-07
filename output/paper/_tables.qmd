@@ -53,13 +53,6 @@ desc_chems_mets$desc_chems
 
 ## Glucocorticosteroids
 
-::: {#tbl-met-desc}
-```{r met-desc}
-desc_chems_mets$desc_mets
-```
-**Participants glucocorticosteroids concentrations, by cohort and overall (HELIX subcohort; 2013-2016).**
-:::
-
 ::: {#tbl-met-new-desc}
 ```{r met-new-desc}
 metabolites <- load_steroids()

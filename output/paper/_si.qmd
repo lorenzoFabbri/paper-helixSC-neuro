@@ -55,7 +55,7 @@ codebook_3
 **Codebook for the covariates used in the estimation of the marginal comparisons of the glucocorticosteroids on \acr{hitrtse}.**
 :::
 
-### Description of chemicals
+### Description of endocrine disruptors
 
 ::: {#supptbl-info-chems}
 ```{r info-chems}
@@ -91,7 +91,14 @@ gt::gt(edcs_info,
 **Information about non-persistent EDCs, including the full compound name, the standard symbol, the used variable name, the identifier from PubChem, and the parental compound.**
 :::
 
-### Description of metabolites
+### Description of glucocorticosteroids
+
+::: {#supptbl-met-desc}
+```{r met-desc}
+desc_chems_mets$desc_mets
+```
+**Participants glucocorticosteroids concentrations, by cohort and overall (HELIX subcohort; 2013-2016).**
+:::
 
 ::: {#supptbl-info-mets}
 ```{r info-mets}
@@ -322,7 +329,23 @@ tidy_res_weighted_fits(
 
 ## Figures for descriptive data
 
-### Description of chemicals
+### Study populations
+
+::: {#suppfig-flow-pop}
+```{mermaid}
+flowchart TB
+  helixsc["HELIX subcohort\n(N = 1,301)"] --> edcs["HELIX data EDCs\n(N = 1,297)"]
+  helixsc --> corts["HELIX data glucocorticosteroids\n(N = 1,004)"]
+  edcs --> inter["HELIX data EDCs and glucocorticosteroids\n(N = 976)"]
+  corts --> inter
+  edcs -.-> rq1(["HRT-SE ~ EDCs"])
+  inter -.-> rq2(["metabolites ~ EDCs"])
+  inter -.-> rq3(["HRT-SE ~ metabolites"])
+```
+Flowchart describing thew sample size for each research question.
+:::
+
+### Description of endocrine disruptors
 
 ::: {#suppfig-desc-chems}
 ```{r desc-chems-lod}
@@ -340,7 +363,7 @@ viz_desc_vars(
 Coding: 1, quantifiable; 2, <LOD; 3, interference or out of range; 4. not analysed.
 :::
 
-### Description of metabolites
+### Description of glucocorticosteroids
 
 ::: {#suppfig-desc-mets}
 ```{r desc-mets-lod}

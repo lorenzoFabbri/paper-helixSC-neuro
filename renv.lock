@@ -1033,23 +1033,19 @@
     },
     "distributional": {
       "Package": "distributional",
-      "Version": "0.3.2",
+      "Version": "0.4.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
-        "digest",
-        "farver",
         "generics",
-        "ggplot2",
         "lifecycle",
         "numDeriv",
         "rlang",
-        "scales",
         "stats",
         "utils",
         "vctrs"
       ],
-      "Hash": "0a94c3c917918a1c90f4609171ff41b6"
+      "Hash": "3bad76869f2257ea4fd00a3c08c2bcce"
     },
     "dlookr": {
       "Package": "dlookr",
