@@ -191,22 +191,15 @@ tbl_desc_pop <- function(num_digits_est, num_digits_sig) {
           "{median} ({p25}, {p75})"
         ),
         gtsummary::all_categorical() ~ "{n} ({p}%)"
-      )
+      ),
+      digits = dplyr::everything() ~ 1,
+      missing = "ifany"
     ) |>
     gtsummary::add_overall() |>
     gtsummary::as_gt() |>
     gt::opt_footnote_marks(
       marks = "letters"
     )
-  
-  # Save table
-  path <- "results/tables/"
-  name <- "tbl_desc_pop.docx"
-  # gt::gtsave(
-  #   data = desc_covars |>
-  #     gtsummary::as_gt(),
-  #   filename = paste0(path, name)
-  # )
   
   return(desc_covars)
 } # End function tbl_desc_pop
@@ -245,7 +238,8 @@ tbl_desc_vars <- function() {
           "{median} ({p25}, {p75}); {N_miss} ({p_miss})"
         )
       ),
-      missing = "no"
+      missing = "no",
+      digits = dplyr::everything() ~ 1
     )
   
   desc_chems <- tbl_edcs |>
@@ -312,7 +306,8 @@ tbl_desc_vars <- function() {
         )
       ),
       missing = "ifany",
-      by = "cohort"
+      by = "cohort",
+      digits = dplyr::everything() ~ 1
     ) |>
     gtsummary::add_overall() |>
     gtsummary::as_gt()

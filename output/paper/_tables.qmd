@@ -90,12 +90,56 @@ scores <- myphd::extract_cohort(
     "corticosterone production" = "corticosterone_production"
   )
 
-scores |>
+# Entire population (1004)
+desc_sums_all <- scores |>
+  dplyr::select(-cohort) |>
   gtsummary::tbl_summary(
-    by = "cohort"
+    statistic = list(
+      gtsummary::all_continuous() ~ c(
+        "{median} ({p25}, {p75}); {N_miss} ({p_miss})"
+      )
+    ),
+    missing = "no",
+    digits = dplyr::everything() ~ 1
+  )
+
+# Intersection with HELIX subcohort (976)
+targets::tar_load(
+  dplyr::contains("load"),
+  store = "~/mounts/rstudioserver/data/data_paper3/_targets/_targetsRQ2/"
+)
+desc_sums_intersection <- create_steroid_scores(rq2_load_dat$outcome) |>
+  dplyr::select(
+    cortisol_production,
+    cortisone_production,
+    corticosterone_production
   ) |>
-  gtsummary::add_overall() |>
+  tidylog::rename(
+    "cortisol production" = "cortisol_production",
+    "cortisone production" = "cortisone_production",
+    "corticosterone production" = "corticosterone_production"
+  ) |>
+  gtsummary::tbl_summary(
+    statistic = list(
+      gtsummary::all_continuous() ~ c(
+        "{median} ({p25}, {p75}); {N_miss} ({p_miss})"
+      )
+    ),
+    missing = "no",
+    digits = dplyr::everything() ~ 1
+  )
+
+gtsummary::tbl_merge(
+  tbls = list(desc_sums_all, desc_sums_intersection)
+) |>
+  gtsummary::modify_spanning_header(
+    dplyr::everything() ~ NA_character_
+  ) |>
   gtsummary::as_gt() |>
+  gt::tab_footnote(
+    footnote = "Measurements available for the HELIX subcohort.",
+    locations = gt::cells_column_labels(8)
+  ) |>
   gt::opt_footnote_marks(
     marks = "letters"
   )
