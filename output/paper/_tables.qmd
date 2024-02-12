@@ -48,7 +48,7 @@ table1
 targets::tar_load("desc_chems_mets", store = store)
 desc_chems_mets$desc_chems
 ```
-**Participants endocrine disruptors concentrations, by cohort and overall (HELIX subcohort; 2013-2016).**
+**Participants endocrine disruptors concentrations (HELIX subcohort; 2013-2016).**
 :::
 
 ## Glucocorticosteroids
@@ -149,11 +149,14 @@ targets::tar_load(
   dplyr::matches("marginal_hypothesis_(\\d)SA$"),
   store = store
 )
+edcs <- myphd::edcs_information() |>
+  dplyr::filter(!chem_id %in% c("dedtp", "dmdtp")) |>
+  dplyr::select(chem_id, short_name)
 ```
 
-::: {#tbl-hypothesis-1}
-```{r hypothesis-1}
-tidy_res_meffects(
+::: {#tbl-hypothesis-1and2}
+```{r hypothesis-1and2}
+t1 <- tidy_res_meffects(
   df = marginal_hypothesis_1SA,
   sa_var = "e3sex",
   outcome = NULL,
@@ -161,13 +164,7 @@ tidy_res_meffects(
   num_digits_est = num_digits_est,
   num_digits_sig = num_digits_sig
 )$table
-```
-**Pairwise differences between sex-specific marginal contrasts for the effect of \acr{edcs} on \acr{hitrtse} (HELIX subcohort; 2013-2016).**
-:::
-
-::: {#tbl-hypothesis-2}
-```{r hypothesis-2}
-tidy_res_meffects(
+t2 <- tidy_res_meffects(
   df = marginal_hypothesis_2SA,
   sa_var = "e3sex",
   outcome = NULL,
@@ -175,8 +172,38 @@ tidy_res_meffects(
   num_digits_est = num_digits_est,
   num_digits_sig = num_digits_sig
 )$table
+
+dplyr::bind_cols(t1$`_data`, t2$`_data`) |>
+  dplyr::select(-`class...4`, -`variable...5`) |>
+  dplyr::rename(
+    class = "class...1",
+    variable = "variable...2"
+  ) |>
+  dplyr::left_join(
+    edcs,
+    by = c("variable" = "chem_id")
+  ) |>
+  dplyr::select(-variable) |>
+  dplyr::rename(variable = "short_name") |>
+  gt::gt(
+    rowname_col = "variable",
+    groupname_col = "class"
+  ) |>
+  gt::tab_style(
+    style = gt::cell_text(
+      weight = "bold"
+    ),
+    locations = gt::cells_row_groups()
+  ) |>
+  gt::tab_footnote(
+    footnote = "Estimate and 95% CI.",
+    locations = gt::cells_column_labels()
+  ) |>
+  gt::opt_footnote_marks(
+    marks = "letters"
+  )
 ```
-**Pairwise differences between sex-specific marginal contrasts for the effect of \acr{edcs} on the glucocorticosteroids (HELIX subcohort; 2013-2016).**
+**Pairwise differences between sex-specific marginal contrasts for the effect of a decrease from the 90th to the 10th percentile of {{< acr edcs >}} on {{< acr hitrtse >}} and the glucocorticosteroids (HELIX subcohort; 2013-2016).**
 :::
 
 ::: {#tbl-hypothesis-3}
@@ -190,5 +217,5 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$table
 ```
-**Pairwise differences between sex-specific marginal contrasts for the effect of the glucocorticosteroids on \acr{hitrtse} (HELIX subcohort; 2013-2016).**
+**Pairwise differences between sex-specific marginal contrasts for the effect of a decrease from the 90th to the 10th percentile of the glucocorticosteroids on {{< acr hitrtse >}} (HELIX subcohort; 2013-2016).**
 :::

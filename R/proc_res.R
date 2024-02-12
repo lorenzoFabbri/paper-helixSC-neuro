@@ -214,7 +214,9 @@ tbl_desc_vars <- function() {
   path_store <- Sys.getenv("path_store")
   
   dat_request <- load_dat_request()
-  edcs <- myphd::edcs_information()
+  edcs <- myphd::edcs_information() |>
+    dplyr::filter(!chem_id %in% c("dedtp", "dmdtp")) |>
+    dplyr::select(chem_id, short_name, class)
   metabolites <- load_steroids()$metabolome
   steroids <- readODS::read_ods("docs/steroids.ods")
   dat <- list()
@@ -232,6 +234,10 @@ tbl_desc_vars <- function() {
     tidylog::select(
       -dplyr::any_of(c("cohort", "HelixID"))
     ) |>
+    dplyr::rename_with(
+      ~tibble::deframe(edcs)[.x],
+      .cols = edcs$chem_id
+    ) |>
     gtsummary::tbl_summary(
       statistic = list(
         gtsummary::all_continuous() ~ c(
@@ -246,15 +252,15 @@ tbl_desc_vars <- function() {
     gtsummary::as_gt() |>
     gt::tab_row_group(
       label = "OP pesticide metabolites",
-      rows = variable %in% as.character(edcs[edcs$class == "OP pesticide metabolites", ]$chem_id)
+      rows = variable %in% as.character(edcs[edcs$class == "OP pesticide metabolites", ]$short_name)
     ) |>
     gt::tab_row_group(
       label = "Phenols",
-      rows = variable %in% as.character(edcs[edcs$class == "Phenols", ]$chem_id)
+      rows = variable %in% as.character(edcs[edcs$class == "Phenols", ]$short_name)
     ) |>
     gt::tab_row_group(
       label = "Phthalate metabolites",
-      rows = variable %in% as.character(edcs[edcs$class == "Phthalate metabolites", ]$chem_id)
+      rows = variable %in% as.character(edcs[edcs$class == "Phthalate metabolites", ]$short_name)
     ) |>
     gt::row_group_order(
       groups = c("OP pesticide metabolites",

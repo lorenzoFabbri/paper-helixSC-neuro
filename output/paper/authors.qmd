@@ -7,6 +7,8 @@ metadata-files:
 format:
   html:
     embed-resources: true
+    template-partials:
+      - title-metadata.html
 
 link-citations: true
 linkcolor: blue
