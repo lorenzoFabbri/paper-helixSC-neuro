@@ -16,9 +16,19 @@ list(
     name = "table1",
     command = tbl_desc_pop(
       num_digits_est = num_digits_est,
-      num_digits_sig = num_digits_sig
+      num_digits_sig = num_digits_sig,
+      by = FALSE
     )
   ), # End table1 target
+  ##############################################################################
+  targets::tar_target(
+    name = "table1_full",
+    command = tbl_desc_pop(
+      num_digits_est = num_digits_est,
+      num_digits_sig = num_digits_sig,
+      by = TRUE
+    )
+  ), # End table1_full target
   ##############################################################################
   targets::tar_target(
     name = "desc_chems_mets",

@@ -20,33 +20,17 @@ local Acronyms = require("acronyms")
 -- Sorting function
 local sortAcronyms = require("sort_acronyms")
 
--- Replacement function (handling styles)
-local replaceExistingAcronymWithStyle = require("acronyms_styles")
+-- Replacement function
+local AcronymsPandoc = require("acronyms_pandoc")
 
 -- The options for the List Of Acronyms, as defined in the document's metadata.
 local Options = require("acronyms_options")
 
+
 --[[
-The current "usage order" value.
-We increment this value each time we find a new acronym, and we use it
-to register the order in which acronyms appear.
+    Parse the document's metadata, including options, and acronyms' definitions.
+    It does not change the metadata.
 --]]
-local current_order = 0
-
-
--- A helper function to print warnings
-function warn(...)
-    -- Handle variadic args: use `tostring` to avoid errors
-    -- (in particular for table or nil values)
-    local t = table.pack(...)
-    for i=1, t.n do
-        t[i] = tostring(t[i])
-    end
-    local msg = table.concat(t, "")
-    io.stderr:write("[WARNING][acronymsdown] ", msg, "\n")
-end
-
-
 function Meta(m)
     Options:parseOptionsFromMetadata(m)
 
@@ -73,45 +57,7 @@ end
 
 
 --[[
-Generate the List Of Acronyms.
-Returns 2 values: the Header, and the DefinitionList.
---]]
-function generateLoA()
-    -- Original idea from https://gist.github.com/RLesur/e81358c11031d06e40b8fef9fdfb2682
-
-    -- We first get the list of sorted acronyms, according to the defined criteria.
-    local sorted = sortAcronyms(Acronyms.acronyms,
-            Options["sorting"],
-            Options["include_unused"])
-
-    -- Create the table that represents the DefinitionList
-    local definition_list = {}
-    for _, acronym in ipairs(sorted) do
-        -- The definition's name. A Span with an ID so we can create a link.
-        local name = pandoc.Span(acronym.shortname,
-            pandoc.Attr(Helpers.key_to_id(acronym.key), {}, {}))
-        -- The definition's value.
-        local definition = pandoc.Plain(acronym.longname)
-        table.insert(definition_list, { name, definition })
-    end
-
-    -- Create the Header (only if the title is not empty)
-    local header = nil
-    local loa_extra_classes = {}
-    if Options["loa_title"] ~= "" then
-        local loa_classes = {"loa"}
-        header = pandoc.Header(1,
-            { table.unpack(Options["loa_title"]) },
-            pandoc.Attr(Helpers.key_to_id("HEADER_LOA"), loa_classes, {})
-        )
-    end
-
-    return header, pandoc.DefinitionList(definition_list)
-end
-
-
---[[
-Append the List Of Acronyms to the document (at the beginning).
+    Append the List Of Acronyms to the document (at the beginning).
 --]]
 function appendLoA(doc)
     local pos
@@ -125,11 +71,15 @@ function appendLoA(doc)
         -- Insert at the last block in the document
         pos = #doc.blocks + 1
     else
-        error("Unrecognized option insert_loa="
-                .. tostring(Options["insert_loa"]))
+        quarto.log.error(
+            "[acronyms] Unrecognized option `insert_loa`=`",
+            tostring(Options["insert_loa"]),
+            "` in `appendLoA`."
+        )
+        assert(false)
     end
 
-    local header, definition_list = generateLoA()
+    local header, definition_list = AcronymsPandoc.generateLoA()
 
     -- Insert the DefinitionList
     table.insert(doc.blocks, pos, definition_list)
@@ -144,10 +94,14 @@ end
 
 
 --[[
-Place the List Of Acronyms in the document (in place of a `\printacronyms` block).
-Since Header and DefinitionList are Blocks, we need to replace a Block
-(Pandoc does not allow to create Blocks from Inlines).
-Thus, `\printacronyms` needs to be in its own Block (no other text!).
+    Place the List of Acronyms in the document, in place of a `\printacronysm`.
+
+    This is used when the user wants to generate the LoA at a very specific
+    place (instead of "simply" at the beginning or end).
+    Because the Header (title) and DefinitionList (LoA itself) are Blocks,
+    we must replace a Block as well (Pandoc does not allow to create Blocks
+    from Inlines). Thus, `\printacronyms` needs to be in its own Block (no
+    other text!).
 --]]
 function RawBlock(el)
     -- The block's content must be exactly "\printacronyms"
@@ -155,7 +109,7 @@ function RawBlock(el)
         return nil
     end
 
-    local header, definition_list = generateLoA()
+    local header, definition_list = AcronymsPandoc.generateLoA()
 
     if header ~= nil then
         return { header, definition_list }
@@ -164,50 +118,6 @@ function RawBlock(el)
     end
 end
 
---[[
-Replace an acronym `\acr{KEY}`, where KEY is not in the `acronyms` table.
-According to the options, we can either:
-- warn, and return simply the KEY as text
-- warn, and return "??" as text (similar to bibtex's behaviour)
-- raise an error
---]]
-function replaceNonExistingAcronym(acr_key)
-    -- TODO: adding the source line to warnings would be useful.
-    --  But maybe not doable in Pandoc?
-    if Options["non_existing"] == "key" then
-        warn("Acronym key ", acr_key, " not recognized")
-        return pandoc.Str(acr_key)
-    elseif Options["non_existing"] == "??" then
-        warn("Acronym key ", acr_key, " not recognized")
-        return pandoc.Str("??")
-    elseif Options["non_existing"] == "error" then
-        error("Acronym key " .. tostring(acr_key)
-                .. " not recognized, stopping!")
-    else
-        error("Unrecognized option non_existing="
-                .. tostring(Options["non_existing"]))
-    end
-end
-
---[[
-Replace an acronym `\acr{KEY}`, where KEY is recognized in the `acronyms` table.
---]]
-function replaceExistingAcronym(acr_key)
-    local acronym = Acronyms:get(acr_key)
-    acronym:incrementOccurrences()
-    if acronym:isFirstUse() then
-        -- This acronym never appeared! We first set its usage order.
-        current_order = current_order + 1
-        acronym.usage_order = current_order
-    end
-
-    -- Replace the acronym with the desired style
-    return replaceExistingAcronymWithStyle(
-        acronym,
-        Options["style"],
-        Options["insert_links"]
-    )
-end
 
 --[[
 Replace each `\acr{KEY}` with the correct text and link to the list of acronyms.
@@ -218,16 +128,17 @@ function replaceAcronym(el)
         -- This is an acronym, we need to parse it.
         if Acronyms:contains(acr_key) then
             -- The acronym exists (and is recognized)
-            return replaceExistingAcronym(acr_key)
+            return AcronymsPandoc.replaceExistingAcronym(acr_key)
         else
             -- The acronym does not exists
-            return replaceNonExistingAcronym(acr_key)
+            return AcronymsPandoc.replaceNonExistingAcronym(acr_key)
         end
     else
         -- This is not an acronym, return nil to leave it unchanged.
         return nil
     end
 end
+
 
 -- Force the execution of the Meta filter before the RawInline
 -- (we need to load the acronyms first!)

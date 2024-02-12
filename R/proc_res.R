@@ -96,7 +96,7 @@ tidy_codebooks <- function(rq) {
 #'
 #' @return
 #' @export
-tbl_desc_pop <- function(num_digits_est, num_digits_sig) {
+tbl_desc_pop <- function(num_digits_est, num_digits_sig, by) {
   path_store <- Sys.getenv("path_store")
   
   # Load data request (all variables)
@@ -179,27 +179,49 @@ tbl_desc_pop <- function(num_digits_est, num_digits_sig) {
   )
   
   # Generate "Table 1"
-  desc_covars <- df_meta |>
-    gtsummary::tbl_summary(
-      by = "cohort",
-      type = list(
-        hs_fastfood ~ "continuous",
-        hs_org_food ~ "continuous"
-      ),
-      statistic = list(
-        gtsummary::all_continuous() ~ c(
-          "{median} ({p25}, {p75})"
+  if (by == FALSE) {
+    desc_covars <- df_meta |>
+      gtsummary::tbl_summary(
+        type = list(
+          hs_fastfood ~ "continuous",
+          hs_org_food ~ "continuous"
         ),
-        gtsummary::all_categorical() ~ "{n} ({p}%)"
-      ),
-      digits = dplyr::everything() ~ 1,
-      missing = "ifany"
-    ) |>
-    gtsummary::add_overall() |>
-    gtsummary::as_gt() |>
-    gt::opt_footnote_marks(
-      marks = "letters"
-    )
+        statistic = list(
+          gtsummary::all_continuous() ~ c(
+            "{median} ({p25}, {p75})"
+          ),
+          gtsummary::all_categorical() ~ "{n} ({p}%)"
+        ),
+        digits = dplyr::everything() ~ 1,
+        missing = "ifany"
+      ) |>
+      gtsummary::as_gt() |>
+      gt::opt_footnote_marks(
+        marks = "letters"
+      )
+  } else {
+    desc_covars <- df_meta |>
+      gtsummary::tbl_summary(
+        by = "cohort",
+        type = list(
+          hs_fastfood ~ "continuous",
+          hs_org_food ~ "continuous"
+        ),
+        statistic = list(
+          gtsummary::all_continuous() ~ c(
+            "{median} ({p25}, {p75})"
+          ),
+          gtsummary::all_categorical() ~ "{n} ({p}%)"
+        ),
+        digits = dplyr::everything() ~ 1,
+        missing = "ifany"
+      ) |>
+      gtsummary::add_overall() |>
+      gtsummary::as_gt() |>
+      gt::opt_footnote_marks(
+        marks = "letters"
+      )
+  }
   
   return(desc_covars)
 } # End function tbl_desc_pop

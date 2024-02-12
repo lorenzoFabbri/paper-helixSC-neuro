@@ -36,6 +36,17 @@ here::i_am("output/paper/_figures.qmd")
 ```{r}
 # Function to align forest plot with table numerical results
 forest_plot <- function(obj, r = 4) {
+  edcs <- myphd::edcs_information() |>
+    dplyr::filter(!chem_id %in% c("dedtp", "dmdtp")) |>
+    dplyr::select(chem_id, short_name, class) |>
+    dplyr::bind_rows(
+      tibble::tibble(
+        chem_id = c("Exposure"),
+        short_name = c("Exposure"),
+        class = c(NULL)
+      )
+    )
+  
   # From table of numerical results to ggplot object
   tbl_num_res <- obj$numerical_results |>
     tidylog::mutate(
@@ -44,6 +55,13 @@ forest_plot <- function(obj, r = 4) {
       )
     ) |>
     tidylog::select(-estimate) |>
+    dplyr::left_join(
+      edcs[, c("chem_id", "short_name")],
+      by = c("variable" = "chem_id")
+    ) |>
+    dplyr::select(-variable) |>
+    dplyr::rename(variable = "short_name") |>
+    dplyr::relocate(variable) |>
     ggplot2::ggplot(
       ggplot2::aes(
         y = variable,
@@ -119,7 +137,7 @@ obj1 <- tidy_res_meffects(
 )
 forest_plot(obj = obj1)
 ```
-**Marginal contrasts for the effect of a decrease from the 90th to the 10th percentile of the {{< acr edcs >}} on {{< acr hitrtse >}} (HELIX subcohort; 2013-2016).** 
+**Marginal contrasts for the effect of a decrease from the 90th to the 10th percentile of the {{< acr edcs >}} on {{< acr hitrtse >}} expressed in {{< acr mss >}} (HELIX subcohort; 2013-2016).** 
 Circles indicate effect estimates. Solid lines indicate the $95\%$ {{< acr ci >}}.
 :::
 
@@ -142,7 +160,7 @@ obj2 <- tidy_res_meffects(
 )
 forest_plot(obj = obj2)
 ```
-**Marginal contrasts for the effect of a decrease from the 90th to the 10th percentile of the {{< acr edcs >}} on the glucocorticosteroids (HELIX subcohort; 2013-2016).** 
+**Marginal contrasts for the effect of a decrease from the 90th to the 10th percentile of the {{< acr edcs >}} on the glucocorticosteroids expressed in ng/ml (HELIX subcohort; 2013-2016).** 
 Circles, triangles, and squares indicate effect estimates. Solid lines indicate the $95\%$ {{< acr ci >}}.
 :::
 
@@ -161,6 +179,6 @@ obj3 <- tidy_res_meffects(
 )
 forest_plot(obj = obj3, r = 5)
 ```
-**Marginal contrasts for the effect of a decrease from the 90th to the 10th percentile of the glucocorticosteroids on {{< acr hitrtse >}} (HELIX subcohort; 2013-2016).** 
+**Marginal contrasts for the effect of a decrease from the 90th to the 10th percentile of the glucocorticosteroids on {{< acr hitrtse >}} expressed in {{< acr mss >}} (HELIX subcohort; 2013-2016).** 
 Circles indicate effect estimates. Solid lines indicate the $95\%$ {{< acr ci >}}.
 :::

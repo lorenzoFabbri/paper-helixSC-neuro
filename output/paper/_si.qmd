@@ -27,6 +27,14 @@ cat(all_dags$marker_to_out)
 
 ### Study populations
 
+::: {#supptbl-pop-desc}
+```{r pop-desc-full}
+targets::tar_load("table1_full", store = store)
+table1_full
+```
+**Participant characteristics, by cohort and overall (HELIX subcohort; 2013-2016).**
+:::
+
 ```{r}
 targets::tar_load(
   dplyr::contains("codebook_"),
@@ -147,13 +155,13 @@ lloq_mets <- load_steroids()$loq |>
   tidylog::select(-metabolite, Metabolite, LLOQ)
 gt::gt(lloq_mets |> dplyr::arrange(Metabolite)) |>
   gt::tab_footnote(
-    footnote = "Abbreviations: lower limit of quantification (LLOQ), expressed in nanograms per millilitre."
+    footnote = "Abbreviations: lower limit of quantification (LLOQ)."
   ) |>
   gt::opt_footnote_marks(
     marks = "letters"
   )
 ```
-**Lower limits of quantification for the glucocorticosteroids (HELIX subcohort; 2013-2016).**
+**Lower limits of quantification expressed in ng/ml for the glucocorticosteroids (HELIX subcohort; 2013-2016).**
 :::
 
 ## Tables for main results
@@ -418,7 +426,7 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
-**Marginal contrasts for effect modification by sex of a decrease from the 90th to the 10th percentile of the {{< acr edcs >}} on {{< acr hitrtse >}} (HELIX subcohort; 2013-2016).** 
+**Marginal contrasts for effect modification by sex of a decrease from the 90th to the 10th percentile of the {{< acr edcs >}} on {{< acr hitrtse >}} expressed in {{< acr mss >}} (HELIX subcohort; 2013-2016).** 
 Circles and triangles indicate effect estimates. Solid lines indicate the $95\%$ {{< acr ci >}}.
 :::
 
@@ -439,7 +447,7 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
-**Marginal contrasts for effect modification by sex of a decrease from the 90th to the 10th percentile of the {{< acr edcs >}} on the glucocorticosteroids (HELIX subcohort; 2013-2016).** 
+**Marginal contrasts for effect modification by sex of a decrease from the 90th to the 10th percentile of the {{< acr edcs >}} on the glucocorticosteroids expressed in ng/ml (HELIX subcohort; 2013-2016).** 
 Circles and triangles indicate effect estimates. Solid lines indicate the $95\%$ {{< acr ci >}}.
 :::
 
@@ -457,6 +465,7 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
-**Marginal contrasts for effect modification by sex of a decrease from the 90th to the 10th percentile of the glucocorticosteroids on {{< acr hitrtse >}} (HELIX subcohort; 2013-2016).** 
+**Marginal contrasts for effect modification by sex of a decrease from the 90th to the 10th percentile of the glucocorticosteroids on {{< acr hitrtse >}} expressed in {{< acr mss >}}
+ (HELIX subcohort; 2013-2016).** 
 Circles and triangles indicate effect estimates. Solid lines indicate the $95\%$ {{< acr ci >}}.
 :::

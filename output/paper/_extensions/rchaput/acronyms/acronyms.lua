@@ -25,16 +25,42 @@ Acronym = {
 }
 
 
+-- Helper method to generate a precise error message describing the user the
+-- problem when creating an acronym (e.g., if the shortname is missing).
+local function raiseAcronymCreationError(object)
+    local msg = lunacolors.red("Error when creating an acronym:\n")
+    msg = msg .. "! Both `shortname`` and `longname` must be specified:\n"
+    if object.shortname == nil then
+        msg = msg .. "x `shortname` was nil\n"
+    end
+    if object.longname == nil then
+        msg = msg .. "x `longname` was nil\n"
+    end
+    local unexpected_keys = {}
+    for k, _ in pairs(object.original_metadata) do
+        if k ~= "shortname" and k ~= "longname" and k ~= "key" then
+            table.insert(unexpected_keys, k)
+        end
+    end
+    msg = msg .. "i Found unexpected keys: " .. table.concat(unexpected_keys, ",") .. ".\n"
+    -- This str here represents the original metadata, not the formatted
+    -- Acronym (which could be obtained with `tostring(object)`).
+    local acronym_str = Helpers.metadata_to_str(object.original_metadata)
+    msg = msg .. "i The acronym was defined as: " .. acronym_str .. "\n"
+    quarto.log.error("[acronyms]", msg, "\n")
+    assert(false)
+end
+
+
 -- Create a new Acronym
 function Acronym:new(object)
     setmetatable(object, self)
     self.__index = self
 
     -- Check that important attributes are non-nil
-    assert(object.shortname ~= nil,
-        "An Acronym shortname should not be nil!")
-    assert(object.longname ~= nil,
-        "An Acronym longname should not be nil!")
+    if object.shortname == nil or object.longname == nil then
+        raiseAcronymCreationError(object)
+    end
 
     -- If the key is not set, we want to use the shortname instead.
     -- (Most of the time, the key is the shortname in lower case anyway...)
@@ -80,6 +106,12 @@ Acronyms = {
     -- count of the order in which acronyms are defined.
     current_definition_order = 0,
 
+    -- The current "usage order" value.
+    -- We increment this value each time an acronym is used for the first time,
+    -- to keep count of their order of appearance. This can be necessary for
+    -- generating the List of Acronyms, depending on the desired order.
+    current_usage_order = 0,
+
     -- Access to the `Acronym` class, if necessary.
     Acronym = Acronym,
 }
@@ -99,13 +131,17 @@ end
 
 -- Add a new acronym to the table. Also handles duplicates.
 function Acronyms:add(acronym, on_duplicate)
+    quarto.log.debug("[acronyms] Trying to add a new acronym...", acronym)
+    assert(acronym ~= nil,
+        "[acronyms] The acronym should not be nil in Acronyms:add!")
     assert(acronym.key ~= nil,
-        "The acronym key should not be nil!")
+        "[acronyms] The acronym key should not be nil in Acronyms:add!")
     assert(on_duplicate ~= nil,
-        "on_duplicate should not be nil!")
+        "[acronyms] The parameter on_duplicate should not be nil in Acronyms:add!")
 
     -- Handling duplicate keys
     if self:contains(acronym.key) then
+        quarto.log.debug("[acronyms] Found an acronym with a duplicate key: ", acronym.key)
         if on_duplicate == "replace" then
             -- Do nothing, let us replace the previous acronym.
         elseif on_duplicate == "keep" then
@@ -113,13 +149,15 @@ function Acronyms:add(acronym, on_duplicate)
             return
         elseif on_duplicate == "warn" then
             -- Warn, and do not replace.
-            warn("Duplicate key: ", acronym.key)
+            quarto.log.warning("[acronyms] Found an acronym with a duplicate key: ", acronym.key)
             return
         elseif on_duplicate == "error" then
             -- Stop execution.
-            error("Duplicate key: " .. acronym.key)
+            quarto.log.error("[acronyms] Found an acronym with a duplicate key: ", acronym.key)
+            assert(false)
         else
-            error("Unrecognized option on_duplicate = " .. on_duplicate)
+            quarto.log.error("[acronyms] Unrecognized option `on_duplicate`=", tostring(on_duplicate), " in Acronyms:add.")
+            assert(false)
         end
     end
 
@@ -129,15 +167,25 @@ function Acronyms:add(acronym, on_duplicate)
 end
 
 
+function Acronyms:setAcronymUsageOrder(acronym)
+    assert(acronym ~=nil,
+        "[acronyms] The acronym should not be nil in Acronyms:setAcronymUsageOrder!")
+    self.current_usage_order = self.current_usage_order + 1
+    acronym.usage_order = self.current_usage_order
+end
+
+
 -- Populate the Acronyms database from a YAML metadata
 function Acronyms:parseFromMetadata(metadata, on_duplicate)
+    quarto.log.debug("[acronyms] Parsing acronyms from metadata...", metadata.acronyms)
     -- We expect the acronyms to be in the `metadata.acronyms.keys` field.
     if not (metadata and metadata.acronyms and metadata.acronyms.keys) then
         return
     end
     -- This field should be a Pandoc "MetaList" (so we can iter over it).
     if not Helpers.isMetaList(metadata.acronyms.keys) then
-        error("The acronyms.keys should be a list!")
+        quarto.log.error("[acronyms] The `acronyms.keys` metadata should be a list!")
+        assert(false)
     end
 
     -- Iterate over the defined acronyms. We use `ipairs` since we want to
@@ -152,6 +200,7 @@ function Acronyms:parseFromMetadata(metadata, on_duplicate)
             key = key,
             shortname = shortname,
             longname = longname,
+            original_metadata = v,
         }
         Acronyms:add(acronym, on_duplicate)
     end
@@ -161,13 +210,14 @@ end
 -- Populate the Acronyms database from a YAML file
 -- Inspired from https://github.com/dsanson/pandoc-abbreviations.lua/
 function Acronyms:parseFromYamlFile(filepath, on_duplicate)
+    quarto.log.debug("[acronyms] Trying to parse acronyms from file: ", filepath)
     assert(filepath ~= nil,
-        "filepath must not be nil!")
+        "[acronyms] filepath must not be nil when parsing from external file!")
 
     -- First, read the file's content.
     local file = io.open(filepath, "r")
     if file == nil then
-        warn("File ", filepath, " could not be read! (does not exist?)")
+        quarto.log.warning("[acronyms] File ", filepath, " could not be read! (does not exist?)")
         return
     end
     local content = file:read("*a")
