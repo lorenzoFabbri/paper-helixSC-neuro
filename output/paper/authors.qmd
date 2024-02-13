@@ -16,18 +16,41 @@ editor_options:
 ---
 
 ```{r}
-authors <- yaml::read_yaml("../../docs/authors.yml")
-
 proc_one <- function(df, idx) {
   tmp <- df$authors[[idx]]
   
   affiliations <- unname(unlist(tmp$affiliations))
-  full_names <- tibble::tibble(unlist(df$affiliations))
-  stringr::str_replace_all()
+  full_names <- tibble::tibble(
+    id = unlist(lapply(df$affiliations, "[[", "id")),
+    long = unlist(lapply(df$affiliations, "[[", "name"))
+  ) |>
+    dplyr::mutate(
+      long = stringr::str_replace_all(
+        long, "\n", ""
+      )
+    )
+  affiliations_long <- unlist(lapply(
+    affiliations,
+    function(x) {
+      full_names[full_names$id == x, ]$long
+    }
+  ))
+  affiliations_long <- paste0(affiliations_long, collapse = ".<br>")
   
   ret <- tibble::tribble(
     ~name, ~affiliations, ~role,
-    tmp$name, paste0(unname(unlist(tmp$affiliations)), collapse = "; "), paste0(tmp$role, collapse = "; ")
+    tmp$name, affiliations_long, paste0(tmp$role, collapse = "<br>")
   )
 }
+```
+
+```{r}
+authors <- yaml::read_yaml("../../docs/authors.yml")
+lapply(seq_along(authors$authors), function(x) {
+  proc_one(authors, x)
+}) |>
+  dplyr::bind_rows() |>
+  gt::gt() |>
+  gt::fmt_markdown(columns = dplyr::everything()) |>
+  gt::gtsave("authors.pdf")
 ```
