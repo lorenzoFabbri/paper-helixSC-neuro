@@ -842,6 +842,11 @@ tidy_res_meffects <- function(df, sa_var, outcome,
         "cortisol metabolism" ~ "cortisol met.",
         "cortisone metabolism" ~ "cortisone met.",
         .default = variable
+      ),
+      outcome = dplyr::case_match(
+        outcome,
+        "hitrtse" ~ "HRT-SE",
+        .default = outcome
       )
     )
   

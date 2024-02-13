@@ -7,9 +7,27 @@ metadata-files:
 format:
   html:
     embed-resources: true
-    template-partials:
-      - title-metadata.html
 
 link-citations: true
 linkcolor: blue
+
+editor_options:
+  chunk_output_type: console
 ---
+
+```{r}
+authors <- yaml::read_yaml("../../docs/authors.yml")
+
+proc_one <- function(df, idx) {
+  tmp <- df$authors[[idx]]
+  
+  affiliations <- unname(unlist(tmp$affiliations))
+  full_names <- tibble::tibble(unlist(df$affiliations))
+  stringr::str_replace_all()
+  
+  ret <- tibble::tribble(
+    ~name, ~affiliations, ~role,
+    tmp$name, paste0(unname(unlist(tmp$affiliations)), collapse = "; "), paste0(tmp$role, collapse = "; ")
+  )
+}
+```
