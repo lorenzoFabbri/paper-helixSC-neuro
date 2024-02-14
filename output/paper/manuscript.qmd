@@ -246,7 +246,7 @@ Neurodevelopmental outcomes were assessed with standardized, non-linguistic, and
 
 ### Confounders {#sec-confounders}
 
-For each research question, defined by a specific type of exposure and outcome, the minimal set of covariates for inclusion in the analyses was selected on the basis of a {{< acr dag >}} built with `DAGitty` [@TextorvanderZanderGilthorpe:2016] and `ggdag` [@Barrett:2023]. The sets of covariates were selected to estimate the total effect of the exposure on the outcome. Further, each minimal adjustment set was *augmented* with precision covariates, defined as the set of parents variable of the outcome that are not parents of the exposure. The adjustment sets are provided in the Supplementary Material as text files compatible with DAGitty. Codebooks for the used covariates, by research question, are provided in Supplementary Tables [-@supptbl-codebook-1; -@supptbl-codebook-2; -@supptbl-codebook-3].
+For each research question, defined by a specific type of exposure and outcome, the minimal set of covariates for inclusion in the analyses was selected on the basis of a {{< acr dag >}} built with `DAGitty` [@TextorvanderZanderGilthorpe:2016] and `ggdag` [@Barrett:2023]. The sets of covariates were selected to estimate the total effect of the exposure on the outcome. For effect estimation of the {{< acr edcs >}} on glucocorticosteroids and of glucocorticosteroids on {{< acr hitrtse >}}, these sets were also sufficient to estimate direct effects. Further, each minimal adjustment set was *augmented* with precision covariates, defined as the set of parents variable of the outcome that are not parents of the exposure. The adjustment sets are provided in the Supplementary Material as text files compatible with DAGitty. Codebooks for the used covariates, by research question, are provided in Supplementary Tables [-@supptbl-codebook-1; -@supptbl-codebook-2; -@supptbl-codebook-3].
 
 - For RQ1 I used creatinine values from HELIX. For RQ3 the ones from the steroids dataset. For RQ2, I included in the model both variables.
 
@@ -281,7 +281,7 @@ We further estimated the {{< acr adrf >}} using the `avg_predictions` function f
 
 ### Effect-modification analysis
 
-We tested for possible effect-modification by sex. To do so, balancing weights were estimated separately for each level of the sex variable, and an interaction term between the exposure and sex was included in the outcome model. Similarly, the {{< acr mcs >}} were aggregated separately for each level of sex. We further tested for significance of the difference between the {{< acr mcs >}} of males and females.
+We tested for possible effect-modification by sex. To do so, balancing weights were estimated separately for each level of the sex variable, and an interaction term between the exposure and sex was included in the outcome model. Similarly, the {{< acr mcs >}} were aggregated separately for each level of sex. We further tested for significance of the difference between the {{< acr mcs >}} of females and males.
 
 # Results {#sec-res}
 

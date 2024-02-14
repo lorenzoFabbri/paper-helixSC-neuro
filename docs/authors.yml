@@ -20,6 +20,7 @@ authors:
       - ref: imperial
     role:
       - funding acquisition
+      - data acquisition
       - data curation
       - writing - review & editing
   - name: Xavier Basagaña
@@ -36,6 +37,7 @@ authors:
     affiliations:
       - ref: usc
     role:
+      - data acquisition
       - writing - review & editing
   - name: Regina Gražulevičienė
     email: regina.grazuleviciene@vdu.lt
@@ -43,6 +45,7 @@ authors:
     affiliations:
       - ref: vdu
     role:
+      - data acquisition
       - writing - review & editing
   - name: Mònica Guxens
     email: monica.guxens@isglobal.org 
@@ -53,12 +56,16 @@ authors:
       - ref: erasmus
       - ref: ciberesp
     role:
+      - data acquisition
       - writing - review & editing
   - name: Barbara Heude
     email: barbara.heude@inserm.fr
     orcid: 0000-0002-1565-1629
     affiliations:
       - ref: inserm
+    role:
+      - data acquisition
+      - writing - review & editing
   - name: Léa Maitre
     email: lea.maitre@isglobal.org
     affiliations:
@@ -72,6 +79,7 @@ authors:
       - ref: imim
     role:
       - resources
+      - data acquisition
       - writing - review & editing
   - name: Cathrine Thomsen
     email: Cathrine.Thomsen@fhi.no
@@ -79,6 +87,7 @@ authors:
     affiliations:
       - ref: fhi
     role:
+      - data acquisition
       - writing - review & editing
   - name: John Wright
     email: john.wright@bthft.nhs.uk
@@ -86,6 +95,7 @@ authors:
     affiliations:
       - ref: bib
     role:
+      - data acquisition
       - writing - review & editing
   - name: Martine Vrijheid
     email: martine.vrijheid@isglobal.org
@@ -99,6 +109,7 @@ authors:
       - project administration
       - funding acquisition
       - resources
+      - data acquisition
       - supervision
       - writing - review & editing
 affiliations:
