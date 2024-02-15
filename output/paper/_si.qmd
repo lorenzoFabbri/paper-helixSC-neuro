@@ -173,12 +173,19 @@ targets::tar_load(
   dplyr::matches("balance_(\\d)$"),
   store = store
 )
+
+edcs <- myphd::edcs_information() |>
+  dplyr::filter(!chem_id %in% c("dedtp", "dmdtp")) |>
+  dplyr::select(chem_id, short_name)
 ```
 
 ::: {#supptbl-balance-1}
 ```{r balance-1}
 balance_1 |>
-  tidylog::rename(Exposure = "exposure") |>
+  dplyr::left_join(edcs, by = c("exposure" = "chem_id")) |>
+  dplyr::select(-exposure) |>
+  dplyr::rename(Exposure = "short_name") |>
+  dplyr::relocate(Exposure) |>
   tidylog::group_by(class) |>
   dplyr::arrange(dplyr::desc(Adjusted)) |>
   tidylog::ungroup() |>
@@ -204,6 +211,10 @@ balance_1 |>
 ::: {#supptbl-balance-2}
 ```{r balance-2}
 balance_2 |>
+  dplyr::left_join(edcs, by = c("exposure" = "chem_id")) |>
+  dplyr::select(-exposure) |>
+  dplyr::rename(Exposure = "short_name") |>
+  dplyr::relocate(Exposure) |>
   tidylog::group_by(class) |>
   dplyr::arrange(dplyr::desc(Adjusted)) |>
   tidylog::ungroup() |>
@@ -229,6 +240,7 @@ balance_2 |>
 ::: {#supptbl-balance-3}
 ```{r balance-3}
 balance_3 |>
+  dplyr::rename(Exposure = "exposure") |>
   dplyr::arrange(dplyr::desc(Adjusted)) |>
   gt::gt() |>
   gt::fmt_number(n_sigfig = 4) |>
@@ -254,6 +266,10 @@ targets::tar_load(
   dplyr::matches("weights_(\\d)$"),
   store = store
 )
+
+edcs <- myphd::edcs_information() |>
+    dplyr::filter(!chem_id %in% c("dedtp", "dmdtp")) |>
+    dplyr::select(chem_id, short_name, class)
 ```
 
 ::: {#supptbl-weights-1}
@@ -262,7 +278,28 @@ tidy_res_weighted_fits(
   dat_tbl = weights_1$dat_tbl,
   dat_plt = weights_1$dat_plt,
   sa_var = NULL
-)$table
+)$table |>
+  gt::tab_row_group(
+    label = "OP pesticide metabolites",
+    rows = variable %in% as.character(edcs[edcs$class == "OP pesticide metabolites", ]$short_name)
+  ) |>
+  gt::tab_row_group(
+    label = "Phenols",
+    rows = variable %in% as.character(edcs[edcs$class == "Phenols", ]$short_name)
+  ) |>
+  gt::tab_row_group(
+    label = "Phthalate metabolites",
+    rows = variable %in% as.character(edcs[edcs$class == "Phthalate metabolites", ]$short_name)
+  ) |>
+  gt::row_group_order(
+    groups = c("OP pesticide metabolites",
+               "Phenols",
+               "Phthalate metabolites")
+  ) |>
+  gt::tab_style(
+    locations = gt::cells_row_groups(group = dplyr::everything()),
+    style = list(gt::cell_text(weight = "bold"))
+  )
 ```
 **Summary statistics of the estimated balancing weights (exposures: {{< acr edcs >}}; outcome: {{< acr hitrtse >}}) (HELIX subcohort; 2013-2016).**
 :::
@@ -273,7 +310,28 @@ tidy_res_weighted_fits(
   dat_tbl = weights_2$dat_tbl,
   dat_plt = weights_2$dat_plt,
   sa_var = NULL
-)$table
+)$table |>
+  gt::tab_row_group(
+    label = "OP pesticide metabolites",
+    rows = variable %in% as.character(edcs[edcs$class == "OP pesticide metabolites", ]$short_name)
+  ) |>
+  gt::tab_row_group(
+    label = "Phenols",
+    rows = variable %in% as.character(edcs[edcs$class == "Phenols", ]$short_name)
+  ) |>
+  gt::tab_row_group(
+    label = "Phthalate metabolites",
+    rows = variable %in% as.character(edcs[edcs$class == "Phthalate metabolites", ]$short_name)
+  ) |>
+  gt::row_group_order(
+    groups = c("OP pesticide metabolites",
+               "Phenols",
+               "Phthalate metabolites")
+  ) |>
+  gt::tab_style(
+    locations = gt::cells_row_groups(group = dplyr::everything()),
+    style = list(gt::cell_text(weight = "bold"))
+  )
 ```
 **Summary statistics of the estimated balancing weights (exposures: {{< acr edcs >}}; outcomes: glucocorticosteroids) (HELIX subcohort; 2013-2016).**
 :::
@@ -306,7 +364,28 @@ tidy_res_weighted_fits(
   dat_tbl = weights_1SA$dat_tbl,
   dat_plt = weights_1SA$dat_plt,
   sa_var = "e3_sex"
-)$table
+)$table |>
+  gt::tab_row_group(
+    label = "OP pesticide metabolites",
+    rows = variable %in% as.character(edcs[edcs$class == "OP pesticide metabolites", ]$short_name)
+  ) |>
+  gt::tab_row_group(
+    label = "Phenols",
+    rows = variable %in% as.character(edcs[edcs$class == "Phenols", ]$short_name)
+  ) |>
+  gt::tab_row_group(
+    label = "Phthalate metabolites",
+    rows = variable %in% as.character(edcs[edcs$class == "Phthalate metabolites", ]$short_name)
+  ) |>
+  gt::row_group_order(
+    groups = c("OP pesticide metabolites",
+               "Phenols",
+               "Phthalate metabolites")
+  ) |>
+  gt::tab_style(
+    locations = gt::cells_row_groups(group = dplyr::everything()),
+    style = list(gt::cell_text(weight = "bold"))
+  )
 ```
 **Summary statistics of the estimated balancing weights for effect modification (exposures: {{< acr edcs >}}; outcome: {{< acr hitrtse >}}; modifier: sex) (HELIX subcohort; 2013-2016).**
 :::
@@ -317,7 +396,28 @@ tidy_res_weighted_fits(
   dat_tbl = weights_2SA$dat_tbl,
   dat_plt = weights_2SA$dat_plt,
   sa_var = "e3_sex"
-)$table
+)$table |>
+  gt::tab_row_group(
+    label = "OP pesticide metabolites",
+    rows = variable %in% as.character(edcs[edcs$class == "OP pesticide metabolites", ]$short_name)
+  ) |>
+  gt::tab_row_group(
+    label = "Phenols",
+    rows = variable %in% as.character(edcs[edcs$class == "Phenols", ]$short_name)
+  ) |>
+  gt::tab_row_group(
+    label = "Phthalate metabolites",
+    rows = variable %in% as.character(edcs[edcs$class == "Phthalate metabolites", ]$short_name)
+  ) |>
+  gt::row_group_order(
+    groups = c("OP pesticide metabolites",
+               "Phenols",
+               "Phthalate metabolites")
+  ) |>
+  gt::tab_style(
+    locations = gt::cells_row_groups(group = dplyr::everything()),
+    style = list(gt::cell_text(weight = "bold"))
+  )
 ```
 **Summary statistics of the estimated balancing weights for effect modification (exposures: {{< acr edcs >}}; outcomes: glucocorticosteroids; modifier: sex) (HELIX subcohort; 2013-2016).**
 :::

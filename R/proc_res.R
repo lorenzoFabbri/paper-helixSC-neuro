@@ -597,11 +597,29 @@ tidy_res_weighted_fits <- function(dat_tbl, dat_plt, sa_var) {
   }
   
   # Tidy table with numerical values
+  edcs <- myphd::edcs_information() |>
+    dplyr::filter(!chem_id %in% c("dedtp", "dmdtp")) |>
+    dplyr::select(chem_id, short_name)
+  
   colnames(dat_tbl) <- gsub(
     "hs_|_c", "", colnames(dat_tbl)
   )
   dat_tbl <- dat_tbl |>
     tidylog::select(-outcome)
+  if ("dep" %in% colnames(dat_tbl)) {
+    dat_tbl <- dat_tbl |>
+      dplyr::rename_with(
+        ~tibble::deframe(edcs)[.x],
+        .cols = edcs$chem_id
+      )
+  } else {
+    colnames(dat_tbl) <- gsub(
+      pattern = "_",
+      replacement = " ",
+      x = colnames(dat_tbl)
+    )
+  }
+  
   by <- if (is.null(sa_var)) {
     NULL
   } else {
@@ -998,9 +1016,7 @@ tidy_res_meffects <- function(df, sa_var, outcome,
         FALSE
       ),
       val = glue::glue(
-        "{estimate} ({conf.low}, {conf.high}){ifelse(
-        sig == TRUE, '*', ''
-        )}"
+        "{estimate} ({conf.low}, {conf.high})"
       )
     ) |>
     tidylog::select(
