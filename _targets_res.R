@@ -7,7 +7,7 @@ targets::tar_option_set(
   format = "qs"
 )
 path_store <- Sys.getenv("path_store")
-num_digits_est <- 2
+num_digits_est <- 3
 num_digits_sig <- 2
 sa_var_ <- "e3_sex"
 

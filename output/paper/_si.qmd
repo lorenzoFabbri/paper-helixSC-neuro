@@ -2,8 +2,6 @@
 here::i_am("output/paper/_si.qmd")
 ```
 
-- Files for supplementary data must be accompanied by a summary of the file names and types.
-
 # Supplementary information
 
 ## Directed Acyclic Graphs
@@ -152,13 +150,18 @@ lloq_mets <- load_steroids()$loq |>
   tidylog::rename(
     LLOQ = "loq"
   ) |>
-  tidylog::select(-metabolite, Metabolite, LLOQ)
+  tidylog::select(-metabolite) |>
+  tidylog::select(Metabolite, LLOQ)
 gt::gt(lloq_mets |> dplyr::arrange(Metabolite)) |>
   gt::tab_footnote(
     footnote = "Abbreviations: lower limit of quantification (LLOQ)."
   ) |>
   gt::opt_footnote_marks(
     marks = "letters"
+  ) |>
+  gt::tab_style(
+    locations = gt::cells_column_labels(),
+    style = list(gt::cell_text(weight = "bold"))
   )
 ```
 **Lower limits of quantification expressed in ng/ml for the glucocorticosteroids (HELIX subcohort; 2013-2016).**
@@ -450,7 +453,7 @@ flowchart TB
   inter -.-> rq2(["metabolites ~ EDCs"])
   inter -.-> rq3(["HRT-SE ~ metabolites"])
 ```
-Flowchart describing thew sample size for each research question.
+Flowchart describing the sample size for each research question.
 :::
 
 ### Description of endocrine disruptors
@@ -567,5 +570,5 @@ tidy_res_meffects(
 ```
 **Marginal contrasts for effect modification by sex of a decrease from the 90th to the 10th percentile of the glucocorticosteroids on {{< acr hitrtse >}} expressed in {{< acr mss >}}
  (HELIX subcohort; 2013-2016).** 
-Circles and triangles indicate effect estimates. Solid lines indicate the $95\%$ {{< acr ci >}}.
+Circles and triangles indicate effect estimates. Solid lines indicate the $95\%$ {{< acr ci >}}. Abbreviations: cortisone production (cortisone prod.); cortisol production (cortisol prod.); corticost. prod. (corticosterone production).
 :::

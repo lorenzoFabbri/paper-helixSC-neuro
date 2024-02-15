@@ -137,7 +137,7 @@ gtsummary::tbl_merge(
     marks = "letters"
   )
 ```
-**Participants derived glucocorticosteroids concentrations expressed in ng/ml, by cohort and overall (HELIX subcohort; 2013-2016).**
+**Participants derived glucocorticosteroids concentrations expressed in ng/ml (HELIX subcohort; 2013-2016).**
 :::
 
 # Tables for other analyses

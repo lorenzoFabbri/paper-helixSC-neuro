@@ -1027,6 +1027,14 @@ tidy_res_meffects <- function(df, sa_var, outcome,
       ))
     )
   df_gt <- processed_df |>
+    dplyr::mutate(
+      variable = dplyr::case_match(
+        variable,
+        "cortisone prod." ~ "cortisone production",
+        "cortisol prod." ~ "cortisol production",
+        "corticost. prod." ~ "corticosterone pruduction"
+      )
+    ) |>
     tidylog::select(-estimate) |>
     tidyr::pivot_wider(
       names_from = dplyr::any_of(c("outcome", "modifier")),
