@@ -109,8 +109,12 @@ tbl_desc_pop <- function(num_digits_est, num_digits_sig, by) {
         cohort == "KAN" ~ "KANC",
         cohort == "MOB" ~ "MOBA",
         cohort == "RHE" ~ "RHEA",
+        cohort == "SAB" ~ "INMA",
         .default = cohort
       )
+    ) |>
+    dplyr::rename(
+      Cohort = "cohort"
     )
   ## Handle time variables
   cols_to_season <- c("hs_date_neu", "e3_cbirth")
@@ -118,6 +122,9 @@ tbl_desc_pop <- function(num_digits_est, num_digits_sig, by) {
     dat = dat_request$dat,
     cols = cols_to_season
   ) |>
+    dplyr::mutate(
+      hs_date_neu = stringr::str_to_sentence(hs_date_neu)
+    ) |>
     tidylog::mutate(dplyr::across(
       dplyr::any_of(cols_to_season),
       \(x) factor(x)
@@ -148,6 +155,7 @@ tbl_desc_pop <- function(num_digits_est, num_digits_sig, by) {
   df <- dat_request$dat |>
     tidylog::select(
       HelixID,
+      Cohort,
       params_dat$variables$rq1$outcome,
       dplyr::any_of(all_confounders)
     )
@@ -193,16 +201,15 @@ tbl_desc_pop <- function(num_digits_est, num_digits_sig, by) {
           gtsummary::all_categorical() ~ "{n} ({p}%)"
         ),
         digits = dplyr::everything() ~ 1,
-        missing = "ifany"
-      ) |>
-      gtsummary::as_gt() |>
-      gt::opt_footnote_marks(
-        marks = "letters"
+        missing = "ifany",
+        sort = list(
+          gtsummary::all_categorical() ~ "frequency"
+        )
       )
   } else {
     desc_covars <- df_meta |>
       gtsummary::tbl_summary(
-        by = "cohort",
+        by = "Cohort",
         type = list(
           hs_fastfood ~ "continuous",
           hs_org_food ~ "continuous"
@@ -214,14 +221,23 @@ tbl_desc_pop <- function(num_digits_est, num_digits_sig, by) {
           gtsummary::all_categorical() ~ "{n} ({p}%)"
         ),
         digits = dplyr::everything() ~ 1,
-        missing = "ifany"
+        missing = "ifany",
+        sort = list(
+          gtsummary::all_categorical() ~ "frequency"
+        )
       ) |>
-      gtsummary::add_overall() |>
-      gtsummary::as_gt() |>
-      gt::opt_footnote_marks(
-        marks = "letters"
-      )
+      gtsummary::add_overall()
   }
+  
+  desc_covars <- desc_covars |>
+    gtsummary::modify_table_body(
+      ~ .x |>
+        dplyr::arrange(var_label)
+    ) |>
+    gtsummary::as_gt() |>
+    gt::opt_footnote_marks(
+      marks = "letters"
+    )
   
   return(desc_covars)
 } # End function tbl_desc_pop
@@ -269,6 +285,15 @@ tbl_desc_vars <- function() {
       missing = "no",
       digits = dplyr::everything() ~ 1
     )
+  tbl_edcs$table_body <- dplyr::left_join(
+    tbl_edcs$table_body, edcs,
+    by = c("variable" = "short_name")
+  ) |>
+    dplyr::group_by(class) |>
+    dplyr::arrange(
+      variable,
+      .by_group = TRUE
+    )
   
   desc_chems <- tbl_edcs |>
     gtsummary::as_gt() |>
@@ -315,6 +340,7 @@ tbl_desc_vars <- function() {
         cohort == "KAN" ~ "KANC",
         cohort == "MOB" ~ "MOBA",
         cohort == "RHE" ~ "RHEA",
+        cohort == "SAB" ~ "INMA",
         .default = cohort
       )
     ) |>
@@ -337,7 +363,21 @@ tbl_desc_vars <- function() {
       by = "cohort",
       digits = dplyr::everything() ~ 1
     ) |>
-    gtsummary::add_overall() |>
+    gtsummary::add_overall()
+  
+  desc_mets$table_body <- dplyr::left_join(
+    desc_mets$table_body,
+    steroids |>
+      dplyr::select(acronym, type),
+    by = c("variable" = "acronym")
+  ) |>
+    dplyr::group_by(type) |>
+    dplyr::arrange(
+      variable,
+      .by_group = TRUE
+    )
+  
+  desc_mets <- desc_mets |>
     gtsummary::as_gt()
   for (x in unique(steroids$type)) {
     desc_mets <- desc_mets |>
@@ -869,13 +909,24 @@ tidy_res_meffects <- function(df, sa_var, outcome,
     )
   
   # Forest plots side-by-side
+  df <- df |>
+    dplyr::group_by(class) |>
+    dplyr::arrange(
+      variable,
+      .by_group = TRUE
+    ) |>
+    dplyr::ungroup() |>
+    dplyr::mutate(
+      variable = factor(variable, levels = unique(variable)),
+      variable = forcats::fct_rev(variable)
+    )
   if (is.null(sa_var) | which_res == "hypothesis") {
     if (length(outcome) > 0) {
       plot <- df |>
         ggplot2::ggplot(
           mapping = ggplot2::aes(
             x = estimate,
-            y = forcats::fct_reorder2(variable, estimate, class),
+            y = variable,
             color = class,
             shape = outcome
           )
@@ -885,7 +936,7 @@ tidy_res_meffects <- function(df, sa_var, outcome,
         ggplot2::ggplot(
           mapping = ggplot2::aes(
             x = estimate,
-            y = forcats::fct_reorder2(variable, estimate, class),
+            y = variable,
             color = class
           )
         )
@@ -895,9 +946,7 @@ tidy_res_meffects <- function(df, sa_var, outcome,
       ggplot2::ggplot(
         mapping = ggplot2::aes(
           x = estimate,
-          y = forcats::fct_reorder2(
-            variable, estimate, class
-          ),
+          y = variable,
           color = class,
           shape = modifier
         )
@@ -998,9 +1047,6 @@ tidy_res_meffects <- function(df, sa_var, outcome,
     paste0(names_, "_", c(unique(df$modifier)))
   }
   processed_df <- df |>
-    dplyr::arrange(
-      outcome, class, dplyr::desc(variable)
-    ) |>
     tidylog::mutate(
       dplyr::across(
         c("estimate", "conf.low", "conf.high"),
@@ -1028,11 +1074,13 @@ tidy_res_meffects <- function(df, sa_var, outcome,
     )
   df_gt <- processed_df |>
     dplyr::mutate(
+      variable = as.character(variable),
       variable = dplyr::case_match(
         variable,
         "cortisone prod." ~ "cortisone production",
         "cortisol prod." ~ "cortisol production",
-        "corticost. prod." ~ "corticosterone pruduction"
+        "corticost. prod." ~ "corticosterone production",
+        .default = variable
       )
     ) |>
     tidylog::select(-estimate) |>
@@ -1075,18 +1123,18 @@ tidy_res_meffects <- function(df, sa_var, outcome,
       marks = "letters"
     )
   
-  if (is.null(sa_var) & which_res == "comparisons") {
-    processed_df <- dplyr::bind_rows(
-      tibble::tibble(
-        variable = "Exposure",
-        val = "Marginal contrast (95% CI)",
-        estimate = 100,
-        outcome = "",
-        class = ""
-      ),
-      processed_df
-    )
-  }
+  # if (is.null(sa_var) & which_res == "comparisons") {
+  #   processed_df <- dplyr::bind_rows(
+  #     tibble::tibble(
+  #       variable = "Exposure",
+  #       val = "Marginal contrast (95% CI)",
+  #       estimate = 100,
+  #       outcome = "",
+  #       class = ""
+  #     ),
+  #     processed_df
+  #   )
+  # }
   
   return(list(
     numerical_results = processed_df,

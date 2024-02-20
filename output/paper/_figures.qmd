@@ -51,19 +51,33 @@ forest_plot <- function(obj, r = 4, is_cortisol = FALSE) {
   tbl_num_res <- obj$numerical_results
   if (is_cortisol == FALSE) {
     tbl_num_res <- tbl_num_res |>
-    dplyr::left_join(
-      edcs[, c("chem_id", "short_name")],
-      by = c("variable" = "chem_id")
-    ) |>
-    dplyr::select(-variable) |>
-    dplyr::rename(variable = "short_name") |>
-    dplyr::relocate(variable)
+      dplyr::left_join(
+        edcs[, c("chem_id", "short_name")],
+        by = c("variable" = "chem_id")
+      ) |>
+      dplyr::select(-variable) |>
+      dplyr::rename(variable = "short_name") |>
+      dplyr::relocate(variable)
   }
-  tbl_num_res <- tbl_num_res |>
-    tidylog::mutate(
-      variable = forcats::fct_reorder2(
-        variable, estimate, class
-      )
+  tbl_num_res <- dplyr::bind_rows(
+    tibble::tibble(
+      variable = "Exposure",
+      val = "Marginal contrast (95% CI)",
+      estimate = 100,
+      outcome = "",
+      class = "AAA"
+    ),
+    tbl_num_res
+  ) |>
+    dplyr::group_by(class) |>
+    dplyr::arrange(
+      variable,
+      .by_group = TRUE
+    ) |>
+    dplyr::ungroup() |>
+    dplyr::mutate(
+      variable = factor(variable, levels = unique(variable)),
+      variable = forcats::fct_rev(variable)
     ) |>
     tidylog::select(-estimate) |>
     ggplot2::ggplot(

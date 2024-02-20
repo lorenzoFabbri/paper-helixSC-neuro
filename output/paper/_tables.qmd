@@ -1,21 +1,3 @@
-<!-- title: "Tables" -->
-
-<!-- format: -->
-<!--   docx: -->
-<!--     reference-doc: reference_document.docx -->
-
-<!-- link-citations: true -->
-<!-- linkcolor: blue -->
-
-<!-- editor_options: -->
-<!--   chunk_output_type: console -->
-
-<!-- execute: -->
-<!--   echo: false -->
-<!--   warning: false -->
-<!--   error: false -->
-<!--   message: false -->
-
 ```{r}
 here::i_am("output/paper/_tables.qmd")
 ```
@@ -28,15 +10,6 @@ here::i_am("output/paper/_tables.qmd")
 ```{r pop-desc}
 targets::tar_load("table1", store = store)
 table1
-  # gt::cols_width(
-  #   label ~ gt::px(300)
-  # ) |>
-  # gt::tab_style(
-  #   style = gt::cell_text(size = gt::pct(90)),
-  #   locations = gt::cells_body(
-  #     columns = dplyr::everything()
-  #   )
-  # )
 ```
 **Participant characteristics (HELIX subcohort; 2013-2016).**
 :::
@@ -74,6 +47,7 @@ scores <- myphd::extract_cohort(
       cohort == "KAN" ~ "KANC",
       cohort == "MOB" ~ "MOBA",
       cohort == "RHE" ~ "RHEA",
+      cohort == "SAB" ~ "INMA",
       .default = cohort
     )
   ) |>

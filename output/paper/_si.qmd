@@ -23,15 +23,87 @@ cat(all_dags$marker_to_out)
 
 ## Tables for descriptive data
 
-### Study populations
+### Information about the endocrine disruptors
 
-::: {#supptbl-pop-desc}
-```{r pop-desc-full}
-targets::tar_load("table1_full", store = store)
-table1_full
+::: {#supptbl-info-chems}
+```{r info-chems}
+edcs_info <- myphd::edcs_information() |>
+  tidylog::select(-c(chem_id, smiles, ctd_id, exposome_explorer_id)) |>
+  tidylog::mutate(
+    var = janitor::make_clean_names(
+      short_name,
+      replace = c(`-` = ""),
+      case = "none"
+    ) |>
+      tolower()
+  ) |>
+  tidylog::relocate(var, .after = short_name) |>
+  dplyr::group_by(class) |>
+  dplyr::arrange(
+    short_name,
+    .by_group = TRUE
+  )
+gt::gt(edcs_info,
+       groupname_col = "class") |>
+  gt::sub_values(
+    values = c("NA"),
+    replacement = ""
+  ) |>
+  gt::cols_label(
+    full_name = "Compound",
+    short_name = "Symbol",
+    var = "Variable name",
+    pubchem_cid = "PubChem CID",
+    parental_compound = "Parental compound"
+  ) |>
+  gt::tab_style(
+    locations = gt::cells_row_groups(group = dplyr::everything()),
+    style = list(gt::cell_text(weight = "bold"))
+  )
 ```
-**Participant characteristics, by cohort and overall (HELIX subcohort; 2013-2016).**
+**Information about non-persistent {{< acr edcs >}}, including the full compound name, the standard symbol, the used variable name, the identifier from PubChem, and the parental compound.**
 :::
+
+### Information about the glucocorticosteroids
+
+::: {#supptbl-info-mets}
+```{r info-mets}
+mets_info <- readODS::read_ods(
+  path = here::here("docs", "steroids.ods")
+) |>
+  tidylog::select(analyte, acronym, type, hmdb_id, cas_number) |>
+  dplyr::group_by(type) |>
+  dplyr::arrange(
+    analyte,
+    .by_group = TRUE
+  )
+gt::gt(mets_info,
+       groupname_col = "type") |>
+  gt::sub_values(
+    values = c("NA"),
+    replacement = ""
+  ) |>
+  gt::cols_label(
+    analyte = "Metabolite",
+    acronym = "Symbol",
+    hmdb_id = "HMDB ID",
+    cas_number = "CAS number"
+  ) |>
+  gt::tab_style(
+    locations = gt::cells_row_groups(group = dplyr::everything()),
+    style = list(gt::cell_text(weight = "bold"))
+  ) |>
+  gt::tab_footnote(
+    footnote = "Abbreviations: Human Metabolome Database (HMDB); Chemical Abstracts Service (CAS).",
+  ) |>
+  gt::opt_footnote_marks(
+    marks = "letters"
+  )
+```
+**Information about the glucocorticosteroids, including the full metabolite name, the standard symbol, the identifier from the HMDB, and the CAS number.**
+:::
+
+### Codebooks
 
 ```{r}
 targets::tar_load(
@@ -61,82 +133,7 @@ codebook_3
 **Codebook for the covariates used in the estimation of the marginal comparisons of the glucocorticosteroids on {{< acr hitrtse >}}.**
 :::
 
-### Description of endocrine disruptors
-
-::: {#supptbl-info-chems}
-```{r info-chems}
-edcs_info <- myphd::edcs_information() |>
-  tidylog::select(-c(chem_id, smiles, ctd_id, exposome_explorer_id)) |>
-  tidylog::mutate(
-    var = janitor::make_clean_names(
-      short_name,
-      replace = c(`-` = ""),
-      case = "none"
-    ) |>
-      tolower()
-  ) |>
-  tidylog::relocate(var, .after = short_name)
-gt::gt(edcs_info,
-       groupname_col = "class") |>
-  gt::sub_values(
-    values = c("NA"),
-    replacement = ""
-  ) |>
-  gt::cols_label(
-    full_name = "Compound",
-    short_name = "Symbol",
-    var = "Variable name",
-    pubchem_cid = "PubChem CID",
-    parental_compound = "Parental compound"
-  ) |>
-  gt::tab_style(
-    locations = gt::cells_row_groups(group = dplyr::everything()),
-    style = list(gt::cell_text(weight = "bold"))
-  )
-```
-**Information about non-persistent {{< acr edcs >}}, including the full compound name, the standard symbol, the used variable name, the identifier from PubChem, and the parental compound.**
-:::
-
-### Description of glucocorticosteroids
-
-::: {#supptbl-met-desc}
-```{r met-desc}
-desc_chems_mets$desc_mets
-```
-**Participants glucocorticosteroids concentrations, by cohort and overall (HELIX subcohort; 2013-2016).**
-:::
-
-::: {#supptbl-info-mets}
-```{r info-mets}
-mets_info <- readODS::read_ods(
-  path = here::here("docs", "steroids.ods")
-) |>
-  tidylog::select(analyte, acronym, type, hmdb_id, cas_number)
-gt::gt(mets_info,
-       groupname_col = "type") |>
-  gt::sub_values(
-    values = c("NA"),
-    replacement = ""
-  ) |>
-  gt::cols_label(
-    analyte = "Metabolite",
-    acronym = "Symbol",
-    hmdb_id = "HMDB ID",
-    cas_number = "CAS number"
-  ) |>
-  gt::tab_style(
-    locations = gt::cells_row_groups(group = dplyr::everything()),
-    style = list(gt::cell_text(weight = "bold"))
-  ) |>
-  gt::tab_footnote(
-    footnote = "Abbreviations: Human Metabolome Database (HMDB); Chemical Abstracts Service (CAS).",
-  ) |>
-  gt::opt_footnote_marks(
-    marks = "letters"
-  )
-```
-**Information about the glucocorticosteroids, including the full metabolite name, the standard symbol, the identifier from the HMDB, and the CAS number.**
-:::
+### Lower limits of quantification of the glucocorticosteroids
 
 ::: {#supptbl-lloq-mets}
 ```{r lloq-mets}
@@ -151,8 +148,9 @@ lloq_mets <- load_steroids()$loq |>
     LLOQ = "loq"
   ) |>
   tidylog::select(-metabolite) |>
-  tidylog::select(Metabolite, LLOQ)
-gt::gt(lloq_mets |> dplyr::arrange(Metabolite)) |>
+  tidylog::select(Metabolite, LLOQ) |>
+  dplyr::arrange(dplyr::desc(LLOQ))
+gt::gt(lloq_mets) |>
   gt::tab_footnote(
     footnote = "Abbreviations: lower limit of quantification (LLOQ)."
   ) |>
@@ -167,9 +165,29 @@ gt::gt(lloq_mets |> dplyr::arrange(Metabolite)) |>
 **Lower limits of quantification expressed in ng/ml for the glucocorticosteroids (HELIX subcohort; 2013-2016).**
 :::
 
+### Study populations
+
+::: {#supptbl-pop-desc}
+```{r pop-desc-full}
+targets::tar_load("table1_full", store = store)
+table1_full
+```
+**Participant characteristics, by cohort and overall (HELIX subcohort; 2013-2016).**
+:::
+
+### Concentrations of the glucocorticosteroids
+
+::: {#supptbl-met-desc}
+```{r met-desc}
+targets::tar_load("desc_chems_mets", store = store)
+desc_chems_mets$desc_mets
+```
+**Participants glucocorticosteroids concentrations, by cohort and overall (HELIX subcohort; 2013-2016).**
+:::
+
 ## Tables for main results
 
-### Balancing weights
+### Balancing weights: sample sizes
 
 ```{r}
 targets::tar_load(
@@ -264,6 +282,8 @@ balance_3 |>
 **Effective sample size before and after balancing weights estimation (exposures: glucocorticosteroids; outcome: {{< acr hitrtse >}}) (HELIX subcohort; 2013-2016).**
 :::
 
+### Balancing weights: summary statistics
+
 ```{r}
 targets::tar_load(
   dplyr::matches("weights_(\\d)$"),
@@ -352,7 +372,7 @@ tidy_res_weighted_fits(
 
 ## Tables for other results
 
-### Balancing weights for effect modification
+### Balancing weights for effect modification: summary statistics
 
 ```{r}
 targets::tar_load(
