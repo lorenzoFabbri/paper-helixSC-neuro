@@ -58,14 +58,6 @@ authors:
     role:
       - data acquisition
       - writing - review & editing
-  - name: Barbara Heude
-    email: barbara.heude@inserm.fr
-    orcid: 0000-0002-1565-1629
-    affiliations:
-      - ref: inserm
-    role:
-      - data acquisition
-      - writing - review & editing
   - name: Léa Maitre
     email: lea.maitre@isglobal.org
     affiliations:
