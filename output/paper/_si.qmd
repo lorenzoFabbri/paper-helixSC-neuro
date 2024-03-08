@@ -61,7 +61,7 @@ gt::gt(edcs_info,
     style = list(gt::cell_text(weight = "bold"))
   )
 ```
-**Information about non-persistent {{< acr edcs >}}, including the full compound name, the standard symbol, the used variable name, the identifier from PubChem, and the parental compound.**
+**Information about non-persistent {{< acr edcs first_use=true >}}, including the full compound name, the standard symbol, the used variable name, the identifier from PubChem, and the parental compound.**
 :::
 
 ### Information about the glucocorticosteroids
@@ -116,21 +116,21 @@ targets::tar_load(
 ```{r codebook-1}
 codebook_1
 ```
-**Codebook for the covariates used in the estimation of the marginal comparisons of {{< acr edcs >}} on {{< acr hitrtse >}}.**
+**Codebook for the covariates used in the estimation of the marginal comparisons of {{< acr edcs first_use=true >}} on {{< acr hitrtse first_use=true >}}.**
 :::
 
 ::: {#supptbl-codebook-2}
 ```{r codebook-2}
 codebook_2
 ```
-**Codebook for the covariates used in the estimation of the marginal comparisons of {{< acr edcs >}} on the glucocorticosteroids.**
+**Codebook for the covariates used in the estimation of the marginal comparisons of {{< acr edcs first_use=true >}} on the glucocorticosteroids.**
 :::
 
 ::: {#supptbl-codebook-3}
 ```{r codebook-3}
 codebook_3
 ```
-**Codebook for the covariates used in the estimation of the marginal comparisons of the glucocorticosteroids on {{< acr hitrtse >}}.**
+**Codebook for the covariates used in the estimation of the marginal comparisons of the glucocorticosteroids on {{< acr hitrtse first_use=true >}}.**
 :::
 
 ### Lower limits of quantification of the glucocorticosteroids
@@ -226,7 +226,7 @@ balance_1 |>
     locations = gt::cells_row_groups()
   )
 ```
-**Effective sample size before and after balancing weights estimation (exposures: {{< acr edcs >}}; outcome: {{< acr hitrtse >}}) (HELIX subcohort; 2013-2016).**
+**Effective sample size before and after balancing weights estimation (exposures: {{< acr edcs first_use=true >}}; outcome: {{< acr hitrtse first_use=true >}}) (HELIX subcohort; 2013-2016).**
 :::
 
 ::: {#supptbl-balance-2}
@@ -255,7 +255,7 @@ balance_2 |>
     locations = gt::cells_row_groups()
   )
 ```
-**Effective sample size before and after balancing weights estimation (exposures: {{< acr edcs >}}; outcomes: glucocorticosteroids) (HELIX subcohort; 2013-2016).**
+**Effective sample size before and after balancing weights estimation (exposures: {{< acr edcs first_use=true >}}; outcomes: glucocorticosteroids) (HELIX subcohort; 2013-2016).**
 :::
 
 ::: {#supptbl-balance-3}
@@ -279,7 +279,7 @@ balance_3 |>
     locations = gt::cells_row_groups()
   )
 ```
-**Effective sample size before and after balancing weights estimation (exposures: glucocorticosteroids; outcome: {{< acr hitrtse >}}) (HELIX subcohort; 2013-2016).**
+**Effective sample size before and after balancing weights estimation (exposures: glucocorticosteroids; outcome: {{< acr hitrtse first_use=true >}}) (HELIX subcohort; 2013-2016).**
 :::
 
 ### Balancing weights: summary statistics
@@ -324,7 +324,7 @@ tidy_res_weighted_fits(
     style = list(gt::cell_text(weight = "bold"))
   )
 ```
-**Summary statistics of the estimated balancing weights (exposures: {{< acr edcs >}}; outcome: {{< acr hitrtse >}}) (HELIX subcohort; 2013-2016).**
+**Summary statistics of the estimated balancing weights (exposures: {{< acr edcs first_use=true >}}; outcome: {{< acr hitrtse first_use=true >}}) (HELIX subcohort; 2013-2016).**
 :::
 
 ::: {#supptbl-weights-2}
@@ -356,7 +356,7 @@ tidy_res_weighted_fits(
     style = list(gt::cell_text(weight = "bold"))
   )
 ```
-**Summary statistics of the estimated balancing weights (exposures: {{< acr edcs >}}; outcomes: glucocorticosteroids) (HELIX subcohort; 2013-2016).**
+**Summary statistics of the estimated balancing weights (exposures: {{< acr edcs first_use=true >}}; outcomes: glucocorticosteroids) (HELIX subcohort; 2013-2016).**
 :::
 
 ::: {#supptbl-weights-3}
@@ -367,7 +367,7 @@ tidy_res_weighted_fits(
   sa_var = NULL
 )$table
 ```
-**Summary statistics of the estimated balancing weights (exposures: glucocorticosteroids; outcome: {{< acr hitrtse >}}) (HELIX subcohort; 2013-2016).**
+**Summary statistics of the estimated balancing weights (exposures: glucocorticosteroids; outcome: {{< acr hitrtse first_use=true >}}) (HELIX subcohort; 2013-2016).**
 :::
 
 ## Tables for other results
@@ -410,7 +410,7 @@ tidy_res_weighted_fits(
     style = list(gt::cell_text(weight = "bold"))
   )
 ```
-**Summary statistics of the estimated balancing weights for effect modification (exposures: {{< acr edcs >}}; outcome: {{< acr hitrtse >}}; modifier: sex) (HELIX subcohort; 2013-2016).**
+**Summary statistics of the estimated balancing weights for effect modification (exposures: {{< acr edcs first_use=true >}}; outcome: {{< acr hitrtse first_use=true >}}; modifier: sex) (HELIX subcohort; 2013-2016).**
 :::
 
 ::: {#supptbl-weights-2sa}
@@ -442,7 +442,7 @@ tidy_res_weighted_fits(
     style = list(gt::cell_text(weight = "bold"))
   )
 ```
-**Summary statistics of the estimated balancing weights for effect modification (exposures: {{< acr edcs >}}; outcomes: glucocorticosteroids; modifier: sex) (HELIX subcohort; 2013-2016).**
+**Summary statistics of the estimated balancing weights for effect modification (exposures: {{< acr edcs first_use=true >}}; outcomes: glucocorticosteroids; modifier: sex) (HELIX subcohort; 2013-2016).**
 :::
 
 ::: {#supptbl-weights-3sa}
@@ -453,7 +453,7 @@ tidy_res_weighted_fits(
   sa_var = "e3_sex"
 )$table
 ```
-**Summary statistics of the estimated balancing weights for effect modification (exposures: glucocorticosteroids; outcome: {{< acr hitrtse >}}; modifier: sex) (HELIX subcohort; 2013-2016).**
+**Summary statistics of the estimated balancing weights for effect modification (exposures: glucocorticosteroids; outcome: {{< acr hitrtse first_use=true >}}; modifier: sex) (HELIX subcohort; 2013-2016).**
 :::
 
 # Supplementary figures
@@ -490,7 +490,7 @@ viz_desc_vars(
   is_chem = TRUE
 )$plot
 ```
-**Measurement classification of {{< acr edcs >}}, by cohort (HELIX subcohort; 2013-2016).** 
+**Measurement classification of {{< acr edcs first_use=true >}}, by cohort (HELIX subcohort; 2013-2016).** 
 Coding: 1, quantifiable; 2, <LOD; 3, interference or out of range; 4. not analysed.
 :::
 
@@ -549,8 +549,8 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
-**Marginal contrasts for effect modification by sex of a decrease from the 90th to the 10th percentile of the {{< acr edcs >}} on {{< acr hitrtse >}} expressed in {{< acr mss >}} (HELIX subcohort; 2013-2016).** 
-Circles and triangles indicate effect estimates. Solid lines indicate the $95\%$ {{< acr ci >}}.
+**Marginal contrasts for effect modification by sex of a decrease from the 90th to the 10th percentile of the {{< acr edcs first_use=true >}} on {{< acr hitrtse first_use=true >}} expressed in {{< acr mss >}} (HELIX subcohort; 2013-2016).** 
+Circles and triangles indicate effect estimates. Solid lines indicate the $95\%$ {{< acr ci >}}. The size of the circles represents the *S* value of the effect estimate [@RafiGreenland:2020].
 :::
 
 ::: {#suppfig-marginal-2sa}
@@ -570,8 +570,8 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
-**Marginal contrasts for effect modification by sex of a decrease from the 90th to the 10th percentile of the {{< acr edcs >}} on the glucocorticosteroids expressed in ng/ml (HELIX subcohort; 2013-2016).** 
-Circles and triangles indicate effect estimates. Solid lines indicate the $95\%$ {{< acr ci >}}.
+**Marginal contrasts for effect modification by sex of a decrease from the 90th to the 10th percentile of the {{< acr edcs first_use=true >}} on the glucocorticosteroids expressed in ng/ml (HELIX subcohort; 2013-2016).** 
+Circles and triangles indicate effect estimates. Solid lines indicate the $95\%$ {{< acr ci >}}. The size of the circles represents the *S* value of the effect estimate [@RafiGreenland:2020].
 :::
 
 ::: {#suppfig-marginal-3sa}
@@ -588,7 +588,6 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
-**Marginal contrasts for effect modification by sex of a decrease from the 90th to the 10th percentile of the glucocorticosteroids on {{< acr hitrtse >}} expressed in {{< acr mss >}}
- (HELIX subcohort; 2013-2016).** 
-Circles and triangles indicate effect estimates. Solid lines indicate the $95\%$ {{< acr ci >}}. Abbreviations: cortisone production (cortisone prod.); cortisol production (cortisol prod.); corticost. prod. (corticosterone production).
+**Marginal contrasts for effect modification by sex of a decrease from the 90th to the 10th percentile of the glucocorticosteroids on {{< acr hitrtse first_use=true >}} expressed in {{< acr mss >}} (HELIX subcohort; 2013-2016).** 
+Circles and triangles indicate effect estimates. Solid lines indicate the $95\%$ {{< acr ci >}}. The size of the circles represents the *S* value of the effect estimate [@RafiGreenland:2020]. Abbreviations: cortisone production (cortisone prod.); cortisol production (cortisol prod.); corticost. prod. (corticosterone production).
 :::

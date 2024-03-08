@@ -177,7 +177,7 @@ dplyr::bind_cols(t1$`_data`, t2$`_data`) |>
     marks = "letters"
   )
 ```
-**Pairwise differences between sex-specific marginal contrasts for the effect of a decrease from the 90th to the 10th percentile of {{< acr edcs >}} on {{< acr hitrtse >}}, expressed in {{< acr mss >}}, and the glucocorticosteroids, expressed in ng/ml (HELIX subcohort; 2013-2016).**
+**Pairwise differences between marginal contrasts of males and females, for the effect of a decrease from the 90th to the 10th percentile of {{< acr edcs first_use=true >}} on {{< acr hitrtse first_use=true >}}, expressed in {{< acr mss >}}, and on the glucocorticosteroids, expressed in ng/ml (HELIX subcohort; 2013-2016).**
 :::
 
 ::: {#tbl-hypothesis-3}
@@ -191,5 +191,5 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$table
 ```
-**Pairwise differences between sex-specific marginal contrasts for the effect of a decrease from the 90th to the 10th percentile of the glucocorticosteroids on {{< acr hitrtse >}} expressed in {{< acr mss >}} (HELIX subcohort; 2013-2016).**
+**Pairwise differences between marginal contrasts of males and females, for the effect of a decrease from the 90th to the 10th percentile of the glucocorticosteroids on {{< acr hitrtse first_use=true >}} expressed in {{< acr mss >}} (HELIX subcohort; 2013-2016).**
 :::

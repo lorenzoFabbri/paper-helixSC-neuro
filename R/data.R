@@ -408,15 +408,15 @@ load_dat_request <- function() {
       ),
       e3_marital = factor(e3_marital,
                           levels = c(
-                            "living alone",
                             "living with the father",
+                            "living alone",
                             "other situation"
                           ),
-                          labels = c(1, 0, 2)
+                          labels = c(0, 1, 2)
       ),
       e3_sex = factor(e3_sex,
-                      levels = c("female", "male"),
-                      labels = c(1, 0)
+                      levels = c("male", "female"),
+                      labels = c(0, 1)
       )
     ) |>
     tidylog::rename(
