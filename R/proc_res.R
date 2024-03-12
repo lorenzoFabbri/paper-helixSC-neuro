@@ -275,16 +275,21 @@ tbl_desc_vars <- function() {
     dplyr::rename_with(
       ~tibble::deframe(edcs)[.x],
       .cols = edcs$chem_id
-    ) |>
-    gtsummary::tbl_summary(
-      statistic = list(
-        gtsummary::all_continuous() ~ c(
-          "{median} ({p25}, {p75}); {N_miss} ({p_miss})"
-        )
-      ),
-      missing = "no",
-      digits = dplyr::everything() ~ 1
     )
+  tbl_edcs <- c("{median} ({p25}, {p75})", "{N_miss} ({p_miss})") |>
+    purrr::map(
+      ~ tbl_edcs |>
+        gtsummary::tbl_summary(
+          statistic = gtsummary::all_continuous() ~ .x,
+          missing = "no",
+          digits = dplyr::everything() ~ 1
+        )
+    ) |>
+    gtsummary::tbl_merge() |>
+    gtsummary::modify_spanning_header(
+      gtsummary::everything() ~ NA
+    )
+  
   tbl_edcs$table_body <- dplyr::left_join(
     tbl_edcs$table_body, edcs,
     by = c("variable" = "short_name")
@@ -1109,16 +1114,16 @@ tidy_res_meffects <- function(df, sa_var, outcome,
     #       )
     #     }
     #   )
-    # ) |>
-    # gt::tab_footnote(
-    #   footnote = "*Significant results."
-    # ) |>
-    gt::tab_footnote(
-      footnote = "Estimate and 95% CI.",
-      locations = gt::cells_column_labels(
-        columns = names_
-      )
-    ) |>
+  # ) |>
+  # gt::tab_footnote(
+  #   footnote = "*Significant results."
+  # ) |>
+  gt::tab_footnote(
+    footnote = "Estimate and 95% CI.",
+    locations = gt::cells_column_labels(
+      columns = names_
+    )
+  ) |>
     gt::opt_footnote_marks(
       marks = "letters"
     )

@@ -1,5 +1,6 @@
 .~lock.*
 .quarto
+manuscript_files/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
