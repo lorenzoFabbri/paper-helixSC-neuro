@@ -279,7 +279,7 @@ load_cp_data <- function(which_sample) {
 #' @returns A named list of data and metadata.
 #'
 #' @export
-load_dat_request <- function() {
+load_dat_request <- function(load_all = FALSE) {
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
   paths <- params_dat$paths
   
@@ -474,7 +474,7 @@ load_dat_request <- function() {
       tab = stringr::str_to_lower(tab),
       period = stringr::str_to_lower(period),
     )
-  if (!is.null(which_meta)) {
+  if (!is.null(which_meta) & load_all == FALSE) {
     meta <- meta |>
       tidylog::filter(.data[[which_meta]] == TRUE)
   }

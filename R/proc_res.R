@@ -101,7 +101,7 @@ tbl_desc_pop <- function(num_digits_est, num_digits_sig, by) {
   
   # Load data request (all variables)
   params_dat <- params(is_hpc = Sys.getenv("is_hpc"))
-  dat_request <- load_dat_request()
+  dat_request <- load_dat_request(load_all = TRUE)
   dat_request$dat <- dat_request$dat |>
     tidylog::mutate(
       cohort = dplyr::case_when(
