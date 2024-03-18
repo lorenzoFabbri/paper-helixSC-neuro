@@ -549,7 +549,7 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
-**Marginal contrasts for effect modification by sex of a decrease from the 90th to the 10th percentile of the {{< acr edcs first_use=true >}} on {{< acr hitrtse first_use=true >}} expressed in {{< acr mss >}} (HELIX subcohort; 2013-2016).** 
+**Marginal contrasts on the logarithmic scale for effect modification by sex of a increase from the 10th to the 90th percentile of the {{< acr edcs first_use=true >}} on {{< acr hitrtse first_use=true >}} expressed in {{< acr mss >}} (HELIX subcohort; 2013-2016).** 
 Circles and triangles indicate effect estimates. Solid lines indicate the $95\%$ {{< acr ci >}}. The size of the circles represents the *S* value of the effect estimate [@RafiGreenland:2020].
 :::
 
@@ -570,7 +570,7 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
-**Marginal contrasts for effect modification by sex of a decrease from the 90th to the 10th percentile of the {{< acr edcs first_use=true >}} on the glucocorticosteroids expressed in ng/ml (HELIX subcohort; 2013-2016).** 
+**Marginal contrasts on the logarithmic scale for effect modification by sex of a increase from the 10th to the 90th percentile of the {{< acr edcs first_use=true >}} on the glucocorticosteroids expressed in ng/ml (HELIX subcohort; 2013-2016).** 
 Circles and triangles indicate effect estimates. Solid lines indicate the $95\%$ {{< acr ci >}}. The size of the circles represents the *S* value of the effect estimate [@RafiGreenland:2020].
 :::
 
@@ -588,6 +588,6 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$plot
 ```
-**Marginal contrasts for effect modification by sex of a decrease from the 90th to the 10th percentile of the glucocorticosteroids on {{< acr hitrtse first_use=true >}} expressed in {{< acr mss >}} (HELIX subcohort; 2013-2016).** 
+**Marginal contrasts on the logarithmic scale for effect modification by sex of a increase from the 10th to the 90th percentile of the glucocorticosteroids on {{< acr hitrtse first_use=true >}} expressed in {{< acr mss >}} (HELIX subcohort; 2013-2016).** 
 Circles and triangles indicate effect estimates. Solid lines indicate the $95\%$ {{< acr ci >}}. The size of the circles represents the *S* value of the effect estimate [@RafiGreenland:2020]. Abbreviations: cortisone production (cortisone prod.); cortisol production (cortisol prod.); corticost. prod. (corticosterone production).
 :::
