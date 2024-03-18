@@ -5,7 +5,8 @@ title: "Childhood exposure to non-persistent endocrine disruptors, glucocorticos
 #   - ../../docs/authors.yml
 
 format:
-  html: default
+  html:
+    embed-resources: true
   docx:
     # reference-doc: reference_document.docx
     page-width: 8.3
