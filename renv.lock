@@ -565,7 +565,7 @@
     },
     "broom.mixed": {
       "Package": "broom.mixed",
-      "Version": "0.2.9.4",
+      "Version": "0.2.9.5",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -581,7 +581,7 @@
         "tibble",
         "tidyr"
       ],
-      "Hash": "f57e244a8d8b672fc7f308779787d048"
+      "Hash": "c4e6c14e4d92d7b2d29ab0758184774a"
     },
     "bslib": {
       "Package": "bslib",
@@ -779,7 +779,7 @@
     },
     "cobalt": {
       "Package": "cobalt",
-      "Version": "4.5.4",
+      "Version": "4.5.5",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -796,7 +796,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "7ae54bcf1e258deac33f508ab2bb30b8"
+      "Hash": "788ae7b7ffee941a95c6201fccd62504"
     },
     "coda": {
       "Package": "coda",
@@ -811,13 +811,13 @@
     },
     "codetools": {
       "Package": "codetools",
-      "Version": "0.2-19",
+      "Version": "0.2-20",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
-      "Hash": "c089a619a7fae175d149d89164f8c7d8"
+      "Hash": "61e097f35917d342622f21cdc79c256e"
     },
     "colorspace": {
       "Package": "colorspace",
@@ -972,14 +972,14 @@
     },
     "data.table": {
       "Package": "data.table",
-      "Version": "1.15.2",
+      "Version": "1.15.4",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R",
         "methods"
       ],
-      "Hash": "536dfe4ac4093b5d115caed7a1a7223b"
+      "Hash": "8ee9ac56ef633d0c7cab8b2ca87d683e"
     },
     "datawizard": {
       "Package": "datawizard",
@@ -1943,7 +1943,7 @@
     },
     "htmltools": {
       "Package": "htmltools",
-      "Version": "0.5.8",
+      "Version": "0.5.8.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1955,7 +1955,7 @@
         "rlang",
         "utils"
       ],
-      "Hash": "149431ee39aba5bdc264112c8ff94444"
+      "Hash": "81d371a9cc60640e74e4ab6ac46dcedc"
     },
     "htmlwidgets": {
       "Package": "htmlwidgets",
@@ -2570,14 +2570,14 @@
     },
     "munsell": {
       "Package": "munsell",
-      "Version": "0.5.0",
+      "Version": "0.5.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "colorspace",
         "methods"
       ],
-      "Hash": "6dfe8bf774944bd5595785e3229d8771"
+      "Hash": "4fd8900853b746af55b81fda99da7695"
     },
     "mvtnorm": {
       "Package": "mvtnorm",
@@ -3463,13 +3463,13 @@
     },
     "secretbase": {
       "Package": "secretbase",
-      "Version": "0.3.0.1",
+      "Version": "0.4.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
-      "Hash": "0c5ec9858d64bdcbde3e5ebf35d5a34c"
+      "Hash": "e9591ffb6d5adcc9284213e496ed7fe9"
     },
     "selectr": {
       "Package": "selectr",
@@ -3536,7 +3536,7 @@
     },
     "shiny": {
       "Package": "shiny",
-      "Version": "1.8.1",
+      "Version": "1.8.1.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -3565,7 +3565,7 @@
         "withr",
         "xtable"
       ],
-      "Hash": "a49e145ac3d0d1299e19ab215504f88e"
+      "Hash": "54b26646816af9960a4c64d8ceec75d6"
     },
     "shinyjs": {
       "Package": "shinyjs",
