@@ -39,6 +39,16 @@ if (rq == "rq2") {
 # Effect modifier
 by <- "e3_sex"
 
+# Create folders to store results
+invisible(lapply(c("figures"), function(x) {
+  path_save_res <- paste0(
+    "results/", x, "/", paste0(rq, "_SA")
+  )
+  if (!dir.exists(path_save_res)) {
+    dir.create(path_save_res)
+  }
+}))
+
 list(
   targets::tar_target_raw(
     name = paste0(rq, "_dag"),
@@ -117,7 +127,7 @@ list(
           by = by,
           is_hcp = FALSE,
           parallel = TRUE,
-          workers = 4
+          workers = 3
         ),
         env = list(all_fits = as.symbol(paste0(rq, "_weighted_fits")))
       )

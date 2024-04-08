@@ -26,6 +26,16 @@ outcome <- switch(rq,
                   "rq03" = "outcome"
 )
 
+# Create folders to store results
+invisible(lapply(c("figures"), function(x) {
+  path_save_res <- paste0(
+    "results/", x, "/", rq
+  )
+  if (!dir.exists(path_save_res)) {
+    dir.create(path_save_res)
+  }
+}))
+
 list(
   targets::tar_target_raw(
     name = paste0(rq, "_dag"),

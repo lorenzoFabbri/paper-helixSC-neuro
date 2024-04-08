@@ -304,20 +304,6 @@ rq_prepare_data <- function(dat, filter_panel, type_sample_hcp, is_sa) {
   steps_exposures <- params_dat$steps[[rq]]$preproc_exposures
   steps_outcome <- params_dat$steps[[rq]]$preproc_outcome
   params_ana <- params_analyses()[[rq]]
-  # Create folders to store results
-  invisible(lapply(c("figures"), function(x) {
-    path_save_res <- paste0(
-      "results/", x, "/",
-      dplyr::case_when(
-        filter_panel == TRUE ~ paste0(rq, "_HCP"),
-        is_sa == TRUE ~ paste0(rq, "_SA"),
-        .default = rq
-      )
-    )
-    if (!dir.exists(path_save_res)) {
-      dir.create(path_save_res)
-    }
-  }))
   
   ##############################################################################
   # Eventually estimate weights for selection into child panel
