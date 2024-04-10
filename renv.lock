@@ -2595,11 +2595,11 @@
       "Version": "0.0.1",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteUsername": "isglobal-cep",
+      "RemoteHost": "api.github.com",
       "RemoteRepo": "myphd",
+      "RemoteUsername": "isglobal-cep",
       "RemoteRef": "HEAD",
       "RemoteSha": "0f3e7e05ad2ee37c26e3d5d50796348d0e32fcca",
-      "RemoteHost": "api.github.com",
       "Requirements": [
         "VIM",
         "WeightIt",
@@ -2796,10 +2796,7 @@
       "Version": "1.9",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Requirements": [
-        "R"
-      ],
-      "Hash": "aefe2753a8e7277e0fdd6d1d08d1692e"
+      "Hash": "495d032ad6bfc725f37ce89e3d6dadb2"
     },
     "papaja": {
       "Package": "papaja",
