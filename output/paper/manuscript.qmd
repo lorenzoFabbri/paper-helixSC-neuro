@@ -11,6 +11,7 @@ format:
     citeproc: true
     mermaid:
       theme: neutral
+    keep-md: true
   pdf:
     documentclass: article
     geometry:
