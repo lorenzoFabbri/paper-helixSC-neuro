@@ -1,0 +1,42 @@
+---
+title: "Childhood exposure to non-persistent endocrine disruptors, glucocorticosteroids, and attentional function: A study based on the parametric g-formula"
+
+metadata-files:
+  - ../../docs/authors.yml
+
+embed-resources: true
+format:
+  html: default
+
+link-citations: true
+linkcolor: blue
+
+editor_options:
+  chunk_output_type: console
+---
+
+## Funding
+
+The research leading to these results has received funding from the European Union's Horizon 2020 research and innovation programme under grant agreements no. 825712 [OBERON] and no. 874583 [ATHLETE].
+
+Data were collected as part of the European Community’s Seventh Framework Programme (FP7/2007-2013) under grant agreement no 308333 (HELIX).
+
+Born in Bradford receives funding from a joint grant from the UK Medical Research Council (MRC) and UK Economic and Social Science Research Council (ESRC) [MR/N024391/1]; the British Heart Foundation [CS/16/4/32482]; a Wellcome Infrastructure Grant [WT101597MA]; The National Institute for Health Research under its Applied Research Collaboration for Yorkshire and Humber [NIHR200166]. The views expressed are those of the author(s), and not necessarily those of the NHS, the NIHR or the Department of Health and Social Care.
+
+The EDEN study was supported by Foundation for medical research (FRM), National Agency for Research (ANR), National Institute for Research in Public health (IRESP: TGIR cohorte santé 2008 program), French Ministry of Health (DGS), French Ministry of Research, INSERM Bone and Joint Diseases National Research (PRO-A), and Human Nutrition National Research Programs, Paris-Sud University, Nestlé, French National Institute for Population Health Surveillance (InVS), French National Institute for Health Education (INPES), the European Union FP7 programmes (FP7/2007–2013, HELIX, ESCAPE, ENRIECO, Medall projects), Diabetes National Research Program (through a collaboration with the French Association of Diabetic Patients (AFD)), French Agency for Environmental Health Safety (now ANSES), Mutuelle Générale de l’Education Nationale a complementary health insurance (MGEN), French national agency for food security, French-speaking association for the study of diabetes and metabolism (ALFEDIAM).
+
+INMA data collections were supported by grants from the Instituto de Salud Carlos III, CIBERESP, and the Generalitat de Catalunya-CIRIT.
+
+KANC was funded by the grant of the Lithuanian Agency for Science Innovation and Technology (6-04-2014_31V-66).
+
+The Norwegian Mother, Father and Child Cohort Study is supported by the Norwegian Ministry of Health and Care Services and the Ministry of Education and Research.
+
+The Rhea project was financially supported by European projects (EU FP6-2003-Food-3-NewGeneris, EU FP6. STREP Hiwate, EU FP7 ENV.2007.1.2.2.2. Project No 211250 Escape, EU FP7-2008-ENV-1.2.1.4 Envirogenomarkers, EU FP7-HEALTH-2009- single stage CHICOS, EU FP7 ENV.2008.1.2.1.6. Proposal No 226285 ENRIECO, EU- FP7- HEALTH-2012 Proposal No 308333 HELIX), and the Greek Ministry of Health (Program of Prevention of obesity and neurodevelopmental disorders in preschool children, in Heraklion district, Crete, Greece: 2011-2014; “Rhea Plus”: Primary Prevention Program of Environmental Risk Factors for Reproductive Health, and Child Health: 2012-15).
+
+ISGlobal acknowledges support from the Spanish Ministry of Science and Innovation through the “Centro de Excelencia Severo Ochoa 2019-2023” Program (CEX2018-000806-S), and support from the Generalitat de Catalunya through the CERCA Program.
+
+## Acknowledgments
+
+The authors acknowledge that Born in Bradford is only possible because of the enthusiasm and commitment of the children and parents in Born in Bradford. We are grateful to all participants, health professionals and researchers who have made Born in Bradford happen.
+
+The authors thank the EDEN mother-child cohort study group, whose members are I. Annesi-Maesano, J.Y. Bernard, M.A. Charles, P. Dargent-Molina, B. de Lauzon-Guillain, P. Ducimetière, M. de Agostini, B. Foliguet, A. Forhan, X. Fritel, A. Germa, V. Goua, R. Hankard, B. Heude, M. Kaminski, B. Larroquey, N. Lelong, J. Lepeule, G. Magnin, L. Marchand, C. Nabet, F Pierre, R. Slama, M.J. Saurel-Cubizolles, M. Schweitzer, and O. Thiebaugeorges.

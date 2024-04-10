@@ -14,8 +14,8 @@ authors:
       - formal analysis
       - writing - original draft
   - name: Oliver Robinson
-    email: o.robinson@imperial.ac.uk
-    orcid: 0000-0002-4735-0468
+    # email: o.robinson@imperial.ac.uk
+    # orcid: 0000-0002-4735-0468
     affiliations:
       - ref: imperial
     role:
@@ -24,49 +24,65 @@ authors:
       - data curation
       - writing - review & editing
   - name: Xavier Basagaña
-    email: xavier.basagana@isglobal.org 
-    orcid: 0000-0002-8457-1489
+    # email: xavier.basagana@isglobal.org 
+    # orcid: 0000-0002-8457-1489
     affiliations:
       - ref: isg
       - ref: upf
       - ref: ciberesp
     role:
       - writing - review & editing
-  - name: Vaia Lida Chatzi
-    email: chatzi@usc.edu
+  - name: Leda Chatzi
+    # email: chatzi@usc.edu
     affiliations:
       - ref: usc
     role:
       - data acquisition
       - writing - review & editing
   - name: Regina Gražulevičienė
-    email: regina.grazuleviciene@vdu.lt
-    orcid: 0000-0002-0210-8053
+    # email: regina.grazuleviciene@vdu.lt
+    # orcid: 0000-0002-0210-8053
     affiliations:
       - ref: vdu
     role:
       - data acquisition
       - writing - review & editing
   - name: Mònica Guxens
-    email: monica.guxens@isglobal.org 
-    orcid: 0000-0002-8624-0333
+    # email: monica.guxens@isglobal.org
+    # orcid: 0000-0002-8624-0333
     affiliations:
       - ref: isg
       - ref: upf
-      - ref: erasmus
       - ref: ciberesp
+      - ref: erasmus
     role:
       - data acquisition
       - writing - review & editing
+  - name: Manik Kadawathagedara
+    # email: manik.kadawathagedara@inserm.fr
+    affiliations:
+      - ref: inserm
+  - name: Amrit Kaur Sakhi
+    # email: amritkaur.sakhi@fhi.no
+    affiliations:
+      - ref: fhi
   - name: Léa Maitre
-    email: lea.maitre@isglobal.org
+    # email: lea.maitre@isglobal.org
     affiliations:
       - ref: isg
       - ref: ciberesp
     role:
       - writing - review & editing
+  - name: Rosemary McEachan
+    # email: Rosie.McEachan@bthft.nhs.uk
+    affiliations:
+      - ref: bib
+  - name: Claire Philippat
+    # email: claire.philippat@inserm.fr
+    affiliations:
+      - ref: grenoble
   - name: Óscar J Pozo
-    email: opozo@researchmar.net
+    # email: opozo@researchmar.net
     affiliations:
       - ref: imim
     role:
@@ -74,24 +90,28 @@ authors:
       - data acquisition
       - writing - review & editing
   - name: Cathrine Thomsen
-    email: Cathrine.Thomsen@fhi.no
-    orcid: 0000-0002-6889-7868
+    # email: Cathrine.Thomsen@fhi.no
+    # orcid: 0000-0002-6889-7868
     affiliations:
       - ref: fhi
     role:
       - data acquisition
       - writing - review & editing
   - name: John Wright
-    email: john.wright@bthft.nhs.uk
-    orcid: 0000-0001-9572-7293
+    # email: john.wright@bthft.nhs.uk
+    # orcid: 0000-0001-9572-7293
     affiliations:
       - ref: bib
     role:
       - data acquisition
       - writing - review & editing
+  - name: Tiffany Yang
+    # email: tiffany.yang@bthft.nhs.uk
+    affiliations:
+      - ref: bib
   - name: Martine Vrijheid
-    email: martine.vrijheid@isglobal.org
-    orcid: 0000-0002-7090-1758
+    # email: martine.vrijheid@isglobal.org
+    # orcid: 0000-0002-7090-1758
     affiliations:
       - ref: isg
       - ref: upf
@@ -106,27 +126,35 @@ authors:
       - writing - review & editing
 affiliations:
   - id: isg
-    name: Barcelona Institute for Global Health (ISGlobal), Barcelona, Spain
+    name: ISGloba, Barcelona, Spain
   - id: upf
-    name: Pompeu Fabra University, Barcelona, Spain
+    name: Universitat Pompeu Fabra, Barcelona, Spain
   - id: ciberesp
     name: |
-      Spanish Consortium for Research and Public Health (CIBERESP), Instituto de Salud Carlos III, Madrid, Spain
+      Spanish Consortium for Research and Public Health (CIBERESP), 
+      Instituto de Salud Carlos III, Madrid, Spain
   - id: imim
     name: Hospital del Mar Research Institute, Barcelona, Spain
   - id: vdu
     name: Department of Environmental Sciences, Vytautas Magnus University, Kaunas, Lithuania
   - id: fhi
-    name: Norwegian Institute of Public Health, Oslo, Norway
+    name: |
+      Norwegian Institute of Public Health, 
+      Division of Climate and Environmental Health, Oslo, Norway
   - id: erasmus
     name: |
       Department of Child and Adolescent Psychiatry/Psychology, 
-      Erasmus University Medical Center, Rotterdam, Netherlands
+      Erasmus University Medical Center - Sophia Children’s Hospital, Rotterdam, Netherlands
   - id: inserm
     name: |
-      Inserm UMR 1153-Centre de Recherche Epidémiologie et Biostatistique Sorbonne Paris Cité (CRESS), 
-      Equipe de recherche sur les origines précoces de la santé et du développement de l'enfant (ORCHAD), 
-      Villejuif, France
+      Centre for Research in Epidemiology and Statistics, Equipe EAROH, 
+      Université Paris Cité, 
+      Université Sorbonne Paris Nord, Île-de-France, France
+  - id: grenoble
+    name: |
+      University Grenoble Alpes, Inserm U1209, CNRS UMR 5309, 
+      Team of Environmental Epidemiology applied to Development and Respiratory Health, 
+      Institute for Advanced Biosciences, Grenoble, France
   - id: bib
     name: |
       Bradford Institute for Health Research, 
