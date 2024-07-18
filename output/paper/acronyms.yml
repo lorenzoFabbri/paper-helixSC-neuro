@@ -1,0 +1,160 @@
+---
+acronyms:
+  keys:
+    - key: dap
+      shortname: DAP
+      longname: dialkylphosphate
+    - key: nhanes
+      shortname: NHANES
+      longname: National Health and Nutrition Examination Survey
+    - key: iq
+      shortname: IQ
+      longname: intelligence quotient
+    - key: adhd
+      shortname: ADHD
+      longname: Attention-Deficit / Hyperactivity Disorder
+    - key: hpa
+      shortname: HPA
+      longname: hypothalamic-pituitary-adrenocortical
+    - key: ci
+      shortname: CI
+      longname: confidence interval
+    - key: cis
+      shortname: CIs
+      longname: confidence intervals
+    - key: mc
+      shortname: MC
+      longname: marginal contrast
+    - key: mcs
+      shortname: MCs
+      longname: marginal contrasts
+    - key: iqr
+      shortname: IQR
+      longname: interquartile range
+    - key: bpa
+      shortname: BPA
+      longname: bisphenol A
+    - key: adrf
+      shortname: ADRF
+      longname: average dose-response function
+    - key: ms
+      shortname: ms
+      longname: millisecond
+    - key: mss
+      shortname: ms
+      longname: milliseconds
+    - key: lod
+      shortname: LOD
+      longname: limit of detection
+    - key: loq
+      shortname: LOQ
+      longname: limit of quantification
+    - key: lloq
+      shortname: LLOQ
+      longname: lower limit of quantification
+    - key: helix
+      shortname: HELIX
+      longname: Human Early-Life Exposome
+    - key: edc
+      shortname: EDC
+      longname: endocrine disrupting chemical
+    - key: edcs
+      shortname: EDCs
+      longname: endocrine disrupting chemicals
+    - key: op
+      shortname: OP
+      longname: organophosphate
+    - key: opp
+      shortname: OP pesticide
+      longname: organophosphate pesticide
+    - key: opps
+      shortname: OP pesticides
+      longname: organophosphate pesticides
+    - key: mtp
+      shortname: MTP
+      longname: modified treatment policy
+    - key: mtps
+      shortname: MTPs
+      longname: modified treatment policies
+    - key: tmle
+      shortname: TMLE
+      longname: Targeted Minimum Loss-Based Estimator
+    - key: sdre
+      shortname: SDRE
+      longname: sequentially doubly robust estimator
+    - key: sl
+      shortname: SL
+      longname: Super Learner
+    - key: cpm
+      shortname: CPM
+      longname: Raven’s Coloured Progressive Matrices
+    - key: ant
+      shortname: ANT
+      longname: Attention Network Test
+    - key: cbcl
+      shortname: CBCL
+      longname: Child Behavior Checklist
+    - key: npsem
+      shortname: NPSEM
+      longname: non-parametric structural equation model
+    - key: prs
+      shortname: PRS
+      longname: polygenic risk score
+    - key: mr
+      shortname: MR
+      longname: Mendelian Randomization
+    - key: 1smr
+      shortname: 1SMR
+      longname: one-sample Mendelian Randomization
+    - key: 2smr
+      shortname: 2SMR
+      longname: two-sample Mendelian Randomization
+    - key: ld
+      shortname: LD
+      longname: linkage disequilibrium
+    - key: maf
+      shortname: MAF
+      longname: minor allele frequency
+    - key: se
+      shortname: SE
+      longname: socio-economic
+    - key: iv
+      shortname: IV
+      longname: instrumental variable
+    - key: ivs
+      shortname: IVs
+      longname: instrumental variables
+    - key: ctd
+      shortname: CTD
+      longname: Comparative Toxicogenomics Database
+    - key: cv
+      shortname: CV
+      longname: cross-validation
+    - key: dag
+      shortname: DAG
+      longname: directed acyclic graph
+    - key: ivw
+      shortname: IVW
+      longname: inverse-variance weighted
+    - key: gwas
+      shortname: GWAS
+      longname: genome-wide association study
+    - key: gwass
+      shortname: GWASs
+      longname: genome-wide association studies
+    - key: snp
+      shortname: SNP
+      longname: single-nucleotide polymorphism
+    - key: snps
+      shortname: SNPs
+      longname: single-nucleotide polymorphisms
+    - key: pc
+      shortname: PC
+      longname: principal component
+    - key: pcs
+      shortname: PCs
+      longname: principal components
+    - key: hitrtse
+      shortname: HRT-SE
+      longname: hit reaction time standard error
+---
