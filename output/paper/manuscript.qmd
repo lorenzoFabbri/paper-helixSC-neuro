@@ -57,7 +57,6 @@ linkcolor: blue
 
 filters:
   - acronyms
-  - ../../../../all_phd/_extensions/wordcount/wordcount.lua
 
 acronyms:
   fromfile: ../../../../all_phd/acronyms.yml
