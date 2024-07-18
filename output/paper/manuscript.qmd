@@ -1,17 +1,20 @@
 ---
-title: "Childhood exposure to non-persistent endocrine disruptors, glucocorticosteroids, and attentional function: A study based on the parametric g-formula"
+title: "Childhood exposure to non-persistent endocrine disruptors, glucocorticosteroids, and attentional function: A cross-sectional study based on the parametric g-formula"
 
 # metadata-files:
 #   - ../../docs/authors.yml
 
+output-file: "Main document - anonymous"
 embed-resources: true
+number-sections: true
+toc: false
+citeproc: true
+mermaid:
+  theme: neutral
+
 format:
   docx:
     page-width: 8.3
-    citeproc: true
-    mermaid:
-      theme: neutral
-    output-file: "Main document - anonymous"
   pdf:
     documentclass: article
     geometry:
@@ -19,8 +22,6 @@ format:
       - left=20mm
       - heightrounded
     pdf-engine: lualatex
-    number-sections: true
-    toc: false
     keep-tex: false
     include-in-header:
       text: |
@@ -28,6 +29,9 @@ format:
         \usepackage{rotating}
         \usepackage{float}
         \usepackage{typearea}
+        \usepackage{amsmath, amssymb, xcolor}
+        \usepackage{pgf, tikz}
+        \usetikzlibrary{external, trees, backgrounds, swigs, calc, positioning, shapes, arrows, arrows.meta, shapes.arrows, shapes.geometric, shapes.multipart, decorations.pathmorphing, decorations.markings}
     include-before-body:
       text: |
         \linenumbers
@@ -46,7 +50,7 @@ crossref:
       space-before-numbering: false
 
 bibliography: bibliography.bib
-csl: american-journal-of-epidemiology.csl
+csl: epidemiology.csl
 
 link-citations: true
 linkcolor: blue
@@ -157,7 +161,7 @@ meffects3 <- tidy_res_meffects(
 
 # Abstract {.unnumbered}
 
-Evidence suggests that {{< acr edcs >}} may perturb the {{< acr hpa >}} axis, which has a major role in brain development. We aimed to evaluate the effects of childhood exposure to organophosphate pesticides, phenols, and phthalate metabolites, on urinary glucocorticosteroids and inattention in children using data from the {{< acr helix >}} cohort. We used the parametric g-formula to estimate associations between {{< acr edcs >}}, glucocorticosteroids, and {{< acr hitrtse >}}, a measure of inattention, and tested for possible effect modification by sex. We observed a positive {{< acr mc >}} for exposure increases from the 10th to the 90th percentile for methyl-paraben (`r format_res(meffects1, "mepa", "HRT-SE")`), and the phthalate metabolites oxo-MiNP (`r format_res(meffects1, "oxominp", "HRT-SE")`), oh-MiNP (`r format_res(meffects1, "ohminp", "HRT-SE")`), and MEHP (`r format_res(meffects1, "mehp", "HRT-SE")`), on {{< acr hitrtse >}}, indicating lower attention. Several {{< acr edcs >}} were also associated with a positive {{< acr mc >}} for cortisone, cortisol, and corticosterone production. Increased levels of the glucocorticosteroids had no effect on {{< acr hitrtse >}}, although we found a possible effect modification by sex. Our results suggest that multiple {{< acr edcs >}} might interfere with inattention and with the homeostasis of the {{< acr hpa >}} axis.
+Evidence suggests that {{< acr edcs >}} may perturb the {{< acr hpa >}} axis, which has a major role in brain development. We aimed to evaluate the effects of childhood exposure to organophosphate pesticides, phenols, and phthalate metabolites, on urinary glucocorticosteroids and inattention in children using data from the {{< acr helix >}} cohort. We used the parametric g-formula to estimate associations between {{< acr edcs >}}, glucocorticosteroids, and {{< acr hitrtse >}}, a measure of inattention, and tested for possible effect modification by sex. We observed a positive {{< acr mc >}} for exposure increases from the 10th to the 90th percentile for methyl-paraben (`r format_res(meffects1, "mepa", "HRT-SE")`), and the phthalate metabolites oxo-MiNP (`r format_res(meffects1, "oxominp", "HRT-SE")`), oh-MiNP (`r format_res(meffects1, "ohminp", "HRT-SE")`), and MEHP (`r format_res(meffects1, "mehp", "HRT-SE")`), on {{< acr hitrtse >}}, indicating lower attention. Several {{< acr edcs >}} were also associated with a positive {{< acr mc >}} for cortisone, cortisol, and corticosterone production. Increased levels of the glucocorticosteroids were not associated with {{< acr hitrtse >}}, although we found a possible effect modification by sex. Our results suggest that multiple {{< acr edcs >}} might interfere with inattention and with the homeostasis of the {{< acr hpa >}} axis.
 
 {{< pagebreak >}}
 
@@ -244,7 +248,7 @@ Cognitive and motor function outcomes were assessed with standardized, non-lingu
 
 ### Confounders {#sec-confounders}
 
-For each research question, defined by a specific type of exposure and outcome, the minimal set of covariates for inclusion in the analyses was selected on the basis of a {{< acr dag >}} built with `DAGitty` [@TextorvanderZanderGilthorpe:2016] and `ggdag` [@Barrett:2023]. The sets of covariates were selected to estimate the total effect of the exposure on the outcome. For effect estimation of the {{< acr edcs >}} on glucocorticosteroids and of glucocorticosteroids on {{< acr hitrtse >}}, these sets were also sufficient to estimate direct effects. Sample-specific creatinine values were used to adjust for possible dilution effects. Further, each minimal adjustment set was *augmented* with precision covariates, defined as the set of parents variable of the outcome that are not parents of the exposure. Common confounders were cohort, ethnicity, sex, age, height, weight, and head circumference of the child, consumption of fish, fruit, vegetables, organic food, anf fast food, maternal tobacco consumption, family financial situation and affluence scale (FAS). Models for estimating the effects of {{< acr edcs >}} on {{< acr hitrtse >}} were further adjusted for child breastfeeding, prenatal maternal active and passive smoking, urine creatinine, child mood and rest before assessment, child neuropsychological diagnosis, marital status, season, and fasting time before assessment. Models for estimating the effects of {{< acr edcs >}} on glucocorticosteroids were further adjusted for urine creatinine, season, and fasting time before assessment. Models for estimating the effects of glucocorticosteroids on {{< acr hitrtse >}} were further adjusted for child breastfeeding, prenatal maternal active and passive smoking, marital status, {{< acr edcs >}}, urine creatinine, child mood and rest before assessment, and child neuropsychological diagnosis. The adjustment sets are provided in the Supplementary Material as text files compatible with DAGitty. Codebooks for the used covariates, by research question, are provided in Supplementary Tables [-@supptbl-codebook-1; -@supptbl-codebook-2; -@supptbl-codebook-3].
+For each research question, defined by a specific type of exposure and outcome, the minimal set of covariates for inclusion in the analyses was selected on the basis of a {{< acr dag >}} built with `DAGitty` [@TextorvanderZanderGilthorpe:2016] and `ggdag` [@Barrett:2023]. The sets of covariates were selected to estimate the total effect of the exposure on the outcome. For effect estimation of the {{< acr edcs >}} on glucocorticosteroids and of glucocorticosteroids on {{< acr hitrtse >}}, these sets were also sufficient to estimate direct effects. Sample-specific creatinine values were used to adjust for possible dilution effects. Further, each minimal adjustment set was *augmented* with precision covariates, defined as the set of parents variable of the outcome that are not parents of the exposure. Common confounders were cohort, ethnicity, sex, age, height, weight, and head circumference of the child, consumption of fish, fruit, vegetables, organic food, and fast food with a food frequency questionnaire, maternal tobacco consumption, family financial situation and affluence scale (FAS). Models for estimating the effects of {{< acr edcs >}} on {{< acr hitrtse >}} were further adjusted for child breastfeeding, prenatal maternal active and passive smoking, urine creatinine, child mood and rest before assessment, child neuropsychological diagnosis, marital status, season, and fasting time before assessment. Models for estimating the effects of {{< acr edcs >}} on glucocorticosteroids were further adjusted for urine creatinine, season, and fasting time before assessment. Models for estimating the effects of glucocorticosteroids on {{< acr hitrtse >}} were further adjusted for child breastfeeding, prenatal maternal active and passive smoking, marital status, {{< acr edcs >}}, urine creatinine, child mood and rest before assessment, and child neuropsychological diagnosis. The adjustment sets are provided in the Supplementary Material as text files compatible with DAGitty. Codebooks for the used covariates, by research question, are provided in Supplementary Tables [-@supptbl-codebook-1; -@supptbl-codebook-2; -@supptbl-codebook-3].
 
 ## Statistical methods {#sec-stat-methods}
 
@@ -266,11 +270,11 @@ Covariate balance was assessed using functionalities provided by the `cobalt` R 
 
 ### G-computation {#sec-gcomp}
 
-We estimated {{< acr mcs >}} with the parametric g-formula, a method of standardization. The parametric g-formula involves the following steps: 1) fit a outcome model including both covariates and balancing weights; 2) create two new datasets identical to the original one but with the exposure shifted according to a user-specified intervention set by a deterministic function of the observed exposure levels; 3) use the outcome model to compute adjusted predictions in the two counterfactual datasets; 4) compute the difference between the means of the adjusted predictions in the counterfactual datasets. The causal parameter of interest was thus specified as the difference in the expected counterfactual outcomes under the shifted exposure levels $\left( \mathbb{E} \left[ Y^{d_1} \right] - \mathbb{E} \left[ Y^{d_2} \right] \right)$. In order for this parameter to be identified, the usual causal identifiability conditions (no unmeasured confounding, positivity, and consistency) are required. Since these conditions are likely not satisfied, we focused on the estimation of a statistical estimand that is as close as possible to the causal parameter of interest.
+We estimated {{< acr mcs >}} with the parametric g-formula, a method of standardization. The parametric g-formula involves the following steps: 1) fit a outcome model including both covariates and balancing weights; 2) create two new datasets identical to the original one but with the exposure shifted according to a user-specified dynamic intervention set by a deterministic function of the observed exposure levels; 3) use the outcome model to compute adjusted predictions in the two counterfactual datasets; 4) compute the difference between the means of the adjusted predictions in the counterfactual datasets. The causal parameter of interest was thus specified as the difference in the expected counterfactual outcomes under the shifted exposure levels $\left( \mathbb{E} \left[ Y^{d_1} \right] - \mathbb{E} \left[ Y^{d_2} \right] \right)$. In order for this parameter to be identified, the usual causal identifiability conditions (no unmeasured confounding, positivity, and consistency) are required. Since these conditions are likely not satisfied, we focused on the estimation of a statistical estimand that is as close as possible to the causal parameter of interest.
 
 We fit the outcome model using the `glm` function and a Gaussian family with identity link from base R. The exposure variable was modeled using natural cubic splines with 3 degrees of freedom, to more flexibly capture the {{< acr adrf >}}.
 
-To estimate the {{< acr mcs >}}, we used the `avg_comparisons` function from the `marginaleffects` R package [@Arel-Bundock:2023]. The two counterfactual datasets were obtained by setting the exposures levels to 90th percentile ($d_1$) and the 10th percentile ($d_2$), for each cohort separately. The {{< acr mcs >}} were computed using the estimated balancing weights above. Robust standard errors were computed with the `sandwich` R package, using cohort as variable indicating clustering of observations [@Zeileis:2004; @ZeileisKollGraham:2020].
+To estimate the {{< acr mcs >}}, we used the `avg_comparisons` function from the `marginaleffects` R package [@Arel-Bundock:2023]. The two counterfactual datasets were obtained by setting the exposures levels to 90th percentile ($d_1$) and the 10th percentile ($d_2$), for each cohort separately to account for cross-cohort differences in the levels of the exposures (@supptbl-chems-desc and @supptbl-met-desc). The {{< acr mcs >}} were computed using the estimated balancing weights above. Robust standard errors were computed with the `sandwich` R package, using cohort as variable indicating clustering of observations [@Zeileis:2004; @ZeileisKollGraham:2020].
 For each outcome, we report the results as differences between {{< acr mcs >}}.
 
 The R code to reproduce analyses and results is available online (https://github.com/lorenzoFabbri/paper-helixSC-neuro).
@@ -284,7 +288,7 @@ We further estimated separate {{< acr mcs >}} for possible effect-modification b
 @tbl-pop-desc and @supptbl-pop-desc provide descriptive statistics for the outcome and covariates for the {{< acr helix >}} subcohort and for each cohort, respectively.
 Of the 1,301 children of the {{< acr helix >}} subcohort, 1,297 had measurements of the non-persistent {{< acr edcs >}}. Measurements of the glucocorticosteroids were available for 1,004 children, of which 980 were matched to the {{< acr helix >}} subcohort. Measurements of both non-persistent {{< acr edcs >}} and glucocorticosteroids were available for 976 children of the subcohort. A flowchart describing the sample size for each research question is presented in @suppfig-flow-pop. The sample consisted of 55% males. The median {{< acr hitrtse >}} was 300 ms ({{< acr iqr >}}, 231-368), with lower median values for EDEN, MOBA, and INMA, corresponding to the cohorts with older children. At the time of visit, the median age of the children was 8.06 years. The children were mostly Caucasian (90%), and the largest minority were of Pakistani origin (6.2%).
 
-Levels of unprocessed non-persistent {{< acr edcs >}}, after imputation of values below the {{< acr lod >}}, and glucocorticosteroids, are presented in @tbl-edc-desc, @tbl-met-new-desc, and @supptbl-met-desc. Supplementary Figures [-@suppfig-desc-chems] and [-@suppfig-desc-mets] provide information on the measurement classification of the {{< acr edcs >}} and glucocorticosteroids by cohort, respectively.
+Levels of unprocessed non-persistent {{< acr edcs >}}, after imputation of values below the {{< acr lod >}}, and glucocorticosteroids, are presented in @tbl-edc-desc, @tbl-met-new-desc, @supptbl-chems-desc, and @supptbl-met-desc. Supplementary Figures [-@suppfig-desc-chems] and [-@suppfig-desc-mets] provide information on the measurement classification of the {{< acr edcs >}} and glucocorticosteroids by cohort, respectively.
 
 The effective sample sizes before and after balancing weights estimation are presented in Supplementary Tables [-@supptbl-balance-1; -@supptbl-balance-2; -@supptbl-balance-3], while basic summary statistics of the estimated balancing weights are presented in Supplementary Tables [-@supptbl-weights-1; -@supptbl-weights-2; -@supptbl-weights-3]. As expected, the median value of the weights for each exposure was close to $1.00$.
 
@@ -358,9 +362,9 @@ Adding to these epidemiological studies, previous toxicological research provide
 
 We are also not aware of prior epidemiological studies specifically investigating the effects of elevated levels of glucocorticosteroids in relation to attentional function, although there is evidence that under- or over-production of glucocorticosteroids interfere with the normal development of the brain [@LupienMcEwenGunnar:2009].
 
-Our findings should be interpreted in light of the following strengths and limitations. Strengths include its relative large sample size and its inclusion of multiple classes of non-persistent {{< acr edcs >}}. Further, this study used pooled urine samples for chemical assessment to obtain more representative long-term exposures, since it is known that these specific {{< acr edcs >}} have very short half-lives [@PerrierGiorgis-AllemandSlama:2016; @CasasBasaganaSakhi:2018]. We decided to model both the *treatment* mechanisms, for the estimation of balancing weights, and the outcomes, with traditional covariates adjustment, to try to obtain *doubly robust* effect estimates. Finally, we decided not to interpret our results by focusing on the estimated coefficients of possibly misspecified regression models, but by making use of the g-computation procedure.
+Our findings should be interpreted in light of the following strengths and limitations. Strengths include its relative large sample size and its inclusion of multiple classes of non-persistent {{< acr edcs >}}. Further, this study used pooled urine samples for chemical assessment to obtain more representative long-term exposures, since it is known that these specific {{< acr edcs >}} have very short half-lives [@PerrierGiorgis-AllemandSlama:2016; @CasasBasaganaSakhi:2018]. We decided to model both the *treatment* mechanisms, for the estimation of balancing weights, and the outcomes, with traditional covariates adjustment, to obtain *doubly robust* effect estimates. Finally, we decided not to interpret our results by focusing on the estimated coefficients of possibly misspecified regression models, but by making use of the g-computation procedure.
 
-Limitations include the cross-sectional design of the present study. Importantly, the non-persistent {{< acr edcs >}} were measured in a pool of night and morning urine samples before the clinical visit, to represent exposure over the previous day, whereas the glucocorticosteroids were measured in the night urine sample. Although we included a wide range of confounders there is the possibility, as with other observational studies, of residual confounding, which might lead to a bias away from the null. There is further the possibility of misspecification of the outcome model, although we included a spline of the exposure to relax some of the linearity assumptions.
+Limitations include the cross-sectional design of the present study. Importantly, the non-persistent {{< acr edcs >}} were measured in a pool of night and morning urine samples before the clinical visit, to represent exposure over the previous day, whereas the glucocorticosteroids were measured in the night urine sample. Cross-sectional designs also have limitations to study the etiologic period of susceptibility of attentional function. Prior studies have investigated associations between short-term effects of air pollution and attentional function, with null results in adolescents but higher response times in adults [@GignacBarrera-GomezPersavento:2021; @GignacRighiToran:2022]. Although we included a wide range of confounders there is the possibility, as with other observational studies, of residual confounding, which might lead to a bias away from the null. There is further the possibility of misspecification of the outcome model, although we included a spline of the exposure to relax some of the linearity assumptions.
 
 In conclusion, in a study of 1,297 children from 6 European birth cohorts, we observed that (i) exposure to non-persistent {{< acr edcs >}} might have short-term effects on {{< acr hitrtse >}}, (ii) exposure to non-persistent {{< acr edcs >}} might disrupt the {{< acr hpa >}} axis, and (iii) disruption of the {{< acr hpa >}} axis might have short-term, sex-specific effects on {{< acr hitrtse >}}.
 

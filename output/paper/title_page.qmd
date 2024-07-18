@@ -1,5 +1,5 @@
 ---
-title: "Childhood exposure to non-persistent endocrine disruptors, glucocorticosteroids, and attentional function: A study based on the parametric g-formula"
+title: "Childhood exposure to non-persistent endocrine disruptors, glucocorticosteroids, and attentional function: A cross-sectional study based on the parametric g-formula"
 
 metadata-files:
   - ../../docs/authors.yml

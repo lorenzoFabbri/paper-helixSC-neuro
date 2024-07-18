@@ -129,6 +129,8 @@ forest_plot <- function(obj, r = 4, is_cortisol = FALSE) {
 } # End function forest_plot
 ```
 
+# DAG
+
 # Figures for main results
 
 ## Marginal contrasts

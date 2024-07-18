@@ -175,6 +175,16 @@ table1_full
 **Participant characteristics, by cohort and overall (HELIX subcohort; 2013-2016).**
 :::
 
+### Concentrations of the endocrine disruptors
+
+::: {#supptbl-chems-desc}
+```{r chems-desc}
+targets::tar_load("desc_chems_mets", store = store)
+desc_chems_mets$desc_chems_full
+```
+**Participants non-persistent {{< acr edcs first_use=true >}} concentrations, by cohort and overall (HELIX subcohort; 2013-2016).**
+:::
+
 ### Concentrations of the glucocorticosteroids
 
 ::: {#supptbl-met-desc}

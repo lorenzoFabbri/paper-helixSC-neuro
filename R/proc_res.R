@@ -25,7 +25,7 @@ tidy_codebooks <- function(rq) {
     ) |>
     tidylog::select(
       dag, variable, type, description, code, label,
-      remark, comments
+      remark, comments, period
     )
   meta <- meta |>
     dplyr::rowwise() |>
@@ -51,13 +51,14 @@ tidy_codebooks <- function(rq) {
     tidylog::rename(
       coding = "code",
       labels = "label",
-      remarks = "remark"
+      remarks = "remark",
+      assessment = "period"
     ) |>
     tidylog::mutate(
       dplyr::across(
-        c("coding", "labels", "remarks", "comments"),
+        c("coding", "labels", "remarks", "comments", "assessment"),
         \(x) ifelse(
-          x == "NA",
+          toupper(x) == "NA",
           "", x
         )
       )
@@ -328,6 +329,84 @@ tbl_desc_vars <- function() {
     )
   ##############################################################################
   
+  # EDCs full
+  dat$exposures <- dat_request$dat |>
+    tidylog::select(
+      params_dat$variables$identifier,
+      cohort,
+      dplyr::any_of(params_dat$variables[["rq1"]]$exposures)
+    ) |>
+    tidylog::mutate(
+      cohort = dplyr::case_when(
+        cohort == "EDE" ~ "EDEN",
+        cohort == "KAN" ~ "KANC",
+        cohort == "MOB" ~ "MOBA",
+        cohort == "RHE" ~ "RHEA",
+        cohort == "SAB" ~ "INMA",
+        .default = cohort
+      )
+    )
+  tbl_edcs <- dat$exposures |>
+    tidylog::rename_with(
+      .fn = \(x) gsub("hs_|_c", "", x)
+    ) |>
+    tidylog::select(
+      -dplyr::any_of(c("HelixID"))
+    ) |>
+    dplyr::rename_with(
+      ~tibble::deframe(edcs)[.x],
+      .cols = edcs$chem_id
+    )
+  tbl_edcs <- tbl_edcs |>
+    gtsummary::tbl_summary(
+      statistic = gtsummary::all_continuous() ~ "{median} ({p10}, {p25}, {p75}, {p90})",
+      missing = "no",
+      by = "cohort",
+      digits = dplyr::everything() ~ 1
+    ) |>
+    gtsummary::add_overall() |>
+    gtsummary::modify_spanning_header(
+      gtsummary::everything() ~ NA
+    )
+  
+  tbl_edcs$table_body <- dplyr::left_join(
+    tbl_edcs$table_body, edcs,
+    by = c("variable" = "short_name")
+  ) |>
+    dplyr::group_by(class) |>
+    dplyr::arrange(
+      variable,
+      .by_group = TRUE
+    )
+  
+  desc_chems_full <- tbl_edcs |>
+    gtsummary::as_gt() |>
+    gt::tab_row_group(
+      label = "OP pesticide metabolites",
+      rows = variable %in% as.character(edcs[edcs$class == "OP pesticide metabolites", ]$short_name)
+    ) |>
+    gt::tab_row_group(
+      label = "Phenols",
+      rows = variable %in% as.character(edcs[edcs$class == "Phenols", ]$short_name)
+    ) |>
+    gt::tab_row_group(
+      label = "Phthalate metabolites",
+      rows = variable %in% as.character(edcs[edcs$class == "Phthalate metabolites", ]$short_name)
+    ) |>
+    gt::row_group_order(
+      groups = c("OP pesticide metabolites",
+                 "Phenols",
+                 "Phthalate metabolites")
+    ) |>
+    gt::tab_style(
+      locations = gt::cells_row_groups(group = dplyr::everything()),
+      style = list(gt::cell_text(weight = "bold"))
+    ) |>
+    gt::opt_footnote_marks(
+      marks = "letters"
+    )
+  ##############################################################################
+  
   ## Glucocorticosteroids
   metabolites <- myphd::extract_cohort(
     dat = metabolites,
@@ -361,7 +440,7 @@ tbl_desc_vars <- function() {
     gtsummary::tbl_summary(
       statistic = list(
         gtsummary::all_continuous() ~ c(
-          "{median} ({p25}, {p75})"
+          "{median} ({p10}, {p25}, {p75}, {p90})"
         )
       ),
       missing = "ifany",
@@ -415,6 +494,7 @@ tbl_desc_vars <- function() {
   
   return(list(
     desc_chems = desc_chems,
+    desc_chems_full = desc_chems_full,
     desc_mets = desc_mets
   ))
 } # End function tbl_desc_vars
@@ -1114,16 +1194,16 @@ tidy_res_meffects <- function(df, sa_var, outcome,
     #       )
     #     }
     #   )
-  # ) |>
-  # gt::tab_footnote(
-  #   footnote = "*Significant results."
-  # ) |>
-  gt::tab_footnote(
-    footnote = "Estimate and 95% CI.",
-    locations = gt::cells_column_labels(
-      columns = names_
-    )
-  ) |>
+    # ) |>
+    # gt::tab_footnote(
+    #   footnote = "*Significant results."
+    # ) |>
+    gt::tab_footnote(
+      footnote = "Estimate and 95% CI.",
+      locations = gt::cells_column_labels(
+        columns = names_
+      )
+    ) |>
     gt::opt_footnote_marks(
       marks = "letters"
     )
