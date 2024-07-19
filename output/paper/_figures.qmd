@@ -114,12 +114,12 @@ digraph simple {
     graph [rankdir=TB]
     
     node [shape=ellipse]
-    U [label='Confounders']
+    U [label="Confounders"]
     
     node [shape=box, height=0.3, width=0.3]
-    E [label='EDCs']
-    M [label='Glucocorticosteroids']
-    Y [label='HRT-SE']
+    E [label="EDCs"]
+    M [label="Glucocorticosteroids"]
+    Y [label="HRT-SE"]
     { rank = same; E M}
     
     E -> M [minlen=3]
@@ -128,7 +128,7 @@ digraph simple {
     U -> E
     U -> M
     U -> Y
-  }
+}
 ```
 **Simplified {{< acr dag first_use=true >}} showing {{< acr edcs first_use=true >}}, {{< acr hitrtse first_use=true >}}, and the glucocorticosteroids.**
 :::

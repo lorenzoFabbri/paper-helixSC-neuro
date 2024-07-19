@@ -472,9 +472,9 @@ m1sa <- tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )
 
-m1sa$df_gt
+m1sa$table
 ```
-**Marginal contrasts for effect modification by sex of a increase from the 10th to the 90th percentile of the {{< acr edcs first_use=true >}} on {{< acr hitrtse first_use=true >}} expressed in {{< acr mss >}} (HELIX subcohort; 2013-2016).**
+**Marginal contrasts on the logarithmic scale for effect modification by sex of a increase from the 10th to the 90th percentile of the {{< acr edcs first_use=true >}} on {{< acr hitrtse first_use=true >}} expressed in {{< acr mss >}} (HELIX subcohort; 2013-2016).**
 :::
 
 ::: {#supptbl-marginal-2sa}
@@ -491,9 +491,9 @@ m2sa <- tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )
 
-m2sa$df_gt
+m2sa$table
 ```
-**Marginal contrasts for effect modification by sex of a increase from the 10th to the 90th percentile of the {{< acr edcs first_use=true >}} on the glucocorticosteroids expressed in ng/ml (HELIX subcohort; 2013-2016).**
+**Marginal contrasts on the logarithmic scale for effect modification by sex of a increase from the 10th to the 90th percentile of the {{< acr edcs first_use=true >}} on the glucocorticosteroids expressed in ng/ml (HELIX subcohort; 2013-2016).**
 :::
 
 ::: {#supptbl-marginal-3sa}
@@ -507,9 +507,9 @@ m3sa <- tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )
 
-m3sa$df_gt
+m3sa$table
 ```
-**Marginal contrasts for effect modification by sex of a increase from the 10th to the 90th percentile of the glucocorticosteroids on {{< acr hitrtse first_use=true >}} expressed in {{< acr mss >}} (HELIX subcohort; 2013-2016).**
+**Marginal contrasts on the logarithmic scale for effect modification by sex of a increase from the 10th to the 90th percentile of the glucocorticosteroids on {{< acr hitrtse first_use=true >}} expressed in {{< acr mss >}} (HELIX subcohort; 2013-2016).**
 :::
 
 # Supplementary figures

@@ -1132,7 +1132,7 @@ tidy_res_meffects <- function(df, sa_var, outcome,
   names_ <- if (is.null(sa_var) | which_res == "hypothesis") {
     names_
   } else {
-    paste0(names_, "_", c(unique(df$modifier)))
+    as.vector(outer(names_, c(unique(df$modifier)), paste, sep = "_"))
   }
   processed_df <- df |>
     tidylog::mutate(
@@ -1174,6 +1174,7 @@ tidy_res_meffects <- function(df, sa_var, outcome,
     tidylog::select(-estimate) |>
     tidyr::pivot_wider(
       names_from = dplyr::any_of(c("outcome", "modifier")),
+      names_sep = " ",
       values_from = c("val")
     ) |>
     gt::gt(
@@ -1186,43 +1187,15 @@ tidy_res_meffects <- function(df, sa_var, outcome,
       ),
       locations = gt::cells_row_groups()
     ) |>
-    # gt::tab_style(
-    #   style = gt::cell_text(weight = "bold"),
-    #   locations = purrr::map(
-    #     names_,
-    #     \(x) {
-    #       gt::cells_body(
-    #         columns = x,
-    #         rows = stringr::str_detect(!!rlang::sym(x), "\\*")
-    #       )
-    #     }
-    #   )
-    # ) |>
-    # gt::tab_footnote(
-    #   footnote = "*Significant results."
-    # ) |>
     gt::tab_footnote(
       footnote = "Estimate and 95% CI.",
       locations = gt::cells_column_labels(
-        columns = names_
+        columns = stringr::str_replace_all(names_, "_", " ")
       )
     ) |>
     gt::opt_footnote_marks(
       marks = "letters"
     )
-  
-  # if (is.null(sa_var) & which_res == "comparisons") {
-  #   processed_df <- dplyr::bind_rows(
-  #     tibble::tibble(
-  #       variable = "Exposure",
-  #       val = "Marginal contrast (95% CI)",
-  #       estimate = 100,
-  #       outcome = "",
-  #       class = ""
-  #     ),
-  #     processed_df
-  #   )
-  # }
   
   return(list(
     numerical_results = processed_df,
