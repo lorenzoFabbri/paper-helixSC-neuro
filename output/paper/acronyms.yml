@@ -1,6 +1,9 @@
 ---
 acronyms:
   keys:
+    - key: swig
+      shortname: SWIG
+      longname: Single World Intervention Graphs
     - key: dap
       shortname: DAP
       longname: dialkylphosphate

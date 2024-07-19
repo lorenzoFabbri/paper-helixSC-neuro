@@ -35,6 +35,11 @@ list(
     command = tbl_desc_vars()
   ), # End desc_chems_mets target
   ##############################################################################
+  targets::tar_target(
+    name = "codebooks",
+    command = tidy_codebooks()
+  ), # End codebook target
+  ##############################################################################
   tarchetypes::tar_map(
     list(rq_ = c("1", "2", "3", "1SA", "2SA", "3SA")),
     targets::tar_target(
@@ -98,14 +103,6 @@ list(
     name = "all_dags",
     command = dags()
   ), # End dags target
-  ##############################################################################
-  tarchetypes::tar_map(
-    list(rq = c("1", "2", "3")),
-    targets::tar_target(
-      name = "codebook",
-      command = tidy_codebooks(rq = rq)
-    ) # End codebook target
-  ), # End loop over RQs
   ##############################################################################
   tarchetypes::tar_map(
     list(rq = c("1", "2", "3")),

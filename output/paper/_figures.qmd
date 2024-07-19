@@ -1,33 +1,7 @@
-<!-- title: "Figures" -->
-
-<!-- format: -->
-<!--   docx: -->
-<!--     reference-doc: reference_document.docx -->
-<!--   pdf: -->
-<!--     pdf-engine: lualatex -->
-<!--     number-sections: true -->
-<!--     toc: false -->
-<!--     include-in-header: -->
-<!--       text: | -->
-<!--         \usepackage{lineno} -->
-<!--         \usepackage{rotating} -->
-<!--         \usepackage{float} -->
-<!--         \usepackage{typearea} -->
-<!--     include-before-body: -->
-<!--       text: | -->
-<!--         \linenumbers -->
-
-<!-- link-citations: true -->
-<!-- linkcolor: blue -->
-
-<!-- editor_options: -->
-<!--   chunk_output_type: console -->
-
-<!-- execute: -->
-<!--   echo: false -->
-<!--   warning: false -->
-<!--   error: false -->
-<!--   message: false -->
+---
+editor_options:
+  chunk_output_type: console
+---
 
 ```{r}
 here::i_am("output/paper/_figures.qmd")
@@ -130,6 +104,34 @@ forest_plot <- function(obj, r = 4, is_cortisol = FALSE) {
 ```
 
 # DAG
+
+::: {#fig-dag}
+```{dot}
+//| fig-width: 9
+//| fig-height: 10
+
+digraph simple {
+    graph [rankdir=TB]
+    
+    node [shape=ellipse]
+    U [label='Confounders']
+    
+    node [shape=box, height=0.3, width=0.3]
+    E [label='EDCs']
+    M [label='Glucocorticosteroids']
+    Y [label='HRT-SE']
+    { rank = same; E M}
+    
+    E -> M [minlen=3]
+    E -> Y
+    M -> Y
+    U -> E
+    U -> M
+    U -> Y
+  }
+```
+**Simplified {{< acr dag first_use=true >}} showing {{< acr edcs first_use=true >}}, {{< acr hitrtse first_use=true >}}, and the glucocorticosteroids.**
+:::
 
 # Figures for main results
 

@@ -1,68 +1,80 @@
 #' Title
 #'
-#' @param rq
-#'
 #' @return
 #' @export
-tidy_codebooks <- function(rq) {
+tidy_codebooks <- function() {
   path_store <- Sys.getenv("path_store")
   
   ## Load objects
-  targets::tar_load(
-    paste0("rq", rq, "_preproc_dat"),
-    store = paste0(path_store, rq)
-  )
-  
-  ## Extract adjustments set used and mapped covariates
-  adj_set <- get(paste0("rq", rq, "_preproc_dat"))$adjustment_set
-  mapped_covars <- get(paste0("rq", rq, "_preproc_dat"))$mapping_covariates
-  actual_covars <- get(paste0("rq", rq, "_preproc_dat"))$covariates |>
-    colnames()
-  meta <- get(paste0("rq", rq, "_preproc_dat"))$meta |>
-    tidylog::filter(
-      dag %in% adj_set &
-        variable %in% mapped_covars
-    ) |>
-    tidylog::select(
-      dag, variable, type, description, code, label,
-      remark, comments, period
+  metas <- list()
+  for (rq in 1:3) {
+    targets::tar_load(
+      paste0("rq", rq, "_preproc_dat"),
+      store = paste0(path_store, rq)
     )
-  meta <- meta |>
-    dplyr::rowwise() |>
-    tidylog::mutate(
-      included = ifelse(
-        variable %in% actual_covars,
-        TRUE, FALSE
+    ## Extract adjustments set used and mapped covariates
+    adj_set <- get(paste0("rq", rq, "_preproc_dat"))$adjustment_set
+    mapped_covars <- get(paste0("rq", rq, "_preproc_dat"))$mapping_covariates
+    actual_covars <- get(paste0("rq", rq, "_preproc_dat"))$covariates |>
+      colnames()
+    meta <- get(paste0("rq", rq, "_preproc_dat"))$meta |>
+      tidylog::filter(
+        dag %in% adj_set &
+          variable %in% mapped_covars
+      ) |>
+      tidylog::select(
+        dag, variable, type, description, code, label,
+        remark, comments, period
       )
+    meta <- meta |>
+      dplyr::rowwise() |>
+      tidylog::mutate(
+        included = ifelse(
+          variable %in% actual_covars,
+          "Yes", "No"
+        )
+      ) |>
+      tidylog::mutate(
+        dplyr::across(
+          dplyr::everything(),
+          as.character
+        )
+      ) |>
+      tidylog::group_by(dag) |>
+      dplyr::arrange(dag, variable) |>
+      tidylog::ungroup() |>
+      tidylog::rename(
+        coding = "code",
+        labels = "label",
+        remarks = "remark",
+        assessment = "period",
+        !!paste0("q", rq) := "included"
+      ) |>
+      tidylog::mutate(
+        dplyr::across(
+          c("coding", "labels", "remarks", "comments", "assessment"),
+          \(x) ifelse(
+            toupper(x) == "NA",
+            "", x
+          )
+        )
+      )
+    metas[[rq]] <- meta
+  }
+  meta <- purrr::reduce(
+    .x = metas,
+    .f = tidylog::full_join
+  ) |>
+    dplyr::mutate(
+      dplyr::across(dplyr::all_of(c("q1", "q2", "q3")),
+                    ~ ifelse(
+                      is.na(.x),
+                      "No", .x
+                    ))
     )
-  perc_included <- round(sum(meta$included == TRUE) / nrow(meta) * 100, 2)
   
   ## Create tidy table
   ret <- meta |>
-    tidylog::mutate(
-      dplyr::across(
-        dplyr::everything(),
-        as.character
-      )
-    ) |>
-    tidylog::group_by(dag) |>
-    dplyr::arrange(dag, variable) |>
-    tidylog::ungroup() |>
-    tidylog::rename(
-      coding = "code",
-      labels = "label",
-      remarks = "remark",
-      assessment = "period"
-    ) |>
-    tidylog::mutate(
-      dplyr::across(
-        c("coding", "labels", "remarks", "comments", "assessment"),
-        \(x) ifelse(
-          toupper(x) == "NA",
-          "", x
-        )
-      )
-    ) |>
     gt::gt(
       rowname_col = "variable",
       groupname_col = "dag"
@@ -75,15 +87,6 @@ tidy_codebooks <- function(rq) {
     ) |>
     gt::sub_missing(
       missing_text = ""
-    ) |>
-    gt::tab_footnote(
-      footnote = glue::glue(
-        "Percentage of confounders included in the models: {perc_included}%."
-      ),
-      locations = gt::cells_column_labels(columns = included)
-    ) |>
-    gt::opt_footnote_marks(
-      marks = "letters"
     )
   
   return(ret)

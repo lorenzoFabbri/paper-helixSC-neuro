@@ -15,29 +15,9 @@ mermaid:
 format:
   docx:
     page-width: 8.3
-  pdf:
-    documentclass: article
-    geometry:
-      - top=30mm
-      - left=20mm
-      - heightrounded
-    pdf-engine: lualatex
-    keep-tex: false
-    include-in-header:
-      text: |
-        \usepackage{lineno}
-        \usepackage{rotating}
-        \usepackage{float}
-        \usepackage{typearea}
-        \usepackage{amsmath, amssymb, xcolor}
-        \usepackage{pgf, tikz}
-        \usetikzlibrary{external, trees, backgrounds, swigs, calc, positioning, shapes, arrows, arrows.meta, shapes.arrows, shapes.geometric, shapes.multipart, decorations.pathmorphing, decorations.markings}
-    include-before-body:
-      text: |
-        \linenumbers
 
 crossref:
-  custom: 
+  custom:
     - kind: float
       key: supptbl
       latex-env: supptbl
@@ -59,12 +39,12 @@ filters:
   - acronyms
 
 acronyms:
-  fromfile: ../../../../all_phd/acronyms.yml
+  fromfile: acronyms.yml
   insert_links: false
   insert_loa: false
   sorting: alphabetical
 
-editor_options: 
+editor_options:
   chunk_output_type: console
 
 execute:
@@ -247,7 +227,7 @@ Cognitive and motor function outcomes were assessed with standardized, non-lingu
 
 ### Confounders {#sec-confounders}
 
-For each research question, defined by a specific type of exposure and outcome, the minimal set of covariates for inclusion in the analyses was selected on the basis of a {{< acr dag >}} built with `DAGitty` [@TextorvanderZanderGilthorpe:2016] and `ggdag` [@Barrett:2023]. The sets of covariates were selected to estimate the total effect of the exposure on the outcome. For effect estimation of the {{< acr edcs >}} on glucocorticosteroids and of glucocorticosteroids on {{< acr hitrtse >}}, these sets were also sufficient to estimate direct effects. Sample-specific creatinine values were used to adjust for possible dilution effects. Further, each minimal adjustment set was *augmented* with precision covariates, defined as the set of parents variable of the outcome that are not parents of the exposure. Common confounders were cohort, ethnicity, sex, age, height, weight, and head circumference of the child, consumption of fish, fruit, vegetables, organic food, and fast food with a food frequency questionnaire, maternal tobacco consumption, family financial situation and affluence scale (FAS). Models for estimating the effects of {{< acr edcs >}} on {{< acr hitrtse >}} were further adjusted for child breastfeeding, prenatal maternal active and passive smoking, urine creatinine, child mood and rest before assessment, child neuropsychological diagnosis, marital status, season, and fasting time before assessment. Models for estimating the effects of {{< acr edcs >}} on glucocorticosteroids were further adjusted for urine creatinine, season, and fasting time before assessment. Models for estimating the effects of glucocorticosteroids on {{< acr hitrtse >}} were further adjusted for child breastfeeding, prenatal maternal active and passive smoking, marital status, {{< acr edcs >}}, urine creatinine, child mood and rest before assessment, and child neuropsychological diagnosis. The adjustment sets are provided in the Supplementary Material as text files compatible with DAGitty. Codebooks for the used covariates, by research question, are provided in Supplementary Tables [-@supptbl-codebook-1; -@supptbl-codebook-2; -@supptbl-codebook-3].
+For each research question, defined by a specific type of exposure and outcome, the minimal set of covariates for inclusion in the analyses was selected on the basis of a {{< acr dag >}} built with `DAGitty` [@TextorvanderZanderGilthorpe:2016] and `ggdag` [@Barrett:2023]. The sets of covariates were selected to estimate the total effect of the exposure on the outcome. For effect estimation of the {{< acr edcs >}} on glucocorticosteroids and of glucocorticosteroids on {{< acr hitrtse >}}, these sets were also sufficient to estimate direct effects. Sample-specific creatinine values were used to adjust for possible dilution effects. Further, each minimal adjustment set was *augmented* with precision covariates, defined as the set of parents variable of the outcome that are not parents of the exposure. Common confounders were cohort, ethnicity, sex, age, height, weight, and head circumference of the child, consumption of fish, fruit, vegetables, organic food, and fast food with a food frequency questionnaire, maternal tobacco consumption, family financial situation and affluence scale (FAS). Models for estimating the effects of {{< acr edcs >}} on {{< acr hitrtse >}} were further adjusted for child breastfeeding, prenatal maternal active and passive smoking, urine creatinine, child mood and rest before assessment, child neuropsychological diagnosis, marital status, season, and fasting time before assessment. Models for estimating the effects of {{< acr edcs >}} on glucocorticosteroids were further adjusted for urine creatinine, season, and fasting time before assessment. Models for estimating the effects of glucocorticosteroids on {{< acr hitrtse >}} were further adjusted for child breastfeeding, prenatal maternal active and passive smoking, marital status, {{< acr edcs >}}, urine creatinine, child mood and rest before assessment, and child neuropsychological diagnosis. The adjustment sets are provided in the Supplementary Material as text files compatible with DAGitty. A simplified {{< acr swig >}} is provided in @fig-dag. Codebooks for the used covariates are provided in @supptbl-codebooks.
 
 ## Statistical methods {#sec-stat-methods}
 
@@ -337,7 +317,7 @@ Basic summary statistics of the estimated balancing weights for effect modificat
 
 @Tbl-hypothesis-1and2 presents the results of the difference between estimates of the {{< acr mcs >}} on the logarithmic scale for females and males, for the {{< acr edcs >}} on the glucocorticosteroids and {{< acr hitrtse >}}.
 For {{< acr hitrtse >}}, significant differences were present for the phenol OXBE (`r format_res(heffects1, "oxbe", "HRT-SE")`) and the phthalate metabolite MbZP (`r format_res(heffects1, "mbzp", "HRT-SE")`).
-For the glucocorticosteroids, significant differences were present across all three classes of {{< acr edcs >}} and for all outcomes. The largest differences were attributable to the phenol ETPA (corticosterone production, `r format_res(heffects2, "etpa", "corticosterone production")`) and the phthalate metabolite MEHP (cortisol production, (`r format_res(heffects2, "mehp", "cortisol production")`); cortisone production, (`r format_res(heffects2, "mehp", "cortisone production")`)). The forest plots of the individual {{< acr mcs >}} are presented in Supplementary Figures [-@suppfig-marginal-1sa] and [-@suppfig-marginal-2sa].
+For the glucocorticosteroids, significant differences were present across all three classes of {{< acr edcs >}} and for all outcomes. The largest differences were attributable to the phenol ETPA (corticosterone production, `r format_res(heffects2, "etpa", "corticosterone production")`) and the phthalate metabolite MEHP (cortisol production, (`r format_res(heffects2, "mehp", "cortisol production")`); cortisone production, (`r format_res(heffects2, "mehp", "cortisone production")`)). The individual {{< acr mcs >}} are presented in Supplementary Tables [-@supptbl-marginal-1sa], [-@supptbl-marginal-2sa] and [-@supptbl-marginal-3sa], and in Supplementary Figures [-@suppfig-marginal-1sa], [-@suppfig-marginal-2sa] and [-@suppfig-marginal-3sa].
 
 @Tbl-hypothesis-3 presents the results of the difference between estimates of the {{< acr mcs >}} on the logarithmic scale for females and males, for the glucocorticosteroids on {{< acr hitrtse >}}. Significant differences were present for cortisone production (`r format_res(heffects3, "cortisone prod.", "HRT-SE")`) and corticosterone production (`r format_res(heffects3, "corticost. prod.", "HRT-SE")`). Furthermore, for all exposures, the {{< acr mcs >}} had opposite sign (positive for males and negative for females). The forest plot of the individual {{< acr mcs >}} is presented in @suppfig-marginal-3sa.
 

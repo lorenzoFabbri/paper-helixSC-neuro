@@ -1,4 +1,4 @@
-Sys.setenv(is_hpc = TRUE)
+Sys.setenv(is_hpc = FALSE)
 # Custom path to _targets for different research questions
 path_store <- ifelse(
   Sys.getenv("is_hpc"), 
