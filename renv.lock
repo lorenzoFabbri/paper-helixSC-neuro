@@ -67,17 +67,6 @@
       ],
       "Hash": "b8b658ec0d7a6a55d9d01e00e3cafd20"
     },
-    "KernSmooth": {
-      "Package": "KernSmooth",
-      "Version": "2.23-24",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "stats"
-      ],
-      "Hash": "9f33a1ee37bbe8919eb2ec4b9f2473a5"
-    },
     "MASS": {
       "Package": "MASS",
       "Version": "7.3-61",
@@ -182,21 +171,6 @@
       ],
       "Hash": "45f0398006e83a5b10b72a90663d8d8c"
     },
-    "ROCR": {
-      "Package": "ROCR",
-      "Version": "1.0-11",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "gplots",
-        "grDevices",
-        "graphics",
-        "methods",
-        "stats"
-      ],
-      "Hash": "cc151930e20e16427bc3d0daec62b4a9"
-    },
     "Rcpp": {
       "Package": "Rcpp",
       "Version": "1.0.13",
@@ -258,20 +232,6 @@
         "utils"
       ],
       "Hash": "e78499cbcbbca98200254bd171379165"
-    },
-    "SuperLearner": {
-      "Package": "SuperLearner",
-      "Version": "2.0-29",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "cvAUC",
-        "gam",
-        "methods",
-        "nnls"
-      ],
-      "Hash": "6f5955ce4a4401df19354547ec179feb"
     },
     "TSP": {
       "Package": "TSP",
@@ -634,17 +594,6 @@
       ],
       "Hash": "392f13bb4dfd3c07259ecdeba6aa71f9"
     },
-    "caTools": {
-      "Package": "caTools",
-      "Version": "1.18.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "bitops"
-      ],
-      "Hash": "34d90fa5845004236b9eacafc51d07b2"
-    },
     "cachem": {
       "Package": "cachem",
       "Version": "1.1.0",
@@ -936,7 +885,7 @@
     },
     "crul": {
       "Package": "crul",
-      "Version": "1.4.2",
+      "Version": "1.5.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -947,7 +896,7 @@
         "mime",
         "urltools"
       ],
-      "Hash": "5685d2603020d0f879a147ba23d51292"
+      "Hash": "22e70c5046981d39b7bf7af74433e396"
     },
     "curl": {
       "Package": "curl",
@@ -958,17 +907,6 @@
         "R"
       ],
       "Hash": "411ca2c03b1ce5f548345d2fc2685f7a"
-    },
-    "cvAUC": {
-      "Package": "cvAUC",
-      "Version": "1.1.4",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "ROCR",
-        "data.table"
-      ],
-      "Hash": "07bca048cef2774d3bc39b8b7f507cff"
     },
     "dagitty": {
       "Package": "dagitty",
@@ -1002,7 +940,7 @@
     },
     "datawizard": {
       "Package": "datawizard",
-      "Version": "0.12.1",
+      "Version": "0.12.2",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1011,7 +949,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "b59aa2ad4d2bb3f76aff054ea64f12b6"
+      "Hash": "4070785c656b9ded5d0ed5db387a96d5"
     },
     "desc": {
       "Package": "desc",
@@ -1360,34 +1298,6 @@
         "utils"
       ],
       "Hash": "fd7b1d69d16d0d114e4fa82db68f184c"
-    },
-    "future.apply": {
-      "Package": "future.apply",
-      "Version": "1.11.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "future",
-        "globals",
-        "parallel",
-        "utils"
-      ],
-      "Hash": "afe1507511629f44572e6c53b9baeb7c"
-    },
-    "gam": {
-      "Package": "gam",
-      "Version": "1.22-4",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "foreach",
-        "methods",
-        "splines",
-        "stats"
-      ],
-      "Hash": "1d00ef061ca18a5d4dc4483bb75599cb"
     },
     "gclus": {
       "Package": "gclus",
@@ -1759,21 +1669,6 @@
       ],
       "Hash": "3ffb863ccab67ccd2f1e8e804018ebc0"
     },
-    "gplots": {
-      "Package": "gplots",
-      "Version": "3.1.3.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "KernSmooth",
-        "R",
-        "caTools",
-        "gtools",
-        "methods",
-        "stats"
-      ],
-      "Hash": "f72b5d1ed587f8905e38ee7295e88d80"
-    },
     "graphlayouts": {
       "Package": "graphlayouts",
       "Version": "1.1.1",
@@ -1845,18 +1740,6 @@
         "rlang"
       ],
       "Hash": "e18861963cbc65a27736e02b3cd3c4a0"
-    },
-    "gtools": {
-      "Package": "gtools",
-      "Version": "3.9.5",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "methods",
-        "stats",
-        "utils"
-      ],
-      "Hash": "588d091c35389f1f4a9d533c8d709b35"
     },
     "gtsummary": {
       "Package": "gtsummary",
@@ -2379,28 +2262,6 @@
       ],
       "Hash": "c6fafa6cccb1e1dfe7f7d122efd6e6a7"
     },
-    "lmtp": {
-      "Package": "lmtp",
-      "Version": "1.4.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "R6",
-        "SuperLearner",
-        "checkmate",
-        "cli",
-        "data.table",
-        "future",
-        "generics",
-        "nnls",
-        "origami",
-        "progressr",
-        "schoolmath",
-        "stats"
-      ],
-      "Hash": "d64aac2f74324cd7d67559d70b0905d8"
-    },
     "lubridate": {
       "Package": "lubridate",
       "Version": "1.9.3",
@@ -2740,13 +2601,6 @@
       ],
       "Hash": "2c797b46eea7fb58ede195bc0b1f1138"
     },
-    "nnls": {
-      "Package": "nnls",
-      "Version": "1.5",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "942974f860268d8b22148d142bb8b946"
-    },
     "norm": {
       "Package": "norm",
       "Version": "1.0-11.1",
@@ -2793,23 +2647,6 @@
         "ucminf"
       ],
       "Hash": "4ab0f16b08887630a9c96b8c33ed7b7d"
-    },
-    "origami": {
-      "Package": "origami",
-      "Version": "1.0.7",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "abind",
-        "assertthat",
-        "data.table",
-        "future",
-        "future.apply",
-        "listenv",
-        "methods"
-      ],
-      "Hash": "91fa37c3646e53f9a1195f85acd76222"
     },
     "pagedown": {
       "Package": "pagedown",
@@ -3147,7 +2984,7 @@
     },
     "quarto": {
       "Package": "quarto",
-      "Version": "1.4",
+      "Version": "1.4.4",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -3163,7 +3000,7 @@
         "utils",
         "yaml"
       ],
-      "Hash": "c94c271f9b998d116186a78b2a9b23c1"
+      "Hash": "af456d7a181750812bd8b2bfedb3ea4e"
     },
     "ranger": {
       "Package": "ranger",
@@ -3450,16 +3287,6 @@
         "viridisLite"
       ],
       "Hash": "c19df082ba346b0ffa6f833e92de34d1"
-    },
-    "schoolmath": {
-      "Package": "schoolmath",
-      "Version": "0.4.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R"
-      ],
-      "Hash": "d2bd755ff966f015093c6aeaefadb64e"
     },
     "secretbase": {
       "Package": "secretbase",
