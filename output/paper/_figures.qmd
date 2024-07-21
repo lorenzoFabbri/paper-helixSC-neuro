@@ -107,8 +107,8 @@ forest_plot <- function(obj, r = 4, is_cortisol = FALSE) {
 
 ::: {#fig-dag}
 ```{dot}
-//| fig-width: 9
-//| fig-height: 10
+//| fig-width: 4
+//| fig-height: 4
 
 digraph simple {
     graph [rankdir=TB]
