@@ -87,6 +87,10 @@ tidy_codebooks <- function() {
     ) |>
     gt::sub_missing(
       missing_text = ""
+    ) |>
+    gt::tab_options(
+      table_body.hlines.width = 0,
+      table_body.vlines.width = 0
     )
   
   return(ret)
@@ -241,6 +245,10 @@ tbl_desc_pop <- function(num_digits_est, num_digits_sig, by) {
     gtsummary::as_gt() |>
     gt::opt_footnote_marks(
       marks = "letters"
+    ) |>
+    gt::tab_options(
+      table_body.hlines.width = 0,
+      table_body.vlines.width = 0
     )
   
   return(desc_covars)
@@ -329,6 +337,10 @@ tbl_desc_vars <- function() {
     ) |>
     gt::opt_footnote_marks(
       marks = "letters"
+    ) |>
+    gt::tab_options(
+      table_body.hlines.width = 0,
+      table_body.vlines.width = 0
     )
   ##############################################################################
   
@@ -407,6 +419,10 @@ tbl_desc_vars <- function() {
     ) |>
     gt::opt_footnote_marks(
       marks = "letters"
+    ) |>
+    gt::tab_options(
+      table_body.hlines.width = 0,
+      table_body.vlines.width = 0
     )
   ##############################################################################
   
@@ -492,6 +508,10 @@ tbl_desc_vars <- function() {
     ) |>
     gt::opt_footnote_marks(
       marks = "letters"
+    ) |>
+    gt::tab_options(
+      table_body.hlines.width = 0,
+      table_body.vlines.width = 0
     )
   ##############################################################################
   
@@ -796,6 +816,10 @@ tidy_res_weighted_fits <- function(dat_tbl, dat_plt, sa_var) {
     ) |>
     gt::opt_footnote_marks(
       marks = "letters"
+    ) |>
+    gt::tab_options(
+      table_body.hlines.width = 0,
+      table_body.vlines.width = 0
     )
   
   return(list(
@@ -1195,6 +1219,10 @@ tidy_res_meffects <- function(df, sa_var, outcome,
     ) |>
     gt::opt_footnote_marks(
       marks = "letters"
+    ) |>
+    gt::tab_options(
+      table_body.hlines.width = 0,
+      table_body.vlines.width = 0
     )
   
   return(list(
