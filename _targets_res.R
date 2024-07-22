@@ -4,7 +4,7 @@ source("R/data.R")
 source("R/proc_res.R")
 
 targets::tar_option_set(
-  format = "qs"
+  format = "rds"
 )
 path_store <- Sys.getenv("path_store")
 num_digits_est <- 3
