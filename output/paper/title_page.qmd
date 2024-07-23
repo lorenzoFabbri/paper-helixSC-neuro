@@ -15,6 +15,11 @@ editor_options:
   chunk_output_type: console
 ---
 
+- Type of manuscript: *Original research article*.
+- Manuscript title: *Childhood exposure to non-persistent endocrine disruptors, glucocorticosteroids, and attentional function: A cross-sectional study based on the parametric g-formula*.
+- Running head up: *Endocrine Disruptors & Childhood Attention*.
+- Corresponding author: Martine Vrijheid, Doctor Aiguader 88 (08003, Barcelona, Spain), martine.vrijheid@isglobal.org, +34 93 2147350 (Ms Iolanda Molina, personal assistant).
+
 ## Funding
 
 The research leading to these results has received funding from the European Union's Horizon 2020 research and innovation programme under grant agreements no. 825712 [OBERON] and no. 874583 [ATHLETE].
@@ -36,6 +41,16 @@ The Rhea project was financially supported by European projects (EU FP6-2003-Foo
 Oliver Robinson is supported by a UK Research and Innovation Future Leaders Fellowship MR/S03532X/1.
 
 ISGlobal acknowledges support from the Spanish Ministry of Science and Innovation through the “Centro de Excelencia Severo Ochoa 2019-2023” Program (CEX2018-000806-S), and support from the Generalitat de Catalunya through the CERCA Program.
+
+## Conflicts of Interest
+
+The authors report no conflicts of interest.
+
+## Data Sharing and Code
+
+Access to HELIX data is based on approval by the HELIX Project Executive Committee and by the individual cohorts. Further details on the content of the data warehouse (data catalog) and procedures for external access are described on the project website (http://www.projecthelix.eu/index.php/es/data-inventory).
+
+The R code to reproduce analyses and results is available online (https://github.com/lorenzoFabbri/paper-helixSC-neuro).
 
 ## Acknowledgments
 

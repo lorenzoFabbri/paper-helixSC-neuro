@@ -273,8 +273,6 @@ We fit the outcome model using the `glm` function and a Gaussian family with ide
 To estimate the {{< acr mcs >}}, we used the `avg_comparisons` function from the `marginaleffects` R package [@Arel-Bundock:2023]. The two counterfactual datasets were obtained by setting the exposures levels to 90th percentile ($d_1$) and the 10th percentile ($d_2$), for each cohort separately to account for cross-cohort differences in the levels of the exposures (@supptbl-chems-desc and @supptbl-met-desc). The {{< acr mcs >}} were computed using the estimated balancing weights above. Robust standard errors were computed with the `sandwich` R package, using cohort as variable indicating clustering of observations [@Zeileis:2004; @ZeileisKollGraham:2020].
 For each outcome, we report the results as differences between {{< acr mcs >}} with 95% {{< acr cis first_use=true >}}.
 
-The R code to reproduce analyses and results is available online (https://github.com/lorenzoFabbri/paper-helixSC-neuro).
-
 ### Effect-modification analysis
 
 We further estimated separate {{< acr mcs >}} for possible effect-modification by sex. To do so, balancing weights were estimated separately for each level of the sex variable, and an interaction term between the exposure and sex was included in the outcome model.
