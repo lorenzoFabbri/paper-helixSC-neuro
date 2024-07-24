@@ -60,9 +60,15 @@ gt::gt(edcs_info,
     locations = gt::cells_row_groups(group = dplyr::everything()),
     style = list(gt::cell_text(weight = "bold"))
   ) |>
-  gt::tab_options(
-    table_body.hlines.width = 0,
-    table_body.vlines.width = 0
+  gt::tab_style(
+    style = gt::cell_borders(
+      weight = gt::px(0)
+    ),
+    locations = list(
+      gt::cells_body(),
+      gt::cells_stub(),
+      gt::cells_row_groups()
+    )
   )
 ```
 **Information about non-persistent {{< acr edcs first_use=true >}}, including the full compound name, the standard symbol, the used variable name, the identifier from PubChem, and the parental compound.**
@@ -103,9 +109,15 @@ gt::gt(mets_info,
   gt::opt_footnote_marks(
     marks = "letters"
   ) |>
-  gt::tab_options(
-    table_body.hlines.width = 0,
-    table_body.vlines.width = 0
+  gt::tab_style(
+    style = gt::cell_borders(
+      weight = gt::px(0)
+    ),
+    locations = list(
+      gt::cells_body(),
+      gt::cells_stub(),
+      gt::cells_row_groups()
+    )
   )
 ```
 **Information about the glucocorticosteroids, including the full metabolite name, the standard symbol, the identifier from the HMDB, and the CAS number.**
@@ -155,9 +167,15 @@ gt::gt(lloq_mets) |>
     locations = gt::cells_column_labels(),
     style = list(gt::cell_text(weight = "bold"))
   ) |>
-  gt::tab_options(
-    table_body.hlines.width = 0,
-    table_body.vlines.width = 0
+  gt::tab_style(
+    style = gt::cell_borders(
+      weight = gt::px(0)
+    ),
+    locations = list(
+      gt::cells_body(),
+      gt::cells_stub(),
+      gt::cells_row_groups()
+    )
   )
 ```
 **Lower limits of quantification expressed in ng/ml for the glucocorticosteroids (HELIX subcohort; 2013-2016).**
@@ -233,9 +251,15 @@ balance_1 |>
     ),
     locations = gt::cells_row_groups()
   ) |>
-  gt::tab_options(
-    table_body.hlines.width = 0,
-    table_body.vlines.width = 0
+  gt::tab_style(
+    style = gt::cell_borders(
+      weight = gt::px(0)
+    ),
+    locations = list(
+      gt::cells_body(),
+      gt::cells_stub(),
+      gt::cells_row_groups()
+    )
   )
 ```
 **Effective sample size before and after balancing weights estimation (exposures: {{< acr edcs first_use=true >}}; outcome: {{< acr hitrtse first_use=true >}}) (HELIX subcohort; 2013-2016).**
@@ -266,9 +290,15 @@ balance_2 |>
     ),
     locations = gt::cells_row_groups()
   ) |>
-  gt::tab_options(
-    table_body.hlines.width = 0,
-    table_body.vlines.width = 0
+  gt::tab_style(
+    style = gt::cell_borders(
+      weight = gt::px(0)
+    ),
+    locations = list(
+      gt::cells_body(),
+      gt::cells_stub(),
+      gt::cells_row_groups()
+    )
   )
 ```
 **Effective sample size before and after balancing weights estimation (exposures: {{< acr edcs first_use=true >}}; outcomes: glucocorticosteroids) (HELIX subcohort; 2013-2016).**
@@ -294,9 +324,15 @@ balance_3 |>
     ),
     locations = gt::cells_row_groups()
   ) |>
-  gt::tab_options(
-    table_body.hlines.width = 0,
-    table_body.vlines.width = 0
+  gt::tab_style(
+    style = gt::cell_borders(
+      weight = gt::px(0)
+    ),
+    locations = list(
+      gt::cells_body(),
+      gt::cells_stub(),
+      gt::cells_row_groups()
+    )
   )
 ```
 **Effective sample size before and after balancing weights estimation (exposures: glucocorticosteroids; outcome: {{< acr hitrtse first_use=true >}}) (HELIX subcohort; 2013-2016).**
@@ -343,9 +379,15 @@ tidy_res_weighted_fits(
     locations = gt::cells_row_groups(group = dplyr::everything()),
     style = list(gt::cell_text(weight = "bold"))
   ) |>
-  gt::tab_options(
-    table_body.hlines.width = 0,
-    table_body.vlines.width = 0
+  gt::tab_style(
+    style = gt::cell_borders(
+      weight = gt::px(0)
+    ),
+    locations = list(
+      gt::cells_body(),
+      gt::cells_stub(),
+      gt::cells_row_groups()
+    )
   )
 ```
 **Summary statistics of the estimated balancing weights (exposures: {{< acr edcs first_use=true >}}; outcome: {{< acr hitrtse first_use=true >}}) (HELIX subcohort; 2013-2016).**
@@ -379,9 +421,15 @@ tidy_res_weighted_fits(
     locations = gt::cells_row_groups(group = dplyr::everything()),
     style = list(gt::cell_text(weight = "bold"))
   ) |>
-  gt::tab_options(
-    table_body.hlines.width = 0,
-    table_body.vlines.width = 0
+  gt::tab_style(
+    style = gt::cell_borders(
+      weight = gt::px(0)
+    ),
+    locations = list(
+      gt::cells_body(),
+      gt::cells_stub(),
+      gt::cells_row_groups()
+    )
   )
 ```
 **Summary statistics of the estimated balancing weights (exposures: {{< acr edcs first_use=true >}}; outcomes: glucocorticosteroids) (HELIX subcohort; 2013-2016).**
@@ -437,9 +485,15 @@ tidy_res_weighted_fits(
     locations = gt::cells_row_groups(group = dplyr::everything()),
     style = list(gt::cell_text(weight = "bold"))
   ) |>
-  gt::tab_options(
-    table_body.hlines.width = 0,
-    table_body.vlines.width = 0
+  gt::tab_style(
+    style = gt::cell_borders(
+      weight = gt::px(0)
+    ),
+    locations = list(
+      gt::cells_body(),
+      gt::cells_stub(),
+      gt::cells_row_groups()
+    )
   )
 ```
 **Summary statistics of the estimated balancing weights for effect modification (exposures: {{< acr edcs first_use=true >}}; outcome: {{< acr hitrtse first_use=true >}}; modifier: sex) (HELIX subcohort; 2013-2016).**
@@ -473,9 +527,15 @@ tidy_res_weighted_fits(
     locations = gt::cells_row_groups(group = dplyr::everything()),
     style = list(gt::cell_text(weight = "bold"))
   ) |>
-  gt::tab_options(
-    table_body.hlines.width = 0,
-    table_body.vlines.width = 0
+  gt::tab_style(
+    style = gt::cell_borders(
+      weight = gt::px(0)
+    ),
+    locations = list(
+      gt::cells_body(),
+      gt::cells_stub(),
+      gt::cells_row_groups()
+    )
   )
 ```
 **Summary statistics of the estimated balancing weights for effect modification (exposures: {{< acr edcs first_use=true >}}; outcomes: glucocorticosteroids; modifier: sex) (HELIX subcohort; 2013-2016).**

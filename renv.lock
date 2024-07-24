@@ -521,27 +521,6 @@
       ],
       "Hash": "a4652c36d1f8abfc3ddf4774f768c934"
     },
-    "broom.helpers": {
-      "Package": "broom.helpers",
-      "Version": "1.15.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "broom",
-        "cli",
-        "dplyr",
-        "labelled",
-        "lifecycle",
-        "purrr",
-        "rlang",
-        "stats",
-        "stringr",
-        "tibble",
-        "tidyr"
-      ],
-      "Hash": "768cae43c3da698d6b11763777301e43"
-    },
     "broom.mixed": {
       "Package": "broom.mixed",
       "Version": "0.2.9.5",
@@ -651,6 +630,22 @@
         "R"
       ],
       "Hash": "ac6cdb8552c61bd36b0e54d07cf2aab7"
+    },
+    "cards": {
+      "Package": "cards",
+      "Version": "0.2.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "cli",
+        "dplyr",
+        "glue",
+        "rlang",
+        "tidyr",
+        "tidyselect"
+      ],
+      "Hash": "46b7ae0faa009c0124a7415e86d0185f"
     },
     "cellranger": {
       "Package": "cellranger",
@@ -1395,7 +1390,7 @@
     },
     "ggdag": {
       "Package": "ggdag",
-      "Version": "0.2.12",
+      "Version": "0.2.13",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1415,7 +1410,7 @@
         "tibble",
         "tidygraph"
       ],
-      "Hash": "813c29e1d0737f3fda24876fd2dd8d72"
+      "Hash": "c923747c35d5aa953cc6d2e7cd7bfb20"
     },
     "ggdist": {
       "Package": "ggdist",
@@ -1743,28 +1738,22 @@
     },
     "gtsummary": {
       "Package": "gtsummary",
-      "Version": "1.7.2",
+      "Version": "2.0.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R",
-        "broom",
-        "broom.helpers",
+        "cards",
         "cli",
         "dplyr",
-        "forcats",
         "glue",
         "gt",
-        "knitr",
         "lifecycle",
-        "purrr",
         "rlang",
-        "stringr",
-        "tibble",
         "tidyr",
         "vctrs"
       ],
-      "Hash": "08df7405a102e3f0bdf7a13a29e8c6ab"
+      "Hash": "c35c4de5039247e326b4ff85618dcdc7"
     },
     "haven": {
       "Package": "haven",
@@ -2499,11 +2488,11 @@
       "Version": "0.0.1",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "myphd",
       "RemoteUsername": "isglobal-cep",
+      "RemoteRepo": "myphd",
       "RemoteRef": "HEAD",
-      "RemoteSha": "0f3e7e05ad2ee37c26e3d5d50796348d0e32fcca",
+      "RemoteSha": "859f872a7b433dc1d3a18aed16a2a1eeffb7758f",
+      "RemoteHost": "api.github.com",
       "Requirements": [
         "VIM",
         "WeightIt",
@@ -2539,7 +2528,7 @@
         "tmvtnorm",
         "visdat"
       ],
-      "Hash": "e0b5dd7bd485749197e89b81d4726ba2"
+      "Hash": "10b1f47d16f42840c5b435bfcc56dcfe"
     },
     "naniar": {
       "Package": "naniar",
@@ -2818,13 +2807,13 @@
     },
     "polyclip": {
       "Package": "polyclip",
-      "Version": "1.10-6",
+      "Version": "1.10-7",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
-      "Hash": "436542aadb70675e361cf359285af7c7"
+      "Hash": "5879bf5aae702ffef0a315c44328f984"
     },
     "prettyunits": {
       "Package": "prettyunits",
@@ -3270,13 +3259,13 @@
     },
     "secretbase": {
       "Package": "secretbase",
-      "Version": "1.0.0",
+      "Version": "1.0.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
-      "Hash": "ac4ce0d0f56d126e63e7f01013f59ce2"
+      "Hash": "28495386ab3f1e83c237c6d519508fe7"
     },
     "selectr": {
       "Package": "selectr",
@@ -3951,7 +3940,7 @@
     },
     "websocket": {
       "Package": "websocket",
-      "Version": "1.4.1",
+      "Version": "1.4.2",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -3960,7 +3949,7 @@
         "cpp11",
         "later"
       ],
-      "Hash": "76e0d400757e318cca33def29ccebbc2"
+      "Hash": "e77c5569354172d0d04d54a9dec89e33"
     },
     "withr": {
       "Package": "withr",

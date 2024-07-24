@@ -110,9 +110,15 @@ gtsummary::tbl_merge(
   gt::opt_footnote_marks(
     marks = "letters"
   ) |>
-  gt::tab_options(
-    table_body.hlines.width = 0,
-    table_body.vlines.width = 0
+  gt::tab_style(
+    style = gt::cell_borders(
+      weight = gt::px(0)
+    ),
+    locations = list(
+      gt::cells_body(),
+      gt::cells_stub(),
+      gt::cells_row_groups()
+    )
   )
 ```
 **Participants derived glucocorticosteroids concentrations expressed in ng/ml (HELIX subcohort; 2013-2016).**
@@ -180,9 +186,15 @@ dplyr::bind_cols(t1$`_data`, t2$`_data`) |>
   gt::opt_footnote_marks(
     marks = "letters"
   ) |>
-  gt::tab_options(
-    table_body.hlines.width = 0,
-    table_body.vlines.width = 0
+  gt::tab_style(
+    style = gt::cell_borders(
+      weight = gt::px(0)
+    ),
+    locations = list(
+      gt::cells_body(),
+      gt::cells_stub(),
+      gt::cells_row_groups()
+    )
   )
 ```
 **Pairwise differences between marginal contrasts on the logarithmic scale of males and females, for the effect of an increase from the 10th to the 90th percentile of {{< acr edcs first_use=true >}} on {{< acr hitrtse first_use=true >}}, expressed in {{< acr mss >}}, and on the glucocorticosteroids, expressed in ng/ml (HELIX subcohort; 2013-2016).**
