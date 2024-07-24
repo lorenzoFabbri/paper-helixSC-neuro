@@ -185,7 +185,7 @@ dplyr::bind_cols(t1$`_data`, t2$`_data`) |>
     table_body.vlines.width = 0
   )
 ```
-**Pairwise differences between marginal contrasts on the logarithmic scale of males and females, for the effect of a increase from the 10th to the 90th percentile of {{< acr edcs first_use=true >}} on {{< acr hitrtse first_use=true >}}, expressed in {{< acr mss >}}, and on the glucocorticosteroids, expressed in ng/ml (HELIX subcohort; 2013-2016).**
+**Pairwise differences between marginal contrasts on the logarithmic scale of males and females, for the effect of an increase from the 10th to the 90th percentile of {{< acr edcs first_use=true >}} on {{< acr hitrtse first_use=true >}}, expressed in {{< acr mss >}}, and on the glucocorticosteroids, expressed in ng/ml (HELIX subcohort; 2013-2016).**
 :::
 
 ::: {#tbl-hypothesis-3}
@@ -199,5 +199,5 @@ tidy_res_meffects(
   num_digits_sig = num_digits_sig
 )$table
 ```
-**Pairwise differences between marginal contrasts on the logarithmic scale of males and females, for the effect of a increase from the 10th to the 90th percentile of the glucocorticosteroids on {{< acr hitrtse first_use=true >}} expressed in {{< acr mss >}} (HELIX subcohort; 2013-2016).**
+**Pairwise differences between marginal contrasts on the logarithmic scale of males and females, for the effect of an increase from the 10th to the 90th percentile of the glucocorticosteroids on {{< acr hitrtse first_use=true >}} expressed in {{< acr mss >}} (HELIX subcohort; 2013-2016).**
 :::
