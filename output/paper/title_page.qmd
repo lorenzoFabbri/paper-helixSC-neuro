@@ -6,7 +6,10 @@ metadata-files:
 
 embed-resources: true
 format:
-  html: default
+  docx: default
+
+filters:
+  - authors-block
 
 link-citations: true
 linkcolor: blue
@@ -51,9 +54,3 @@ The authors report no conflicts of interest.
 Access to HELIX data is based on approval by the HELIX Project Executive Committee and by the individual cohorts. Further details on the content of the data warehouse (data catalog) and procedures for external access are described on the project website (http://www.projecthelix.eu/index.php/es/data-inventory).
 
 The R code to reproduce analyses and results is available online (https://github.com/lorenzoFabbri/paper-helixSC-neuro).
-
-## Acknowledgments
-
-The authors acknowledge that Born in Bradford is only possible because of the enthusiasm and commitment of the children and parents in Born in Bradford. We are grateful to all participants, health professionals and researchers who have made Born in Bradford happen.
-
-The authors thank the EDEN mother-child cohort study group, whose members are I. Annesi-Maesano, J.Y. Bernard, M.A. Charles, P. Dargent-Molina, B. de Lauzon-Guillain, P. Ducimetière, M. de Agostini, B. Foliguet, A. Forhan, X. Fritel, A. Germa, V. Goua, R. Hankard, B. Heude, M. Kaminski, B. Larroquey, N. Lelong, J. Lepeule, G. Magnin, L. Marchand, C. Nabet, F Pierre, R. Slama, M.J. Saurel-Cubizolles, M. Schweitzer, and O. Thiebaugeorges.

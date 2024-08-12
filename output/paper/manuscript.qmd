@@ -12,6 +12,7 @@ mermaid:
 format:
   docx:
     reference-doc: custom-reference-doc.docx
+    fig-dpi: 420
 
 crossref:
   custom:
@@ -27,7 +28,7 @@ crossref:
       space-before-numbering: false
 
 bibliography: bibliography.bib
-csl: epidemiology.csl
+csl: environmental-research.csl
 
 link-citations: true
 linkcolor: blue
@@ -39,6 +40,8 @@ acronyms:
   fromfile: acronyms.yml
   insert_links: false
   insert_loa: false
+  include_unused: true
+  loa_title: ""
   sorting: alphabetical
 
 editor_options:
@@ -135,6 +138,14 @@ meffects3 <- tidy_res_meffects(
 )$numerical_results
 ```
 
+{{< pagebreak >}}
+
+# List of Acronyms {.unnumbered}
+
+\printacronyms
+
+{{< pagebreak >}}
+
 # Abstract {.unnumbered}
 
 **Background**
@@ -169,7 +180,7 @@ Taken together, these results suggest that disruption of the {{< acr hpa >}} axi
 
 In the present study, we estimated cross-sectional associations between 1) non-persistent {{< acr edcs >}} and attentional function, 2) non-persistent {{< acr edcs >}} and glucocorticosteroids, and 3) glucocorticosteroids and attentional function in children of a multi-country cohort in Europe. We used the parametric g-formula, a causal inference technique, and {{< acr mcs first_use=true >}} to obtain robust effect estimates and overcome limitations of classical regression models.
 
-# Methods {#sec-methods}
+# Material and methods {#sec-methods}
 
 ## Study population and design {#sec-design}
 
@@ -368,7 +379,15 @@ Limitations include the cross-sectional design of the present study. Importantly
 Although we included a wide range of confounders, there is the possibility, as with other observational studies, of residual confounding, which might lead to a bias away from the null. We decided not to include prenatal levels of the {{< acr edcs >}} as confounders due to the *small* correlation between prenatal and childhood levels of these non-persistent chemicals [@HaugSakhiCequier:2018].
 There is further the possibility of misspecification of the outcome model, although we included a spline of the exposure to relax some of the linearity assumptions. Finally, we acknowledge that the present study does not consider the possible mixture effect of these chemicals. While methods for causal mixture analysis are available [@KeilBuckleyO:2020], we also emphasize that using these tools without thoughtful consideration may lead to misleading results [@WebsterWeisskopf:2020].
 
+## Conclusion
+
 In conclusion, in a study of 1,297 children from 6 European birth cohorts, we observed that (i) exposure to certain non-persistent {{< acr edcs >}} is associated with higher values of {{< acr hitrtse >}} and might disrupt the {{< acr hpa >}} axis, and (ii) certain glucocorticosteroids are associated with {{< acr hitrtse >}} in a sex-specific manner.
+
+# Acknowledgments
+
+The authors acknowledge that Born in Bradford is only possible because of the enthusiasm and commitment of the children and parents in Born in Bradford. We are grateful to all participants, health professionals and researchers who have made Born in Bradford happen.
+
+The authors thank the EDEN mother-child cohort study group, whose members are I. Annesi-Maesano, J.Y. Bernard, M.A. Charles, P. Dargent-Molina, B. de Lauzon-Guillain, P. Ducimetière, M. de Agostini, B. Foliguet, A. Forhan, X. Fritel, A. Germa, V. Goua, R. Hankard, B. Heude, M. Kaminski, B. Larroquey, N. Lelong, J. Lepeule, G. Magnin, L. Marchand, C. Nabet, F Pierre, R. Slama, M.J. Saurel-Cubizolles, M. Schweitzer, and O. Thiebaugeorges.
 
 {{< pagebreak >}}
 
