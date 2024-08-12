@@ -126,7 +126,7 @@ forest_plot_combined <- function(obj, r = 4, is_cortisol = FALSE) {
         class = "AAA",
         modifier = c(NA, NA, NA)
       ),
-      tbl_num_res
+      obj$numerical_results
     ) |>
     dplyr::group_by(class) |>
     dplyr::arrange(
