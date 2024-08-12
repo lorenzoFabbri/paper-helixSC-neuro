@@ -1029,7 +1029,8 @@ load_res_meffects <- function(path_store, rq, sa_var, which_res) {
 #' @export
 tidy_res_meffects <- function(df, sa_var, outcome,
                               which_res,
-                              num_digits_est, num_digits_sig) {
+                              num_digits_est, num_digits_sig,
+                              combined = NULL) {
   if (length(outcome) > 0) {
     df <- df |>
       tidylog::filter(
@@ -1156,6 +1157,27 @@ tidy_res_meffects <- function(df, sa_var, outcome,
         )
     }
     plot <- plot +
+      ggplot2::theme(
+        legend.position = "bottom",
+        legend.box = "vertical",
+        legend.margin = ggplot2::margin(),
+        axis.title.y = ggplot2::element_blank(),
+        axis.text.y = ggplot2::element_blank(),
+        axis.ticks.y = ggplot2::element_blank(),
+        axis.line.y = ggplot2::element_blank(),
+        axis.line.x = ggplot2::element_line(linewidth = 0.6),
+        axis.ticks.length = ggplot2::unit(0.3, "cm")
+      )
+  } else if (!is.null(sa_var) & !is.null(combined)) {
+    plot <- plot +
+      ggplot2::coord_cartesian(
+        ylim = c(1, (nrow(df) / length(combined)) + 1)
+      ) +
+      ggplot2::annotate(
+        "text",
+        x = 0, y = (nrow(df) / length(combined)) + 1,
+        label = ""
+      ) +
       ggplot2::theme(
         legend.position = "bottom",
         legend.box = "vertical",

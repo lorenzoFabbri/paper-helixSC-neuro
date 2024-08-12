@@ -101,6 +101,91 @@ forest_plot <- function(obj, r = 4, is_cortisol = FALSE) {
   
   return(ret)
 } # End function forest_plot
+
+# Function to align forest plot with table numerical results for RQ and RQSA
+forest_plot_combined <- function(obj, r = 4, is_cortisol = FALSE) {
+  edcs <- myphd::edcs_information() |>
+    dplyr::filter(!chem_id %in% c("dedtp", "dmdtp")) |>
+    dplyr::select(chem_id, short_name, class) |>
+    dplyr::bind_rows(
+      tibble::tibble(
+        chem_id = c("Exposure"),
+        short_name = c("Exposure"),
+        class = c(NULL)
+      )
+    )
+  
+  # From table of numerical results to ggplot object
+  tbl_num_res <- obj$numerical_results |>
+    dplyr::bind_rows(
+      tibble::tibble(
+        variable = "Exposure",
+        val = "Marginal contrast (95% CI)",
+        estimate = 100,
+        outcome = "",
+        class = "AAA",
+        modifier = c(NA, NA, NA)
+      ),
+      tbl_num_res
+    ) |>
+    dplyr::group_by(class) |>
+    dplyr::arrange(
+      variable,
+      .by_group = TRUE
+    ) |>
+    dplyr::ungroup() |>
+    dplyr::mutate(
+      variable = factor(variable, levels = unique(variable)),
+      variable = forcats::fct_rev(variable)
+    ) |>
+    tidylog::select(-estimate) |>
+    ggplot2::ggplot(
+      ggplot2::aes(
+        y = variable,
+        shape = modifier
+      )
+    ) +
+    ggplot2::geom_text(
+      ggplot2::aes(
+        x = 0,
+        label = variable
+      ),
+      hjust = 0,
+      fontface = "bold"
+    ) +
+    ggplot2::geom_text(
+      ggplot2::aes(
+        x = 1,
+        label = val
+      ),
+      hjust = 0,
+      position = ggstance::position_dodgev(height = 0.9)
+    ) +
+    ggplot2::theme_void() +
+    ggplot2::theme(
+      strip.background = ggplot2::element_blank(),
+      strip.text = ggplot2::element_blank(),
+      legend.position = "bottom",
+      legend.box = "vertical",
+      legend.margin = ggplot2::margin()
+    ) +
+    ggplot2::coord_cartesian(
+      xlim = c(0, 4)
+    )
+  
+  # Assemble elements
+  ret <- patchwork::wrap_plots(
+    tbl_num_res, obj$plot
+  ) +
+    patchwork::plot_layout(
+      design = c(
+        patchwork::area(t = 0, l = 1, b = 3, r = r),
+        patchwork::area(t = 1, l = r, b = 3, r = r + 4)
+      )
+    )
+  
+  return(ret)
+} # End function forest_plot_combined
 ```
 
 # DAG
@@ -140,6 +225,10 @@ digraph simple {
 ```{r}
 targets::tar_load(
   dplyr::matches("marginal_comparisons_(\\d)$"),
+  store = store
+)
+targets::tar_load(
+  dplyr::matches("marginal_comparisons_3SA$"),
   store = store
 )
 ```
@@ -186,21 +275,26 @@ forest_plot(obj = obj2)
 Circles, triangles, and squares indicate effect estimates. Solid lines indicate the $95\%$ {{< acr ci >}}. The size of the circles represents the *S* value of the effect estimate [@RafiGreenland:2020].
 :::
 
+```{r}
+marginal_comparisons_3$modifier <- "overall"
+obj3 <- tidy_res_meffects(
+  df = dplyr::bind_rows(marginal_comparisons_3, marginal_comparisons_3SA),
+  sa_var = "e3_sex",
+  outcome = c("hitrtse"),
+  which_res = "comparisons",
+  num_digits_est = num_digits_est,
+  num_digits_sig = num_digits_sig,
+  combined = c("overall", "females", "males")
+)
+```
+
 ::: {#fig-marginal-3}
 ```{r marginal-3}
 #| fig-width: 9
 #| fig-height: 5
 
-obj3 <- tidy_res_meffects(
-  df = marginal_comparisons_3,
-  sa_var = NULL,
-  outcome = c("hitrtse"),
-  which_res = "comparisons",
-  num_digits_est = num_digits_est,
-  num_digits_sig = num_digits_sig
-)
-forest_plot(obj = obj3, r = 5, is_cortisol = TRUE)
+forest_plot_combined(obj = obj3, r = 5, is_cortisol = TRUE)
 ```
-**Marginal contrasts on the logarithmic scale for the effect of an increase from the 10th to the 90th percentile of the glucocorticosteroids on {{< acr hitrtse first_use=true >}} expressed in {{< acr mss >}} (HELIX subcohort; 2013-2016).** 
+**Marginal contrasts on the logarithmic scale for the effect of an increase from the 10th to the 90th percentile of the glucocorticosteroids on {{< acr hitrtse first_use=true >}} expressed in {{< acr mss >}}, overall and by sex (HELIX subcohort; 2013-2016).** 
 Circles indicate effect estimates. Solid lines indicate the $95\%$ {{< acr ci >}}. The size of the circles represents the *S* value of the effect estimate [@RafiGreenland:2020]. Abbreviations: cortisone production (cortisone prod.); cortisol production (cortisol prod.); corticost. prod. (corticosterone production).
 :::

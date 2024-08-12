@@ -28,7 +28,7 @@ cat(all_dags$marker_to_out)
 ::: {#supptbl-info-chems}
 ```{r info-chems}
 edcs_info <- myphd::edcs_information() |>
-  tidylog::select(-c(chem_id, smiles, ctd_id, exposome_explorer_id)) |>
+  tidylog::select(-c(chem_id, smiles, ctd_id, exposome_explorer_id, molar_mass)) |>
   tidylog::mutate(
     var = janitor::make_clean_names(
       short_name,
@@ -594,22 +594,6 @@ m2sa <- tidy_res_meffects(
 m2sa$table
 ```
 **Marginal contrasts on the logarithmic scale for effect modification by sex of a increase from the 10th to the 90th percentile of the {{< acr edcs first_use=true >}} on the glucocorticosteroids expressed in ng/ml (HELIX subcohort; 2013-2016).**
-:::
-
-::: {#supptbl-marginal-3sa}
-```{r marginal-3sa-tbl}
-m3sa <- tidy_res_meffects(
-  df = marginal_comparisons_3SA,
-  sa_var = "e3_sex",
-  outcome = NULL,
-  which_res = "comparisons",
-  num_digits_est = num_digits_est,
-  num_digits_sig = num_digits_sig
-)
-
-m3sa$table
-```
-**Marginal contrasts on the logarithmic scale for effect modification by sex of a increase from the 10th to the 90th percentile of the glucocorticosteroids on {{< acr hitrtse first_use=true >}} expressed in {{< acr mss >}} (HELIX subcohort; 2013-2016).**
 :::
 
 # Supplementary figures
