@@ -290,8 +290,6 @@ For each outcome, we report the results as differences between {{< acr mcs >}} w
 We further estimated separate {{< acr mcs >}} for possible effect-modification by sex. To do so, balancing weights were estimated separately for each level of the sex variable, and an interaction term between the exposure and sex was included in the outcome model.
 Similarly, the {{< acr mcs >}} were estimated with the `avg_comparisons` function. For each outcome, we report the results as pairwise differences between female {{< acr mcs >}} and male {{< acr mcs >}}, with 95% {{< acr cis first_use=true >}}.
 
-by taking the difference between the mean potential outcome of females and males.
-
 # Results {#sec-res}
 
 @tbl-pop-desc and @supptbl-pop-desc provide descriptive statistics for the outcome and covariates for the {{< acr helix >}} subcohort and for each cohort, respectively.
