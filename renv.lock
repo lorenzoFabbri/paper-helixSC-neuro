@@ -268,7 +268,7 @@
     },
     "V8": {
       "Package": "V8",
-      "Version": "5.0.0",
+      "Version": "5.0.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -277,7 +277,7 @@
         "jsonlite",
         "utils"
       ],
-      "Hash": "9eb7b2df315593e726b029200fc0276c"
+      "Hash": "7f3867df00a91c63089beb85b9ef0208"
     },
     "VIM": {
       "Package": "VIM",
@@ -434,17 +434,17 @@
     },
     "bit": {
       "Package": "bit",
-      "Version": "4.0.5",
+      "Version": "4.5.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
-      "Hash": "d242abec29412ce988848d0294b208fd"
+      "Hash": "5dc7b2677d65d0e874fc4aaf0e879987"
     },
     "bit64": {
       "Package": "bit64",
-      "Version": "4.0.5",
+      "Version": "4.5.2",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -454,7 +454,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "9fe98599ca456d6552421db0d6772d8f"
+      "Hash": "e84984bf5f12a18628d9a02322128dfd"
     },
     "bitops": {
       "Package": "bitops",
@@ -881,13 +881,13 @@
     },
     "curl": {
       "Package": "curl",
-      "Version": "5.2.2",
+      "Version": "5.2.3",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
-      "Hash": "8f27335f2bcff4d6035edcc82d7d46de"
+      "Hash": "d91263322a58af798f6cf3b13fd56dde"
     },
     "dagitty": {
       "Package": "dagitty",
@@ -1898,12 +1898,10 @@
       "Package": "introdataviz",
       "Version": "0.0.0.9003",
       "Source": "GitHub",
-      "Remotes": "psyteachr/glossary, crsh/papaja",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "introdataviz",
       "RemoteUsername": "psyteachr",
-      "RemoteRef": "HEAD",
       "RemoteSha": "0519c9803b17b68e286788219708289bb3db2de7",
       "Requirements": [
         "R",
@@ -1997,13 +1995,13 @@
     },
     "jsonlite": {
       "Package": "jsonlite",
-      "Version": "1.8.8",
+      "Version": "1.8.9",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "methods"
       ],
-      "Hash": "e1b9c55281c5adc4dd113652d9e26768"
+      "Hash": "4e993b65c2c3ffbffce7bb3e2c6f832b"
     },
     "juicyjuice": {
       "Package": "juicyjuice",
@@ -2448,11 +2446,10 @@
       "Version": "0.0.1",
       "Source": "GitHub",
       "RemoteType": "github",
-      "RemoteUsername": "isglobal-cep",
-      "RemoteRepo": "myphd",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "859f872a7b433dc1d3a18aed16a2a1eeffb7758f",
       "RemoteHost": "api.github.com",
+      "RemoteRepo": "myphd",
+      "RemoteUsername": "isglobal-cep",
+      "RemoteSha": "859f872a7b433dc1d3a18aed16a2a1eeffb7758f",
       "Requirements": [
         "VIM",
         "WeightIt",
@@ -2572,13 +2569,13 @@
     },
     "openssl": {
       "Package": "openssl",
-      "Version": "2.2.1",
+      "Version": "2.2.2",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "askpass"
       ],
-      "Hash": "c62edf62de70cadf40553e10c739049d"
+      "Hash": "d413e0fef796c9401a4419485f709ca1"
     },
     "ordinal": {
       "Package": "ordinal",
@@ -3040,13 +3037,13 @@
     },
     "renv": {
       "Package": "renv",
-      "Version": "1.0.7",
+      "Version": "1.0.8",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "utils"
       ],
-      "Hash": "397b7b2a265bc5a7a06852524dabae20"
+      "Hash": "e082251834fa427514e68bec8afc8fda"
     },
     "reshape2": {
       "Package": "reshape2",
