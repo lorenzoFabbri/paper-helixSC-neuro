@@ -2,7 +2,7 @@
 .~lock.*
 .quarto
 manuscript_files/
-*Reviewers.docx
+*Reviewers*.docx
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
