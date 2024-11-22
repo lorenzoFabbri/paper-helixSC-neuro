@@ -1,4 +1,6 @@
-# Paper 2: endocrine disruptors, corticosteroids, and neuro-development (HELIX sub-cohort)
+# Childhood exposure to non-persistent endocrine disruptors, glucocorticosteroids, and attentional function: A cross-sectional study based on the parametric g-formula
+
+[![DOI](https://zenodo.org/badge/588052543.svg)](https://doi.org/10.5281/zenodo.14202768)
 
 ## Abstract
 
