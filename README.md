@@ -14,6 +14,6 @@ We used data from the Human Early-Life Exposome (HELIX) cohort (2013-2016) and t
 
 We observed a positive marginal contrast (MC) for exposure increases from the 10th to the 90th percentile for methyl-paraben (MC: 0.042 and confidence interval (CI): (0.013, 0.071)), and the phthalate metabolites oxo-MiNP (MC: 0.023 and  CI: (0.003, 0.044)), oh-MiNP (MC: 0.039 and  CI: (0.001, 0.076)), and MEHP (MC: 0.036 and  CI: (0.008, 0.063)), on HRT-SE, indicating lower attention. Several EDCs were also associated with a positive MC for cortisone, cortisol, and corticosterone production. Increased levels of the glucocorticosteroids were not associated with HRT-SE, although we found a possible effect modification by sex.
 
-Conclusions*
+*Conclusions*
 
 Our results suggest that multiple EDCs might interfere with inattention and with the homeostasis of the HPA axis.
